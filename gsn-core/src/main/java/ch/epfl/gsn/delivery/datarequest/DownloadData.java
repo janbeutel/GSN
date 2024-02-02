@@ -162,8 +162,9 @@ public class DownloadData extends AbstractDataRequest {
                     }
                     fieldToUnitMap.put(df.getName().toLowerCase(), unit);
                 }
-
-                logger.debug("Data Enumerator: " + de);
+                if(logger.isDebugEnabled()){
+                    logger.debug("Data Enumerator: " + de);
+                }
                 if (ot == AllowedOutputType.csv) {
                     respond.println("# vsname:" + nextSqlQuery.getKey());
                     respond.println("# query:" + nextSqlQuery.getValue().getStandardQuery()

@@ -219,7 +219,9 @@ public class DataDistributer implements VirtualSensorDataListener, VSensorStateC
         /**
          * Locker variable should be modified EXACTLY like candidateListeners variable.
          */
-        logger.debug("Adding the listener: " + listener.toString() + " to the candidates.");
+        if(logger.isDebugEnabled()){
+            logger.debug("Adding the listener: " + listener.toString() + " to the candidates.");
+        }
         DataEnumerator dataEnum = makeDataEnum(listener);
         if (dataEnum.hasMoreElements()) {
             candidateListeners.put(listener, dataEnum);
@@ -239,7 +241,9 @@ public class DataDistributer implements VirtualSensorDataListener, VSensorStateC
         /**
          * Locker variable should be modified EXACTLY like candidateListeners variable.
          */
-        logger.debug("Updating the candidate list [" + listener.toString() + " (removed)].");
+        if(logger.isDebugEnabled()){
+            logger.debug("Updating the candidate list [" + listener.toString() + " (removed)].");
+        }
         if (candidatesForNextRound.contains(listener)) {
             candidateListeners.put(listener, makeDataEnum(listener));
             candidatesForNextRound.remove(listener);
@@ -261,22 +265,30 @@ public class DataDistributer implements VirtualSensorDataListener, VSensorStateC
      */
     private boolean flushStreamElement(DataEnumerator dataEnum, DistributionRequest listener) {
         if (listener.isClosed()) {
-            logger.debug("Flushing an stream element failed, isClosed=true [Listener: " + listener.toString() + "]");
+            if(logger.isDebugEnabled()){
+                logger.debug("Flushing an stream element failed, isClosed=true [Listener: " + listener.toString() + "]");
+            }
             return false;
         }
 
         if (!dataEnum.hasMoreElements()) {
-            logger.debug("Nothing to flush to [Listener: " + listener.toString() + "]");
+            if(logger.isDebugEnabled()){
+                logger.debug("Nothing to flush to [Listener: " + listener.toString() + "]");
+            }
             return true;
         }
 
         StreamElement se = dataEnum.nextElement();
         boolean success = listener.deliverStreamElement(se);
         if (!success) {
-            logger.debug("FLushing an stream element failed, delivery failure [Listener: " + listener.toString() + "]");
+            if(logger.isDebugEnabled()){
+                logger.debug("FLushing an stream element failed, delivery failure [Listener: " + listener.toString() + "]");
+            }
             return false;
         }
-        logger.debug("Flushing an stream element succeed [Listener: " + listener.toString() + "]");
+        if(logger.isDebugEnabled()){
+            logger.debug("Flushing an stream element succeed [Listener: " + listener.toString() + "]");
+        }
         return true;
     }
 
@@ -330,8 +342,10 @@ public class DataDistributer implements VirtualSensorDataListener, VSensorStateC
         synchronized (listeners) {
             for (DistributionRequest listener : listeners) {
                 if (listener.getVSensorConfig() == config) {
-                    logger.debug("sending stream element " + (se == null ? "second-chance-se" : se.toString())
+                    if(logger.isDebugEnabled()){
+                        logger.debug("sending stream element " + (se == null ? "second-chance-se" : se.toString())
                             + " produced by " + config.getName() + " to listener =>" + listener.toString());
+                    }
                     if (!candidateListeners.containsKey(listener)) {
                         addListenerToCandidates(listener);
                     } else {
@@ -346,11 +360,15 @@ public class DataDistributer implements VirtualSensorDataListener, VSensorStateC
         while (true) {
             try {
                 if (locker.isEmpty()) {
-                    logger.debug("Waiting(locked) for requests or data items, Number of total listeners: "
+                    if(logger.isDebugEnabled()){
+                        logger.debug("Waiting(locked) for requests or data items, Number of total listeners: "
                             + listeners.size());
+                    }
                     locker.put(locker.take());
-                    logger.debug("Lock released, trying to find interest listeners (total listeners:" + listeners.size()
+                    if(logger.isDebugEnabled()){
+                        logger.debug("Lock released, trying to find interest listeners (total listeners:" + listeners.size()
                             + ")");
+                    }
                 }
             } catch (InterruptedException e) {
                 logger.error(e.getMessage(), e);
@@ -413,7 +431,9 @@ public class DataDistributer implements VirtualSensorDataListener, VSensorStateC
      */
     public boolean vsUnLoading(VSensorConfig config) {
         synchronized (listeners) {
-            logger.debug("Distributer unloading: " + listeners.size());
+            if(logger.isDebugEnabled()){
+                logger.debug("Distributer unloading: " + listeners.size());
+            }
             ArrayList<DistributionRequest> toRemove = new ArrayList<DistributionRequest>();
             for (DistributionRequest listener : listeners) {
                 if (listener.getVSensorConfig() == config) {

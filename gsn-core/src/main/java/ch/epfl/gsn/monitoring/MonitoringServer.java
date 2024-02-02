@@ -85,7 +85,9 @@ public class MonitoringServer extends Thread {
 			try {
 				final Socket server = socket.accept();
 				server.setSoTimeout(60000);
-				logger.debug("monitoring accepted from " + server.getInetAddress());
+				if(logger.isDebugEnabled()){
+					logger.debug("monitoring accepted from " + server.getInetAddress());
+				}
 				Thread t = new Thread(new Runnable() {
 
 					@Override

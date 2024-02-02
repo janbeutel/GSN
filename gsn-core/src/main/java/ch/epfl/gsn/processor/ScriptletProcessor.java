@@ -327,7 +327,9 @@ public class ScriptletProcessor extends AbstractVirtualSensor {
         Script script = null;
         try {
             script = shell.parse(scriptlet.toString());
-            logger.debug("Compiled script: \n" + scriptlet.toString());
+            if(logger.isDebugEnabled()){
+                logger.debug("Compiled script: \n" + scriptlet.toString());
+            }
         } catch (Exception e) {
             logger.error("Failed to compile the scriptlet " + e.getMessage());
             return null;

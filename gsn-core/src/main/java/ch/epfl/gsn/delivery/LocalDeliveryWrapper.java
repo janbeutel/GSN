@@ -208,8 +208,9 @@ public class LocalDeliveryWrapper extends AbstractWrapper implements DeliverySys
 			}
 
 			query = SQLUtils.newRewrite(query, vsName, vsName.toLowerCase()).toString();
-
-			logger.debug("Local wrapper request received for: " + vsName);
+			if(logger.isDebugEnabled()){
+				logger.debug("Local wrapper request received for: " + vsName);
+			}
 			distributionRequest = DefaultDistributionRequest.create(this, vSensorConfig, query, lastVisited);
 			// This call MUST be executed before adding this listener to the
 			// data-distributer because distributer checks the isClose method before
@@ -314,7 +315,9 @@ public class LocalDeliveryWrapper extends AbstractWrapper implements DeliverySys
 	 */
 	public boolean writeStreamElement(StreamElement se) {
 		boolean isSucced = postStreamElement(se);
-		logger.debug("wants to deliver stream element:" + se.toString() + "[" + isSucced + "]");
+		if(logger.isDebugEnabled()){
+			logger.debug("wants to deliver stream element:" + se.toString() + "[" + isSucced + "]");
+		}
 		return true;
 	}
 

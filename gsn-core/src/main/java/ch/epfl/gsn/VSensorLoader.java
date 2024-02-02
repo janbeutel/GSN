@@ -513,7 +513,10 @@ public class VSensorLoader extends Thread {
 			}
 			inputStream.release();
 		}
-		logger.debug("Total change Listeners:" + changeListeners.size());
+		if (logger.isDebugEnabled()) {
+			logger.debug("Total change Listeners:" + changeListeners.size());
+		}
+		
 		fireVSensorUnLoading(pool.getConfig());
 	}
 
@@ -682,7 +685,9 @@ public class VSensorLoader extends Thread {
 			return null;
 		}
 		try {
-			logger.debug("Wrapper name: " + wrapper.getWrapperName() + " -- view name " + wrapper.getDBAliasInStr());
+			if(logger.isDebugEnabled()){
+				logger.debug("Wrapper name: " + wrapper.getWrapperName() + " -- view name " + wrapper.getDBAliasInStr());
+			}
 			if (!Main.getWindowStorage().tableExists(wrapper.getDBAliasInStr(), wrapper.getOutputFormat())) {
 				Main.getWindowStorage().executeCreateTable(wrapper.getDBAliasInStr(), wrapper.getOutputFormat(),
 						wrapper.isTimeStampUnique());

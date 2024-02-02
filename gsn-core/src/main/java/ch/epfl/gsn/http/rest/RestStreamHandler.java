@@ -219,7 +219,9 @@ public class RestStreamHandler extends HttpServlet implements ContinuationListen
 
 			boolean isExist = DataDistributerRest.getInstance(delivery.getClass()).contains(delivery);
 			if (isExist) {
-				logger.debug("Keep alive request received for the notification-id:" + notificationId);
+				if(logger.isDebugEnabled()){
+					ogger.debug("Keep alive request received for the notification-id:" + notificationId);
+				}
 				response.setStatus(SUCCESS_200);
 				delivery.close();
 				return;
@@ -227,9 +229,13 @@ public class RestStreamHandler extends HttpServlet implements ContinuationListen
 
 			DefaultDistributionRequest distributionReq = DefaultDistributionRequest.create(delivery,
 					parser.getVSensorConfig(), parser.getQuery(), parser.getStartTime(), parser.isContinuous());
-			logger.debug("Rest request received: " + distributionReq.toString());
+			if(logger.isDebugEnabled()){
+				logger.debug("Rest request received: " + distributionReq.toString());
+			}
 			DataDistributerRest.getInstance(delivery.getClass()).addListener(distributionReq);
-			logger.debug("Streaming request received and registered:" + distributionReq.toString());
+			if(logger.isDebugEnabled()){	
+				logger.debug("Streaming request received and registered:" + distributionReq.toString());
+			}
 		} catch (Exception e) {
 			logger.warn(e.getMessage(), e);
 			return;

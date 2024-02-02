@@ -147,7 +147,9 @@ public class AbstractQuery {
 		} else {
 			sqlQuery.append("group by aggregation_interval desc ");
 		}
-		logger.debug("SQL Query built >" + sqlQuery.toString() + "<");
+		if(logger.isDebugEnabled()){
+			logger.debug("SQL Query built >" + sqlQuery.toString() + "<");
+		}
 		return sqlQuery;
 	}
 
