@@ -30,20 +30,20 @@ import java.util.Comparator;
 import java.util.TreeMap;
 
 import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.utils.models.AbstractModel;
-import ch.epfl.gsn.vsensor.AbstractVirtualSensor;
-import ch.epfl.gsn.vsensor.ModellingVirtualSensor;
 
-import org.slf4j.Logger;
+
 
 /**
- * This class is linked to an array of AbstractModels and keep them updated by
+ * This class is linked to an array of AbstractModels and keeps them updated by
  * pushing every StreamElement to them.
  * The model classes are defined by their class names separated by "," as a
  * parameter of the VS.
- * If a model need some parameters before initializing, they can be specified in
+ * If a model needs some parameters before initializing, they can be specified
+ * in
  * the VS parameters as "model.i.param",
  * where i is the index of the model and param the parameter name.
  * 
@@ -61,6 +61,13 @@ public class ModellingVirtualSensor extends AbstractVirtualSensor {
 
 	private AbstractModel[] am;
 
+	/**
+	 * Initializes the modeling virtual sensor by getting the model class names from
+	 * the parameters, instantiating the models, setting their parameters, output
+	 * structure and virtual sensor reference, and initializing them.
+	 * 
+	 * @return true if all models initialize successfully, false otherwise.
+	 */
 	@Override
 	public boolean initialize() {
 
@@ -111,6 +118,17 @@ public class ModellingVirtualSensor extends AbstractVirtualSensor {
 
 	}
 
+	/**
+	 * Handles new sensor data arriving from sensor.
+	 *
+	 * Pushes the data to each configured model, collects the output,
+	 * sorts it by timestamp, and sends it out as the virtual sensor's
+	 * output.
+	 *
+	 * @param inputStreamName Name of the input stream for the arriving data
+	 * @param streamElement   The StreamElement data object containing the sensor
+	 *                        reading
+	 */
 	@Override
 	public void dataAvailable(String inputStreamName, StreamElement streamElement) {
 		StreamElement[] out = new StreamElement[] { streamElement };

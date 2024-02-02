@@ -40,6 +40,10 @@ import java.sql.SQLException;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
+/**
+ * This class extends BridgeVirtualSensorPermasense to provide conditional
+ * deletion of data based on evaluating fields against values.
+ */
 public class ConditionalDeleteVirtualSensor extends BridgeVirtualSensorPermasense {
 
 	private final static transient Logger logger = LoggerFactory.getLogger(ConditionalDeleteVirtualSensor.class);
@@ -48,6 +52,15 @@ public class ConditionalDeleteVirtualSensor extends BridgeVirtualSensorPermasens
 	private ArrayList<String> fieldList;
 	String conditional = "";
 
+	/**
+	 * Initializes the virtual sensor by parsing parameters from the virtual sensor
+	 * configuration, constructing the delete query, and preparing the delete statement.
+	 * 
+	 * Retrieves the field names and operations from the parameter map. Validates
+	 * that the fields exist in the output structure. 
+	 * Constructs the conditional delete query by joining the field names,
+	 * operations, and join clauses. Prepares the delete statement.
+	 */
 	@Override
 	public boolean initialize() {
 		boolean ret = super.initialize();
@@ -106,6 +119,15 @@ public class ConditionalDeleteVirtualSensor extends BridgeVirtualSensorPermasens
 		return ret;
 	}
 
+	/**
+	 * Handles incoming data from the input stream.
+	 * Checks if the data contains the fields needed for the delete query.
+	 * If so, sets the prepared statement parameters and executes the delete.
+	 * Retries the delete up to 3 times if there are issues executing it.
+	 * 
+	 * @param inputStreamName Name of the input stream
+	 * @param data            StreamElement containing the input data
+	 */
 	@Override
 	public void dataAvailable(String inputStreamName, StreamElement data) {
 		long time = System.currentTimeMillis();

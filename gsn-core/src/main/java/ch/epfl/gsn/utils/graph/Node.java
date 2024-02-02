@@ -49,6 +49,11 @@ public class Node<T> implements Serializable {
 		this(null);
 	}
 
+	/**
+	 * Constructs a new `Node` with the specified object of type T.
+	 *
+	 * @param object The object to be stored in the node.
+	 */
 	public Node(T object) {
 		inputEdges = new ArrayList<Edge<T>>();
 		outputEdges = new ArrayList<Edge<T>>();
@@ -58,6 +63,13 @@ public class Node<T> implements Serializable {
 		this.object = object;
 	}
 
+	/**
+	 * Adds an edge connecting this node to the specified node.
+	 *
+	 * @param node The target node to which the edge connects.
+	 * @return The created edge.
+	 * @throws EdgeExistsException If an edge to the specified node already exists.
+	 */
 	public Edge<T> addEdge(Node<T> node) throws EdgeExistsException {
 		if (edgeExists(node)) {
 			throw new EdgeExistsException();
@@ -68,6 +80,12 @@ public class Node<T> implements Serializable {
 		return edge;
 	}
 
+	/**
+	 * Removes the edge connecting the current node to the specified node.
+	 *
+	 * @param node The target node to which the edge connects.
+	 * @return `true` if the edge was successfully removed, `false` otherwise.
+	 */
 	public boolean removeEdge(Node<T> node) {
 		boolean removed = false;
 		Edge<T> edge = getEdge(node);
@@ -79,6 +97,13 @@ public class Node<T> implements Serializable {
 		return removed;
 	}
 
+	/**
+	 * Checks if an edge exists between the current node object and the specified
+	 * node.
+	 * 
+	 * @param node the node to check for an edge connection
+	 * @return true if an edge exists, false otherwise
+	 */
 	private boolean edgeExists(Node<T> node) {
 		for (Edge<T> edge : outputEdges) {
 			if (edge.getEndNode().equals(node)) {
@@ -88,6 +113,13 @@ public class Node<T> implements Serializable {
 		return false;
 	}
 
+	/**
+	 * Returns the edge connecting the current node object to the specified node.
+	 *
+	 * @param node the node to which the edge is connected
+	 * @return the edge connecting this node to the specified node, or null if no
+	 *         such edge exists
+	 */
 	private Edge<T> getEdge(Node<T> node) {
 		for (Edge<T> edge : outputEdges) {
 			if (edge.getEndNode().equals(node)) {
@@ -137,6 +169,17 @@ public class Node<T> implements Serializable {
 		this.visited = visited;
 	}
 
+	/**
+	 * Compares this Node object with the specified object for equality.
+	 * Returns true if the specified object is also a Node and has the same object
+	 * reference,
+	 * or if the specified object is a Node and its object reference is equal to
+	 * this Node's object reference.
+	 * Otherwise, returns false.
+	 *
+	 * @param obj the object to compare with
+	 * @return true if the objects are equal, false otherwise
+	 */
 	public boolean equals(Object obj) {
 		if (this.object == obj) {
 			return true;
@@ -148,6 +191,11 @@ public class Node<T> implements Serializable {
 		return false;
 	}
 
+	/**
+	 * Returns a string representation of the object.
+	 * 
+	 * @return a string representation of the object
+	 */
 	public String toString() {
 		return new StringBuilder("Node[").append(object != null ? object.toString() : null).append("]").toString();
 	}

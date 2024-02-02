@@ -36,13 +36,12 @@ import java.util.Vector;
 import java.util.Map.Entry;
 
 import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.beans.VSensorConfig;
-import ch.epfl.gsn.vsensor.AbstractVirtualSensor;
-import ch.epfl.gsn.vsensor.StreamRRDExporterVirtualSensor;
 
-import org.slf4j.Logger;
+
 
 public class StreamRRDExporterVirtualSensor extends AbstractVirtualSensor {
 	public static final String PARAM_RRDFILE = "rrdfile";
@@ -55,6 +54,13 @@ public class StreamRRDExporterVirtualSensor extends AbstractVirtualSensor {
 
 	private Vector<String> fields = new Vector<String>();
 
+	/**
+	 * Initializes the virtual sensor by setting its configuration parameters from
+	 * the Virtual
+	 * Sensor Configuration and performing necessary checks and operations.
+	 *
+	 * @return True if the initialization is successful, false otherwise.
+	 */
 	public boolean initialize() {
 		VSensorConfig vsensor = getVirtualSensorConfiguration();
 		TreeMap<String, String> params = vsensor.getMainClassInitialParams();
@@ -82,6 +88,12 @@ public class StreamRRDExporterVirtualSensor extends AbstractVirtualSensor {
 		}
 	}
 
+	/**
+	 * Creates an RRD (Round Robin Database) file using the rrdtool command-line
+	 * tool.
+	 *
+	 * @return True if the RRD file creation is successful, false otherwise.
+	 */
 	private boolean createRRDFile() {
 		String command = "rrdtool create " + rrdfile + " --step 300 ";
 		for (int i = 0; i < this.fields.size(); i++) {
@@ -108,24 +120,33 @@ public class StreamRRDExporterVirtualSensor extends AbstractVirtualSensor {
 		}
 	}
 
+	/**
+	 * Called when new data is available in the input stream.
+	 * Ensures the existence of the RRD file and exports the values from the stream
+	 * element.
+	 *
+	 * @param inputStreamName The name of the input stream.
+	 * @param streamElement   The data element from the stream.
+	 */
 	public void dataAvailable(String inputStreamName, StreamElement streamElement) {
 		ensureFileExistence();
 		exportValues(streamElement);
 	}
 
-	/*
-	 * returns true if the requested file exists.
-	 * 
-	 * @param filename The file name to check for.
+	/**
+	 * Ensures the existence of the RRD file by checking if it exists.
+	 *
+	 * @return True if the RRD file exists, false otherwise.
 	 */
 	private boolean ensureFileExistence() {
 		return ensureFileExistence(this.rrdfile);
 	}
 
-	/*
-	 * returns true if the requested file exists.
-	 * 
-	 * @param filename The file name to check for.
+	/**
+	 * Ensures the existence of the requested file by checking if it exists.
+	 *
+	 * @param filename The name of the file to check for existence.
+	 * @return True if the file exists, false otherwise.
 	 */
 	private boolean ensureFileExistence(String filename) {
 		File file = new File(rrdfile);
@@ -137,11 +158,13 @@ public class StreamRRDExporterVirtualSensor extends AbstractVirtualSensor {
 		}
 	}
 
-	/*
-	 * Export all received values from a stream to the proposed table name into
+	/**
+	 * Exports values from a StreamElement to the proposed table name into
 	 * the database selected by the currently open connection.
+	 *
+	 * @param streamElement The StreamElement object containing the data to be
+	 *                      exported.
 	 */
-
 	private void exportValues(StreamElement streamElement) {
 		logger.debug("Trying to add new data items to the rrdfile:" + this.rrdfile);
 		String command = "rrdtool update " + rrdfile + " N";

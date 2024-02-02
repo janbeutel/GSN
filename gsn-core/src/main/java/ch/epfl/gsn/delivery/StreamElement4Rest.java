@@ -35,14 +35,25 @@ import com.thoughtworks.xstream.XStream;
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.StreamElement;
 
+/**
+ * Represents a StreamElement for REST communication.
+ */
 public class StreamElement4Rest {
 
 	private List<Field4Rest> fields = new ArrayList<Field4Rest>();
 
+	/**
+	 * Default constructor.
+	 */
 	public StreamElement4Rest() {
 
 	}
 
+	/**
+	 * Constructs a StreamElement4Rest object from a StreamElement.
+	 *
+	 * @param se The StreamElement object to convert.
+	 */
 	public StreamElement4Rest(StreamElement se) {
 		this.timestamp = new Date(se.getTimeStamp());
 		for (int i = 0; i < se.getFieldNames().length; i++) {
@@ -50,6 +61,11 @@ public class StreamElement4Rest {
 		}
 	}
 
+	/**
+	 * Returns a string representation of the StreamElement4Rest object.
+	 *
+	 * @return The string representation of the object.
+	 */
 	public String toString() {
 		StringBuilder sb = new StringBuilder("StreamElement4Rest: (timestamp:");
 		sb.append(timestamp.toString());
@@ -64,6 +80,11 @@ public class StreamElement4Rest {
 
 	private Date timestamp;
 
+	/**
+	 * Converts the StreamElement4Rest object to a StreamElement object.
+	 *
+	 * @return The converted StreamElement object.
+	 */
 	public StreamElement toStreamElement() {
 		String[] names = new String[fields.size()];
 		Serializable[] values = new Serializable[fields.size()];
@@ -80,6 +101,11 @@ public class StreamElement4Rest {
 
 	}
 
+	/**
+	 * Returns an XStream object configured for StreamElement4Rest serialization.
+	 *
+	 * @return The configured XStream object.
+	 */
 	public static XStream getXstream() {
 		XStream xstream = new XStream();
 		xstream.alias("stream-element", StreamElement4Rest.class);
@@ -102,6 +128,11 @@ public class StreamElement4Rest {
 		return xstream;
 	}
 
+	/**
+	 * Returns the timestamp of the StreamElement4Rest object.
+	 *
+	 * @return The timestamp.
+	 */
 	public Date getTimestamp() {
 		return timestamp;
 	}

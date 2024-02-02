@@ -47,6 +47,12 @@ public abstract class AbstractModel {
 		return outputfield;
 	}
 
+	/**
+	 * Sets the output fields of the model.
+	 *
+	 * @param outputStructure the array of DataField objects representing the output
+	 *                        structure
+	 */
 	public void setOutputFields(DataField[] outputStructure) {
 		outputfield = outputStructure;
 
@@ -62,10 +68,20 @@ public abstract class AbstractModel {
 		return true;
 	}
 
+	/**
+	 * Sets the virtual sensor for the model.
+	 * 
+	 * @param v the virtual sensor to be set
+	 */
 	public void setVirtualSensor(ModellingVirtualSensor v) {
 		vs = v;
 	}
 
+	/**
+	 * Returns the ModellingVirtualSensor associated with this AbstractModel.
+	 *
+	 * @return the ModellingVirtualSensor associated with this AbstractModel
+	 */
 	public ModellingVirtualSensor getVirtualSensor() {
 
 		return vs;

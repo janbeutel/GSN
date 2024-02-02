@@ -44,6 +44,14 @@ public abstract class AbstractHCIQuery {
 	private String queryDescription;
 	private String[] paramsDescriptions;
 
+	/**
+	 * Constructs a new AbstractHCIQuery object with the specified name, query
+	 * description, and parameter descriptions.
+	 *
+	 * @param name               the name of the query
+	 * @param queryDescription   the description of the query
+	 * @param paramsDescriptions an array of parameter descriptions
+	 */
 	public AbstractHCIQuery(String name, String queryDescription, String[] paramsDescriptions) {
 		QUERY_NAME = name;
 		this.queryDescription = queryDescription;

@@ -29,9 +29,6 @@ package ch.epfl.gsn.delivery.datarequest;
 import java.io.OutputStream;
 import java.util.Map;
 
-import ch.epfl.gsn.delivery.datarequest.DataRequestException;
-import ch.epfl.gsn.delivery.datarequest.QueriesBuilder;
-
 /**
  * <p>
  * This class provides a generic and fine grained way to select data for a set
@@ -89,16 +86,41 @@ public abstract class AbstractDataRequest {
 
 	protected Map<String, String[]> requestParameters = null;
 
+	/**
+	 * Constructs a new AbstractDataRequest object with the specified request
+	 * parameters.
+	 *
+	 * @param requestParameters the request parameters to be used for processing the
+	 *                          data request
+	 * @throws DataRequestException if an error occurs during the construction of
+	 *                              the data request
+	 */
 	public AbstractDataRequest(Map<String, String[]> requestParameters) throws DataRequestException {
 		this.requestParameters = requestParameters;
 		qbuilder = new QueriesBuilder(requestParameters);
 	}
 
+	/**
+	 * Gets the QueriesBuilder object associated with this data request.
+	 *
+	 * @return the QueriesBuilder object
+	 */
 	public QueriesBuilder getQueryBuilder() {
 		return qbuilder;
 	}
 
+	/**
+	 * Processes the data request.
+	 *
+	 * @throws DataRequestException if an error occurs during the processing of the
+	 *                              data request
+	 */
 	public abstract void process() throws DataRequestException;
 
+	/**
+	 * Outputs the result of the data request to the specified output stream.
+	 *
+	 * @param os the output stream to write the result to
+	 */
 	public abstract void outputResult(OutputStream os);
 }

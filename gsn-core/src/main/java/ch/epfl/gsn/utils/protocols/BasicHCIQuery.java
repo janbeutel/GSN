@@ -35,7 +35,12 @@ public class BasicHCIQuery extends AbstractHCIQueryWithoutAnswer {
 	public static final String[] PARAMS_DESCRIPTION = { "Bytes to send to the controller." };
 
 	/**
-	 * You can change the default texts here.
+	 * Constructs a new BasicHCIQuery with the specified name, query description,
+	 * and parameters descriptions.
+	 *
+	 * @param Name               the name of the BasicHCIQuery
+	 * @param queryDescription   the description of the query
+	 * @param paramsDescriptions an array of descriptions for each parameter
 	 */
 	public BasicHCIQuery(String Name, String queryDescription, String[] paramsDescriptions) {
 		super(Name, queryDescription, paramsDescriptions);

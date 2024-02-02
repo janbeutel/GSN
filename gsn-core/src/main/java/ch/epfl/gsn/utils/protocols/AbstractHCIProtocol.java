@@ -60,12 +60,23 @@ public abstract class AbstractHCIProtocol {
 	private String protocolName;
 	private HashMap<String, AbstractHCIQuery> queries;
 
+	/**
+	 * Constructs a new instance of the AbstractHCIProtocol class with the specified
+	 * name.
+	 *
+	 * @param name the name of the protocol
+	 */
 	public AbstractHCIProtocol(String name) {
 		logger.debug("Initializing protocol " + name);
 		protocolName = name;
 		queries = new HashMap<String, AbstractHCIQuery>();
 	}
 
+	/**
+	 * Adds a query to the protocol.
+	 *
+	 * @param query the query to be added
+	 */
 	protected void addQuery(AbstractHCIQuery query) {
 		queries.put(query.getName(), query);
 		logger.debug("added query: " + query.getName());
@@ -81,6 +92,11 @@ public abstract class AbstractHCIProtocol {
 		return queries.values();
 	}
 
+	/**
+	 * Returns a collection of names associated with the queries in the protocol.
+	 *
+	 * @return a collection of names
+	 */
 	public Collection<String> getNames() {
 		return queries.keySet();
 	}
@@ -94,6 +110,12 @@ public abstract class AbstractHCIProtocol {
 		return protocolName;
 	}
 
+	/**
+	 * Retrieves the query with the specified name from the collection of queries.
+	 *
+	 * @param queryName the name of the query to retrieve
+	 * @return the query with the specified name, or null if not found
+	 */
 	public AbstractHCIQuery getQuery(String queryName) {
 		for (String key : queries.keySet()) {
 			if (key.equals(queryName)) {

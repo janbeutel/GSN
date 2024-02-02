@@ -27,6 +27,14 @@ package ch.epfl.gsn.utils;
 
 public class ParamParser {
 
+   /**
+    * Parses the given input string into an integer value.
+    * If the input is null or cannot be parsed, the default value is returned.
+    *
+    * @param input        the input string to be parsed
+    * @param defaultValue the default value to be returned if parsing fails
+    * @return the parsed integer value or the default value if parsing fails
+    */
    public static int getInteger(String input, int defaultValue) {
       if (input == null) {
          return defaultValue;
@@ -38,6 +46,15 @@ public class ParamParser {
       }
    }
 
+   /**
+    * Parses the input object into an integer value.
+    * If the input is null or cannot be parsed into an integer, the default value
+    * is returned.
+    *
+    * @param input        the input object to be parsed
+    * @param defaultValue the default value to be returned if parsing fails
+    * @return the parsed integer value or the default value if parsing fails
+    */
    public static int getInteger(Object input, int defaultValue) {
       if (input == null) {
          return defaultValue;

@@ -27,6 +27,10 @@ import ch.epfl.gsn.storage.DataEnumerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * MappingVirtualSensor extends BridgeVirtualSensorPermasense to provide mapping
+ * functionality between physical and virtual sensors.
+ */
 public class MappingVirtualSensor extends BridgeVirtualSensorPermasense {
 
 	private static final transient Logger logger = LoggerFactory.getLogger(MappingVirtualSensor.class);
@@ -35,6 +39,18 @@ public class MappingVirtualSensor extends BridgeVirtualSensorPermasense {
 	private Map<Integer, SensorMappings> sensorMappings;
 	private ArrayList<GeoMapping> geoMappings;
 
+	/**
+	 * initializes the positionMappings, sensorMappings, and geoMappings fields.
+	 * 
+	 * It loads the latest mapping data from the database for this virtual sensor,
+	 * by querying for the max timed row.
+	 * 
+	 * It then unmarshalls the byte array from the latest row into a DeviceMappings
+	 * object, and extracts the positionMappings, sensorMappings, and geoMappings
+	 * into the fields.
+	 * 
+	 * If no data is found, it just initializes empty maps and list.
+	 */
 	@Override
 	public boolean initialize() {
 		positionMappings = new Hashtable<Integer, PositionMappings>();
@@ -89,6 +105,16 @@ public class MappingVirtualSensor extends BridgeVirtualSensorPermasense {
 		return true;
 	}
 
+	/**
+	 * Handles incoming data from input streams to map device data.
+	 * 
+	 * This maps incoming data from the "position_mapping", "sensor_mapping",
+	 * and "geo_mapping" input streams to the positionMappings, sensorMappings,
+	 * and geoMappings objects to track device and sensor metadata.
+	 *
+	 * @param inputStreamName The name of the input stream for the incoming data
+	 * @param data            The StreamElement data object with the incoming data
+	 */
 	@Override
 	public void dataAvailable(String inputStreamName, StreamElement data) {
 		int position = (Integer) data.getData("position");
@@ -135,6 +161,14 @@ public class MappingVirtualSensor extends BridgeVirtualSensorPermasense {
 		}
 	}
 
+	/**
+	 * Generates data from the position, sensor, and geo mappings.
+	 *
+	 * This is done synchronously when new mapping data is received to keep
+	 * the output stream up to date.
+	 *
+	 * @param timestamp The timestamp to use for the generated data
+	 */
 	synchronized void generateData(Long timestamp) {
 		DeviceMappings map = new DeviceMappings(new ArrayList<PositionMappings>(positionMappings.values()),
 				new ArrayList<SensorMappings>(sensorMappings.values()), geoMappings);

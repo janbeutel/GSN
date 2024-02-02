@@ -54,6 +54,13 @@ public class KeyValueImp implements KeyValue, Serializable {
 
    }
 
+   /**
+    * Constructs a new instance of the KeyValueImp class with the specified key and
+    * value.
+    *
+    * @param key   the key associated with the key-value pair
+    * @param value the value associated with the key-value pair
+    */
    public KeyValueImp(String key, String value) {
       this.key = key;
       this.value = value;
@@ -67,6 +74,16 @@ public class KeyValueImp implements KeyValue, Serializable {
       this.value = value;
    }
 
+   /**
+    * Compares this KeyValueImp object with the specified object for equality.
+    * Returns true if the specified object is also a KeyValueImp object and
+    * has the same key and value as this object, ignoring case sensitivity.
+    *
+    * @param obj the object to be compared for equality with this KeyValueImp
+    *            object
+    * @return true if the specified object is equal to this KeyValueImp object,
+    *         false otherwise
+    */
    public boolean equals(Object obj) {
       if (obj == null || !(obj instanceof KeyValueImp)) {
          return false;
@@ -112,6 +129,11 @@ public class KeyValueImp implements KeyValue, Serializable {
       return toString().hashCode();
    }
 
+   /**
+    * Returns a string representation of the object.
+    *
+    * @return a string representation of the object.
+    */
    public String toString() {
       StringBuffer result = new StringBuffer();
       result.append("Predicate ( Key = ").append(key).append(", Value = ").append(value).append(" )\n");

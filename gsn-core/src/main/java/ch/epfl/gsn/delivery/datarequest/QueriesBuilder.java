@@ -35,18 +35,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.slf4j.LoggerFactory;
-
-import ch.epfl.gsn.Main;
-import ch.epfl.gsn.delivery.datarequest.AbstractQuery;
-import ch.epfl.gsn.delivery.datarequest.AggregationCriterion;
-import ch.epfl.gsn.delivery.datarequest.DataRequestException;
-import ch.epfl.gsn.delivery.datarequest.FieldsCollection;
-import ch.epfl.gsn.delivery.datarequest.LimitCriterion;
-import ch.epfl.gsn.delivery.datarequest.QueriesBuilder;
-import ch.epfl.gsn.delivery.datarequest.StandardCriterion;
-
 import org.slf4j.Logger;
 
+import ch.epfl.gsn.Main;
+
+/**
+ * The QueriesBuilder class is responsible for building SQL queries based on the
+ * request parameters.
+ */
 public class QueriesBuilder {
 
 	private static transient Logger logger = LoggerFactory.getLogger(QueriesBuilder.class);
@@ -80,12 +76,27 @@ public class QueriesBuilder {
 		allowedTimeFormats.put("unix", "unix");
 	}
 
+	/**
+	 * Constructs a new `QueriesBuilder` object with the specified request
+	 * parameters.
+	 *
+	 * @param requestParameters The request parameters containing input data.
+	 * @throws DataRequestException If there is an issue with the data request.
+	 */
 	public QueriesBuilder(Map<String, String[]> requestParameters) throws DataRequestException {
 		this.requestParameters = requestParameters;
 		parseParameters();
 		buildSQLQueries();
 	}
 
+	/**
+	 * Parses the input parameters and initializes the internal state of the
+	 * `QueriesBuilder` instance accordingly.
+	 * It validates the presence of mandatory parameters and constructs data
+	 * structures for optional parameters.
+	 *
+	 * @throws DataRequestException If there is an issue with the data request.
+	 */
 	private void parseParameters() throws DataRequestException {
 
 		String[] vsnamesParameters = requestParameters.get(PARAM_VSNAMES_AND_FIELDS);
@@ -140,6 +151,11 @@ public class QueriesBuilder {
 		return sqlQueries;
 	}
 
+	/**
+	 * Builds SQL queries based on the parsed input parameters.
+	 * It constructs queries for virtual sensors, applying aggregation, standard
+	 * criteria, and limiting as needed.
+	 */
 	private void buildSQLQueries() {
 
 		this.sqlQueries = new Hashtable<String, AbstractQuery>();

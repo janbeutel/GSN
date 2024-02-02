@@ -49,6 +49,13 @@ public final class Mappings {
 
    private static final transient Logger logger = LoggerFactory.getLogger(Mappings.class);
 
+   /**
+    * Adds a virtual sensor instance to the sensor pool.
+    * 
+    * @param sensorPool The virtual sensor instance to be added.
+    * @return true if the virtual sensor instance was added successfully, false
+    *         otherwise.
+    */
    public static boolean addVSensorInstance(VirtualSensor sensorPool) {
       try {
          logger.info("Testing the pool for :" + sensorPool.getConfig().getName());
@@ -70,14 +77,36 @@ public final class Mappings {
       return true;
    }
 
+   /**
+    * Retrieves an instance of VirtualSensor based on the given file name.
+    *
+    * @param fileName the name of the file associated with the VirtualSensor
+    *                 instance
+    * @return the VirtualSensor instance associated with the given file name, or
+    *         null if not found
+    */
    public static VirtualSensor getVSensorInstanceByFileName(String fileName) {
       return fileNameToVSInstance.get(fileName);
    }
 
+   /**
+    * Retrieves the mapping of output structure fields for a given virtual sensor
+    * name.
+    *
+    * @param vsName the name of the virtual sensor
+    * @return a TreeMap containing the mapping of output structure fields
+    */
    public static final TreeMap<String, Boolean> getVsNamesToOutputStructureFieldsMapping(String vsName) {
       return vsNamesToOutputStructureFields.get(vsName);
    }
 
+   /**
+    * Retrieves the configuration for a virtual sensor based on its name.
+    *
+    * @param vSensorName the name of the virtual sensor
+    * @return the configuration for the virtual sensor, or null if the name is null
+    *         or not found
+    */
    public static VSensorConfig getVSensorConfig(String vSensorName) {
       if (vSensorName == null) {
          return null;
@@ -85,6 +114,13 @@ public final class Mappings {
       return vsNameTOVSConfig.get(vSensorName);
    }
 
+   /**
+    * Removes the specified filename from the mappings.
+    * If the filename exists in the mappings, it will be removed along with its
+    * associated VSensorConfig.
+    *
+    * @param fileName the name of the file to be removed from the mappings
+    */
    public static void removeFilename(String fileName) {
       if (fileNameToVSInstance.containsKey(fileName)) {
          VSensorConfig config = fileNameToVSInstance.get(fileName).getConfig();
@@ -93,14 +129,32 @@ public final class Mappings {
       }
    }
 
+   /**
+    * Returns the last modified time of the specified file.
+    *
+    * @param configFileName the name of the configuration file
+    * @return the last modified time of the file as a Long value
+    */
    public static Long getLastModifiedTime(String configFileName) {
       return Long.valueOf(fileNameToVSInstance.get(configFileName).getLastModified());
    }
 
+   /**
+    * Returns an array of all known file names.
+    *
+    * @return an array of strings representing the file names
+    */
    public static String[] getAllKnownFileName() {
       return fileNameToVSInstance.keySet().toArray(new String[0]);
    }
 
+   /**
+    * Retrieves the configuration object for a given file name.
+    *
+    * @param fileName the name of the file
+    * @return the configuration object associated with the file name, or null if
+    *         the file name is null
+    */
    public static VSensorConfig getConfigurationObject(String fileName) {
       if (fileName == null) {
          return null;
@@ -108,10 +162,22 @@ public final class Mappings {
       return fileNameToVSInstance.get(fileName).getConfig();
    }
 
+   /**
+    * Returns an iterator over all the VSensorConfigs in the Mappings.
+    *
+    * @return an iterator over all the VSensorConfigs
+    */
    public static Iterator<VSensorConfig> getAllVSensorConfigs() {
       return vsNameTOVSConfig.values().iterator();
    }
 
+   /**
+    * Retrieves an instance of VirtualSensor based on the given virtual sensor
+    * name.
+    * 
+    * @param vsensorName the name of the virtual sensor
+    * @return an instance of VirtualSensor if found, otherwise null
+    */
    public static VirtualSensor getVSensorInstanceByVSName(String vsensorName) {
       if (vsensorName == null) {
          return null;

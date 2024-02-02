@@ -21,8 +21,6 @@ import ch.epfl.gsn.processor.ScriptletProcessor;
 import ch.epfl.gsn.utils.ParamParser;
 import ch.epfl.gsn.utils.Helpers;
 import ch.epfl.gsn.wrappers.DataMappingWrapper;
-
-//import org.apache.log4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -30,6 +28,11 @@ import org.slf4j.Logger;
  *
  * @author Tonio Gsell
  * @author Mustafa Yuecel
+ */
+
+/**
+ * BridgeVirtualSensorPermasense extends ScriptletProcessor to provide
+ * functionality for processing Permasense sensor data.
  */
 public class BridgeVirtualSensorPermasense extends ScriptletProcessor {
 	private static final int DEFAULT_WIDTH = 610;
@@ -45,6 +48,18 @@ public class BridgeVirtualSensorPermasense extends ScriptletProcessor {
 	private boolean gps_time_conversion = false;
 	private boolean processScriptlet;
 
+	/**
+	 * Initializes the BridgeVirtualSensorPermasense by parsing
+	 * the virtual sensor configuration file
+	 * 
+	 * Sets the deployment name, image width, rotate image flag,
+	 * list of images to scale, and enables position mapping, sensor type mapping,
+	 * sensor value conversion, and GPS time conversion based on configuration.
+	 * 
+	 * Calls the parent initialize() method.
+	 * 
+	 * @return true if successful initialization
+	 */
 	@Override
 	public boolean initialize() {
 		String s;
@@ -88,6 +103,15 @@ public class BridgeVirtualSensorPermasense extends ScriptletProcessor {
 		return true;
 	}
 
+	/**
+	 * Processes incoming data from the input stream.
+	 * Performs position mapping, sensor type mapping, sensor value conversion
+	 * and GPS time conversion based on configuration.
+	 * Scales images in the data to the configured width.
+	 * 
+	 * @param inputStreamName Name of the input stream
+	 * @param data            The input data
+	 */
 	@Override
 	public void dataAvailable(String inputStreamName, StreamElement data) {
 		String s;

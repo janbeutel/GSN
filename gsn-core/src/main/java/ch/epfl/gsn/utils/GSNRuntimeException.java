@@ -26,10 +26,21 @@
 
 package ch.epfl.gsn.utils;
 
+/**
+ * This class represents a custom runtime exception specific to the GSN
+ * application.
+ * It extends the RuntimeException class and provides a constructor to set the
+ * exception message.
+ */
 public class GSNRuntimeException extends RuntimeException {
 
    private static final long serialVersionUID = 444L;
 
+   /**
+    * Constructs a new GSNRuntimeException with the specified detail message.
+    *
+    * @param message the detail message
+    */
    public GSNRuntimeException(String message) {
       super(message);
    }

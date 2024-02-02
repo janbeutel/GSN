@@ -30,8 +30,6 @@ import ch.epfl.gsn.beans.DataTypes;
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.beans.VSensorConfig;
 import ch.epfl.gsn.utils.geo.GridTools;
-import ch.epfl.gsn.vsensor.AbstractVirtualSensor;
-import ch.epfl.gsn.vsensor.GridRenderer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,8 +39,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.MalformedURLException;
@@ -50,6 +46,10 @@ import java.net.URL;
 import java.util.Hashtable;
 import java.util.TreeMap;
 
+/**
+ * GridRenderer class extends AbstractVirtualSensor.
+ * Used to render grid-based sensor data as images.
+ */
 public class GridRenderer extends AbstractVirtualSensor {
 
     private static final transient Logger logger = LoggerFactory.getLogger(GridRenderer.class);
@@ -76,6 +76,21 @@ public class GridRenderer extends AbstractVirtualSensor {
     int cell_pixels = 20;
     boolean map_overlay = false;
 
+    /**
+     * Initializes the GridRenderer virtual sensor by parsing configuration
+     * parameters from the Virtual Sensor configuartion.
+     * 
+     * Parses parameters for:
+     * - cell_pixels: Number of pixels per grid cell
+     * - min_v: Minimum value for color scale
+     * - max_v: Maximum value for color scale
+     * - map_overlay: Whether to overlay map tiles
+     * 
+     * Validates parameter values and sets defaults if invalid.
+     * Initializes the color map.
+     * 
+     * Returns true if initialization succeeded.
+     */
     @Override
     public boolean initialize() {
 
@@ -144,6 +159,14 @@ public class GridRenderer extends AbstractVirtualSensor {
 
     }
 
+    /**
+     * Handles new grid data received from the input stream.
+     * Deserializes the grid data, renders it to an image,
+     * and outputs it as a binary StreamElement.
+     *
+     * @param inputStreamName Name of the input stream
+     * @param streamElement   StreamElement containing the new grid data
+     */
     @Override
     public void dataAvailable(String inputStreamName, StreamElement streamElement) {
 
@@ -317,7 +340,12 @@ public class GridRenderer extends AbstractVirtualSensor {
         return outputStream.toByteArray();
     }
 
-    // green-yellow-red color map
+    /**
+     * Initializes the color map used for rendering the heatmap grid.
+     * The color map is an array that maps intensity values (0-255) to
+     * RGB color values. Lower intensities are mapped to greens, medium
+     * intensities to yellows, and higher intensities to reds.
+     */
     public void initColorMap() {
         map = new int[256];
         int r, g, b;

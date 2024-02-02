@@ -56,6 +56,14 @@ import java.sql.ResultSet;
 import org.slf4j.Logger;
 import org.joda.time.format.ISODateTimeFormat;
 
+/**
+ * The LocalDeliveryWrapper class represents a local delivery system.
+ * It extends the AbstractWrapper class and implements the DeliverySystem
+ * interface.
+ * This class acts as a wrapper around the actual delivery system
+ * implementation,
+ * providing an abstraction layer for interacting with the delivery system.
+ */
 public class LocalDeliveryWrapper extends AbstractWrapper implements DeliverySystem {
 
 	private final String CURRENT_TIME = ISODateTimeFormat.dateTime().print(System.currentTimeMillis());
@@ -76,6 +84,29 @@ public class LocalDeliveryWrapper extends AbstractWrapper implements DeliverySys
 		return "Local-wrapper";
 	}
 
+	/**
+	 * Initializes the local delivery system by setting up the necessary parameters
+	 * and configurations.
+	 * It retrieves the required parameters from the AddressBean object and
+	 * validates them.
+	 * The method checks if the `query` and `name` parameters are specified, and if
+	 * not, it logs an error and returns false.
+	 * If the `query` parameter is not specified, a default query is constructed
+	 * using the `vsName` parameter.
+	 * If the `startTime` is set to "continue", the method retrieves the last
+	 * visited timestamp from the database.
+	 * If the `startTime` starts with a "-", it indicates a relative time offset
+	 * from the current time.
+	 * Otherwise, the `startTime` is assumed to be an ISO-formatted timestamp.
+	 * The method validates the query using the `SQLValidator` class and retrieves
+	 * the virtual sensor configuration.
+	 * It then rewrites the query using the `SQLUtils` class, replacing the virtual
+	 * sensor name with a lowercase version.
+	 * Finally, the method creates a `DefaultDistributionRequest` object for further
+	 * processing in the delivery system.
+	 *
+	 * @return true if the initialization is successful, false otherwise.
+	 */
 	public boolean initialize() {
 		AddressBean params = getActiveAddressBean();
 		String query = params.getPredicateValue("query");
@@ -191,6 +222,18 @@ public class LocalDeliveryWrapper extends AbstractWrapper implements DeliverySys
 		return true;
 	}
 
+	/**
+	 * Responsible for sending data back to the source virtual sensor by invoking
+	 * the `dataFromWeb` method on an instance of the virtual sensor.
+	 *
+	 * @param action      The action to be performed by the virtual sensor.
+	 * @param paramNames  An array of parameter names to be passed to the action.
+	 * @param paramValues An array of parameter values to be passed to the action.
+	 * @return true if the data is successfully sent to the virtual sensor, false
+	 *         otherwise.
+	 * @throws OperationNotSupportedException If the operation is not supported by
+	 *                                        the virtual sensor.
+	 */
 	public boolean sendToWrapper(String action, String[] paramNames, Serializable[] paramValues)
 			throws OperationNotSupportedException {
 		AbstractVirtualSensor vs;
@@ -205,6 +248,12 @@ public class LocalDeliveryWrapper extends AbstractWrapper implements DeliverySys
 		return toReturn;
 	}
 
+	/**
+	 * Returns a string representation of the LocalDeliveryWrapper.
+	 *
+	 * @return A string representation of the LocalDeliveryWrapper, including the
+	 *         query and start time.
+	 */
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("LocalDistributionReq => [").append(distributionRequest.getQuery()).append(", Start-Time: ")
@@ -212,6 +261,15 @@ public class LocalDeliveryWrapper extends AbstractWrapper implements DeliverySys
 		return sb.toString();
 	}
 
+	/**
+	 * Responsible for running the local data distribution process.
+	 * It retrieves an instance of the `DataDistributer` class specific to the
+	 * `LocalDeliveryWrapper` class.
+	 * The method adds the `distributionRequest` object as a listener to the
+	 * `DataDistributer` instance.
+	 * This allows the `LocalDeliveryWrapper` to receive and process new data for
+	 * local distribution.
+	 */
 	public void run() {
 		DataDistributer localDistributer = DataDistributer.getInstance(LocalDeliveryWrapper.class);
 		localDistributer.addListener(this.distributionRequest);
@@ -226,6 +284,14 @@ public class LocalDeliveryWrapper extends AbstractWrapper implements DeliverySys
 		return structure;
 	}
 
+	/**
+	 * Responsible for closing the local delivery.
+	 * It logs a warning message indicating the closure of the local delivery.
+	 * The method then attempts to release any resources held by the local delivery
+	 * by invoking the `releaseResources` method of the AbstractWrapper class.
+	 * If an `SQLException` occurs during the resource release, an error message is
+	 * logged.
+	 */
 	public void close() {
 		logger.warn("Closing a local delivery.");
 		try {
@@ -240,6 +306,12 @@ public class LocalDeliveryWrapper extends AbstractWrapper implements DeliverySys
 		return !isActive();
 	}
 
+	/**
+	 * Responsible for writing a StreamElement object to the local delivery system.
+	 *
+	 * @param se The StreamElement object to be written.
+	 * @return true indicating that the stream element was written successfully.
+	 */
 	public boolean writeStreamElement(StreamElement se) {
 		boolean isSucced = postStreamElement(se);
 		logger.debug("wants to deliver stream element:" + se.toString() + "[" + isSucced + "]");

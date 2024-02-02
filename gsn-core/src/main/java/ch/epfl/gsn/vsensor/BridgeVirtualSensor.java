@@ -31,17 +31,24 @@ import org.slf4j.LoggerFactory;
 
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.beans.VSensorConfig;
-import ch.epfl.gsn.vsensor.AbstractVirtualSensor;
-import ch.epfl.gsn.vsensor.BridgeVirtualSensor;
 
 import org.slf4j.Logger;
 import java.util.TreeMap;
 
+/**
+ * BridgeVirtualSensor extends AbstractVirtualSensor that provides
+ * functionality for bridging data between input and output streams.
+ */
 public class BridgeVirtualSensor extends AbstractVirtualSensor {
 
     private static final transient Logger logger = LoggerFactory.getLogger(BridgeVirtualSensor.class);
     private boolean allow_nulls = true; // by default allow nulls
 
+    /**
+     * Initializes the BridgeVirtualSensor by getting the allow-nulls parameter
+     * from the virtual sensor configuration and setting the allow_nulls field
+     * accordingly.
+     */
     public boolean initialize() {
         VSensorConfig vsensor = getVirtualSensorConfiguration();
         TreeMap<String, String> params = vsensor.getMainClassInitialParams();
@@ -53,6 +60,14 @@ public class BridgeVirtualSensor extends AbstractVirtualSensor {
         return true;
     }
 
+    /**
+     * Called when data is available for processing.
+     * If allow_nulls is true, the data is produced regardless of null fields.
+     * If allow_nulls is false, the data is checked via areAllFieldsNull().
+     * 
+     * @param inputStreamName the name of the input stream
+     * @param data            the StreamElement containing the data
+     */
     public void dataAvailable(String inputStreamName, StreamElement data) {
         if (allow_nulls) {
             dataProduced(data);
@@ -66,6 +81,12 @@ public class BridgeVirtualSensor extends AbstractVirtualSensor {
         logger.debug("Data received under the name: " + inputStreamName);
     }
 
+    /**
+     * Checks if fields of the given StreamElement are null.
+     * 
+     * @param data The StreamElement to check.
+     * @return True if a field is null, false otherwise.
+     */
     public boolean areAllFieldsNull(StreamElement data) {
         boolean allFieldsNull = false;
         for (int i = 0; i < data.getData().length; i++) {

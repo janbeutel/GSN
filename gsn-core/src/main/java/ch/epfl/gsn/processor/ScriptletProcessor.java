@@ -193,6 +193,11 @@ public class ScriptletProcessor extends AbstractVirtualSensor {
 
     private TimerTask periodicalTask = null;
 
+    /**
+     * Initializes the ScriptletProcessor.
+     * 
+     * @return true if the initialization is successful, false otherwise.
+     */
     @Override
     public boolean initialize() {
         return initialize(
@@ -212,6 +217,15 @@ public class ScriptletProcessor extends AbstractVirtualSensor {
         evaluate(scriptlet, se, persistant);
     }
 
+    /**
+     * Initializes the ScriptletProcessor with the given output structure and
+     * parameters.
+     * 
+     * @param outputStructure The array of DataField representing the output
+     *                        structure.
+     * @param parameters      The TreeMap containing the parameters.
+     * @return true if the initialization is successful, false otherwise.
+     */
     protected boolean initialize(DataField[] outputStructure, TreeMap<String, String> parameters) {
         if (outputStructure == null) {
             logger.warn("Failed to initialize the processing class because the outputStructure is null.");
@@ -289,6 +303,12 @@ public class ScriptletProcessor extends AbstractVirtualSensor {
         return true;
     }
 
+    /**
+     * Initializes a scriptlet with the given script.
+     * 
+     * @param ps the script to be initialized
+     * @return the initialized scriptlet
+     */
     protected Script initScriptlet(String ps) {
         StringBuilder scriptlet = new StringBuilder();
         scriptlet.append("// start auto generated part --\n");
@@ -315,6 +335,16 @@ public class ScriptletProcessor extends AbstractVirtualSensor {
         return script;
     }
 
+    /**
+     * Formats the output stream element based on the provided binding.
+     * 
+     * @param binding The binding object containing the variables to be included in
+     *                the output stream element.
+     * @return A StreamElement object containing the data extracted from the
+     *         binding, formatted according to the output structure.
+     * @throws MissingPropertyException If a required property is missing from the
+     *                                  binding.
+     */
     protected StreamElement formatOutputStreamElement(Binding binding) {
         Serializable[] data = new Serializable[outputStructure.length];
         for (int i = 0; i < outputStructure.length; i++) {
@@ -338,6 +368,12 @@ public class ScriptletProcessor extends AbstractVirtualSensor {
         return seo;
     }
 
+    /**
+     * Updates the context with the data from the given StreamElement.
+     * 
+     * @param se the StreamElement containing the data to update the context with
+     * @return the updated context
+     */
     protected Binding updateContext(StreamElement se) {
         if (se != null) {
             for (String fieldName : se.getFieldNames()) {
@@ -348,6 +384,15 @@ public class ScriptletProcessor extends AbstractVirtualSensor {
         return context;
     }
 
+    /**
+     * Evaluates a script with the given stream element and updates the context.
+     * If persist is true, formats the output stream element and calls the
+     * dataProduced method.
+     *
+     * @param script  The script to be evaluated.
+     * @param se      The stream element to be used for evaluation.
+     * @param persist Indicates whether to persist the output stream element.
+     */
     protected void evaluate(Script script, StreamElement se, boolean persist) {
         StreamElement seo = null;
         synchronized (context) {

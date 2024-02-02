@@ -35,6 +35,11 @@ public class FieldsCollection {
 	private boolean wantTimed;
 	private String[] fields;
 
+	/**
+	 * Constructs a FieldsCollection object with the specified fields.
+	 *
+	 * @param _fields the array of fields
+	 */
 	public FieldsCollection(String[] _fields) {
 
 		wantTimed = false;
@@ -53,10 +58,20 @@ public class FieldsCollection {
 		this.fields = tmp;
 	}
 
+	/**
+	 * Checks if the "timed" field is requested.
+	 *
+	 * @return true if the "timed" field is requested, false otherwise
+	 */
 	public boolean isWantTimed() {
 		return wantTimed;
 	}
 
+	/**
+	 * Retrieves the fields.
+	 *
+	 * @return an array of fields
+	 */
 	public String[] getFields() {
 		return fields;
 	}

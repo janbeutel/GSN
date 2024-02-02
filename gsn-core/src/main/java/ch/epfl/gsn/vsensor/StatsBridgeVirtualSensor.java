@@ -28,13 +28,15 @@ package ch.epfl.gsn.vsensor;
 import org.slf4j.LoggerFactory;
 
 import ch.epfl.gsn.beans.StreamElement;
-import ch.epfl.gsn.vsensor.AbstractVirtualSensor;
-import ch.epfl.gsn.vsensor.BridgeVirtualSensor;
 
 import org.slf4j.Logger;
 
 import java.util.TreeMap;
 
+/**
+ * Extends AbstractVirtualSensor to provide a bridge virtual sensor that logs
+ * statistics about the data received from the wrapped virtual sensor.
+ */
 public class StatsBridgeVirtualSensor extends AbstractVirtualSensor {
 
     private static final String PARAM_LOGGING_INTERVAL = "logging-interval";
@@ -45,6 +47,15 @@ public class StatsBridgeVirtualSensor extends AbstractVirtualSensor {
 
     private static final transient Logger logger = LoggerFactory.getLogger(BridgeVirtualSensor.class);
 
+    /**
+     * Initializes the StatsBridgeVirtualSensor.
+     * 
+     * Parses the logging interval parameter from the virtual sensor configuration.
+     * Enables timestamp logging if the parameter is valid.
+     * Stores the virtual sensor name.
+     * 
+     * @return True if initialization succeeded.
+     */
     public boolean initialize() {
 
         TreeMap<String, String> params = getVirtualSensorConfiguration().getMainClassInitialParams();
@@ -64,6 +75,20 @@ public class StatsBridgeVirtualSensor extends AbstractVirtualSensor {
 
         return true;
     }
+
+    /**
+     * Logs statistics about the data received from the wrapped
+     * virtual sensor.
+     * 
+     * This method is called whenever new data is available from the
+     * virtual sensor. It logs a message at the configured
+     * interval containing the virtual sensor name, logging counter,
+     * and timestamp.
+     *
+     * @param inputStreamName Name of the input stream for the received data
+     * @param data            The StreamElement data received from the wrapped
+     *                        sensor
+     */
 
     public void dataAvailable(String inputStreamName, StreamElement data) {
 

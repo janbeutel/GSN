@@ -36,11 +36,23 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 import ch.epfl.gsn.beans.DataTypes;
 
+/**
+ * This class is responsible for converting Field4Rest objects to XML format and
+ * vice versa.
+ * It implements the Converter interface.
+ */
 public class Field4RestConverter implements Converter {
 
 	private static final Class<Field4Rest> clazz = Field4Rest.class;
 	private static final Base64Encoder base64 = new Base64Encoder();
 
+	/**
+	 * Marshals the given object to XML format.
+	 *
+	 * @param in      The object to be marshalled.
+	 * @param writer  The HierarchicalStreamWriter used for writing XML.
+	 * @param context The MarshallingContext.
+	 */
 	public void marshal(Object in, HierarchicalStreamWriter writer, MarshallingContext context) {
 		Field4Rest input = (Field4Rest) in;
 		writer.addAttribute("name", input.getName());
@@ -69,14 +81,12 @@ public class Field4RestConverter implements Converter {
 				if (input.getValue() != null) {
 					value = (String) input.getValue();
 				}
-
 				break;
 			default:
 				type = "binary";
 				if (input.getValue() != null) {
 					value = base64.encode((byte[]) input.getValue());
 				}
-
 		}
 
 		writer.addAttribute("type", type);
@@ -85,6 +95,13 @@ public class Field4RestConverter implements Converter {
 		}
 	}
 
+	/**
+	 * Unmarshals the XML data to create an object of type Field4Rest.
+	 *
+	 * @param reader  The HierarchicalStreamReader used for reading XML.
+	 * @param context The UnmarshallingContext.
+	 * @return The unmarshalled Field4Rest object.
+	 */
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
 		Field4Rest toReturn = null;
 		String name = reader.getAttribute("name");
@@ -112,15 +129,19 @@ public class Field4RestConverter implements Converter {
 			} else {
 				value = (byte[]) base64.decode(reader.getValue());
 			}
-
 		}
 
 		toReturn = new Field4Rest(name, typeId, value);
 		return toReturn;
 	}
 
+	/**
+	 * Checks if the given class can be converted by this converter.
+	 *
+	 * @param arg0 The class to be checked.
+	 * @return true if the class can be converted, false otherwise.
+	 */
 	public boolean canConvert(Class arg0) {
 		return clazz.equals(arg0);
 	}
-
 }

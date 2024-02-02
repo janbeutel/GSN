@@ -31,28 +31,55 @@ public class UnsignedByte {
     private byte byteValue;
     private int intValue;
 
+    /**
+     * Default Constructor of an unsigned byte value.
+     */
     public UnsignedByte() {
         byteValue = 0;
         intValue = 0;
     }
 
+    /**
+     * Constructs an UnsignedByte object with the specified byte value.
+     * 
+     * @param b the byte value to be represented as an unsigned byte
+     */
     public UnsignedByte(byte b) {
         byteValue = b;
         intValue = (int) b & 0xff;
     }
 
+    /**
+     * Constructs an UnsignedByte object from an integer value.
+     * The integer value is converted to an unsigned byte value by masking it with
+     * 0xff.
+     * 
+     * @param i the integer value to be converted to an unsigned byte
+     */
     public UnsignedByte(int i) {
         i = i & 0xff;
         byteValue = (byte) i;
         intValue = i;
     }
 
+    /**
+     * Sets the value of the unsigned byte.
+     * 
+     * @param b the byte value to set
+     * @return the updated UnsignedByte object
+     */
     public UnsignedByte setValue(byte b) {
         byteValue = b;
         intValue = (int) b & 0xff;
         return this;
     }
 
+    /**
+     * Sets the value of the unsigned byte.
+     * 
+     * @param i the value to set
+     * @return the updated UnsignedByte object
+     */
     public UnsignedByte setValue(int i) {
         i = i & 0xff;
         byteValue = (byte) i;
@@ -68,10 +95,23 @@ public class UnsignedByte {
         return byteValue;
     }
 
+    /**
+     * Returns a string representation of the UnsignedByte object.
+     * The string representation consists of the byte value and the corresponding
+     * integer value.
+     *
+     * @return a string representation of the UnsignedByte object.
+     */
     public String toString() {
         return "(byte:" + getByte() + ", int:" + getInt() + ")";
     }
 
+    /**
+     * Converts an array of UnsignedByte objects to a byte array.
+     *
+     * @param uba the array of UnsignedByte objects to be converted
+     * @return the resulting byte array
+     */
     public static byte[] UnsignedByteArray2ByteArray(UnsignedByte[] uba) {
         int length = uba.length;
         byte[] ba = new byte[length];
@@ -81,6 +121,13 @@ public class UnsignedByte {
         return ba;
     }
 
+    /**
+     * Converts a byte array to an array of UnsignedByte objects.
+     *
+     * @param ba the byte array to be converted
+     * @return an array of UnsignedByte objects representing the values of the byte
+     *         array
+     */
     public static UnsignedByte[] ByteArray2UnsignedByteArray(byte[] ba) {
         int length = ba.length;
         UnsignedByte[] uba = new UnsignedByte[length];

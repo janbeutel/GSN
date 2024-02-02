@@ -44,6 +44,13 @@ public class GridTools {
 
     private static transient Logger logger = LoggerFactory.getLogger(GridTools.class);
 
+    /**
+     * Converts a byte array into a string representation of a deserialized 2D array
+     * of Double values.
+     *
+     * @param bytes The byte array representing the serialized data.
+     * @return A string representation of the deserialized data.
+     */
     public static String deSerializeToString(byte[] bytes) {
 
         StringBuilder sb = new StringBuilder();
@@ -79,6 +86,15 @@ public class GridTools {
         return sb.toString();
     }
 
+    /**
+     * Responsible for deserializing a byte array into a 2D array of Double values
+     * and retrieving the valua at a specific cell position.
+     *
+     * @param bytes The byte array representing the serialized data.
+     * @param xcell The x-coordinate of the desired cell.
+     * @param ycell The y-coordinate of the desired cell.
+     * @return The value at the specified cell position.
+     */
     public static double deSerializeToCell(byte[] bytes, int xcell, int ycell) {
 
         StringBuilder sb = new StringBuilder();
@@ -109,6 +125,19 @@ public class GridTools {
         return value;
     }
 
+    /**
+     * Responsible for deserializing a byte array into a 2D array of Double values
+     * and returning a string representation of the deserialized data within
+     * specified boundaries.
+     *
+     * @param bytes The byte array representing the serialized data.
+     * @param xmin  The minimum x-coordinate of the desired data boundaries.
+     * @param xmax  The maximum x-coordinate of the desired data boundaries.
+     * @param ymin  The minimum y-coordinate of the desired data boundaries.
+     * @param ymax  The maximum y-coordinate of the desired data boundaries.
+     * @return A string representation of the deserialized data within the specified
+     *         boundaries.
+     */
     public static String deSerializeToStringWithBoundaries(byte[] bytes, int xmin, int xmax, int ymin, int ymax) {
 
         StringBuilder sb = new StringBuilder();
@@ -144,8 +173,11 @@ public class GridTools {
         return sb.toString();
     }
 
-    /*
-     * deserialization
+    /**
+     * Deserializes a byte array into a 2D array of Double values.
+     *
+     * @param bytes The byte array representing the serialized data.
+     * @return The deserialized 2D array of Double values.
      */
     public static Double[][] deSerialize(byte[] bytes) {
 
@@ -179,6 +211,14 @@ public class GridTools {
         return deserial;
     }
 
+    /**
+     * Executes a SQL query on a database and returns the results as a formatted
+     * string.
+     *
+     * @param query  The SQL query to be executed.
+     * @param sensor The sensor for the database connection.
+     * @return The results of the query as a formatted string.
+     */
     public static String executeQueryForGridAsString(String query, String sensor) {
 
         Connection connection = null;
@@ -250,6 +290,18 @@ public class GridTools {
         return sb.toString();
     }
 
+    /**
+     * Executes a SQL query on a database and returns the results as a map of
+     * timestamps and values.
+     * The query is executed for a specific cell identified by its x and y
+     * coordinates.
+     *
+     * @param query  The SQL query to be executed.
+     * @param xcell  The x-coordinate of the cell.
+     * @param ycell  The y-coordinate of the cell.
+     * @param sensor The sensor for the database connection.
+     * @return A map of timestamps and values representing the result of the query.
+     */
     public static Map<Long, Double> executeQueryForCell2TimeSeriesAsListOfDoubles(String query, int xcell, int ycell,
             String sensor) {
 
@@ -329,6 +381,18 @@ public class GridTools {
         return listOfDoubles;
     }
 
+    /**
+     * Executes a SQL query on a database and returns the results as a map of
+     * timestamps and strings.
+     *
+     * @param query  the SQL query to execute
+     * @param xmin   the minimum x coordinate of the subgrid
+     * @param xmax   the maximum x coordinate of the subgrid
+     * @param ymin   the minimum y coordinate of the subgrid
+     * @param ymax   the maximum y coordinate of the subgrid
+     * @param sensor the sensor for the database connection
+     * @return a map of timestamps and strings representing the query results
+     */
     public static Map<Long, String> executeQueryForSubGridAsListOfStrings(String query, int xmin, int xmax, int ymin,
             int ymax, String sensor) {
 
@@ -422,6 +486,14 @@ public class GridTools {
         return listOfStrings;
     }
 
+    /**
+     * Executes a SQL query on a database and returns the results as a map of
+     * timestamps and strings.
+     *
+     * @param query  the SQL query to execute
+     * @param sensor the sensor for the database connection
+     * @return a map of timestamps and strings representing the query results
+     */
     public static Map<Long, String> executeQueryForGridAsListOfStrings(String query, String sensor) {
 
         Map<Long, String> listOfStrings = new HashMap<Long, String>();

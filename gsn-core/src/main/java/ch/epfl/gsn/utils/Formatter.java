@@ -25,29 +25,68 @@
 
 package ch.epfl.gsn.utils;
 
-import java.util.Iterator;
 import java.util.List;
 
-import ch.epfl.gsn.utils.UnsignedByte;
-
+/**
+ * The Formatter class provides utility methods for formatting arrays and lists.
+ */
 public class Formatter {
 
+    /**
+     * Returns a formatted string representation of the specified array elements.
+     *
+     * @param a    the array of integers
+     * @param from the starting index (inclusive)
+     * @param to   the ending index (exclusive)
+     * @return a formatted string representation of the array elements
+     */
     public static String listArray(int[] a, int from, int to) {
         return listArray(a, from, to, false);
     }
 
+    /**
+     * Returns a string representation of the given integer array.
+     *
+     * @param a the integer array to be converted to a string
+     * @return a string representation of the integer array
+     */
     public static String listArray(int[] a) {
         return listArray(a, 0, a.length - 1);
     }
 
+    /**
+     * Returns a string representation of the specified integer array, starting from
+     * index 0 and ending at the specified length.
+     *
+     * @param a   the array to be represented as a string
+     * @param len the length of the array to be represented
+     * @return a string representation of the specified array
+     */
     public static String listArray(int[] a, int len) {
         return listArray(a, 0, len - 1);
     }
 
+    /**
+     * Returns a string representation of the specified integer array.
+     *
+     * @param a         the array of integers
+     * @param len       the length of the array
+     * @param hexFormat whether to format the integers as hexadecimal values
+     * @return a formatted string representation of the array
+     */
     public static String listArray(int[] a, int len, boolean hexFormat) {
         return listArray(a, 0, len - 1, hexFormat);
     }
 
+    /**
+     * Returns a string representation of the specified integer array.
+     * 
+     * @param a         the array of integers
+     * @param from      the starting index of the array to format
+     * @param to        the ending index of the array to format
+     * @param hexFormat specifies whether the output should be in hexadecimal format
+     * @return the formatted string representation of the array
+     */
     public static String listArray(int[] a, int from, int to, boolean hexFormat) {
         StringBuilder hex_sb_2 = new StringBuilder();
         StringBuilder dec_sb_2 = new StringBuilder();
@@ -67,18 +106,54 @@ public class Formatter {
 
     }
 
+    /**
+     * Returns a formatted string representation of the specified byte array, from
+     * the specified index 'from' to the specified index 'to'.
+     * 
+     * @param a    the byte array
+     * @param from the starting index (inclusive)
+     * @param to   the ending index (exclusive)
+     * @return a formatted string representation of the byte array
+     */
     public static String listArray(byte[] a, int from, int to) {
         return listArray(a, from, to, false);
     }
 
+    /**
+     * Returns a string representation of the specified byte array, starting from
+     * index 0 and ending at the specified length.
+     *
+     * @param a   the byte array
+     * @param len the length of the array to be represented as a string
+     * @return a string representation of the specified byte array
+     */
     public static String listArray(byte[] a, int len) {
         return listArray(a, 0, len - 1);
     }
 
+    /**
+     * Returns a formatted string representation of the given byte array.
+     *
+     * @param a         the byte array to be formatted
+     * @param len       the length of the byte array to be formatted
+     * @param hexFormat true if the byte array should be formatted in hexadecimal
+     *                  format, false otherwise
+     * @return a formatted string representation of the byte array
+     */
     public static String listArray(byte[] a, int len, boolean hexFormat) {
         return listArray(a, 0, len - 1, hexFormat);
     }
 
+    /**
+     * Formats a byte array into a string representation.
+     *
+     * @param a         the byte array to be formatted
+     * @param from      the starting index of the array to be formatted
+     * @param to        the ending index of the array to be formatted
+     * @param hexFormat specifies whether the string should be formatted in
+     *                  hexadecimal or decimal format
+     * @return the formatted string representation of the byte array
+     */
     public static String listArray(byte[] a, int from, int to, boolean hexFormat) {
         StringBuilder hex_sb_2 = new StringBuilder();
         StringBuilder dec_sb_2 = new StringBuilder();
@@ -97,14 +172,42 @@ public class Formatter {
         }
     }
 
+    /**
+     * Returns a formatted string representation of the specified array of
+     * UnsignedByte objects,
+     * from the specified index 'from' to the specified index 'to'.
+     *
+     * @param a    the array of UnsignedByte objects
+     * @param from the starting index (inclusive)
+     * @param to   the ending index (exclusive)
+     * @return a formatted string representation of the specified array
+     */
     public static String listArray(UnsignedByte[] a, int from, int to) {
         return listArray(a, from, to, false);
     }
 
+    /**
+     * Returns a formatted string representation of an array of UnsignedByte
+     * objects.
+     *
+     * @param a   the array of UnsignedByte objects
+     * @param len the length of the array
+     * @return a formatted string representation of the array
+     */
     public static String listArray(UnsignedByte[] a, int len) {
         return listArray(a, 0, len - 1);
     }
 
+    /**
+     * Returns a formatted string representation of an array of UnsignedByte
+     * objects.
+     *
+     * @param a         the array of UnsignedByte objects
+     * @param len       the length of the array
+     * @param hexFormat true if the string representation should be in hexadecimal
+     *                  format, false otherwise
+     * @return a formatted string representation of the array
+     */
     public static String listArray(UnsignedByte[] a, int len, boolean hexFormat) {
         return listArray(a, 0, len - 1, hexFormat);
     }
@@ -127,10 +230,25 @@ public class Formatter {
         }
     }
 
+    /**
+     * Returns a string representation of the given list of UnsignedByte objects.
+     * 
+     * @param a the list of UnsignedByte objects
+     * @return a string representation of the list
+     */
     public static String listUnsignedByteList(List<UnsignedByte> a) {
         return listUnsignedByteList(a, false);
     }
 
+    /**
+     * Formats a list of UnsignedByte objects into a string representation.
+     * 
+     * @param a         the list of UnsignedByte objects to be formatted
+     * @param hexFormat specifies whether the output should be in hexadecimal format
+     *                  or decimal format
+     * @return the formatted string representation of the list of UnsignedByte
+     *         objects
+     */
     public static String listUnsignedByteList(List<UnsignedByte> a, boolean hexFormat) {
         StringBuilder hex_sb_2 = new StringBuilder();
         StringBuilder dec_sb_2 = new StringBuilder();

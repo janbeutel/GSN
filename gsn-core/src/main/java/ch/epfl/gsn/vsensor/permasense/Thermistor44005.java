@@ -3,10 +3,26 @@ package ch.epfl.gsn.vsensor.permasense;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 
+/**
+ * This class represents a Thermistor44005 converter that implements the
+ * {@code Converter} interface.
+ * It provides a method to convert a signal value to temperature using the
+ * Steinhart-Hart equation.
+ */
 public class Thermistor44005 implements Converter {
 
 	private static final DecimalFormat decimal4 = new DecimalFormat("0.0000");
 
+	/**
+	 * Converts the given signal value to temperature using the Steinhart-Hart
+	 * equation.
+	 *
+	 * @param signal_name the name of the signal (unused in this implementation)
+	 * @param value       the signal value as a string
+	 * @param input       additional input (unused in this implementation)
+	 * @return the converted temperature as a string, or null if the signal name is
+	 *         null or the conversion is not possible.
+	 */
 	public String convert(Serializable signal_name, String value, Serializable input) {
 		if (signal_name == null) {
 			return null;

@@ -30,6 +30,10 @@ import javax.naming.NamingException;
 import javax.naming.spi.InitialContextFactory;
 import java.util.Hashtable;
 
+/**
+ * The GSNContextFactory class is responsible for creating the initial context for the GSN framework.
+ * It implements the InitialContextFactory interface and provides a singleton instance of GSNContext.
+ */
 public class GSNContextFactory implements InitialContextFactory {
 
     private static GSNContext singleton = new GSNContext();

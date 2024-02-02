@@ -42,12 +42,9 @@ import java.util.Date;
 import java.util.TreeMap;
 
 import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import ch.epfl.gsn.beans.StreamElement;
-import ch.epfl.gsn.vsensor.AbstractVirtualSensor;
-import ch.epfl.gsn.vsensor.SensorInternetVS;
-
-import org.slf4j.Logger;
 
 public class SensorInternetVS extends AbstractVirtualSensor {
 
@@ -69,6 +66,20 @@ public class SensorInternetVS extends AbstractVirtualSensor {
 
 	private static transient Logger logger = LoggerFactory.getLogger(SensorInternetVS.class);
 
+	/**
+	 * Initializes the SensorInternetVS virtual sensor.
+	 * 
+	 * Parses the required configuration parameters from the virtual sensor
+	 * configuration file and validates them:
+	 * - siUrl: The URL to send the data to.
+	 * - siUsername: The username for basic HTTP authentication.
+	 * - siPassword: The password for basic HTTP authentication.
+	 * - siStreamMapping: The mapping of input streams to fields in the request.
+	 * 
+	 * Also sets up the basic HTTP authentication using the provided credentials.
+	 * 
+	 * @return true if initialization succeeded, false otherwise.
+	 */
 	@Override
 	public boolean initialize() {
 		TreeMap<String, String> params = getVirtualSensorConfiguration().getMainClassInitialParams();
@@ -129,6 +140,17 @@ public class SensorInternetVS extends AbstractVirtualSensor {
 		return true;
 	}
 
+	/**
+	 * Sends the given StreamElement data to the configured remote server.
+	 *
+	 * This is called when new data is available from the attached input streams.
+	 * 
+	 * It will encode the StreamElement's fields and values into URL encoded POST
+	 * parameters, and send a POST request to the configured remote URL.
+	 *
+	 * @param inputStreamName The name of the input stream of the data
+	 * @param streamElement   The StreamElement containing the new data
+	 */
 	@Override
 	public void dataAvailable(String inputStreamName, StreamElement streamElement) {
 		try {
@@ -165,6 +187,16 @@ public class SensorInternetVS extends AbstractVirtualSensor {
 
 	}
 
+	/**
+	 * Builds the parameter string to send to the Sensor Internet server based on
+	 * the input data.
+	 *
+	 * @param fieldsNames the names of the data fields
+	 * @param data        the array of data values
+	 * @param timestamp   the timestamp for the data
+	 * @return a string containing the parameters to send to the server, or null if
+	 *         error
+	 */
 	private String buildParameters(String[] fieldsNames, Serializable[] data, long timestamp) {
 
 		StringBuilder sb = new StringBuilder();
@@ -186,6 +218,13 @@ public class SensorInternetVS extends AbstractVirtualSensor {
 		return sb.toString();
 	}
 
+	/**
+	 * Creates a URL encoded parameter string for an HTTP POST request.
+	 * 
+	 * @param paramName  The parameter name.
+	 * @param paramValue The parameter value.
+	 * @return The URL encoded parameter string, or null if encoding fails.
+	 */
 	private String createPostParameter(String paramName, String paramValue) {
 		try {
 			return paramName + URLEncoder.encode(paramValue, "UTF-8");
@@ -195,6 +234,21 @@ public class SensorInternetVS extends AbstractVirtualSensor {
 		return null;
 	}
 
+	/**
+	 * Initializes the stream mapping array by parsing a comma-separated parameter
+	 * string.
+	 * 
+	 * The stream mapping array maps the virtual sensor's output fields to keys that
+	 * identify streams on the Sensor Internet server. This allows each output field
+	 * to be
+	 * sent as a separate stream.
+	 *
+	 * @param param A comma-separated string containing the stream mapping. Each
+	 *              element is the
+	 *              Sensor Internet stream key for the corresponding output field.
+	 * @return An array mapping output fields to Sensor Internet stream keys, or
+	 *         null if parsing fails.
+	 */
 	private Integer[] initStreamMapping(String param) {
 		String[] mps = param.split(",");
 		Integer[] mapping = new Integer[mps.length];

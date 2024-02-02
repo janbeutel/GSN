@@ -29,10 +29,12 @@ package ch.epfl.gsn.delivery.datarequest;
 
 import java.util.Hashtable;
 
-import ch.epfl.gsn.delivery.datarequest.AbstractCriterion;
-import ch.epfl.gsn.delivery.datarequest.DataRequestException;
 import ch.epfl.gsn.utils.Helpers;
 
+/**
+ * Represents an aggregation criterion used for data analysis or filtering.
+ * This class extends the {@code AbstractCriterion} class.
+ */
 public class AggregationCriterion extends AbstractCriterion {
 
 	private static Hashtable<String, String> allowedGroupOperator = null;
@@ -70,6 +72,11 @@ public class AggregationCriterion extends AbstractCriterion {
 		critGroupOperator = getCriterion(crits[1], allowedGroupOperator);
 	}
 
+	/**
+	 * Returns a string representation of the AggregationCriterion object.
+	 *
+	 * @return A string representation of the AggregationCriterion object.
+	 */
 	public String toString() {
 		return "Select: " + critGroupOperator.toUpperCase() + ", group by: timed/" + critTimeRange + " ("
 				+ Helpers.formatTimePeriod(Long.parseLong(critTimeRange)) + ")";

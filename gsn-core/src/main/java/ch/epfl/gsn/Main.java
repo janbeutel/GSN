@@ -56,6 +56,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
+import java.sql.Connection;
 
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -125,6 +126,14 @@ public final class Main {
 
 	private static ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
 
+	/**
+	 * The Main class represents the entry point of the GSN (Global Sensor Networks)
+	 * application.
+	 * It initializes the necessary components, loads the configuration, and starts
+	 * the application.
+	 * 
+	 * @throws Exception if an error occurs during the initialization process
+	 */
 	private Main() throws Exception {
 
 		ValidityTools.checkAccessibilityOfFiles(WrappersUtil.DEFAULT_WRAPPER_PROPERTIES_FILE,
@@ -188,6 +197,11 @@ public final class Main {
 
 	}
 
+	/**
+	 * Closes the splash screen if it is visible.
+	 * If the application is running in headless mode or no splash screen is
+	 * specified, this method does nothing.
+	 */
 	private static void closeSplashIfneeded() {
 		if (isHeadless()) {
 			return;
@@ -203,6 +217,11 @@ public final class Main {
 
 	}
 
+	/**
+	 * Updates the splash screen if needed with the given message.
+	 * 
+	 * @param message the array of messages to be displayed on the splash screen
+	 */
 	private static void updateSplashIfNeeded(String message[]) {
 		boolean headless_check = isHeadless();
 
@@ -236,6 +255,17 @@ public final class Main {
 		return GraphicsEnvironment.isHeadless();
 	}
 
+	/**
+	 * Returns the singleton instance of the Main class.
+	 * If the singleton instance does not exist, it is created.
+	 * 
+	 * This method is thread-safe. It uses the "double-checked locking" idiom
+	 * to ensure that only one instance of Main is ever created.
+	 *
+	 * @return The singleton instance of the Main class.
+	 * @throws RuntimeException if an exception occurs while creating the singleton
+	 *                          instance.
+	 */
 	public synchronized static Main getInstance() {
 		if (singleton == null) {
 			try {
@@ -303,6 +333,20 @@ public final class Main {
 		closeSplashIfneeded();
 	}
 
+	/**
+	 * Loads the container configuration from the default configuration files.
+	 * 
+	 * This method first checks the accessibility of the necessary files and
+	 * directories.
+	 * Then, it loads the container configuration from the 'gsn.xml' file and the
+	 * wrappers from the
+	 * 'wrappers.properties' file.
+	 *
+	 * @return The loaded container configuration.
+	 * @throws RuntimeException If the 'wrappers.properties' file refers to one or
+	 *                          more classes
+	 *                          which don't exist in the classpath.
+	 */
 	public static ContainerConfig loadContainerConfiguration() {
 		ValidityTools.checkAccessibilityOfFiles(WrappersUtil.DEFAULT_WRAPPER_PROPERTIES_FILE,
 				gsnConfFolder + "/gsn.xml");
@@ -322,6 +366,13 @@ public final class Main {
 
 	}
 
+	/**
+	 * Loads the container configuration from the specified gsn.xml file.
+	 *
+	 * @param gsnXMLpath The path to the gsn.xml file.
+	 * @return The loaded ContainerConfig object.
+	 * @throws ClassNotFoundException If the specified gsn.xml file is not found.
+	 */
 	public static ContainerConfig loadContainerConfig(String gsnXMLpath) throws ClassNotFoundException {
 		if (!new File(gsnXMLpath).isFile()) {
 			logger.error("Couldn't find the gsn.xml file @: " + (new File(gsnXMLpath).getAbsolutePath()));
@@ -353,6 +404,11 @@ public final class Main {
 		return conf;
 	}
 
+	/**
+	 * Retrieves the wrappers.
+	 *
+	 * @return the wrappers as a Properties object.
+	 */
 	public static Properties getWrappers() {
 		if (singleton == null) {
 			return WrappersUtil.loadWrappers(new HashMap<String, Class<?>>());
@@ -360,6 +416,13 @@ public final class Main {
 		return Main.wrappers;
 	}
 
+	/**
+	 * Retrieves the wrapper class associated with the given ID.
+	 * 
+	 * @param id the ID of the wrapper class to retrieve
+	 * @return the wrapper class associated with the given ID, or null if it doesn't
+	 *         exist
+	 */
 	public static Class<?> getWrapperClass(String id) {
 		try {
 			String className = getWrappers().getProperty(id);
@@ -393,10 +456,24 @@ public final class Main {
 		}
 	}
 
+	/**
+	 * Returns the validation storage manager.
+	 *
+	 * @return the validation storage manager
+	 */
 	public static StorageManager getValidationStorage() {
 		return validationStorage;
 	}
 
+	/**
+	 * Retrieves the StorageManager based on the provided VSensorConfig.
+	 * If the StorageManager is already cached, it is returned.
+	 * Otherwise, a new StorageManager is created based on the configuration and
+	 * cached for future use.
+	 *
+	 * @param config The VSensorConfig used to determine the StorageManager.
+	 * @return The StorageManager instance.
+	 */
 	public static StorageManager getStorage(VSensorConfig config) {
 		StorageManager sm = storagesConfigs.get(config == null ? null : config);
 		if (sm != null) {
@@ -428,38 +505,84 @@ public final class Main {
 
 	}
 
+	/**
+	 * Retrieves the storage manager for a given virtual sensor name.
+	 *
+	 * @param vsName the name of the virtual sensor
+	 * @return the storage manager for the virtual sensor
+	 */
 	public static StorageManager getStorage(String vsName) {
 		return getStorage(Mappings.getVSensorConfig(vsName));
 	}
 
+	/**
+	 * Returns the default StorageManager.
+	 *
+	 * @return the default StorageManager
+	 */
 	public static StorageManager getDefaultStorage() {
 		return getStorage((VSensorConfig) null);
 	}
 
+	/**
+	 * Returns the window storage manager.
+	 *
+	 * @return the window storage manager
+	 */
 	public static StorageManager getWindowStorage() {
 		return windowStorage;
 	}
 
+	/**
+	 * Returns the ZMQ context.
+	 *
+	 * @return the ZMQ context
+	 */
 	public static ZContext getZmqContext() {
 		return zmqContext;
 	}
 
+	/**
+	 * Returns the ZeroMQProxy instance.
+	 *
+	 * @return the ZeroMQProxy instance
+	 */
 	public static ZeroMQProxy getZmqProxy() {
 		return zmqproxy;
 	}
 
+	/**
+	 * Returns the GsnConf object.
+	 *
+	 * @return the GsnConf object
+	 */
 	public GsnConf getGsnConf() {
 		return gsnConf;
 	}
 
+	/**
+	 * Returns the map of VsConf objects.
+	 *
+	 * @return the map of VsConf objects
+	 */
 	public Map<String, VsConf> getVsConf() {
 		return vsConf;
 	}
 
+	/**
+	 * Returns the list of objects to be monitored.
+	 *
+	 * @return the list of objects to be monitored
+	 */
 	public ArrayList<Monitorable> getToMonitor() {
 		return toMonitor;
 	}
 
+	/**
+	 * Returns the ThreadMXBean instance.
+	 *
+	 * @return the ThreadMXBean instance
+	 */
 	public static ThreadMXBean getThreadMXBean() {
 		return threadBean;
 	}

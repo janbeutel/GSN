@@ -45,7 +45,6 @@ import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.beans.VSensorConfig;
 import ch.epfl.gsn.monitoring.AnomalyDetector;
 import ch.epfl.gsn.monitoring.Monitorable;
-import ch.epfl.gsn.vsensor.AbstractVirtualSensor;
 
 import org.slf4j.Logger;
 
@@ -70,6 +69,13 @@ public abstract class AbstractVirtualSensor implements Monitorable {
 	private Map<Long, String> threads = new HashMap<Long, String>();
 	private AnomalyDetector anomalyDetector;
 
+	/**
+	 * Initializes the virtual sensor wrapper.
+	 * Registers the virtual sensor with the anomaly detector and main GSN instance.
+	 * Calls the virtual sensor's initialize() method.
+	 * 
+	 * @return True if the wrapper initialization succeeded.
+	 */
 	public final boolean initialize_wrapper() {
 
 		anomalyDetector = new AnomalyDetector(this);
@@ -84,6 +90,20 @@ public abstract class AbstractVirtualSensor implements Monitorable {
 	 */
 	public abstract boolean initialize();
 
+	/**
+	 * Validates that the given stream element is compatible with the
+	 * output structure defined in the virtual sensor configuration.
+	 * 
+	 * If adjust is true, it will adjust the stream element to match the
+	 * output structure by removing extra fields.
+	 * 
+	 * If adjust is false, it will throw an exception if the structures do not
+	 * match exactly.
+	 *
+	 * @param streamElement The stream element to validate
+	 * @param adjust        Whether to adjust the stream element if needed
+	 * @throws RuntimeException if adjust is false and the structures do not match
+	 */
 	private void validateStreamElement(StreamElement streamElement, boolean adjust) {
 		if (!compatibleStructure(streamElement, getVirtualSensorConfiguration().getOutputStructure(), adjust)) {
 			StringBuilder exceptionMessage = new StringBuilder().append("The streamElement produced by :")
@@ -209,6 +229,11 @@ public abstract class AbstractVirtualSensor implements Monitorable {
 		return true;
 	}
 
+	/**
+	 * Disposes of this virtual sensor instance by removing it from the
+	 * monitoring list and calling the dispose() method.
+	 * Called when the container stops the pool and removes its resources.
+	 */
 	public final void dispose_decorated() {
 		Main.getInstance().getToMonitor().remove(this);
 		dispose();
@@ -255,6 +280,15 @@ public abstract class AbstractVirtualSensor implements Monitorable {
 		this.threads = threads;
 	}
 
+	/**
+	 * Gets statistics related to this virtual sensor instance.
+	 * Adds output count and last output time statistics.
+	 * Adds input count and last input time statistics.
+	 * Sums the CPU times of the threads associated with this
+	 * virtual sensor and adds the total CPU time statistic.
+	 * 
+	 * @return A map containing the statistics.
+	 */
 	public Hashtable<String, Object> getStatistics() {
 		Hashtable<String, Object> stat = anomalyDetector.getStatistics();
 		stat.put("vs." + virtualSensorConfiguration.getName().replaceAll("\\.", "_") + ".output.produced.counter",
@@ -306,6 +340,17 @@ public abstract class AbstractVirtualSensor implements Monitorable {
 		return stat;
 	}
 
+	/**
+	 * Decorated version of {@link #dataAvailable(String, StreamElement)} that
+	 * updates internal counters for number of inputs received and time of last
+	 * input.
+	 * 
+	 * Increments {@code inputCount} counter and sets {@code lastInputTime} to
+	 * current time whenever new data is received. Handles counter overflow.
+	 * 
+	 * This is called by the container when new data is available on one of
+	 * the input streams.
+	 */
 	public final void dataAvailable_decorated(String inputStreamName, StreamElement streamElement) {
 		dataAvailable(inputStreamName, streamElement);
 		final long currentTime = System.currentTimeMillis();

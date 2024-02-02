@@ -38,15 +38,19 @@ import java.util.TreeMap;
 import javax.swing.Timer;
 
 import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import ch.epfl.gsn.Main;
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.storage.DataEnumerator;
-import ch.epfl.gsn.vsensor.AbstractVirtualSensor;
 import ch.epfl.gsn.vsensor.ClockedBridgeVirtualSensor;
 
-import org.slf4j.Logger;
-
+/**
+ * ClockedBridgeVirtualSensor extends AbstractVirtualSensor and implements
+ * ActionListener.
+ * VirtualSensor implementation that uses a Timer to periodically
+ * poll a data source and generate VirtualSensor output.
+ */
 public class ClockedBridgeVirtualSensor extends AbstractVirtualSensor implements ActionListener {
 
 	private static final String RATE_PARAM = "rate";
@@ -59,6 +63,16 @@ public class ClockedBridgeVirtualSensor extends AbstractVirtualSensor implements
 
 	private static final transient Logger logger = LoggerFactory.getLogger(ClockedBridgeVirtualSensor.class);
 
+	/**
+	 * Initializes the ClockedBridgeVirtualSensor.
+	 * 
+	 * Parses the rate and table_name parameters from the virtual sensor
+	 * configuration.
+	 * Starts a Timer to periodically poll the data source based on the rate.
+	 * Initializes the last_updated timestamp to read all data initially.
+	 * Overrides last_updated if data already exists in the output table,
+	 * to avoid duplicate readings.
+	 */
 	public boolean initialize() {
 
 		TreeMap<String, String> params = getVirtualSensorConfiguration().getMainClassInitialParams();
@@ -117,6 +131,17 @@ public class ClockedBridgeVirtualSensor extends AbstractVirtualSensor implements
 		return true;
 	}
 
+	/**
+	 * Handles new data received from the input stream.
+	 * 
+	 * This method is called when new data is received on the input stream.
+	 * It simply passes the data along to the dataProduced() method and logs the
+	 * input stream name.
+	 *
+	 * @param inputStreamName The name of the input stream where data was received.
+	 * @param data            The StreamElement data that was received.
+	 */
+
 	public void dataAvailable(String inputStreamName, StreamElement data) {
 		dataProduced(data);
 		logger.debug("Data received under the name: " + inputStreamName);
@@ -127,6 +152,11 @@ public class ClockedBridgeVirtualSensor extends AbstractVirtualSensor implements
 
 	}
 
+	/**
+	 * Checks for new data in the table since the last update, retrieves it ordered
+	 * by timestamp, calls dataProduced() on each new row, and updates last_updated
+	 * to the latest timestamp.
+	 */
 	public void actionPerformed(ActionEvent actionEvent) {
 
 		// check if new data is available since last update then call

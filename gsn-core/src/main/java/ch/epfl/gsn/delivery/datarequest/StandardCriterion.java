@@ -31,8 +31,6 @@ import java.util.Date;
 import java.util.Hashtable;
 
 import ch.epfl.gsn.Main;
-import ch.epfl.gsn.delivery.datarequest.AbstractCriterion;
-import ch.epfl.gsn.delivery.datarequest.DataRequestException;
 import ch.epfl.gsn.delivery.datarequest.StandardCriterion;
 
 public class StandardCriterion extends AbstractCriterion {
@@ -154,6 +152,15 @@ public class StandardCriterion extends AbstractCriterion {
 		this.critOperator = critOperator;
 	}
 
+	/**
+	 * Compares this StandardCriterion object with another object for equality.
+	 * Two StandardCriterion objects are considered equal if their critField,
+	 * critJoin,
+	 * critNeg, critOperator, and critVsname fields are equal.
+	 *
+	 * @param o The object to compare with this StandardCriterion.
+	 * @return true if the objects are equal, false otherwise.
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
@@ -184,6 +191,13 @@ public class StandardCriterion extends AbstractCriterion {
 		return true;
 	}
 
+	/**
+	 * Generates a hash code value for this StandardCriterion object.
+	 * The hash code is calculated based on the critJoin, critNeg, critField,
+	 * critVsname, and critOperator fields of the object.
+	 *
+	 * @return The hash code value for this StandardCriterion object.
+	 */
 	@Override
 	public int hashCode() {
 		int result = critJoin != null ? critJoin.hashCode() : 0;

@@ -29,14 +29,12 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import org.slf4j.LoggerFactory;
-
+import org.slf4j.Logger;
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.beans.VSensorConfig;
 import ch.epfl.gsn.storage.SQLValidator;
 import ch.epfl.gsn.utils.models.AbstractModel;
-
-import org.slf4j.Logger;
 
 public class ModelDistributionRequest implements DistributionRequest {
 
@@ -50,6 +48,20 @@ public class ModelDistributionRequest implements DistributionRequest {
 
 	private AbstractModel modelClass;
 
+	/**
+	 * Constructor of ModelDistributionRequest class initializes a
+	 * ModelDistributionRequest object with the provided parameters.
+	 *
+	 * @param deliverySystem The delivery system for distributing the model.
+	 * @param sensorConfig   The sensor configuration associated with the
+	 *                       distribution request.
+	 * @param query          The query associated with the distribution request.
+	 * @param model          The machine learning model to be distributed.
+	 * @throws IOException  If an I/O error occurs during the initialization
+	 *                      process.
+	 * @throws SQLException If a SQL-related error occurs during the initialization
+	 *                      process.
+	 */
 	private ModelDistributionRequest(DeliverySystem deliverySystem, VSensorConfig sensorConfig, String query,
 			AbstractModel model) throws IOException, SQLException {
 		this.deliverySystem = deliverySystem;
@@ -61,6 +73,13 @@ public class ModelDistributionRequest implements DistributionRequest {
 		deliverySystem.writeStructure(selectedColmnNames);
 	}
 
+	/**
+	 * Generates a string representation of the ModelDistributionRequest object.
+	 *
+	 * @return A string representation of the ModelDistributionRequest object,
+	 *         including information about the delivery system, query, model class,
+	 *         and virtual sensor name.
+	 */
 	public String toString() {
 		return new StringBuilder("ModelDistributionRequest Request[[ Delivery System: ")
 				.append(deliverySystem.getClass().getName())
@@ -101,6 +120,12 @@ public class ModelDistributionRequest implements DistributionRequest {
 		return deliverySystem;
 	}
 
+	/**
+	 * Determines if the given Object equals the ModelDistributionRequest object.
+	 *
+	 * @param o The object to compare for equality.
+	 * @return true if the two objects are equal, false otherwise.
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
@@ -148,6 +173,20 @@ public class ModelDistributionRequest implements DistributionRequest {
 		return 0;
 	}
 
+	/**
+	 * Creates a ModelDistributionRequest object with the provided parameters.
+	 *
+	 * @param delivery      The delivery system for distributing the model.
+	 * @param vSensorConfig The sensor configuration associated with the
+	 *                      distribution request.
+	 * @param query         The query associated with the distribution request.
+	 * @param modelClass    The machine learning model to be distributed.
+	 * @return The created ModelDistributionRequest object.
+	 * @throws IOException  If an I/O error occurs during the initialization
+	 *                      process.
+	 * @throws SQLException If a SQL-related error occurs during the initialization
+	 *                      process.
+	 */
 	public static ModelDistributionRequest create(DeliverySystem delivery,
 			VSensorConfig vSensorConfig, String query, AbstractModel modelClass) throws IOException, SQLException {
 		ModelDistributionRequest toReturn = new ModelDistributionRequest(delivery, vSensorConfig, query, modelClass);

@@ -70,6 +70,17 @@ public class ValidityTools {
 		return isAccessibleSocket(host, port, 3000);
 	}
 
+	/**
+	 * Checks if a socket connection can be established to the specified host and
+	 * port within the given timeout.
+	 *
+	 * @param host          the host to connect to
+	 * @param port          the port to connect to
+	 * @param timeOutInMSec the timeout in milliseconds
+	 * @return true if the socket connection is accessible, false otherwise
+	 * @throws UnknownHostException if the host is unknown
+	 * @throws RuntimeException     if the specified parameters are not valid
+	 */
 	public static boolean isAccessibleSocket(String host, int port, int timeOutInMSec)
 			throws UnknownHostException, RuntimeException {
 		Socket socket = null;
@@ -98,6 +109,11 @@ public class ValidityTools {
 		return toReturn;
 	}
 
+	/**
+	 * Checks the accessibility of directories.
+	 * 
+	 * @param args The names of the directories to check.
+	 */
 	public static void checkAccessibilityOfDirs(String... args) {
 		for (String name : args) {
 			File f = new File(name);
@@ -110,6 +126,11 @@ public class ValidityTools {
 		}
 	}
 
+	/**
+	 * Checks the accessibility of files.
+	 *
+	 * @param args The names of the files to check.
+	 */
 	public static void checkAccessibilityOfFiles(String... args) {
 		for (String name : args) {
 			File f = new File(name);
@@ -122,6 +143,18 @@ public class ValidityTools {
 		}
 	}
 
+	/**
+	 * Checks if the database is accessible by establishing a connection using the
+	 * provided driver class, URL, username, and password.
+	 * 
+	 * @param driverClass the fully qualified name of the JDBC driver class
+	 * @param url         the URL of the database
+	 * @param user        the username for the database connection
+	 * @param password    the password for the database connection
+	 * @throws ClassNotFoundException if the driver class cannot be found
+	 * @throws SQLException           if there is an error while establishing the
+	 *                                database connection
+	 */
 	public static void isDBAccessible(String driverClass, String url, String user, String password)
 			throws ClassNotFoundException, SQLException {
 		Class.forName(driverClass);
@@ -161,6 +194,12 @@ public class ValidityTools {
 		return port;
 	}
 
+	/**
+	 * Checks if the given host is the localhost.
+	 *
+	 * @param host the host to check
+	 * @return true if the host is the localhost, false otherwise
+	 */
 	public static boolean isLocalhost(String host) {
 		// this allows us to be ipv6 compatible (we simply remove the port)
 		try {
@@ -221,6 +260,12 @@ public class ValidityTools {
 		}
 	}
 
+	/**
+	 * Checks if the given string is a valid Java variable.
+	 *
+	 * @param string the string to be checked
+	 * @return true if the string is a valid Java variable, false otherwise
+	 */
 	public static boolean isValidJavaVariable(CharSequence string) {
 		if (string == null) {
 			return false;

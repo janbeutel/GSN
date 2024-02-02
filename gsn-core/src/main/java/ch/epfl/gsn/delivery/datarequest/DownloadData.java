@@ -32,7 +32,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.LinkedList;
 import java.util.Map.Entry;
 import java.util.*;
 
@@ -66,10 +65,25 @@ public class DownloadData extends AbstractDataRequest {
 
     private String csvDelimiter = ",";
 
+    /**
+     * Initializes an instance of the DownloadData class with the provided request
+     * parameters.
+     *
+     * @param requestParameters A Map object containing the request parameters for
+     *                          downloading data.
+     * @throws DataRequestException If an exception occurs during the execution of
+     *                              the constructor.
+     */
     public DownloadData(Map<String, String[]> requestParameters) throws DataRequestException {
         super(requestParameters);
     }
 
+    /**
+     * Processes the request parameters for downloading data.
+     *
+     * @throws DataRequestException If an exception occurs during the execution of
+     *                              the method.
+     */
     @Override
     public void process() throws DataRequestException {
         String outputType = QueriesBuilder.getParameter(requestParameters, PARAM_OUTPUT_TYPE);
@@ -111,6 +125,12 @@ public class DownloadData extends AbstractDataRequest {
     // return baos.toString();
     // }
 
+    /**
+     * Generates the output result based on the processed data and writes it to the
+     * provided OutputStream.
+     *
+     * @param os The OutputStream to write the output result to.
+     */
     @Override
     public void outputResult(OutputStream os) {
 
@@ -249,10 +269,22 @@ public class DownloadData extends AbstractDataRequest {
         }
     }
 
+    /**
+     * Selects a single StreamElement from an array for sampling purposes.
+     *
+     * @param seForSampling An array of StreamElement objects for sampling.
+     * @return The selected StreamElement for sampling.
+     */
     private StreamElement sampleSkip(StreamElement[] seForSampling) {
         return seForSampling[seForSampling.length - 1];
     }
 
+    /**
+     * Calculates the total number of fields in the request based on the "vsname"
+     * parameter.
+     *
+     * @return The total number of fields in the request.
+     */
     private int numberOfFieldsInRequest() {
         int toRet = 0;
 
@@ -264,6 +296,20 @@ public class DownloadData extends AbstractDataRequest {
         return toRet;
     }
 
+    /**
+     * Formats a single StreamElement object into a CSV format and writes it to the
+     * provided PrintWriter.
+     *
+     * @param respond        The PrintWriter object to write the formatted CSV to.
+     * @param se             The StreamElement object to be formatted.
+     * @param wantTimed      A boolean flag indicating whether the formatted CSV
+     *                       should include a timestamp.
+     * @param cvsDelimiter   The delimiter used to separate values in the CSV.
+     * @param firstLine      A boolean flag indicating whether it is the first line
+     *                       of the CSV.
+     * @param fieldToUnitMap A HashMap that maps field names to their corresponding
+     *                       units.
+     */
     private void formatCSVElement(PrintWriter respond, StreamElement se, boolean wantTimed, String cvsDelimiter,
             boolean firstLine, HashMap<String, String> fieldToUnitMap) {
         if (firstLine) {
@@ -302,6 +348,19 @@ public class DownloadData extends AbstractDataRequest {
         respond.println();
     }
 
+    /**
+     * Formats a single StreamElement object into an XML format and writes it to the
+     * provided PrintWriter.
+     *
+     * @param respond        The PrintWriter object to write the formatted XML to.
+     * @param se             The StreamElement object to be formatted.
+     * @param wantTimed      A boolean flag indicating whether the formatted XML
+     *                       should include a timestamp.
+     * @param firstLine      A boolean flag indicating whether it is the first line
+     *                       of the XML.
+     * @param fieldToUnitMap A HashMap that maps field names to their corresponding
+     *                       units.
+     */
     private void formatXMLElement(PrintWriter respond, StreamElement se, boolean wantTimed, boolean firstLine,
             HashMap<String, String> fieldToUnitMap) {
         if (firstLine) {

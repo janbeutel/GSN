@@ -74,6 +74,17 @@ public class ProtocolManager {
 		READY, WAITING
 	}
 
+	/**
+	 * Constructs a new ProtocolManager with the specified protocol and output
+	 * wrapper.
+	 *
+	 * @param protocol      the AbstractHCIProtocol that this ProtocolManager will
+	 *                      manage
+	 * @param outputWrapper the AbstractWrapper that this ProtocolManager will use
+	 *                      for output operations
+	 *                      The initial state of the ProtocolManager is set to
+	 *                      READY.
+	 */
 	public ProtocolManager(AbstractHCIProtocol protocol, AbstractWrapper outputWrapper) {
 		this.protocol = protocol;
 		this.outputWrapper = outputWrapper;
@@ -84,7 +95,7 @@ public class ProtocolManager {
 		return currentState;
 	}
 
-	/*
+	/**
 	 * This method tries to execute a query named queryName with parameters params
 	 * on the wrapper wrapper.
 	 * If successful, it returns the raw command that has been sent.
@@ -127,11 +138,15 @@ public class ProtocolManager {
 		return answer;
 	}
 
-	/*
+	/**
 	 * This tries to match incoming data to the pattern
 	 * expected by the query. If the pattern describes
 	 * several groups then all the different String
 	 * matching these groups are returned.
+	 * 
+	 * @param rawData the raw data to process
+	 * @return an array of objects representing the answer, or null if the current
+	 *         state is not WAITING
 	 */
 	public synchronized Object[] getAnswer(byte[] rawData) {
 		Object[] answer = null;
@@ -152,8 +167,12 @@ public class ProtocolManager {
 	}
 
 	/**
-	 * @param string
-	 * @return
+	 * Returns the AbstractHCIQuery associated with the provided string identifier.
+	 * If the protocol is null, it returns null.
+	 *
+	 * @param string the identifier of the query to be retrieved
+	 * @return the AbstractHCIQuery associated with the string identifier if the
+	 *         protocol is not null, null otherwise
 	 */
 	public AbstractHCIQuery getQuery(String string) {
 		if (protocol != null) {
@@ -163,7 +182,12 @@ public class ProtocolManager {
 	}
 
 	/**
-	 * @return
+	 * Returns a collection of AbstractHCIQuery objects associated with the current
+	 * protocol.
+	 * If the protocol is null, it returns null.
+	 *
+	 * @return a collection of AbstractHCIQuery objects if the protocol is not null,
+	 *         null otherwise
 	 */
 	public Collection<AbstractHCIQuery> getQueries() {
 		if (protocol != null) {

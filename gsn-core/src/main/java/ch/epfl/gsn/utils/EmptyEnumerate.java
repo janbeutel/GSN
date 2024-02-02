@@ -30,10 +30,21 @@ import java.util.NoSuchElementException;
 
 public class EmptyEnumerate<T> implements Enumeration {
 
+   /**
+    * Returns whether there are more elements to iterate over.
+    *
+    * @return true if there are more elements, false otherwise
+    */
    public boolean hasMoreElements() {
       return false;
    }
 
+   /**
+      * Returns the next element in the enumeration.
+      *
+      * @return the next element in the enumeration
+      * @throws NoSuchElementException if there are no more elements in the enumeration
+      */
    public Object nextElement() throws NoSuchElementException {
       return new NoSuchElementException("This is an Empty Enumerator");
    }

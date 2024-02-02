@@ -39,6 +39,14 @@ public class CaseInsensitiveComparator implements Comparator<Object>, Serializab
 
    private static final long serialVersionUID = 2540687777213332025L;
 
+   /**
+    * Compares two objects in a case-insensitive manner.
+    * 
+    * @param o1 the first object to be compared
+    * @param o2 the second object to be compared
+    * @return 0 if both objects are null, a negative value if o1 is null, a positive value if o2 is null,
+    *         or the result of comparing the string representations of o1 and o2 in a case-insensitive manner
+    */
    public int compare(Object o1, Object o2) {
       if (o1 == null && o2 == null) {
          return 0;

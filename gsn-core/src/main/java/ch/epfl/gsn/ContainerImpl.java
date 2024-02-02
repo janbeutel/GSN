@@ -52,6 +52,18 @@ public class ContainerImpl {
 	private ContainerImpl() {
 	}
 
+	/**
+	 * Returns the singleton instance of the ContainerImpl class.
+	 *
+	 * <p>
+	 * This method implements the Singleton Design Pattern, which ensures that only
+	 * one instance of the ContainerImpl class is created.
+	 * If the singleton instance is null, a new instance is created and returned.
+	 * If the singleton instance already exists, the existing instance is returned.
+	 * </p>
+	 *
+	 * @return The singleton instance of the ContainerImpl class.
+	 */
 	public static ContainerImpl getInstance() {
 		if (singleton == null) {
 			singleton = new ContainerImpl();
@@ -59,6 +71,27 @@ public class ContainerImpl {
 		return singleton;
 	}
 
+	/**
+	 * Publishes data from a virtual sensor to a storage manager and notifies
+	 * registered listeners.
+	 *
+	 * This method retrieves the name of the virtual sensor from its configuration.
+	 * It then retrieves a StorageManager instance associated with the virtual
+	 * sensor's name.
+	 * The method then executes an insert operation on the StorageManager, passing
+	 * the sensor's name, its output structure, and the data.
+	 *
+	 * After the data has been stored, the method iterates over all registered
+	 * VirtualSensorDataListener objects and calls their consume method,
+	 * passing the data and the virtual sensor's configuration. This operation
+	 * notifies the listener about the new data, allowing it to process it as
+	 * needed.
+	 *
+	 * @param sensor The virtual sensor from which data is to be published.
+	 * @param data   The data to be published.
+	 * @throws SQLException If any SQL-related errors occur during the execution of
+	 *                      the storage operation.
+	 */
 	public void publishData(AbstractVirtualSensor sensor, StreamElement data) throws SQLException {
 		String name = sensor.getVirtualSensorConfiguration().getName().toLowerCase();
 		StorageManager storageMan = Main.getStorage(sensor.getVirtualSensorConfiguration().getName());
@@ -73,12 +106,26 @@ public class ContainerImpl {
 
 	private ArrayList<VirtualSensorDataListener> dataListeners = new ArrayList<VirtualSensorDataListener>();
 
+	/**
+	 * Adds a VirtualSensorDataListener to the list of data listeners if it is not
+	 * already present.
+	 *
+	 *
+	 * @param listener The VirtualSensorDataListener to be added to the
+	 *                 dataListeners list.
+	 */
 	public synchronized void addVSensorDataListener(VirtualSensorDataListener listener) {
 		if (!dataListeners.contains(listener)) {
 			dataListeners.add(listener);
 		}
 	}
 
+	/**
+	 * Removes a VirtualSensorDataListener from the list of data listeners.
+	 *
+	 * @param listener The VirtualSensorDataListener to be removed from the
+	 *                 dataListeners list.
+	 */
 	public synchronized void removeVSensorDataListener(VirtualSensorDataListener listener) {
 		dataListeners.remove(listener);
 	}

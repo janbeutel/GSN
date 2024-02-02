@@ -42,7 +42,9 @@ import ch.epfl.gsn.utils.GSNRuntimeException;
 import org.slf4j.Logger;
 
 /**
- * This virtual sensor saves its input stream to any JDBC accessible source.
+ * This virtual sensor exports streams on a scheduled basis to any JDBC data
+ * source.
+ * It extends AbstractScheduledVirtualSensor
  */
 public class ScheduledStreamExporterVirtualSensor extends AbstractScheduledVirtualSensor {
 
@@ -58,6 +60,19 @@ public class ScheduledStreamExporterVirtualSensor extends AbstractScheduledVirtu
 
 	private static final transient Logger logger = LoggerFactory.getLogger(ScheduledStreamExporterVirtualSensor.class);
 
+	/**
+	 * Initializes the ScheduledStreamExporterVirtualSensor.
+	 * Gets the required parameters from the virtual sensor configuration.
+	 * Loads the JDBC driver class.
+	 * Establishes a database connection.
+	 * Checks if the output table exists, creates it if needed.
+	 * Schedules the timer task to run periodically.
+	 * 
+	 * @return true if initialization succeeded, false otherwise.
+	 * @throws ClassNotFoundException If the JDBC driver class cannot be found.
+	 * @throws SQLException           If there is an error connecting to the
+	 *                                database.
+	 */
 	public boolean initialize() {
 		// Get the StreamExporter parameters
 		TreeMap<String, String> params = getVirtualSensorConfiguration()
@@ -107,6 +122,14 @@ public class ScheduledStreamExporterVirtualSensor extends AbstractScheduledVirtu
 		return true;
 	}
 
+	/**
+	 * TimerTask subclass that runs periodically.
+	 * It retrieves the latest data item, sets the timestamp, logs a message,
+	 * builds the insert query, gets a DB connection, executes the insert,
+	 * closes the connection, publishes the data item, and catches any errors.
+	 * This handles the core logic of exporting the data stream to the database
+	 * on a scheduled interval.
+	 */
 	class MyTimerTask extends TimerTask {
 
 		public void run() {
@@ -145,6 +168,12 @@ public class ScheduledStreamExporterVirtualSensor extends AbstractScheduledVirtu
 		}
 	}
 
+	/**
+	 * Gets a connection to the database.
+	 * If the connection is null or closed, creates a new connection.
+	 * Otherwise returns the existing open connection.
+	 * Uses the url, user, and password fields to create the connection.
+	 */
 	public Connection getConnection() throws SQLException {
 		if (this.connection == null || this.connection.isClosed()) {
 			this.connection = DriverManager.getConnection(url, user, password);
@@ -152,6 +181,9 @@ public class ScheduledStreamExporterVirtualSensor extends AbstractScheduledVirtu
 		return connection;
 	}
 
+	/**
+	 * Cancels the timer, closes the database connection, and logs any errors.
+	 */
 	public void dispose() {
 		timer0.cancel();
 		try {
@@ -159,8 +191,6 @@ public class ScheduledStreamExporterVirtualSensor extends AbstractScheduledVirtu
 		} catch (SQLException e) {
 			logger.error(e.getMessage(), e);
 		}
-
-		// <TODO> should we close the database connection here?
 	}
 
 }

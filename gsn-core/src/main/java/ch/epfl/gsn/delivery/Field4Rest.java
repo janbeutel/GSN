@@ -27,29 +27,59 @@ package ch.epfl.gsn.delivery;
 
 import java.io.Serializable;
 
+/**
+ * Represents a field for REST communication.
+ */
 public class Field4Rest {
 	private String name;
 	private Serializable value;
 	private Byte type;
 
+	/**
+	 * Constructs a Field4Rest object with the specified name, type, and value.
+	 *
+	 * @param name  the name of the field
+	 * @param type  the type of the field
+	 * @param value the value of the field
+	 */
 	public Field4Rest(String name, Byte type, Serializable value) {
 		this.name = name;
 		this.type = type;
 		this.value = value;
 	}
 
+	/**
+	 * Returns the name of the field.
+	 *
+	 * @return the name of the field
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Returns the value of the field.
+	 *
+	 * @return the value of the field
+	 */
 	public Serializable getValue() {
 		return value;
 	}
 
+	/**
+	 * Returns the type of the field.
+	 *
+	 * @return the type of the field
+	 */
 	public byte getType() {
 		return type;
 	}
 
+	/**
+	 * Returns a string representation of the Field4Rest object.
+	 *
+	 * @return a string representation of the object
+	 */
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Field(name:").append(name).append(",").append("type:").append(type).append(",value:").append(value)

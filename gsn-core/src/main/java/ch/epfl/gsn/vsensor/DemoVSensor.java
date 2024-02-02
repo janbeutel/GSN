@@ -43,11 +43,13 @@ import org.slf4j.LoggerFactory;
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.DataTypes;
 import ch.epfl.gsn.beans.StreamElement;
-import ch.epfl.gsn.vsensor.AbstractVirtualSensor;
-import ch.epfl.gsn.vsensor.DemoVSensor;
 
 import org.slf4j.Logger;
 
+/**
+ * DemoVSensor extends AbstractVirtualSensor to provide a demo virtual sensor
+ * implementation.
+ */
 public class DemoVSensor extends AbstractVirtualSensor {
 
 	private static final transient Logger logger = LoggerFactory.getLogger(DemoVSensor.class);
@@ -70,6 +72,24 @@ public class DemoVSensor extends AbstractVirtualSensor {
 
 	private static int counter = 0;
 
+	/**
+	 * Handles new data received from the input streams.
+	 * 
+	 * This method is called when new data is available on the
+	 * input streams specified by the virtual sensor configuration.
+	 *
+	 * It checks the input stream name and processes the data accordingly:
+	 *
+	 * - For stream "SSTREAM", it checks the action and ID in the data.
+	 * If action contains "add", it increments the counter.
+	 * If action contains "remove", it decrements the counter.
+	 *
+	 * - For stream "CSTREAM", it processes the image data.
+	 * writes the processed image to the output stream.
+	 *
+	 * @param inputStreamName Name of the input stream where data is available.
+	 * @param data            The StreamElement containing the new data.
+	 */
 	public void dataAvailable(String inputStreamName, StreamElement data) {
 		if (inputStreamName.equalsIgnoreCase("SSTREAM")) {
 			String action = (String) data.getData("STATUS");
@@ -140,6 +160,12 @@ public class DemoVSensor extends AbstractVirtualSensor {
 		logger.info(new StringBuilder().append("Data received under the name: ").append(inputStreamName).toString());
 	}
 
+	/**
+	 * This method initializes the virtual sensor.
+	 * It retrieves the output fields from the virtual sensor configuration.
+	 * 
+	 * @return true if initialization is successful, false otherwise.
+	 */
 	public boolean initialize() {
 		for (DataField field : getVirtualSensorConfiguration().getOutputStructure()) {
 			fields.add(field.getName());

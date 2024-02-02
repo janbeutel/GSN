@@ -41,6 +41,12 @@ public class VaisalaDemuxBridgeVirtualSensor extends BridgeVirtualSensorPermasen
 			new DataField("SUPPLY_VOLTAGE", "VARCHAR(30)"),
 			new DataField("REF_VOLTAGE", "VARCHAR(30)") };
 
+	/**
+	 * Processes incoming data from a specific input stream.
+	 *
+	 * @param inputStreamName The name of the input stream.
+	 * @param data            The StreamElement object containing the data to be processed.
+	 */
 	@Override
 	public void dataAvailable(String inputStreamName, StreamElement data) {
 		Serializable[] serialized_data = new Serializable[dataField.length];

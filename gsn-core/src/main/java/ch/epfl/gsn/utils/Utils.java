@@ -40,6 +40,12 @@ public class Utils {
 
 	private static final transient Logger logger = LoggerFactory.getLogger(Utils.class);
 
+	/**
+	 * Loads properties from a file.
+	 *
+	 * @param path the path to the property file
+	 * @return the loaded properties, or null if the file cannot be loaded
+	 */
 	public static Properties loadProperties(String path) {
 		Properties properties = new Properties();
 		try {
@@ -51,6 +57,17 @@ public class Utils {
 		return properties;
 	}
 
+	/**
+	 * Parses a string representation of a window size and returns a Pair object
+	 * containing a boolean value indicating
+	 * whether the parsing was successful and the parsed window size in
+	 * milliseconds.
+	 *
+	 * @param s the string representation of the window size
+	 * @return a Pair object containing a boolean value indicating the success of
+	 *         parsing and the parsed window size
+	 * @throws NumberFormatException if the window size cannot be parsed
+	 */
 	public static Pair<Boolean, Long> parseWindowSize(String s) throws NumberFormatException {
 		s = s.replace(" ", "").trim().toLowerCase();
 		int mIndex = s.indexOf("m");

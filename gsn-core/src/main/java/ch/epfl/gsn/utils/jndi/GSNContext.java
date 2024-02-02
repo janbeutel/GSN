@@ -33,6 +33,9 @@ import java.util.Hashtable;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * The GSNContext class implements the Context interface and provides a custom implementation of a JNDI context.
+ */
 public class GSNContext  implements Context {
 
     private static final transient Logger logger = LoggerFactory.getLogger(GSNContext.class);
@@ -59,6 +62,13 @@ public class GSNContext  implements Context {
         throw new OperationNotSupportedException();
     }
 
+    /**
+     * Looks up and returns the object associated with the specified name in the context.
+     *
+     * @param name the name of the object to be looked up
+     * @return the object associated with the specified name, or null if no object is found
+     * @throws NamingException if a naming exception is encountered
+     */
     public Object lookup(String name) throws NamingException {
         return map.get(name);
     }
@@ -67,6 +77,13 @@ public class GSNContext  implements Context {
         throw new OperationNotSupportedException();
     }
 
+    /**
+     * Binds the specified name to the given object in this context.
+     *
+     * @param name the name to bind the object to
+     * @param obj the object to be bound
+     * @throws NamingException if a naming exception is encountered
+     */
     public void bind(String name, Object obj) throws NamingException {
         map.put(name,obj);
     }
@@ -75,6 +92,14 @@ public class GSNContext  implements Context {
         throw new OperationNotSupportedException();
     }
 
+    /**
+     * Binds a name to an object in the GSN context.
+     * If the name already exists, it is replaced with the new object.
+     *
+     * @param name the name to bind the object to
+     * @param obj the object to be bound
+     * @throws NamingException if an error occurs during the binding process
+     */
     public void rebind(String name, Object obj) throws NamingException {
         map.put(name,obj);
     }
@@ -83,6 +108,12 @@ public class GSNContext  implements Context {
         throw new OperationNotSupportedException();
     }
 
+    /**
+     * Removes the binding for the specified name from this context.
+     *
+     * @param name the name of the binding to remove
+     * @throws NamingException if an error occurs during the unbinding process
+     */
     public void unbind(String name) throws NamingException {
         map.remove(name);
     }

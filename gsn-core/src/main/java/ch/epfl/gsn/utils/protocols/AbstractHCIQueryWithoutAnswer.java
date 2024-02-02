@@ -35,6 +35,15 @@ import java.util.Vector;
  */
 public abstract class AbstractHCIQueryWithoutAnswer extends AbstractHCIQuery {
 
+   /**
+    * Represents an abstract HCI query without an answer.
+    * This class extends the base HCIQuery class and provides a constructor to
+    * initialize the query.
+    *
+    * @param Name               the name of the query
+    * @param queryDescription   the description of the query
+    * @param paramsDescriptions an array of descriptions for the query parameters
+    */
    public AbstractHCIQueryWithoutAnswer(String Name, String queryDescription, String[] paramsDescriptions) {
       super(Name, queryDescription, paramsDescriptions);
    }

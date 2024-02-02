@@ -28,6 +28,11 @@ package ch.epfl.gsn.utils.graph;
 
 import java.io.Serializable;
 
+/**
+ * Represents an edge in a graph.
+ *
+ * @param <T> the type of data stored in the nodes of the edge
+ */
 public class Edge<T> implements Serializable {
 
 	private static final long serialVersionUID = -8165242353963312649L;
@@ -36,23 +41,49 @@ public class Edge<T> implements Serializable {
 
 	private Node<T> endNode;
 
+	/**
+	 * Constructs a new edge with the specified start and end nodes.
+	 *
+	 * @param startNode the start node of the edge
+	 * @param endNode   the end node of the edge
+	 */
 	public Edge(Node<T> startNode, Node<T> endNode) {
 		this.startNode = startNode;
 		this.endNode = endNode;
 	}
 
+	/**
+	 * Returns the end node of the edge.
+	 *
+	 * @return the end node of the edge
+	 */
 	public Node<T> getEndNode() {
 		return endNode;
 	}
 
+	/**
+	 * Sets the end node of the edge.
+	 *
+	 * @param endNode the end node of the edge
+	 */
 	public void setEndNode(Node<T> endNode) {
 		this.endNode = endNode;
 	}
 
+	/**
+	 * Returns the start node of the edge.
+	 *
+	 * @return the start node of the edge
+	 */
 	public Node<T> getStartNode() {
 		return startNode;
 	}
 
+	/**
+	 * Sets the start node of the edge.
+	 *
+	 * @param startNode the start node of the edge
+	 */
 	public void setStartNode(Node<T> startNode) {
 		this.startNode = startNode;
 	}

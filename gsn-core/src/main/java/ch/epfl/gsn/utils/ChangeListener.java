@@ -26,6 +26,12 @@
 package ch.epfl.gsn.utils;
 
 public interface ChangeListener {
-
+   /**
+    * Called when a change has occurred.
+    *
+    * @param changeType   the type of change that occurred
+    * @param changedKey   the key of the object that has changed
+    * @param changedValue the new value of the object that has changed
+    */
    public void changeHappended(String changeType, Object changedKey, Object changedValue);
 }

@@ -46,6 +46,7 @@ import java.sql.SQLException;
 import java.util.TreeMap;
 
 /**
+ * This class represents a StreamExporterVirtualSensor, which is a type of AbstractVirtualSensor.
  * This virtual sensor saves its input stream to any JDBC accessible source.
  */
 public class StreamExporterVirtualSensor extends AbstractVirtualSensor {
@@ -73,6 +74,12 @@ public class StreamExporterVirtualSensor extends AbstractVirtualSensor {
 	private int counter = 0;
 	private int limit;
 
+	/**
+	 * Initializes the StreamExporterVirtualSensor by retrieving the necessary parameters from the virtual sensor configuration.
+	 * It establishes a JDBC connection to the specified database and creates the table if it does not exist.
+	 * 
+	 * @return true if initialization is successful, false otherwise
+	 */
 	public boolean initialize() {
 		VSensorConfig vsensor = getVirtualSensorConfiguration();
 		TreeMap<String, String> params = vsensor.getMainClassInitialParams();
@@ -116,6 +123,14 @@ public class StreamExporterVirtualSensor extends AbstractVirtualSensor {
 		return true;
 	}
 
+	/**
+	 * This method is called when data is available in the input stream.
+	 * It inserts the stream element into the database table and keeps track of the insertion time.
+	 * If the number of inserted elements reaches the limit, it logs the estimated time taken for the insertions.
+	 * 
+	 * @param inputStreamName the name of the input stream
+	 * @param streamElement the stream element to be inserted
+	 */
 	public void dataAvailable(String inputStreamName, StreamElement streamElement) {
 		StringBuilder query = Main.getStorage(table_name.toString()).getStatementInsert(table_name,
 				getVirtualSensorConfiguration().getOutputStructure());
@@ -143,13 +158,20 @@ public class StreamExporterVirtualSensor extends AbstractVirtualSensor {
 
 	}
 
+	/**
+	 * Retrieves the JDBC connection to the database.
+	 * If the connection is closed or null, a new connection is established.
+	 * 
+	 * @return the JDBC connection
+	 * @throws SQLException if an error occurs while establishing the connection
+	 */
 	public Connection getConnection() throws SQLException {
 		if (this.connection == null || this.connection.isClosed()) {
 			this.connection = DriverManager.getConnection(url, user, password);
 		}
 		return connection;
 	}
-
+	
 	public void dispose() {
 	}
 }

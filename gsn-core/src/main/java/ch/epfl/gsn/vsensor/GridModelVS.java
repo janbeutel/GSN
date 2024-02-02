@@ -26,6 +26,7 @@
 package ch.epfl.gsn.vsensor;
 
 import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import ch.epfl.gsn.Mappings;
 import ch.epfl.gsn.VirtualSensor;
@@ -33,11 +34,6 @@ import ch.epfl.gsn.VirtualSensorInitializationFailedException;
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.utils.models.AbstractModel;
-import ch.epfl.gsn.vsensor.AbstractVirtualSensor;
-import ch.epfl.gsn.vsensor.GridModelVS;
-import ch.epfl.gsn.vsensor.ModellingVirtualSensor;
-
-import org.slf4j.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -45,6 +41,9 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.TreeMap;
 
+/**
+ * Virtual sensor for running a grid model.
+ */
 public class GridModelVS extends AbstractVirtualSensor {
 
     private static final transient Logger logger = LoggerFactory.getLogger(GridModelVS.class);
@@ -67,6 +66,23 @@ public class GridModelVS extends AbstractVirtualSensor {
     private double XCellSize = 0;
     private double YCellSize = 0;
 
+    /**
+     * Initializes the GridModelVS virtual sensor.
+     * This method is called at startup to initialize the required model, 
+     * field name, and grid configuration parameters.
+     *  
+     * Gets the virtual sensor configuration parameters from the VS XML file.
+     * Parameters include:
+     * - model_VS - Name of the modeling VS to get model from
+     * - model_index - Index of the model to use
+     * - field - Data field name for the grid
+     * - x_bottomLeft - X coordinate of bottom left grid corner 
+     * - y_bottomLeft - Y coordinate of bottom left grid corner
+     * - grid_size - Number of cells per side in the grid
+     * - cell_size - Size of each cell
+     *
+     * @return true if initialization succeeded, false otherwise
+     */
     public boolean initialize() {
 
         TreeMap<String, String> params = getVirtualSensorConfiguration().getMainClassInitialParams();
@@ -192,6 +208,18 @@ public class GridModelVS extends AbstractVirtualSensor {
         return true;
     }
 
+    /**
+     * Returns the output format for the grid model virtual sensor.
+     * 
+     * The output contains:
+     * - ncols: Number of columns in the grid
+     * - nrows: Number of rows in the grid
+     * - xllcorner: x coordinate of lower left corner of grid
+     * - yllcorner: y coordinate of lower left corner of grid
+     * - cellsize: Size of each cell in the grid
+     * - nodata_value: Value used for missing data
+     * - grid: Binary data representing the grid values
+     */
     public DataField[] getOutputFormat() {
         return new DataField[] {
                 new DataField("ncols", "int", "number of columns"),
@@ -203,6 +231,18 @@ public class GridModelVS extends AbstractVirtualSensor {
                 new DataField("grid", "binary", "raw  data") };
     }
 
+    /**
+     * Fills a 2D grid with predictions/extrapolations from the modelVS sensor.
+     * 
+     * For each cell in the grid, queries the modelVS with the cell center
+     * coordinates.
+     * The result is cast to a double and stored in the grid array.
+     * 
+     * After filling the grid, serializes it and packages it into a StreamElement.
+     * 
+     * @param inputStreamName Name of the input stream
+     * @param data            Input StreamElement containing lat/lon coordinates
+     */
     public void dataAvailable(String inputStreamName, StreamElement data) {
 
         DataField[] fields = new DataField[] { new DataField("latitude", "double"),

@@ -34,8 +34,18 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
+/**
+ * The Helpers class provides utility methods for time conversion and
+ * formatting.
+ */
 public class Helpers {
 
+	/**
+	 * Formats the given timestamp into a human-readable time period string.
+	 *
+	 * @param timestamp the timestamp to format
+	 * @return the formatted time period string
+	 */
 	public static String formatTimePeriod(long timestamp) {
 		if (timestamp < 1000) {
 			return timestamp + " ms";
@@ -52,22 +62,53 @@ public class Helpers {
 		return (timestamp / (24 * 1000 * 60 * 60)) + " day";
 	}
 
+	/**
+	 * Converts a time string in ISO format to a long value representing
+	 * milliseconds since the epoch.
+	 *
+	 * @param time the time string in ISO format
+	 * @return the long value representing milliseconds since the epoch
+	 * @throws Exception if the time string is not in a valid ISO format
+	 */
 	public static long convertTimeFromIsoToLong(String time) throws Exception {
 		DateTimeFormatter fmt = ISODateTimeFormat.dateTime();
 		return fmt.parseDateTime(time).getMillis();
 	}
 
+	/**
+	 * Converts a time string in ISO format to a long value representing
+	 * milliseconds.
+	 *
+	 * @param time   the time string to convert
+	 * @param format the format of the time string
+	 * @return the converted time in milliseconds
+	 * @throws Exception if an error occurs during the conversion
+	 */
 	public static long convertTimeFromIsoToLong(String time, String format) throws Exception {
 		DateTimeFormatter fmt = DateTimeFormat.forPattern(format);
 		return fmt.parseDateTime(time).getMillis();
 	}
 
+	/**
+	 * Converts a long timestamp to an ISO formatted string representation.
+	 *
+	 * @param timestamp the long timestamp to convert
+	 * @return the ISO formatted string representation of the timestamp
+	 */
 	public static String convertTimeFromLongToIso(long timestamp) {
 		DateTimeFormatter fmt = ISODateTimeFormat.dateTime();
 		DateTime dt = new DateTime(timestamp);
 		return fmt.print(dt);
 	}
 
+	/**
+	 * Converts a long timestamp to a string representation in the specified format.
+	 *
+	 * @param timestamp the long timestamp to convert
+	 * @param format    the format of the string representation (e.g., "yyyy-MM-dd
+	 *                  HH:mm:ss")
+	 * @return the string representation of the timestamp in the specified format
+	 */
 	public static String convertTimeFromLongToIso(long timestamp, String format) {
 		DateTimeFormatter fmt = DateTimeFormat.forPattern(format);
 		DateTime dt = new DateTime(timestamp);
@@ -126,6 +167,13 @@ public class Helpers {
 			315187205L, 346723206L, 393984007L, 425520008L, 457056009L, 504489610L,
 			551750411L, 599184012L, 820108813L, 914803214L, 1025136015L, 1119744016L, 1167264017L };
 
+	/**
+	 * Converts GPS time to Unix time.
+	 * 
+	 * @param gpsSec  the GPS seconds
+	 * @param gpsWeek the GPS week
+	 * @return the Unix time
+	 */
 	public static double convertGPSTimeToUnixTime(double gpsSec, short gpsWeek) {
 		double gpsTime = (double) (gpsWeek * 604800 + gpsSec);
 
@@ -149,6 +197,12 @@ public class Helpers {
 		return unixTime;
 	}
 
+	/**
+	 * Checks if the given GPS time is a leap second.
+	 *
+	 * @param gpsTime the GPS time to check
+	 * @return true if the GPS time is a leap second, false otherwise
+	 */
 	private static boolean isleap(long gpsTime) {
 		boolean isLeap = false;
 		for (int i = 0; i < leaps.length; i++) {
@@ -160,6 +214,14 @@ public class Helpers {
 		return isLeap;
 	}
 
+	/**
+	 * Counts the number of leap seconds that have occurred since the given GPS
+	 * time.
+	 *
+	 * @param gpsTime     the GPS time
+	 * @param accum_leaps flag indicating whether to accumulate leap seconds or not
+	 * @return the number of leap seconds
+	 */
 	private static long countleaps(long gpsTime, boolean accum_leaps) {
 		long nleaps = 0;
 

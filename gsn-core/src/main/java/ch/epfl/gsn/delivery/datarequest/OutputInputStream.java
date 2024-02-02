@@ -30,8 +30,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import ch.epfl.gsn.delivery.datarequest.OutputInputStream;
-
 public class OutputInputStream {
 
 	private OISInputStream oisi = null;
@@ -40,10 +38,21 @@ public class OutputInputStream {
 	private boolean oisoClosed = false;
 	private ArrayBlockingQueue<Integer> circularBuffer = null;
 
+	/**
+	 * Constructs a new OutputInputStream object with the specified buffer size.
+	 *
+	 * @param bufferSize The size of the circular buffer used for storing elements.
+	 */
 	public OutputInputStream(int bufferSize) {
 		circularBuffer = new ArrayBlockingQueue<Integer>(bufferSize);
 	}
 
+	/**
+	 * Closes the input and output streams associated with the OutputInputStream
+	 * object.
+	 *
+	 * @throws IOException If an error occurs while closing the streams.
+	 */
 	public void close() throws IOException {
 		synchronized (this) {
 			if (oisi != null && !oisiClosed) {
@@ -57,6 +66,11 @@ public class OutputInputStream {
 		}
 	}
 
+	/**
+	 * Returns an InputStream object associated with the OutputInputStream object.
+	 *
+	 * @return The InputStream object associated with the OutputInputStream.
+	 */
 	public InputStream getInputStream() {
 		if (oisi == null) {
 			oisi = new OISInputStream();
@@ -64,6 +78,11 @@ public class OutputInputStream {
 		return oisi;
 	}
 
+	/**
+	 * Returns an OutputStream object associated with the OutputInputStream object.
+	 *
+	 * @return The OutputStream object associated with the OutputInputStream.
+	 */
 	public OutputStream getOutputStream() {
 		if (oiso == null) {
 			oiso = new OISOutputStream();
@@ -71,7 +90,17 @@ public class OutputInputStream {
 		return oiso;
 	}
 
+	/**
+	 * The OISOutputStream class extends the OutputStream class and is responsible
+	 * for writing data to the OutputInputStream object.
+	 */
 	private class OISOutputStream extends OutputStream {
+		/**
+		 * Writes a byte of data to the output stream.
+		 *
+		 * @param b The byte of data to be written.
+		 * @throws IOException If the output stream is closed.
+		 */
 		@Override
 		public void write(int b) throws IOException {
 			if (oisoClosed) {
@@ -85,6 +114,11 @@ public class OutputInputStream {
 			}
 		}
 
+		/**
+		 * Closes the output stream.
+		 *
+		 * @throws IOException If an error occurs while closing the stream.
+		 */
 		@Override
 		public void close() throws IOException {
 			synchronized (OutputInputStream.this) {
@@ -97,7 +131,19 @@ public class OutputInputStream {
 		}
 	}
 
+	/**
+	 * The OISInputStream class extends the InputStream class and is responsible for
+	 * reading data from the OutputInputStream object.
+	 */
 	private class OISInputStream extends InputStream {
+
+		/**
+		 * Reads the next byte of data from the input stream.
+		 *
+		 * @return The next byte of data, or -1 if the end of the stream is reached.
+		 * @throws IOException If the input stream is closed or an error occurs while
+		 *                     reading.
+		 */
 		@Override
 		public int read() throws IOException {
 			if (oisiClosed) {
@@ -116,6 +162,14 @@ public class OutputInputStream {
 			return nextValue;
 		}
 
+		/**
+		 * Reads data from the input stream into a byte array.
+		 *
+		 * @param b The byte array to read the data into.
+		 * @return The number of bytes read, or -1 if the end of the stream is reached.
+		 * @throws IOException If the input stream is closed or an error occurs while
+		 *                     reading.
+		 */
 		@Override
 		public int read(byte[] b) throws IOException {
 			if (oisiClosed) {
@@ -149,6 +203,11 @@ public class OutputInputStream {
 			}
 		}
 
+		/**
+		 * Closes the input stream associated with the OutputInputStream object.
+		 *
+		 * @throws IOException If an I/O error occurs while closing the input stream.
+		 */
 		@Override
 		public void close() throws IOException {
 			synchronized (OutputInputStream.this) {
@@ -158,6 +217,12 @@ public class OutputInputStream {
 			}
 		}
 
+		/**
+		 * Returns the number of bytes that can be read from the input stream without
+		 * blocking.
+		 *
+		 * @return The number of bytes available for reading from the input stream.
+		 */
 		@Override
 		public int available() {
 			int available = 0;
@@ -168,6 +233,11 @@ public class OutputInputStream {
 		}
 	}
 
+	/**
+	 * The main method creates an instance of OutputInputStream with a specified
+	 * buffer size.
+	 * It writes data to the output stream and reads it from the input stream.
+	 */
 	public static void main(String[] args) {
 		final OutputInputStream ois = new OutputInputStream(4);
 		new Thread(

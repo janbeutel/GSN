@@ -3,10 +3,24 @@ package ch.epfl.gsn.vsensor.permasense;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 
+/**
+ * The Resistivity class is responsible for converting a signal value to
+ * resistivity.
+ * Implements the {@code Converter} interface.
+ */
 public class Resistivity implements Converter {
 
 	private static final DecimalFormat decimal3 = new DecimalFormat("0.000");
 
+	/**
+	 * Converts the given signal value to resistivity.
+	 *
+	 * @param signal_name the name of the signal (unused in this implementation)
+	 * @param value       the value of the signal
+	 * @param input       additional input (unused in this implementation)
+	 * @return the resistivity value as a formatted string, or null if the
+	 *         signal_name is null
+	 */
 	public String convert(Serializable signal_name, String value, Serializable input) {
 		if (signal_name == null) {
 			return null;

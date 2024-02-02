@@ -48,6 +48,16 @@ public class DummyModel extends AbstractModel {
 		return new StreamElement[] { lastone };
 	}
 
+	/**
+	 * Retrieves the query result based on the given parameters.
+	 * If the last element is not null, it returns an array containing only the last
+	 * element.
+	 * Otherwise, it returns an array containing a new StreamElement with a default
+	 * value.
+	 *
+	 * @param params the parameters used for the query
+	 * @return an array of StreamElement objects representing the query result
+	 */
 	@Override
 	public StreamElement[] query(StreamElement params) {
 
@@ -59,6 +69,12 @@ public class DummyModel extends AbstractModel {
 		}
 	}
 
+	/**
+	 * Sets the value of a parameter.
+	 * 
+	 * @param k      the key of the parameter
+	 * @param string the value of the parameter
+	 */
 	@Override
 	public void setParam(String k, String string) {
 		if (k.equalsIgnoreCase("default")) {

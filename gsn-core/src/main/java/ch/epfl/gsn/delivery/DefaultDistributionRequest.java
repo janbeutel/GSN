@@ -41,6 +41,13 @@ import ch.epfl.gsn.utils.models.AbstractModel;
 
 import org.slf4j.Logger;
 
+/**
+ * The DefaultDistributionRequest class represents a distribution request for a
+ * delivery system in a Global Sensor Networks (GSN) application.
+ * It implements the {@code DistributionRequest} interface and provides methods
+ * for handling the distribution of data from a sensor to the specified delivery
+ * system.
+ */
 public class DefaultDistributionRequest implements DistributionRequest {
 
 	private static transient Logger logger = LoggerFactory.getLogger(DefaultDistributionRequest.class);
@@ -55,6 +62,24 @@ public class DefaultDistributionRequest implements DistributionRequest {
 
 	private VSensorConfig vSensorConfig;
 
+	/**
+	 * Constructor of a new DefaultDistributionRequest object with the provided
+	 * parameters.
+	 * The constructor initializes the instance variables of the object and performs
+	 * additional operations such as extracting selected column names from the query
+	 * and writing the structure of the selected columns to the delivery system.
+	 *
+	 * @param deliverySystem The delivery system to write the structure of the
+	 *                       selected columns.
+	 * @param sensorConfig   The VSensorConfig object containing sensor
+	 *                       configuration.
+	 * @param query          The query string.
+	 * @param startTime      The start time for the distribution request.
+	 * @throws IOException  If an I/O error occurs during the writing of the
+	 *                      structure.
+	 * @throws SQLException If a SQL error occurs during the extraction of selected
+	 *                      column names.
+	 */
 	private DefaultDistributionRequest(DeliverySystem deliverySystem, VSensorConfig sensorConfig, String query,
 			long startTime) throws IOException, SQLException {
 		this.deliverySystem = deliverySystem;
@@ -65,6 +90,24 @@ public class DefaultDistributionRequest implements DistributionRequest {
 		deliverySystem.writeStructure(selectedColmnNames);
 	}
 
+	/**
+	 * Creates a new instance of the DefaultDistributionRequest class with the
+	 * provided parameters.
+	 * Calls the Constructor and therefore encapsulates the object creation logic
+	 * and returns the newly created object.
+	 *
+	 * @param deliverySystem The delivery system to write the structure of the
+	 *                       selected columns.
+	 * @param sensorConfig   The VSensorConfig object containing sensor
+	 *                       configuration.
+	 * @param query          The query string.
+	 * @param startTime      The start time for the distribution request.
+	 * @return A new instance of the DefaultDistributionRequest class.
+	 * @throws IOException  If an I/O error occurs during the writing of the
+	 *                      structure.
+	 * @throws SQLException If a SQL error occurs during the extraction of selected
+	 *                      column names.
+	 */
 	public static DefaultDistributionRequest create(DeliverySystem deliverySystem, VSensorConfig sensorConfig,
 			String query, long startTime) throws IOException, SQLException {
 		DefaultDistributionRequest toReturn = new DefaultDistributionRequest(deliverySystem, sensorConfig, query,
@@ -72,6 +115,14 @@ public class DefaultDistributionRequest implements DistributionRequest {
 		return toReturn;
 	}
 
+	/**
+	 * Returns a string representation of the DefaultDistributionRequest object.
+	 * The method constructs a string by concatenating various information such as
+	 * the delivery system class name, query string, start time, and virtual sensor
+	 * name.
+	 *
+	 * @return A string representation of the DefaultDistributionRequest object.
+	 */
 	public String toString() {
 		return new StringBuilder("DefaultDistributionRequest Request[[ Delivery System: ")
 				.append(deliverySystem.getClass().getName())
@@ -125,6 +176,18 @@ public class DefaultDistributionRequest implements DistributionRequest {
 		return deliverySystem;
 	}
 
+	/**
+	 * Compares the current DefaultDistributionRequest object with the provided
+	 * object for equality.
+	 * The method returns true if the provided object is also a
+	 * DefaultDistributionRequest object
+	 * and all the instance variables of both objects are equal. Otherwise, it
+	 * returns false.
+	 *
+	 * @param o The object to compare with the current DefaultDistributionRequest
+	 *          object.
+	 * @return true if the objects are equal, false otherwise.
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
@@ -149,6 +212,13 @@ public class DefaultDistributionRequest implements DistributionRequest {
 		return true;
 	}
 
+	/**
+	 * Generates a hash code value for this DefaultDistributionRequest object.
+	 * The hash code is calculated based on the deliverysystem, query, and virtual
+	 * sensor name.
+	 *
+	 * @return The hash code value for this DefaultDistributionRequest object.
+	 */
 	@Override
 	public int hashCode() {
 		int result = query != null ? query.hashCode() : 0;

@@ -38,8 +38,6 @@ import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.DataTypes;
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.utils.Helpers;
-import ch.epfl.gsn.vsensor.AbstractScheduledVirtualSensor;
-import ch.epfl.gsn.vsensor.AbstractVirtualSensor;
 
 import org.slf4j.Logger;
 import org.joda.time.format.ISODateTimeFormat;
@@ -100,6 +98,7 @@ public abstract class AbstractScheduledVirtualSensor extends AbstractVirtualSens
 				throw new RuntimeException(e);
 			}
 		}
+
 		// If the scheduled start is not in the future
 		// then start at the next whole time interval
 		if (System.currentTimeMillis() >= startTime) {
@@ -120,6 +119,13 @@ public abstract class AbstractScheduledVirtualSensor extends AbstractVirtualSens
 		return true;
 	}
 
+	/**
+	 * Handles new data received from the input stream.
+	 * Validates the data against the output structure defined in the
+	 * virtual sensor descriptor file.
+	 * Logs any errors validating the data.
+	 * Sets the dataItem property with the received data if valid.
+	 */
 	public void dataAvailable(String inputStreamName, StreamElement data) {
 		try {
 			// <TODO> if AbstractVirtualSensor.validateStreamElement() was protected then
@@ -136,6 +142,19 @@ public abstract class AbstractScheduledVirtualSensor extends AbstractVirtualSens
 
 	}
 
+	/**
+	 * Validates the given StreamElement against the output structure
+	 * defined in the virtual sensor descriptor.
+	 * 
+	 * Checks if the data types are compatible and the number of
+	 * fields match the defined output structure.
+	 * 
+	 * Throws a RuntimeException if validation fails.
+	 * 
+	 * @param streamElement The StreamElement to validate
+	 * @param adjust        If true, only checks data type compatibility,
+	 *                      does not check number of fields.
+	 */
 	private void validateStreamElement(StreamElement streamElement, boolean adjust) {
 		if (!compatibleStructure(streamElement, getVirtualSensorConfiguration().getOutputStructure(), adjust)) {
 			StringBuilder exceptionMessage = new StringBuilder().append("The streamElement produced by :")
@@ -210,8 +229,7 @@ public abstract class AbstractScheduledVirtualSensor extends AbstractVirtualSens
 		return true;
 	}
 
-	public abstract class MyTimerTask extends TimerTask {
-	};
+	public abstract class MyTimerTask extends TimerTask {};
 
 	public abstract void dispose();
 

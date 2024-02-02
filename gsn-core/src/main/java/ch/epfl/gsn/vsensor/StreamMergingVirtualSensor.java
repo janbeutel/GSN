@@ -20,6 +20,11 @@ import ch.epfl.gsn.beans.VSensorConfig;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
+/**
+ * This class represents a Stream Merging Virtual Sensor that extends the BridgeVirtualSensorPermasense class.
+ * It merges multiple streams of data based on specified parameters and stores the merged data in a buffer.
+ * The merged data can be accessed and processed later.
+ */
 public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 
 	private static final String BUFFER_SIZE_IN_DAYS = "maximum_buffered_stream_age_in_days";
@@ -86,6 +91,14 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 			new DataField("MERGED_STREAMS", "INTEGER"),
 			new DataField("TOTAL_BUFFERED_STREAMS", "BIGINT")
 	};
+
+	/**
+	 * Initializes the virtual sensor by extracting and processing configuration parameters 
+	 * from the Virtual Sensor Configuration file.
+	 * 
+	 *
+	 * @return true if initialization is successful, false otherwise.
+	 */
 
 	@Override
 	public boolean initialize() {
@@ -348,6 +361,12 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 		return ret;
 	}
 
+	/**
+	 * Checks if the given value exists in the output structure of the virtual sensor.
+	 *
+	 * @param value The value to be checked against the output structure.
+	 * @return {@code true} if the value exists in the output structure, {@code false} otherwise.
+	 */
 	private boolean isInOutputStructure(String value) {
 		for (DataField d : getVirtualSensorConfiguration().getOutputStructure()) {
 			if (d.getName().compareToIgnoreCase(value) == 0) {
@@ -357,6 +376,12 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 		return false;
 	}
 
+	/**
+	 * Retrieves the operator associated with the given field name.
+	 *
+	 * @param fieldName The name of the field for which to retrieve the operator.
+	 * @return The operator associated with the given field name. If no specific operator is found, the default merge operator is returned.
+	 */
 	private Operator getOperator(String fieldName) {
 		Operator op = FieldNameToOperatorMap.get(fieldName);
 		if (op == null) {
@@ -364,7 +389,12 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 		}
 		return op;
 	}
-
+	/**
+	 * Called when new data is available from a specific input stream.
+	 *
+	 * @param inputStreamName The name of the input stream.
+	 * @param data The StreamElement object containing the new data.
+	 */
 	@Override
 	public void dataAvailable(String inputStreamName, StreamElement data) {
 		Serializable match1 = null;
@@ -406,6 +436,12 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 		cleanupLock.release();
 	}
 
+	/**
+	 * Adds missing fields to the given StreamElement object.
+	 *
+	 * @param data The StreamElement object to which missing fields will be added.
+	 * @return A new StreamElement object with the missing fields added.
+	 */
 	private StreamElement addMissingFields(StreamElement data) {
 		ArrayList<DataField> dataFields = new ArrayList<DataField>();
 		for (DataField df : mergedDataFields) {
@@ -426,6 +462,14 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 		return new StreamElement(data, dfArray, d);
 	}
 
+	/**
+	 * Processes the data for a specific input stream and merges it with other streams based on matching criteria.
+	 *
+	 * @param inputStreamName The name of the input stream.
+	 * @param data The StreamElement object containing the new data.
+	 * @param streamElementContainerMap The map storing the StreamElementContainer objects for each matching criteria.
+	 * @throws Exception If an error occurs during the processing.
+	 */
 	private void processPerDeviceData(String inputStreamName, StreamElement data,
 			Map<Serializable, ArrayList<StreamElementContainer>> streamElementContainerMap) throws Exception {
 		Serializable match2 = null;
@@ -479,6 +523,13 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 		super.dispose();
 	}
 
+	/**
+	 * Cleans up the buffers used for storing stream data, removing outdated elements based on the cleanup criteria.
+	 *
+	 * @param cleanupAll If true, all elements in the buffers will be cleaned up. 
+	 * 					If false, only elements older than the buffer timestamp 
+	 * 					minus the buffer size will be cleaned up.
+	 */
 	private void cleanupBuffers(boolean cleanupAll) {
 		try {
 			cleanupLock.acquire();
@@ -536,6 +587,16 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 		cleanupLock.release();
 	}
 
+	/**
+	 * Generates statistics based on the number of merged streams and the total number of buffered streams.
+	 *
+	 * @param mergedStreams The number of streams that have been merged.
+	 * @param se The StreamElement object representing the merged stream.
+	 * @return An array of Serializable objects containing the generated statistics. 
+	 * The first element represents the number of merged streams, 
+	 * and the second element represents the total number 
+	 * of streams remaining in the buffer after the merge.
+	 */
 	private Serializable[] generateStats(Integer mergedStreams, StreamElement se) {
 		totalBufferedStreams -= mergedStreams;
 
@@ -549,6 +610,12 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 		private Long bucketStartTime = null;
 		private Long bucketEndTime = null;
 
+		/**
+		 * Constructs a new StreamElementContainer object with the provided input stream name and stream element.
+		 *
+		 * @param inputStreamName The name of the input stream associated with the stream element.
+		 * @param streamElement The StreamElement object to be stored in the container.
+		 */
 		protected StreamElementContainer(String inputStreamName, StreamElement streamElement) {
 			streamElementTuples = new ArrayList<StreamElementInputStreamNameTuple>(bucketSpace);
 			streamElementTuples.add(new StreamElementInputStreamNameTuple(inputStreamName, streamElement));
@@ -569,11 +636,24 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 				}
 			}
 		}
-
+		/**
+		 * Checks whether a given timestamp falls within the current time range.
+		 *
+		 * @param incomingTime The timestamp to be checked.
+		 * @return True if the timestamp falls within the current time range, false otherwise.
+		 */
 		protected boolean checkTime(Long incomingTime) {
 			return (bucketStartTime == null) || ((incomingTime >= bucketStartTime) && (incomingTime < bucketEndTime));
 		}
 
+		/**
+		 * Adds a new StreamElement to the streamElementTuples list, while performing checks to filter out duplicates based on the specified flags.
+		 *
+		 * @param inputStreamName The name of the input stream associated with the StreamElement.
+		 * @param streamElement The StreamElement object to be added.
+		 * @return True if the StreamElement is successfully added, false if it is considered a duplicate and should be discarded.
+		 * @throws Exception If the streamElementTuples list is already full.
+		 */
 		protected boolean putStreamElement(String inputStreamName, StreamElement streamElement) throws Exception {
 			if (streamElementTuples.size() == bucketSpace) {
 				throw new Exception("StreamElementContainer already full!");
@@ -634,6 +714,11 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 			return (Long) newSE.getData(timeline);
 		}
 
+		/**
+		 * Generates a merged StreamElement by performing specific operations on the data fields of the virtual sensor.
+		 *
+		 * @return The merged StreamElement object.
+		 */
 		protected StreamElement getMergedStreamElement() {
 			Serializable[] mergedData = new Serializable[mergedDataFields.length];
 
@@ -671,6 +756,12 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 			return oldSE.getData(dataField.getName());
 		}
 
+		/**
+		 * Performs addition operations on the data fields of the virtual sensor.
+		 *
+		 * @param d The data field on which the addition operation is performed.
+		 * @return The result of the addition operation.
+		 */
 		private Serializable add(DataField d) {
 			Serializable toReturn = null;
 			switch (d.getDataTypeID()) {
@@ -771,6 +862,12 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 			return toReturn;
 		}
 
+		/**
+		 * Calculates the average of the data fields of the virtual sensor.
+		 *
+		 * @param d The data field on which the average calculation is performed.
+		 * @return The calculated average.
+		 */
 		private Serializable avg(DataField d) {
 			Serializable toReturn = null;
 			int divider = 0;
@@ -866,6 +963,12 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 			return toReturn;
 		}
 
+		/**
+		 * Finds the minimum value among the data fields of the virtual sensor.
+		 *
+		 * @param d The data field on which the minimum value calculation is performed.
+		 * @return The minimum value found among the data fields.
+		 */
 		private Serializable min(DataField d) {
 			Serializable toReturn = null;
 			switch (d.getDataTypeID()) {
@@ -919,6 +1022,12 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 			return toReturn;
 		}
 
+		/**
+		 * Finds the maximum value among the data fields of the virtual sensor.
+		 *
+		 * @param d The data field on which the maximum value calculation is performed.
+		 * @return The maximum value found among the data fields.
+		 */
 		private Serializable max(DataField d) {
 			Serializable toReturn = null;
 			switch (d.getDataTypeID()) {
@@ -974,7 +1083,12 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 	class StreamElementInputStreamNameTuple {
 		private String inputStreamName;
 		private StreamElement streamElement;
-
+		/**
+		 * Constructs a new instance of the StreamElementInputStreamNameTuple class.
+		 *
+		 * @param inputStreamName The name of the input stream associated with the tuple.
+		 * @param streamElement   The StreamElement object representing the data element.
+		 */
 		protected StreamElementInputStreamNameTuple(String inputStreamName, StreamElement streamElement) {
 			this.inputStreamName = inputStreamName;
 			this.streamElement = streamElement;
