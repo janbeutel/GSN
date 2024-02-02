@@ -37,7 +37,6 @@ import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp2.*;
 import org.slf4j.LoggerFactory;
 
