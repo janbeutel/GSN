@@ -33,8 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import ch.epfl.gsn.beans.AddressBean;
 import ch.epfl.gsn.beans.DataField;
-import ch.epfl.gsn.wrappers.AbstractWrapper;
-import ch.epfl.gsn.wrappers.MultiFormatWrapper;
 
 import org.slf4j.Logger;
 
@@ -57,6 +55,12 @@ public class MultiFormatWrapper extends AbstractWrapper {
   private AddressBean params;
   private long rate = 1000;
 
+  /**
+   * Initializes the MultiFormatWrapper.
+   * Retrieves the active address bean and sets the sampling rate if provided.
+   * 
+   * @return true if initialization is successful, false otherwise.
+   */
   public boolean initialize() {
     params = getActiveAddressBean();
 
@@ -69,6 +73,11 @@ public class MultiFormatWrapper extends AbstractWrapper {
     return true;
   }
 
+  /**
+   * Runs the wrapper by continuously generating random readings for light and
+   * temperature,
+   * and posting the data to GSN.
+   */
   public void run() {
     Double light = 0.0, temperature = 0.0;
     int packetType = 0;

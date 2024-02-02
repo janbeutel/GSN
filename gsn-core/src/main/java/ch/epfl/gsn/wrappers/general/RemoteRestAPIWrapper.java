@@ -79,6 +79,12 @@ public class RemoteRestAPIWrapper extends AbstractWrapper {
 		return "Remote REST API Wrapper";
 	}
 
+	/**
+	 * Initializes the RemoteRestAPIWrapper by retrieving the necessary
+	 * configuration parameters and setting up the required components.
+	 * 
+	 * @return true if the initialization is successful, false otherwise.
+	 */
 	public boolean initialize() {
 		try {
 			addressBean = getActiveAddressBean();
@@ -118,6 +124,11 @@ public class RemoteRestAPIWrapper extends AbstractWrapper {
 		return structure != null;
 	}
 
+	/**
+	 * Retrieves the access token from the remote REST API.
+	 * 
+	 * @return The access token as a String, or null if an error occurs.
+	 */
 	public String getToken() {
 		HttpPost post = new HttpPost(wsURL + "/oauth2/token");
 		List<BasicNameValuePair> parametersBody = new ArrayList<BasicNameValuePair>();
@@ -146,6 +157,12 @@ public class RemoteRestAPIWrapper extends AbstractWrapper {
 		return null;
 	}
 
+	/**
+	 * Performs an HTTP GET request and returns the response body as a String.
+	 * 
+	 * @param get the HttpGet request to be executed
+	 * @return the response body as a String
+	 */
 	private String doRequest(HttpGet get) {
 		HttpResponse response = null;
 		int code = 401;
@@ -177,6 +194,15 @@ public class RemoteRestAPIWrapper extends AbstractWrapper {
 		return "";
 	}
 
+	/**
+	 * Retrieves the remote structure of the data fields from the REST API.
+	 * 
+	 * @return an array of DataField objects representing the remote structure
+	 * @throws IOException            if an I/O error occurs while making the
+	 *                                request
+	 * @throws ClassNotFoundException if the class of a serialized object cannot be
+	 *                                found
+	 */
 	public DataField[] getRemoteStructure() throws IOException, ClassNotFoundException {
 		HttpGet get = new HttpGet(wsURL + "/api/sensors/" + vsName);
 		try {
@@ -207,6 +233,15 @@ public class RemoteRestAPIWrapper extends AbstractWrapper {
 		}
 	}
 
+	/**
+	 * Executes the continuous data retrieval process from the remote REST API.
+	 * This method runs in a separate thread and retrieves data from the specified
+	 * URI.
+	 * The retrieved data is then processed and inserted into the system.
+	 * If an exception occurs during the retrieval process, the method will log a
+	 * warning
+	 * and retry after a minute if the process is still active.
+	 */
 	public void run() {
 		getData = new HttpGet();
 		while (isActive()) {
@@ -233,6 +268,17 @@ public class RemoteRestAPIWrapper extends AbstractWrapper {
 		}
 	}
 
+	/**
+	 * Inserts a stream element manually into the database.
+	 * If the stream element is out of order, it is accepted and the last received
+	 * timestamp is updated.
+	 * If the stream element is in order, it is first inserted into the database.
+	 * If the insertion is successful, the last received timestamp is updated.
+	 * 
+	 * @param se The stream element to be inserted.
+	 * @return true if the stream element was inserted successfully or if it was out
+	 *         of order, false otherwise.
+	 */
 	public boolean manualDataInsertion(StreamElement se) {
 		try {
 			// If the stream element is out of order, we accept the stream element and wait

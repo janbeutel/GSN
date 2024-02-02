@@ -71,6 +71,19 @@ public class CSVWrapper extends AbstractWrapper {
     long processedLineCounter = 0; // counts lines processed when checkpoint use counter to track changes (instead
                                    // of timestamp, by default)
 
+    /**
+     * Initializes the CSVWrapper by retrieving the necessary configuration values
+     * from the AddressBean.
+     * It sets up the data file, CSV fields, formats, separator, check-point
+     * directory, quote, skip-first-lines,
+     * timezone, bad-values, use-counter-for-check-point, and sampling period.
+     * It also checks the validity of the provided CSV separator and quote, and
+     * handles counter-based check points.
+     * Finally, it initializes the handler and reads the check-point file to
+     * determine the last processed item.
+     * 
+     * @return true if the initialization is successful, false otherwise.
+     */
     public boolean initialize() {
         AddressBean addressBean = getActiveAddressBean();
         dataFile = addressBean.getPredicateValueWithException("file");
@@ -150,6 +163,13 @@ public class CSVWrapper extends AbstractWrapper {
         return true;
     }
 
+    /**
+     * Executes the main logic of the CSVWrapper in a continuous loop until the
+     * isActive flag is set to false.
+     * This method reads data from the data file and performs necessary operations
+     * on it.
+     * It also handles exceptions and updates the checkpoint file accordingly.
+     */
     public void run() {
         Exception preivousError = null;
         long previousModTime = -1;

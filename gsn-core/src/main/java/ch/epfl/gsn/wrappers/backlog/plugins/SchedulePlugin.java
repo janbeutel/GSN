@@ -63,6 +63,14 @@ public class SchedulePlugin extends AbstractPlugin {
 		return "SchedulePlugin";
 	}
 
+	/**
+	 * Handles the received message from a device.
+	 * 
+	 * @param deviceId  the ID of the device
+	 * @param timestamp the timestamp of the message
+	 * @param data      the data received from the device
+	 * @return true if the message was successfully processed, false otherwise
+	 */
 	@Override
 	public boolean messageReceived(int deviceId, long timestamp, Serializable[] data) {
 		if (((Byte) data[0]) == GSN_TYPE_GET_SCHEDULE) {
@@ -176,6 +184,23 @@ public class SchedulePlugin extends AbstractPlugin {
 		}
 	}
 
+	/**
+	 * Sends a command or schedule to a plugin based on the specified action,
+	 * parameter names,
+	 * and parameter values. If the action is "schedule_command," the method
+	 * processes the schedule
+	 * information and sends it to the CoreStation. Otherwise, it returns an
+	 * InputInfo object indicating
+	 * that the provided action is not supported.
+	 *
+	 * @param action      The action to be performed by the plugin.
+	 * @param paramNames  An array of parameter names associated with the action.
+	 * @param paramValues An array of parameter values corresponding to the
+	 *                    parameter names.
+	 * @return An InputInfo object representing the result of the operation.
+	 * @throws Exception If an error occurs during the processing or sending of the
+	 *                   command or schedule.
+	 */
 	@Override
 	public InputInfo sendToPlugin(String action, String[] paramNames, Object[] paramValues) {
 		if (action.compareToIgnoreCase("schedule_command") == 0) {

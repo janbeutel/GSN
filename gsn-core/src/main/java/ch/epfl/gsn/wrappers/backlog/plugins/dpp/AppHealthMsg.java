@@ -21,6 +21,15 @@ public class AppHealthMsg extends AbstractMsg {
 			new DataField("HUMIDITY", "INTEGER") /* Humidity [10^-2 %] */
 	};
 
+	/**
+	 * Receives the payload from a ByteBuffer and extracts the necessary data
+	 * fields.
+	 * 
+	 * @param payload The ByteBuffer containing the payload data.
+	 * @return An array of Serializable objects containing the extracted data
+	 *         fields.
+	 * @throws Exception If an error occurs while extracting the data fields.
+	 */
 	@Override
 	public Serializable[] receivePayload(ByteBuffer payload) throws Exception {
 		Long uptime = null;

@@ -69,6 +69,14 @@ public class AsyncCoreStationClient extends Thread {
 		return singletonObject;
 	}
 
+	/**
+	 * Executes the main logic of the thread.
+	 * This method continuously processes change requests and handles selected keys
+	 * from the selector.
+	 * It reads, writes, and finishes connections based on the operations specified
+	 * in the change requests.
+	 * The thread stops when the dispose flag is set to true.
+	 */
 	public void run() {
 		if (logger.isDebugEnabled()) {
 			logger.debug("thread started");
@@ -170,6 +178,15 @@ public class AsyncCoreStationClient extends Thread {
 		logger.info("thread stoped");
 	}
 
+	/**
+	 * Reads data from the given socket channel and processes it.
+	 * If the remote entity closes the connection, it will attempt to reconnect if
+	 * necessary.
+	 *
+	 * @param key The selection key associated with the socket channel.
+	 * @throws IOException If an I/O error occurs while reading from the socket
+	 *                     channel.
+	 */
 	private void read(SelectionKey key) throws IOException {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 
@@ -209,6 +226,18 @@ public class AsyncCoreStationClient extends Thread {
 		}
 	}
 
+	/**
+	 * Closes the connection associated with the given SelectionKey and
+	 * SocketChannel.
+	 * If the SelectionKey is not null, it is cancelled.
+	 * If the SocketChannel is not null, it is closed and the corresponding pending
+	 * data is removed.
+	 * Finally, the connectionLost() method is called on the associated
+	 * CoreStationListener.
+	 *
+	 * @param key The SelectionKey associated with the connection.
+	 * @param sc  The SocketChannel associated with the connection.
+	 */
 	private void closeConnection(SelectionKey key, SocketChannel sc) {
 		if (key != null) {
 			key.cancel();
@@ -228,6 +257,12 @@ public class AsyncCoreStationClient extends Thread {
 		}
 	}
 
+	/**
+	 * Writes data from the pendingData queue to the specified socket channel.
+	 * If there is no more data to write, switches the selection key to OP_READ.
+	 *
+	 * @param key The selection key associated with the socket channel.
+	 */
 	private void write(SelectionKey key) {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 		try {
@@ -277,6 +312,15 @@ public class AsyncCoreStationClient extends Thread {
 		}
 	}
 
+	/**
+	 * Finishes the connection for the given SelectionKey.
+	 * If the connection operation failed, it will raise an IOException.
+	 * If the connection is successful, it notifies the corresponding
+	 * CoreStationListener
+	 * and registers an interest in reading on the channel.
+	 *
+	 * @param key The SelectionKey representing the connection.
+	 */
 	private void finishConnection(SelectionKey key) {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 
@@ -306,6 +350,12 @@ public class AsyncCoreStationClient extends Thread {
 		}
 	}
 
+	/**
+	 * Registers a CoreStationListener to receive events from the core station.
+	 * 
+	 * @param listener the CoreStationListener to register
+	 * @throws IOException if an I/O error occurs
+	 */
 	public void registerListener(CoreStationListener listener) throws IOException {
 		if (logger.isDebugEnabled()) {
 			logger.debug("register core station: " + listener.getCoreStationName());
@@ -340,6 +390,14 @@ public class AsyncCoreStationClient extends Thread {
 		selector.wakeup();
 	}
 
+	/**
+	 * Deregisters a CoreStationListener from the AsyncCoreStationClient.
+	 * This method closes the associated SocketChannel and removes the listener from
+	 * the internal maps.
+	 * If there are no more listeners registered, the client is disposed.
+	 *
+	 * @param listener The CoreStationListener to be deregistered.
+	 */
 	public void deregisterListener(CoreStationListener listener) {
 		synchronized (listenerToSocketList) {
 			SocketChannel sc = listenerToSocketList.get(listener);
@@ -369,6 +427,13 @@ public class AsyncCoreStationClient extends Thread {
 
 	}
 
+	/**
+	 * Adds a device ID for a specific deployment to the listener map.
+	 * 
+	 * @param deployment the deployment name
+	 * @param id         the device ID to add
+	 * @param listener   the CoreStationListener associated with the device ID
+	 */
 	public void addDeviceId(String deployment, Integer id, CoreStationListener listener) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("adding DeviceId " + id + " for " + deployment + " deployment");
@@ -385,6 +450,17 @@ public class AsyncCoreStationClient extends Thread {
 		}
 	}
 
+	/**
+	 * Removes the specified device ID for the given deployment.
+	 * If the deployment or device ID is null, an error message is logged.
+	 * If there is no core station listener for the specified deployment, an error
+	 * message is logged.
+	 * If the device ID is successfully removed and there are no more listeners for
+	 * the deployment, the deployment is removed from the map.
+	 *
+	 * @param deployment the deployment name
+	 * @param id         the device ID to remove
+	 */
 	public void removeDeviceId(String deployment, Integer id) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("removing DeviceId: " + id + " for " + deployment + " deployment");
@@ -413,6 +489,14 @@ public class AsyncCoreStationClient extends Thread {
 		}
 	}
 
+	/**
+	 * Disposes the object and performs necessary cleanup operations.
+	 * Sets the singletonObject to null, marks the dispose flag as true,
+	 * wakes up the selector, and waits for the thread to join.
+	 * 
+	 * @throws InterruptedException if the thread is interrupted while waiting to
+	 *                              join
+	 */
 	private void dispose() {
 		singletonObject = null;
 		dispose = true;
@@ -424,6 +508,12 @@ public class AsyncCoreStationClient extends Thread {
 		}
 	}
 
+	/**
+	 * Stuffs the given message with a stuffing byte.
+	 * 
+	 * @param message the message to be stuffed
+	 * @return the stuffed message
+	 */
 	private byte[] pktStuffing(byte[] message) {
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -440,6 +530,18 @@ public class AsyncCoreStationClient extends Thread {
 		}
 	}
 
+	/**
+	 * Sends data to a core station.
+	 * 
+	 * @param deployment the deployment name
+	 * @param id         the device ID (null if not applicable)
+	 * @param listener   the core station listener (null if not applicable)
+	 * @param priority   the priority of the data
+	 * @param data       the data to be sent
+	 * @return an array of Serializable objects containing the success status and
+	 *         the response (if any)
+	 * @throws IOException if there is an error sending the data
+	 */
 	public Serializable[] send(String deployment, Integer id, CoreStationListener listener, int priority, byte[] data)
 			throws IOException {
 		Serializable[] ret = new Serializable[] { false, null };
@@ -477,6 +579,17 @@ public class AsyncCoreStationClient extends Thread {
 		return ret;
 	}
 
+	/**
+	 * Sends data to the CoreStationListener over a socket channel.
+	 * 
+	 * @param listener the CoreStationListener to send the data to
+	 * @param priority the priority of the data
+	 * @param data     the byte array of data to send
+	 * @param stuff    a flag indicating whether the data should be stuffed
+	 * @return an array containing a boolean indicating the success of the send
+	 *         operation and the size of the sent data
+	 * @throws IOException if an I/O error occurs during the send operation
+	 */
 	private Serializable[] send(CoreStationListener listener, int priority, byte[] data, boolean stuff)
 			throws IOException {
 		if (data.length > PACKET_SIZE - 4) {
@@ -536,6 +649,15 @@ public class AsyncCoreStationClient extends Thread {
 		return send(listener, 1, data, false);
 	}
 
+	/**
+	 * Reconnects the listener to the core station.
+	 * If a socket channel exists for the listener, a reconnect request is added to
+	 * the change requests list.
+	 * The selector is then woken up to process the change requests.
+	 * If no socket channel is found for the listener, a warning is logged.
+	 *
+	 * @param listener The CoreStationListener to reconnect.
+	 */
 	public void reconnect(CoreStationListener listener) {
 		SocketChannel sc = listenerToSocketList.get(listener);
 		if (sc != null) {
@@ -557,6 +679,11 @@ public class AsyncCoreStationClient extends Thread {
 
 	}
 
+	/**
+	 * Attempts to reconnect to the specified CoreStation after a certain timeout.
+	 * 
+	 * @param listener the CoreStationListener to reconnect to
+	 */
 	private void timeReconnect(CoreStationListener listener) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("trying to reconnect to " + listener.getCoreStationName() + " CoreStation in "

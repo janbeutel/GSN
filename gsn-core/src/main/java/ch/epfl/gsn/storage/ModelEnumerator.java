@@ -45,6 +45,13 @@ public class ModelEnumerator implements DataEnumeratorIF {
 	private StreamElement[] results;
 	private int ptr;
 
+	/**
+	 * Constructs a ModelEnumerator object for iterating over query results from the
+	 * specified model and query.
+	 *
+	 * @param query The SQL query containing conditions to filter model results.
+	 * @param model The AbstractModel instance to query.
+	 */
 	public ModelEnumerator(String query, AbstractModel model) {
 		String where = SQLUtils.extractWhereClause(query).toLowerCase();
 		String[] ex = where.split(" and ");
@@ -61,11 +68,22 @@ public class ModelEnumerator implements DataEnumeratorIF {
 		results = model.query(new StreamElement(df, sr));
 	}
 
+	/**
+	 * Returns true if there are more elements to be enumerated.
+	 * 
+	 * @return true if there are more elements, false otherwise
+	 */
 	@Override
 	public boolean hasMoreElements() {
 		return results != null && ptr < results.length - 1;
 	}
 
+	/**
+	 * Returns the next element in the stream.
+	 *
+	 * @return the next element in the stream, or null if there are no more elements
+	 * @throws RuntimeException if an error occurs while retrieving the next element
+	 */
 	@Override
 	public StreamElement nextElement() throws RuntimeException {
 		if (hasMoreElements()) {

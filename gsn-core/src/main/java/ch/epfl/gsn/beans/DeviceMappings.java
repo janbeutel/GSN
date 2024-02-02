@@ -32,6 +32,11 @@ public class DeviceMappings {
 		calcSensorTimeAxis();
 	}
 
+	/**
+	 * Calculates the position time axis based on the position mappings.
+	 * Updates the positionTimeMin, positionTimeMax, and positionTimeTicks
+	 * variables.
+	 */
 	private void calcPositionTimeAxis() {
 		for (PositionMappings mappings : positionMappings) {
 			for (PositionMap map : mappings.mappings) {
@@ -71,6 +76,12 @@ public class DeviceMappings {
 		}
 	}
 
+	/**
+	 * Calculates the time axis for the sensors in the device mappings.
+	 * This method iterates through the sensor mappings and updates the minimum and
+	 * maximum sensor times.
+	 * It also adds new time ticks to the sensor time ticks list if necessary.
+	 */
 	private void calcSensorTimeAxis() {
 		for (SensorMappings mappings : sensorMappings) {
 			for (SensorMap map : mappings.mappings) {

@@ -16,6 +16,14 @@ public class ImuMsg extends AbstractMsg {
 			new DataField("MAG_Z", "INTEGER") /* Magnetometer Z-axis raw data */
 	};
 
+	/**
+	 * Receives the payload from a ByteBuffer and converts it into an array of
+	 * Serializable objects.
+	 * 
+	 * @param payload the ByteBuffer containing the payload data
+	 * @return an array of Serializable objects representing the received payload
+	 * @throws Exception if an error occurs during the conversion process
+	 */
 	@Override
 	public Serializable[] receivePayload(ByteBuffer payload) throws Exception {
 		Integer acc_x = null;

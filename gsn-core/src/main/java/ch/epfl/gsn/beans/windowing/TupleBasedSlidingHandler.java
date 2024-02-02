@@ -65,6 +65,23 @@ public class TupleBasedSlidingHandler implements SlidingHandler {
 		this.wrapper = wrapper;
 	}
 
+	/**
+	 * Adds a stream source to the sliding handler.
+	 * If the windowing type of the stream source is not
+	 * TUPLE_BASED_SLIDE_ON_EACH_TUPLE,
+	 * the method calculates the slide value based on the parsed slide value and
+	 * parsed storage size of the stream source.
+	 * If the windowing type is TUPLE_BASED, the slide value is calculated as
+	 * parsedSlideValue - parsedStorageSize.
+	 * If the windowing type is neither TUPLE_BASED nor
+	 * TUPLE_BASED_SLIDE_ON_EACH_TUPLE, the slide value is set to 0.
+	 * If the windowing type is TUPLE_BASED_SLIDE_ON_EACH_TUPLE, the stream source
+	 * is added to the list of stream sources.
+	 * Finally, the method initializes the SQLViewQueryRewriter with the stream
+	 * source.
+	 *
+	 * @param streamSource the stream source to be added
+	 */
 	public void addStreamSource(StreamSource streamSource) {
 		if (streamSource.getWindowingType() != WindowType.TUPLE_BASED_SLIDE_ON_EACH_TUPLE) {
 			if (streamSource.getWindowingType() == WindowType.TUPLE_BASED) {
@@ -81,6 +98,14 @@ public class TupleBasedSlidingHandler implements SlidingHandler {
 		rewriter.initialize();
 	}
 
+	/**
+	 * Checks if data is available for processing based on the given stream element.
+	 * This method iterates over the stream sources and sliding hash map to
+	 * determine if data is available.
+	 * 
+	 * @param streamElement The stream element to check for data availability.
+	 * @return true if data is available, false otherwise.
+	 */
 	public boolean dataAvailable(StreamElement streamElement) {
 		boolean toReturn = false;
 		synchronized (streamSources) {
@@ -101,6 +126,14 @@ public class TupleBasedSlidingHandler implements SlidingHandler {
 		return toReturn;
 	}
 
+	/**
+	 * Retrieves the cutting condition for the sliding window.
+	 * The cutting condition is determined based on the maximum tuple count and
+	 * maximum window size
+	 * of the stream sources in the sliding window.
+	 * 
+	 * @return the cutting condition as a string in the format "pk < value"
+	 */
 	public String getCuttingCondition() {
 		long pk1 = -1;
 		long pk2 = -1;
@@ -188,12 +221,22 @@ public class TupleBasedSlidingHandler implements SlidingHandler {
 		return "pk < " + ((pk1 == -1) ? pk2 : pk1);
 	}
 
+	/**
+	 * Removes a stream source from the sliding handler.
+	 * 
+	 * @param streamSource the stream source to be removed
+	 */
 	public void removeStreamSource(StreamSource streamSource) {
 		streamSources.remove(streamSource);
 		slidingHashMap.remove(streamSource);
 		streamSource.getQueryRewriter().dispose();
 	}
 
+	/**
+	 * Disposes the resources used by the TupleBasedSlidingHandler.
+	 * This method releases any acquired resources and clears the internal data
+	 * structures.
+	 */
 	public void dispose() {
 		synchronized (streamSources) {
 			for (StreamSource streamSource : streamSources) {
@@ -209,12 +252,29 @@ public class TupleBasedSlidingHandler implements SlidingHandler {
 		}
 	}
 
+	/**
+	 * Checks if the given stream source is of tuple-based windowing type.
+	 * 
+	 * @param streamSource the stream source to check
+	 * @return true if the stream source is of tuple-based windowing type, false
+	 *         otherwise
+	 */
 	public boolean isInterestedIn(StreamSource streamSource) {
 		return WindowType.isTupleBased(streamSource.getWindowingType());
 	}
 
 	private class TupleBasedSQLViewQueryRewriter extends SQLViewQueryRewriter {
 
+		/**
+		 * Overrides the createViewSQL method to generate a SQL query for creating a
+		 * view based on the configured StreamSource.
+		 * If a cached SQL query exists, it is returned. Otherwise, a new query is
+		 * generated and cached.
+		 *
+		 * @return A CharSequence representing the SQL query for creating the view.
+		 * @throws GSNRuntimeException If certain conditions are not met, such as a null
+		 *                             wrapper object or failed validation.
+		 */
 		@Override
 		public CharSequence createViewSQL() {
 			if (cachedSqlQuery != null) {

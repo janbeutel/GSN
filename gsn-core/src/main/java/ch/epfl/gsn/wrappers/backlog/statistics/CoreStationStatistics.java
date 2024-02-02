@@ -34,6 +34,12 @@ public class CoreStationStatistics {
 		return isConnected;
 	}
 
+	/**
+	 * Sets the device ID for the CoreStation.
+	 * If the device ID has changed, all statistics are reset.
+	 * 
+	 * @param id the new device ID
+	 */
 	public void setDeviceId(int id) {
 		if (deviceId != null && id != deviceId) {
 			logger.warn("device id for CoreStation " + coreStationAddress + " has changed => reseting all statistics");
@@ -51,6 +57,13 @@ public class CoreStationStatistics {
 		return deviceId;
 	}
 
+	/**
+	 * Updates the message received counters for the specified message type and
+	 * size.
+	 *
+	 * @param type The type of the received message.
+	 * @param size The size of the received message.
+	 */
 	public void msgReceived(int type, long size) {
 		Long val = msgRecvCounterMap.get(type);
 		if (val == null) {
@@ -67,6 +80,11 @@ public class CoreStationStatistics {
 		}
 	}
 
+	/**
+	 * Updates the total number of bytes received by the core station.
+	 * 
+	 * @param size the size of the received bytes
+	 */
 	public void bytesReceived(long size) {
 		if (recvTotal == null) {
 			recvTotal = size;
@@ -79,6 +97,11 @@ public class CoreStationStatistics {
 		return recvTotal;
 	}
 
+	/**
+	 * Returns the total message receive counter.
+	 *
+	 * @return the total message receive counter
+	 */
 	public Long getTotalMsgRecvCounter() {
 		long total = 0;
 		synchronized (msgRecvCounterMap) {
@@ -93,6 +116,11 @@ public class CoreStationStatistics {
 		return msgRecvCounterMap.get(type);
 	}
 
+	/**
+	 * Returns the total message receive byte counter.
+	 *
+	 * @return the total message receive byte counter
+	 */
 	public Long getTotalMsgRecvByteCounter() {
 		long total = 0;
 		synchronized (msgRecvByteCounterMap) {
@@ -107,6 +135,13 @@ public class CoreStationStatistics {
 		return msgRecvByteCounterMap.get(type);
 	}
 
+	/**
+	 * Updates the message send counters and byte counters for the specified message
+	 * type and size.
+	 * 
+	 * @param type the type of the message
+	 * @param size the size of the message in bytes
+	 */
 	public void msgSent(int type, long size) {
 		Long val = msgSendCounterMap.get(type);
 		if (val == null) {
@@ -136,6 +171,11 @@ public class CoreStationStatistics {
 		return sendTotal;
 	}
 
+	/**
+	 * Returns the total message send counter.
+	 *
+	 * @return the total message send counter
+	 */
 	public Long getTotalMsgSendCounter() {
 		long total = 0;
 		synchronized (msgSendCounterMap) {
@@ -150,6 +190,11 @@ public class CoreStationStatistics {
 		return msgSendCounterMap.get(type);
 	}
 
+	/**
+	 * Returns the total number of bytes sent in messages.
+	 *
+	 * @return the total number of bytes sent in messages
+	 */
 	public Long getTotalMsgSendByteCounter() {
 		long total = 0;
 		synchronized (msgSendByteCounterMap) {

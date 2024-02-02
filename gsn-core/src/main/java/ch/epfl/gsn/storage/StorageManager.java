@@ -37,6 +37,7 @@ import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp2.*;
 import org.slf4j.LoggerFactory;
 
@@ -64,6 +65,16 @@ public abstract class StorageManager {
 
     private int Idcounter = 0;
 
+    /**
+     * Initializes the StorageManager with the specified database driver, username,
+     * password, database URL, and maximum number of database connections.
+     * 
+     * @param databaseDriver   the database driver to be used
+     * @param username         the username for the database connection
+     * @param password         the password for the database connection
+     * @param databaseURL      the URL of the database
+     * @param maxDBConnections the maximum number of database connections
+     */
     public void init(String databaseDriver, String username, String password, String databaseURL,
             int maxDBConnections) {
         this.databaseDriver = databaseDriver;
@@ -167,6 +178,14 @@ public abstract class StorageManager {
         return query;
     }
 
+    /**
+     * Retrieves the structure of a database table as an array of DataField objects.
+     * 
+     * @param tableName  the name of the table
+     * @param connection the database connection
+     * @return an array of DataField objects representing the structure of the table
+     * @throws SQLException if an error occurs while retrieving the table structure
+     */
     public DataField[] tableToStructure(CharSequence tableName, Connection connection) throws SQLException {
         StringBuilder sb = new StringBuilder("select * from ").append(tableName).append(" where 1=0 ");
         ResultSet rs = null;
@@ -256,7 +275,6 @@ public abstract class StorageManager {
      * @throws SQLException
      * @Throws GSNRuntimeException
      */
-
     public boolean tableExists(CharSequence tableName, DataField[] fields, Connection connection) throws SQLException,
             GSNRuntimeException {
         if (!ValidityTools.isValidJavaVariable(tableName)) {
@@ -312,6 +330,15 @@ public abstract class StorageManager {
         return true;
     }
 
+    /**
+     * Checks if a table with the given name and fields exists in the database.
+     *
+     * @param tableName the name of the table to check
+     * @param fields    the array of DataFields representing the columns of the
+     *                  table
+     * @return true if the table exists, false otherwise
+     * @throws SQLException if an error occurs while accessing the database
+     */
     public boolean tableExists(CharSequence tableName, DataField[] fields)
             throws SQLException {
         Connection conn = null;
@@ -359,7 +386,6 @@ public abstract class StorageManager {
      *         the row is there and then retrieve the value for the row.
      * @throws SQLException
      */
-
     public ResultSet getBinaryFieldByQuery(StringBuilder query,
             String colName, long pk, Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(query.toString());
@@ -367,6 +393,11 @@ public abstract class StorageManager {
         return ps.executeQuery();
     }
 
+    /**
+     * Closes the given database statement.
+     *
+     * @param stmt the statement to be closed
+     */
     public void closeStatement(Statement stmt) {
         try {
             if (stmt != null) {
@@ -377,6 +408,11 @@ public abstract class StorageManager {
         }
     }
 
+    /**
+     * Closes the given ResultSet.
+     *
+     * @param resultSet the ResultSet to be closed
+     */
     public void close(ResultSet resultSet) {
         try {
             if (resultSet != null) {
@@ -387,6 +423,11 @@ public abstract class StorageManager {
         }
     }
 
+    /**
+     * Closes the given PreparedStatement.
+     *
+     * @param preparedStatement the PreparedStatement to be closed
+     */
     public void close(PreparedStatement preparedStatement) {
         try {
             if (preparedStatement != null) {
@@ -397,6 +438,12 @@ public abstract class StorageManager {
         }
     }
 
+    /**
+     * Closes the given database connection.
+     * If the connection is not null and not already closed, it will be closed.
+     *
+     * @param conn the database connection to be closed
+     */
     public void close(Connection conn) {
         try {
             if (conn != null && !conn.isClosed()) {
@@ -420,6 +467,13 @@ public abstract class StorageManager {
      * ************************************************************************
      */
 
+    /**
+     * Executes a table rename operation in the database.
+     * 
+     * @param oldName the name of the table to be renamed
+     * @param newName the new name for the table
+     * @throws SQLException if an error occurs while executing the rename operation
+     */
     public void executeRenameTable(String oldName, String newName)
             throws SQLException {
         Connection conn = null;
@@ -432,6 +486,14 @@ public abstract class StorageManager {
 
     }
 
+    /**
+     * Executes a SQL statement to rename a table in the database.
+     *
+     * @param oldName    the current name of the table
+     * @param newName    the new name for the table
+     * @param connection the database connection
+     * @throws SQLException if an error occurs while executing the SQL statement
+     */
     public void executeRenameTable(String oldName, String newName, Connection connection) throws SQLException {
         PreparedStatement prepareStatement = null;
         try {
@@ -443,6 +505,13 @@ public abstract class StorageManager {
 
     }
 
+    /**
+     * Executes a drop table operation on the specified table.
+     *
+     * @param tableName the name of the table to drop
+     * @throws SQLException if an error occurs while executing the drop table
+     *                      operation
+     */
     public void executeDropTable(CharSequence tableName) throws SQLException {
         Connection conn = null;
         try {
@@ -457,6 +526,12 @@ public abstract class StorageManager {
         return pool;
     }
 
+    /**
+     * Executes a SQL statement to drop a table in the database.
+     * 
+     * @param tableName  the name of the table to be dropped
+     * @param connection the database connection
+     */
     public void executeDropTable(CharSequence tableName, Connection connection) {
         PreparedStatement prepareStatement = null;
         try {
@@ -469,6 +544,13 @@ public abstract class StorageManager {
         }
     }
 
+    /**
+     * Executes the drop view operation for the specified table name.
+     * 
+     * @param tableName the name of the view to be dropped
+     * @throws SQLException if an error occurs while executing the drop view
+     *                      operation
+     */
     public void executeDropView(StringBuilder tableName) throws SQLException {
         Connection conn = null;
         try {
@@ -479,6 +561,16 @@ public abstract class StorageManager {
         }
     }
 
+    /**
+     * Executes the drop view operation for the given table name using the provided
+     * database connection.
+     * This method drops the table structure associated with the given table name.
+     *
+     * @param tableName  the name of the table to drop
+     * @param connection the database connection to use
+     * @throws SQLException if an error occurs while executing the drop view
+     *                      operation
+     */
     public void executeDropView(StringBuilder tableName, Connection connection) throws SQLException {
         logger.debug("Dropping table structure: " + tableName);
         PreparedStatement prepareStatement = connection
@@ -487,6 +579,16 @@ public abstract class StorageManager {
         close(prepareStatement);
     }
 
+    /**
+     * Executes the creation of a table in the database.
+     * 
+     * @param tableName the name of the table to be created
+     * @param structure the structure of the table, represented by an array of
+     *                  DataField objects
+     * @param unique    a boolean indicating whether the table should have unique
+     *                  rows
+     * @throws SQLException if an error occurs while executing the SQL statement
+     */
     public void executeCreateTable(CharSequence tableName, DataField[] structure, boolean unique) throws SQLException {
         Connection conn = null;
         try {
@@ -538,11 +640,41 @@ public abstract class StorageManager {
 
     }
 
+    /**
+     * Returns a StringBuilder object that represents a statement to create an index
+     * on a field in a database table.
+     *
+     * @param tableName the name of the table
+     * @param field     the name of the field to create an index on
+     * @param unique    true if the index should be unique, false otherwise
+     * @return a StringBuilder object representing the statement to create the index
+     * @throws SQLException if an error occurs while creating the statement
+     */
     public StringBuilder getStatementCreateIndexOnField(
             CharSequence tableName, String field, boolean unique) throws SQLException {
         return getStatementCreateIndexOnField(tableName, field, unique, "");
     }
 
+    /**
+     * Generates a SQL statement to create an index on a specific field of a table.
+     *
+     * This method constructs a SQL statement for creating an index on the specified
+     * field of a given table. The generated
+     * statement includes options for uniqueness and sorting order. The index name
+     * is created based on the current system
+     * time and an incrementing counter to ensure uniqueness. The resulting SQL
+     * statement is returned as a StringBuilder.
+     *
+     * @param tableName The name of the table on which the index is to be created.
+     * @param field     The field for which the index is to be created.
+     * @param unique    A boolean indicating whether the index should be unique.
+     * @param order     The sorting order of the index (e.g., ASC for ascending,
+     *                  DESC for descending).
+     * @return A StringBuilder containing the SQL statement for creating the
+     *         specified index.
+     * @throws SQLException If an SQL exception occurs during the construction of
+     *                      the SQL statement.
+     */
     private StringBuilder getStatementCreateIndexOnField(
             CharSequence tableName, String field, boolean unique, String order) throws SQLException {
         StringBuilder toReturn = new StringBuilder("CREATE ");
@@ -556,10 +688,27 @@ public abstract class StorageManager {
         return toReturn;
     }
 
+    /**
+     * Executes the given query and returns the result as a ResultSet.
+     *
+     * @param query      the query to be executed
+     * @param connection the database connection
+     * @return the result set containing the query results
+     * @throws SQLException if a database access error occurs
+     */
     public ResultSet executeQueryWithResultSet(StringBuilder query, Connection connection) throws SQLException {
         return connection.prepareStatement(query.toString()).executeQuery();
     }
 
+    /**
+     * Executes a database query and returns the result as a ResultSet.
+     *
+     * @param abstractQuery the abstract query object representing the query to be
+     *                      executed
+     * @param c             the database connection to use for executing the query
+     * @return the result of the query as a ResultSet
+     * @throws SQLException if an error occurs while executing the query
+     */
     public ResultSet executeQueryWithResultSet(AbstractQuery abstractQuery, Connection c) throws SQLException {
         if (abstractQuery.getLimitCriterion() == null) {
             return executeQueryWithResultSet(abstractQuery.getStandardQuery(), c);
@@ -569,6 +718,15 @@ public abstract class StorageManager {
         return executeQueryWithResultSet(new StringBuilder(query), c);
     }
 
+    /**
+     * Executes a database query and returns a DataEnumerator object.
+     * 
+     * @param query              The query to be executed.
+     * @param binaryFieldsLinked Specifies whether binary fields are linked.
+     * @param connection         The database connection.
+     * @return A DataEnumerator object representing the result of the query.
+     * @throws SQLException If an error occurs while executing the query.
+     */
     public DataEnumerator executeQuery(StringBuilder query, boolean binaryFieldsLinked, Connection connection)
             throws SQLException {
         logger.debug("Executing query: " + query + "( Binary Field Linked:" + binaryFieldsLinked + ")");
@@ -595,6 +753,15 @@ public abstract class StorageManager {
         return new DataEnumerator(this, connection.prepareStatement(query.toString()), binaryFieldsLinked);
     }
 
+    /**
+     * Executes a query and returns a DataEnumerator for streaming the results.
+     * 
+     * @param abstractQuery      The abstract query to execute.
+     * @param binaryFieldsLinked Indicates whether binary fields are linked.
+     * @param connection         The database connection to use.
+     * @return A DataEnumerator for streaming the query results.
+     * @throws SQLException if an error occurs during the query execution.
+     */
     public DataEnumerator streamedExecuteQuery(AbstractQuery abstractQuery, boolean binaryFieldsLinked,
             Connection connection) throws SQLException {
         if (abstractQuery.getLimitCriterion() == null) {
@@ -606,19 +773,52 @@ public abstract class StorageManager {
         return streamedExecuteQuery(query, binaryFieldsLinked, connection);
     }
 
+    /**
+     * Executes a database query and returns a DataEnumerator object.
+     * 
+     * @param query              The query to be executed.
+     * @param binaryFieldsLinked A flag indicating whether binary fields are linked.
+     * @return A DataEnumerator object representing the result of the query.
+     * @throws SQLException If an error occurs while executing the query.
+     */
     public DataEnumerator executeQuery(StringBuilder query, boolean binaryFieldsLinked) throws SQLException {
         return executeQuery(query, binaryFieldsLinked, getConnection());
     }
 
+    /**
+     * Executes a query and returns a DataEnumerator object for streaming the
+     * results.
+     *
+     * @param query              the SQL query to execute
+     * @param binaryFieldsLinked a flag indicating whether binary fields are linked
+     * @param conn               the database connection
+     * @return a DataEnumerator object for streaming the query results
+     * @throws SQLException if an error occurs while executing the query
+     */
     public DataEnumerator streamedExecuteQuery(String query, boolean binaryFieldsLinked, Connection conn)
             throws SQLException {
         return new DataEnumerator(this, conn.prepareStatement(query), binaryFieldsLinked);
     }
 
+    /**
+     * Executes a query and returns a DataEnumerator for streaming the results.
+     * 
+     * @param query              the SQL query to execute
+     * @param binaryFieldsLinked a flag indicating whether binary fields are linked
+     * @return a DataEnumerator for streaming the query results
+     * @throws SQLException if an error occurs while executing the query
+     */
     public DataEnumerator streamedExecuteQuery(String query, boolean binaryFieldsLinked) throws SQLException {
         return streamedExecuteQuery(query, binaryFieldsLinked, getConnection());
     }
 
+    /**
+     * Executes the creation of a view in the database.
+     * 
+     * @param viewName    the name of the view to be created
+     * @param selectQuery the SELECT query used to define the view
+     * @throws SQLException if an error occurs while executing the query
+     */
     public void executeCreateView(CharSequence viewName, CharSequence selectQuery) throws SQLException {
         Connection connection = null;
         try {
@@ -629,6 +829,14 @@ public abstract class StorageManager {
         }
     }
 
+    /**
+     * Executes a SQL query to create a view in the database.
+     *
+     * @param viewName    the name of the view to be created
+     * @param selectQuery the SELECT query used to define the view
+     * @param connection  the database connection to execute the query on
+     * @throws SQLException if an error occurs while executing the query
+     */
     public void executeCreateView(CharSequence viewName, CharSequence selectQuery, Connection connection)
             throws SQLException {
         StringBuilder statement = getStatementCreateView(viewName, selectQuery);
@@ -667,6 +875,13 @@ public abstract class StorageManager {
         }
     }
 
+    /**
+     * Executes an update statement on the database using the provided connection.
+     * 
+     * @param updateStatement the SQL update statement to be executed
+     * @param connection      the database connection to be used
+     * @return the number of rows affected by the update statement
+     */
     public int executeUpdate(String updateStatement, Connection connection) {
         int toReturn = -1;
         // PreparedStatement prepareStatement = null;
@@ -680,12 +895,26 @@ public abstract class StorageManager {
         return toReturn;
     }
 
+    /**
+     * Executes an update statement on the database using the provided connection.
+     * 
+     * @param updateStatement the update statement to be executed
+     * @param connection      the database connection to be used
+     * @return the number of rows affected by the update statement
+     */
     public int executeUpdate(StringBuilder updateStatement, Connection connection) {
         int to_return = -1;
         to_return = executeUpdate(updateStatement.toString(), connection);
         return to_return;
     }
 
+    /**
+     * Executes an update statement on the database.
+     * 
+     * @param updateStatement the update statement to be executed
+     * @return the number of rows affected by the update
+     * @throws SQLException if an error occurs while executing the update
+     */
     public int executeUpdate(StringBuilder updateStatement) throws SQLException {
         Connection connection = null;
         try {
@@ -696,6 +925,15 @@ public abstract class StorageManager {
         }
     }
 
+    /**
+     * Executes an insert operation on the specified table with the given fields and
+     * stream element.
+     * 
+     * @param tableName the name of the table to insert into
+     * @param fields    the array of data fields to insert
+     * @param se        the stream element to insert
+     * @throws SQLException if an error occurs during the insert operation
+     */
     public void executeInsert(CharSequence tableName, DataField[] fields, StreamElement se) throws SQLException {
         Connection connection = null;
         try {
@@ -706,6 +944,18 @@ public abstract class StorageManager {
         }
     }
 
+    /**
+     * Executes an insert operation on the specified table with the given fields and
+     * stream element.
+     * 
+     * @param tableName     the name of the table to insert into
+     * @param fields        an array of DataField objects representing the fields to
+     *                      insert
+     * @param streamElement the StreamElement object containing the data to insert
+     * @param connection    the Connection object representing the database
+     *                      connection
+     * @throws SQLException if an error occurs while executing the insert operation
+     */
     public void executeInsert(CharSequence tableName, DataField[] fields, StreamElement streamElement,
             Connection connection) throws SQLException {
         PreparedStatement ps = null;
@@ -852,6 +1102,13 @@ public abstract class StorageManager {
         return toReturn;
     }
 
+    /**
+     * Returns a SQL statement to rename a table in the database.
+     *
+     * @param oldName the current name of the table
+     * @param newName the new name for the table
+     * @return a SQL statement to rename the table
+     */
     public String getStatementRenameTable(String oldName, String newName) {
         return new StringBuilder("alter table ").append(oldName).append(" rename to ").append(newName).toString();
     }
@@ -872,10 +1129,30 @@ public abstract class StorageManager {
         return new StringBuilder(getStatementDropIndex().replace("#NAME", indexName).replace("#TABLE", tableName));
     }
 
+    /**
+     * Generates a SQL statement to drop a view identified by the specified name.
+     *
+     * @param viewName   The name of the view to be dropped.
+     * @param connection The database connection on which the drop view operation
+     *                   will be executed.
+     * @return A StringBuilder containing the generated SQL statement for dropping
+     *         the specified view.
+     * @throws SQLException If an SQL exception occurs during the generation of the
+     *                      drop view statement.
+     */
     public StringBuilder getStatementDropView(CharSequence viewName, Connection connection) throws SQLException {
         return new StringBuilder(getStatementDropView().replace("#NAME", viewName));
     }
 
+    /**
+     * Returns a StringBuilder object that represents a SQL statement to create an
+     * index on a table based on the timed column.
+     * 
+     * @param tableName the name of the table
+     * @param unique    true if the index should be unique, false otherwise
+     * @return a StringBuilder object representing the SQL statement
+     * @throws SQLException if an error occurs while creating the statement
+     */
     public StringBuilder getStatementCreateIndexOnTimed(
             CharSequence tableName, boolean unique) throws SQLException {
         StringBuilder toReturn = new StringBuilder("CREATE ");
@@ -888,6 +1165,18 @@ public abstract class StorageManager {
         return toReturn;
     }
 
+    /**
+     * Returns a StringBuilder object that represents a SQL statement for creating a
+     * table.
+     *
+     * @param tableName  the name of the table
+     * @param structure  an array of DataField objects representing the structure of
+     *                   the table
+     * @param connection the database connection
+     * @return a StringBuilder object representing the SQL statement for creating
+     *         the table
+     * @throws SQLException if an error occurs while creating the SQL statement
+     */
     public StringBuilder getStatementCreateTable(CharSequence tableName, DataField[] structure, Connection connection)
             throws SQLException {
         return getStatementCreateTable(tableName.toString(), structure);
@@ -895,6 +1184,15 @@ public abstract class StorageManager {
 
     public abstract StringBuilder getStatementCreateTable(String tableName, DataField[] structure);
 
+    /**
+     * Generates a SQL statement to create a view with the specified name and select
+     * query.
+     *
+     * @param viewName    The name of the view to be created.
+     * @param selectQuery The select query that defines the view.
+     * @return A StringBuilder containing the generated SQL statement for creating a
+     *         view.
+     */
     public StringBuilder getStatementCreateView(CharSequence viewName, CharSequence selectQuery) {
         return new StringBuilder("create view ").append(viewName).append(" AS ( ").append(selectQuery).append(" ) ");
     }
@@ -966,8 +1264,12 @@ public abstract class StorageManager {
         return new ArrayList<String>();
     }
 
-    //
-
+    /**
+     * Generates a random string of the specified length.
+     *
+     * @param length the length of the generated string
+     * @return a random string of the specified length
+     */
     public String randomTableNameGenerator(int length) {
         byte oneCharacter;
         StringBuffer result = new StringBuffer(length);
@@ -978,14 +1280,31 @@ public abstract class StorageManager {
         return result.toString();
     }
 
+    /**
+     * Generates a random table name and returns its hash code.
+     *
+     * @return The hash code of the generated table name.
+     */
     public int tableNameGenerator() {
         return randomTableNameGenerator(15).hashCode();
     }
 
+    /**
+     * Generates a StringBuilder object with the specified table name.
+     *
+     * @param tableName the name of the table
+     * @return a StringBuilder object with the specified table name
+     */
     public StringBuilder tableNameGeneratorInString(CharSequence tableName) {
         return new StringBuilder(tableName);
     }
 
+    /**
+     * Generates a table name in string format based on the given code.
+     *
+     * @param code the code used to generate the table name
+     * @return a StringBuilder object representing the generated table name
+     */
     public StringBuilder tableNameGeneratorInString(int code) {
         StringBuilder sb = new StringBuilder("_");
         if (code < 0) {
@@ -996,6 +1315,14 @@ public abstract class StorageManager {
         return tableNameGeneratorInString(sb);
     }
 
+    /**
+     * Appends a postfix to a given table name and returns the modified table name
+     * as a String.
+     *
+     * @param table_name The original table name.
+     * @param postFix    The postfix to be appended.
+     * @return The modified table name with the postfix appended.
+     */
     public String tableNamePostFixAppender(CharSequence table_name, String postFix) {
         String tableName = table_name.toString();
         if (tableName.endsWith("\"")) {

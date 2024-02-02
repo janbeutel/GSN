@@ -36,8 +36,6 @@ import org.slf4j.LoggerFactory;
 import ch.epfl.gsn.beans.AddressBean;
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.StreamElement;
-import ch.epfl.gsn.wrappers.AbstractWrapper;
-import ch.epfl.gsn.wrappers.ImageFileWrapper;
 
 import org.slf4j.Logger;
 import org.joda.time.format.DateTimeFormatter;
@@ -50,7 +48,6 @@ import org.joda.time.format.DateTimeFormat;
 * The timestamp for the image is created from the file name following the time-format parameter
 * See ./virtual-sensors/samples/imagefileexample.xml for an example
 * */
-
 public class ImageFileWrapper extends AbstractWrapper {
 
     private static final transient Logger logger = LoggerFactory.getLogger(ImageFileWrapper.class);
@@ -75,6 +72,12 @@ public class ImageFileWrapper extends AbstractWrapper {
                 new DataField("image", "binary:image/" + fileExtension, fileExtension + " image") };
     }
 
+    /**
+     * Initializes the ImageFileWrapper by retrieving the necessary configuration
+     * parameters from the active address bean.
+     * 
+     * @return true if the initialization is successful, false otherwise.
+     */
     public boolean initialize() {
         AddressBean addressBean = getActiveAddressBean();
 
@@ -127,6 +130,15 @@ public class ImageFileWrapper extends AbstractWrapper {
         return true;
     }
 
+    /**
+     * Runs the image file wrapper.
+     * This method continuously checks for new files in the specified directory and
+     * performs actions accordingly.
+     * It sleeps for 2 seconds initially and then checks for new files in a loop
+     * until the wrapper is active.
+     * The rate at which it checks for new files can be set using the 'rate'
+     * variable.
+     */
     public void run() {
         try {
             Thread.sleep(2000);
@@ -170,6 +182,15 @@ public class ImageFileWrapper extends AbstractWrapper {
         return l;
     }
 
+    /**
+     * Extracts the timestamp from a given file name using a regular expression
+     * mask.
+     *
+     * @param fileName  the name of the file
+     * @param regexMask the regular expression mask to match against the file name
+     * @return the extracted timestamp from the file name, or null if no match is
+     *         found
+     */
     private String getTimeStampFromFileName(String fileName, String regexMask) {
 
         Pattern pattern = Pattern.compile(regexMask);

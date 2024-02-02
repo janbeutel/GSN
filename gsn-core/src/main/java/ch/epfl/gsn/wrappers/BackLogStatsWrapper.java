@@ -60,6 +60,15 @@ public class BackLogStatsWrapper extends AbstractWrapper implements StatisticLis
 	private Object event = new Object();
 	private DeploymentStatistics stats;
 
+	/**
+	 * Initializes the BackLogStatsWrapper.
+	 * This method retrieves the deployment name from the active address bean,
+	 * initializes the statistics instance for the deployment,
+	 * and sets the sampling rate based on the predicate value.
+	 * If the sampling rate is not parsable, it is set to the default value.
+	 * 
+	 * @return true if the initialization is successful, false otherwise.
+	 */
 	@Override
 	public boolean initialize() {
 		String deployment = getActiveAddressBean().getVirtualSensorName().split("_")[0].toLowerCase();
@@ -78,6 +87,13 @@ public class BackLogStatsWrapper extends AbstractWrapper implements StatisticLis
 		return true;
 	}
 
+	/**
+	 * Executes the run method in a separate thread.
+	 * This method continuously checks the connection status of devices and
+	 * generates stream elements accordingly.
+	 * It uses the sampling rate to control the frequency of checking and generating
+	 * stream elements.
+	 */
 	public void run() {
 		long timestamp;
 
@@ -108,6 +124,15 @@ public class BackLogStatsWrapper extends AbstractWrapper implements StatisticLis
 		}
 	}
 
+	/**
+	 * Generates a stream element with the given timestamp, device ID, and connected
+	 * list.
+	 * The stream element is then posted using the postStreamElement method.
+	 *
+	 * @param timestamp     the timestamp of the stream element
+	 * @param deviceid      the ID of the device
+	 * @param connectedList a map representing the connected status of devices
+	 */
 	private void generateStreamElement(long timestamp, int deviceid, Map<Integer, Boolean> connectedList) {
 		Serializable[] output = new Serializable[outputStructure.length];
 		output[0] = timestamp;
@@ -126,6 +151,12 @@ public class BackLogStatsWrapper extends AbstractWrapper implements StatisticLis
 		postStreamElement(new StreamElement(outputStructure, output));
 	}
 
+	/**
+	 * Returns a list of maps containing various statistics related to message
+	 * counters and byte counters.
+	 *
+	 * @return The list of maps containing the statistics.
+	 */
 	@SuppressWarnings("unchecked")
 	private List<Map<Integer, Long>> getStatsList() {
 		return Arrays.asList(

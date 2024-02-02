@@ -87,6 +87,14 @@ public final class AddressBean implements Serializable {
 		return this.predicates;
 	}
 
+	/**
+	 * Retrieves the value associated with the specified key from the predicates
+	 * list.
+	 * 
+	 * @param key the key to search for
+	 * @return the value associated with the key
+	 * @throws RuntimeException if the key is not found in the predicates list
+	 */
 	public String getPredicateValueWithException(String key) {
 		key = key.trim();
 		for (KeyValue predicate : this.predicates) {
@@ -160,6 +168,15 @@ public final class AddressBean implements Serializable {
 		}
 	}
 
+	/**
+	 * Retrieves the value of a predicate as an integer, throwing an exception if
+	 * the value is missing or cannot be parsed as an integer.
+	 * 
+	 * @param key the key of the predicate
+	 * @return the value of the predicate as an integer
+	 * @throws RuntimeException if the value is missing or cannot be parsed as an
+	 *                          integer
+	 */
 	public int getPredicateValueAsIntWithException(String key) {
 		String value = getPredicateValue(key);
 		if (value == null || value.trim().length() == 0) {

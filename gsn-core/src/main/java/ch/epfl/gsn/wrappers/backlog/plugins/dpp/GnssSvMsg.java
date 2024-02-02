@@ -26,6 +26,15 @@ public class GnssSvMsg extends AbstractMsg {
 			new DataField("TRKSTAT", "SMALLINT") /* Tracking status bitfield */
 	};
 
+	/**
+	 * Receives the payload from a ByteBuffer and extracts the necessary data
+	 * fields.
+	 * 
+	 * @param payload The ByteBuffer containing the payload data.
+	 * @return An array of Serializable objects representing the extracted data
+	 *         fields.
+	 * @throws Exception If an error occurs while extracting the data fields.
+	 */
 	@Override
 	public Serializable[] receivePayload(ByteBuffer payload) throws Exception {
 		Double rcvTow = null;

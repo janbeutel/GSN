@@ -66,6 +66,17 @@ public class RemoteTimeBasedSlidingHandler implements SlidingHandler {
 		this.wrapper = wrapper;
 	}
 
+	/**
+	 * Adds a StreamSource to the collection, sets up its SQL query rewriter, and
+	 * initializes it.
+	 * If the windowing type is not TIME_BASED_SLIDE_ON_EACH_TUPLE, adds the
+	 * StreamSource to the slidingHashMap.
+	 *
+	 * @param streamSource The StreamSource to be added.
+	 * @see StreamSource
+	 * @see SQLViewQueryRewriter
+	 * @see RTBSQLViewQueryRewriter
+	 */
 	public void addStreamSource(StreamSource streamSource) {
 		SQLViewQueryRewriter rewriter = new RTBSQLViewQueryRewriter();
 		rewriter.setStreamSource(streamSource);
@@ -77,6 +88,12 @@ public class RemoteTimeBasedSlidingHandler implements SlidingHandler {
 		streamSources.add(streamSource);
 	}
 
+	/**
+	 * Checks if data is available for processing based on the given stream element.
+	 * 
+	 * @param streamElement the stream element to check for data availability
+	 * @return true if data is available, false otherwise
+	 */
 	public synchronized boolean dataAvailable(StreamElement streamElement) {
 		boolean toReturn = false;
 		synchronized (streamSources) {
@@ -108,12 +125,22 @@ public class RemoteTimeBasedSlidingHandler implements SlidingHandler {
 		return toReturn;
 	}
 
+	/**
+	 * Removes a stream source from the handler.
+	 * 
+	 * @param streamSource the stream source to be removed
+	 */
 	public void removeStreamSource(StreamSource streamSource) {
 		streamSources.remove(streamSource);
 		slidingHashMap.remove(streamSource);
 		streamSource.getQueryRewriter().dispose();
 	}
 
+	/**
+	 * Disposes the resources associated with the RemoteTimeBasedSlidingHandler.
+	 * This method releases any acquired resources and removes the stream sources
+	 * from the sliding window.
+	 */
 	public void dispose() {
 		synchronized (streamSources) {
 			for (Iterator<StreamSource> iterator = streamSources.iterator(); iterator.hasNext();) {
@@ -125,6 +152,17 @@ public class RemoteTimeBasedSlidingHandler implements SlidingHandler {
 		}
 	}
 
+	/**
+	 * Retrieves the cutting condition for the windowing operation.
+	 * The cutting condition is a string representation of the condition used to
+	 * determine the oldest timestamp in the window.
+	 * It is based on the maximum window size, slide value, and storage size of the
+	 * stream sources.
+	 * If the cutting condition cannot be determined, the string "timed < -1" is
+	 * returned.
+	 * 
+	 * @return the cutting condition as a string
+	 */
 	public String getCuttingCondition() {
 		long timed1 = -1;
 		long timed2 = -1;
@@ -208,12 +246,28 @@ public class RemoteTimeBasedSlidingHandler implements SlidingHandler {
 		return "timed < " + ((timed1 == -1) ? timed2 : timed1);
 	}
 
+	/**
+	 * Checks if the given stream source is of interest to this handler.
+	 * 
+	 * @param streamSource the stream source to check
+	 * @return true if the stream source is time-based, false otherwise
+	 */
 	public boolean isInterestedIn(StreamSource streamSource) {
 		return WindowType.isTimeBased(streamSource.getWindowingType());
 	}
 
 	private class RTBSQLViewQueryRewriter extends SQLViewQueryRewriter {
 
+		/**
+		 * Overrides the createViewSQL method to generate a SQL query for creating a
+		 * view based on the configured StreamSource.
+		 * If a cached SQL query exists, it is returned. Otherwise, a new query is
+		 * generated and cached.
+		 *
+		 * @return A CharSequence representing the SQL query for creating the view.
+		 * @throws GSNRuntimeException If certain conditions are not met, such as a null
+		 *                             wrapper object or failed validation.
+		 */
 		@Override
 		public CharSequence createViewSQL() {
 			if (cachedSqlQuery != null) {

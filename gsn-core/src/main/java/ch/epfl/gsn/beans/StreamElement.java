@@ -350,6 +350,11 @@ public final class StreamElement implements Serializable {
 		return this.timeStamp;
 	}
 
+	/**
+	 * Returns a string representation of the field types in the StringBuilder.
+	 *
+	 * @return a StringBuilder object containing the field types as a string
+	 */
 	public StringBuilder getFieldTypesInString() {
 		final StringBuilder stringBuilder = new StringBuilder();
 		for (final byte i : this.getFieldTypes()) {
@@ -697,6 +702,19 @@ public final class StreamElement implements Serializable {
 		return new StreamElement(outputFormat, values, Long.parseLong(timestamp));
 	}
 
+	/**
+	 * Creates a {@link StreamElement} instance from REST API data represented by
+	 * field names and values.
+	 *
+	 * @param outputFormat The array of {@link DataField} representing the expected
+	 *                     output format.
+	 * @param fieldNames   The array of field names corresponding to the REST API
+	 *                     data.
+	 * @param fieldValues  The array of field values corresponding to the REST API
+	 *                     data.
+	 * @return A {@link StreamElement} instance constructed from the provided field
+	 *         names and values.
+	 */
 	public static StreamElement createElementFromREST(DataField[] outputFormat, String[] fieldNames,
 			Object[] fieldValues) {
 		ArrayList<Serializable> values = new ArrayList<Serializable>();
@@ -804,6 +822,13 @@ public final class StreamElement implements Serializable {
 		setData(index, data);
 	}
 
+	/**
+	 * Generates a JSON representation of the stream element in GeoJSON format with
+	 * additional properties.
+	 *
+	 * @param vs_name The name of the virtual sensor.
+	 * @return A JSON string representing the stream element in GeoJSON format.
+	 */
 	public String toJSON(String vs_name) {
 
 		GeoJsonField[] fields = new GeoJsonField[getFieldNames().length + 1];
@@ -834,6 +859,14 @@ public final class StreamElement implements Serializable {
 		return Json.toJson(feature).toString();
 	}
 
+	/**
+	 * Calculates and returns the volume of the stream element. The volume
+	 * represents the data size in bytes.
+	 * The calculation is based on the size of individual fields and their
+	 * corresponding data types.
+	 *
+	 * @return The volume of the stream element in bytes.
+	 */
 	public long getVolume() {
 		if (volume == null) {
 			volume = (long) 0;

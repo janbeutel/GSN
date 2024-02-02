@@ -25,8 +25,6 @@
 
 package ch.epfl.gsn.beans;
 
-import ch.epfl.gsn.beans.StorageConfig;
-
 public class SlidingConfig {
 
     private StorageConfig storage;

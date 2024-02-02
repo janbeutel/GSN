@@ -184,6 +184,20 @@ public class ContainerConfig {
 		return this.maxSlidingDBConnections;
 	}
 
+	/**
+	 * Reads a container configuration from the specified file and constructs a
+	 * ContainerConfig object.
+	 * Loads the GSN configuration from the provided file, initializes a
+	 * ContainerConfig using the
+	 * configuration, and sets the source files information.
+	 *
+	 * @param containerConfigurationFileName The name of the file containing the GSN
+	 *                                       configuration.
+	 * @return A ContainerConfig object representing the configuration loaded from
+	 *         the file.
+	 * @throws FileNotFoundException If the specified file for GSN configuration is
+	 *                               not found.
+	 */
 	public static ContainerConfig getConfigurationFromFile(String containerConfigurationFileName)
 			throws FileNotFoundException {
 		GsnConf gsn = GsnConf.load(containerConfigurationFileName);
@@ -196,6 +210,15 @@ public class ContainerConfig {
 		this.gsnConfigurationFileName = gsnConfigurationFileName;
 	}
 
+	/**
+	 * Sets the database system for the configuration, initializing the associated
+	 * storage configuration.
+	 * This method sets the specified database system, updates the storage
+	 * configuration accordingly, and
+	 * marks the initialization status.
+	 *
+	 * @param newValue The new database system to be set.
+	 */
 	public void setdatabaseSystem(String newValue) {
 		isdatabaseSystemInitialzied = true;
 		databaseSystem = newValue;
@@ -216,6 +239,15 @@ public class ContainerConfig {
 		}
 	}
 
+	/**
+	 * Gets the database system associated with the configuration. If not
+	 * initialized,
+	 * it attempts to infer the database system based on the JDBC URL and
+	 * initializes
+	 * the associated storage configuration accordingly.
+	 *
+	 * @return The database system associated with the configuration.
+	 */
 	public String getdatabaseSystem() {
 		if (isdatabaseSystemInitialzied == false) {
 			isdatabaseSystemInitialzied = true;
@@ -231,6 +263,12 @@ public class ContainerConfig {
 		return this.databaseSystem;
 	}
 
+	/**
+	 * Converts a database system name to its corresponding JDBC driver.
+	 *
+	 * @param dbSys the name of the database system
+	 * @return the JDBC driver corresponding to the given database system name
+	 */
 	private String convertToDriver(String dbSys) {
 		for (int i = 0; i < JDBC_SYSTEMS.length; i++) {
 			if (JDBC_SYSTEMS[i].equals(dbSys)) {
@@ -241,6 +279,15 @@ public class ContainerConfig {
 		return "";
 	}
 
+	/**
+	 * Writes the configurations to a file using a specified template.
+	 * Configurations include database user, password, driver, and URL.
+	 *
+	 * @throws FileNotFoundException If the file to write configurations is not
+	 *                               found.
+	 * @throws IOException           If an I/O error occurs while writing
+	 *                               configurations.
+	 */
 	public void writeConfigurations() throws FileNotFoundException, IOException {
 		StringTemplateGroup templateGroup = new StringTemplateGroup("ch.epfl.gsn");
 		StringTemplate st = templateGroup.getInstanceOf("ch.epfl.gsn/gui/templates/templateConf");
@@ -255,6 +302,13 @@ public class ContainerConfig {
 
 	}
 
+	/**
+	 * Retrieves the default container configuration with preset values.
+	 * The default configuration includes a storage configuration with JDBC driver,
+	 * password, and URL set to initial values.
+	 *
+	 * @return The default {@code ContainerConfig} instance.
+	 */
 	public static ContainerConfig getDefaultConfiguration() {
 		ContainerConfig bean = new ContainerConfig();
 		bean.storage = new StorageConfig();

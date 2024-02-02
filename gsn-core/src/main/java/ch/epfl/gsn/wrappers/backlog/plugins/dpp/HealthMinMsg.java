@@ -29,6 +29,14 @@ public class HealthMinMsg extends AbstractMsg {
 			new DataField("CONFIG", "INTEGER") /* contains a part of the current node configuration (bit field) */
 	};
 
+	/**
+	 * Receives the payload from a ByteBuffer and extracts the necessary data
+	 * fields.
+	 * 
+	 * @param payload the ByteBuffer containing the payload data
+	 * @return an array of Serializable objects containing the extracted data fields
+	 * @throws Exception if an error occurs during the extraction process
+	 */
 	@Override
 	public Serializable[] receivePayload(ByteBuffer payload) throws Exception {
 		Integer uptime = null;

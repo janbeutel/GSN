@@ -37,8 +37,6 @@ import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.DataTypes;
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.utils.ParamParser;
-import ch.epfl.gsn.wrappers.AbstractWrapper;
-import ch.epfl.gsn.wrappers.MemoryMonitoringWrapper;
 
 import org.slf4j.Logger;
 
@@ -68,6 +66,15 @@ public class MemoryMonitoringWrapper extends AbstractWrapper {
 
    private static final MemoryMXBean mbean = ManagementFactory.getMemoryMXBean();
 
+   /**
+    * Initializes the MemoryMonitoringWrapper.
+    * Retrieves the sampling rate from the active address bean and sets it as the
+    * sampling rate for the wrapper.
+    * If the sampling rate is not specified or is not a positive number, the
+    * default sampling rate is used.
+    * 
+    * @return true if the initialization is successful, false otherwise.
+    */
    public boolean initialize() {
       AddressBean addressBean = getActiveAddressBean();
       if (addressBean.getPredicateValue("sampling-rate") != null) {
@@ -82,6 +89,11 @@ public class MemoryMonitoringWrapper extends AbstractWrapper {
       return true;
    }
 
+   /**
+    * Executes the memory monitoring process in a loop until the wrapper is active.
+    * It periodically collects memory usage information and posts it as a stream
+    * element.
+    */
    public void run() {
       while (isActive()) {
          try {

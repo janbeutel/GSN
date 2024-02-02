@@ -28,7 +28,6 @@ package ch.epfl.gsn.wrappers;
 
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.StreamElement;
-import ch.epfl.gsn.wrappers.AbstractWrapper;
 
 public class MockWrapper extends AbstractWrapper {
 	int threadCounter;

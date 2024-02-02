@@ -115,6 +115,14 @@ public class DPPMessageMultiplexer implements BackLogMessageListener {
 		blMessageMultiplexer.deregisterListener(BackLogMessage.DPP_MESSAGE_TYPE, this, true);
 	}
 
+	/**
+	 * Receives a message from the backlog and processes it.
+	 * 
+	 * @param deviceID the ID of the device that sent the message
+	 * @param message  the BackLogMessage received
+	 * @return true if the message was successfully processed by at least one
+	 *         listener, false otherwise
+	 */
 	@Override
 	public boolean messageRecv(int deviceID, BackLogMessage message) {
 		try {

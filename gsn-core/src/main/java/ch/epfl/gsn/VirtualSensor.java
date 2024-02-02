@@ -56,6 +56,22 @@ public class VirtualSensor {
         this.lastModified = new File(config.getFileName()).lastModified();
     }
 
+    /**
+     * Borrows an instance of AbstractVirtualSensor, creating a new one if not
+     * already available.
+     *
+     * This method synchronizes the process of borrowing an AbstractVirtualSensor
+     * instance. If no instance is
+     * currently available, it attempts to create a new one by instantiating the
+     * processing class specified in the
+     * configuration. The new instance is then initialized, and if successful, it is
+     * stored for subsequent borrowings.
+     *
+     * @return An instance of AbstractVirtualSensor for processing.
+     * @throws VirtualSensorInitializationFailedException If an error occurs during
+     *                                                    instantiation or
+     *                                                    initialization.
+     */
     public synchronized AbstractVirtualSensor borrowVS() throws VirtualSensorInitializationFailedException {
         if (virtualSensor == null) {
             try {
@@ -88,6 +104,13 @@ public class VirtualSensor {
 
     }
 
+    /**
+     * Closes the virtual sensor pool.
+     * If the virtual sensor is not null, it disposes the virtual sensor and logs a
+     * debug message indicating that the virtual sensor is released.
+     * If the virtual sensor is null, it logs a debug message indicating that the
+     * virtual sensor was already released.
+     */
     public synchronized void closePool() {
         if (virtualSensor != null) {
             virtualSensor.dispose_decorated();
@@ -97,6 +120,13 @@ public class VirtualSensor {
         }
     }
 
+    /**
+     * Starts the virtual sensor by starting the wrapper threads and storing their
+     * ids and names in a HashMap for monitoring.
+     * 
+     * @throws VirtualSensorInitializationFailedException if the virtual sensor
+     *                                                    initialization fails.
+     */
     public void start() throws VirtualSensorInitializationFailedException {
 
         /*
@@ -135,7 +165,18 @@ public class VirtualSensor {
     public void dispose() {
     }
 
-    // apply the storage size parameter to the virtual sensor table
+    /**
+     * Removes useless data from the virtual sensor's storage based on the
+     * configured storage size.
+     * If the storage size is not set, no action is taken.
+     * The removal strategy is determined by the storage configuration: count-based
+     * or time-based.
+     * If count-based, the specified number of rows will be removed from the
+     * storage.
+     * If time-based, the data older than the specified time will be removed from
+     * the storage.
+     * The number of rows affected by the removal operation is logged.
+     */
     public void DoUselessDataRemoval() {
         if (config.getParsedStorageSize() == VSensorConfig.STORAGE_SIZE_NOT_SET) {
             return;

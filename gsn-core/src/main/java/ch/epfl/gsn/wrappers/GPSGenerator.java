@@ -42,8 +42,6 @@ import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.DataTypes;
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.utils.ParamParser;
-import ch.epfl.gsn.wrappers.AbstractWrapper;
-import ch.epfl.gsn.wrappers.GPSGenerator;
 
 import org.slf4j.Logger;
 
@@ -77,6 +75,16 @@ public class GPSGenerator extends AbstractWrapper {
       return outputStrcture;
    }
 
+   /**
+    * Initializes the GPSGenerator.
+    * This method retrieves the necessary configuration parameters from the address
+    * bean,
+    * such as the sampling rate and the picture file.
+    * It also initializes the output structure with the appropriate field names,
+    * types, and descriptions.
+    * 
+    * @return true if the initialization is successful, false otherwise.
+    */
    public boolean initialize() {
       AddressBean addressBean = getActiveAddressBean();
       if (addressBean.getPredicateValue("rate") != null) {
@@ -126,6 +134,10 @@ public class GPSGenerator extends AbstractWrapper {
 
    private static int step = 1;
 
+   /**
+    * Runs the GPSGenerator thread.
+    * Generates GPS coordinates and posts them as StreamElements.
+    */
    public void run() {
       while (isActive()) {
          double latitude = 37.4419 + .01 * (step++);

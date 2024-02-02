@@ -80,6 +80,10 @@ public class UDPWrapper extends AbstractWrapper {
       return true;
    }
 
+   /**
+    * Runs the UDPWrapper thread, continuously receiving packets from the socket
+    * and processing them.
+    */
    public void run() {
       byte[] receivedData = new byte[50];
       DatagramPacket receivedPacket = null;

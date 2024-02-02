@@ -28,6 +28,17 @@ public class ZeroMQDeliveryAsync implements DeliverySystem {
 
 	public static transient Logger logger = LoggerFactory.getLogger(ZeroMQDeliveryAsync.class);
 
+	/**
+	 * Constructs a ZeroMQDeliveryAsync object with the specified name.
+	 *
+	 * This constructor initializes a ZeroMQDeliveryAsync object, setting up the
+	 * necessary ZeroMQ context, creating a
+	 * PUB socket for communication, and binding it to the "inproc://stream/"
+	 * address with the specified name. Additionally,
+	 * it connects to the specified name using the ZeroMQ proxy.
+	 *
+	 * @param name The name associated with the ZeroMQDeliveryAsync object.
+	 */
 	public ZeroMQDeliveryAsync(String name) {
 		if (name.endsWith(":")) {
 			name = name.substring(0, name.length() - 1);
@@ -44,11 +55,25 @@ public class ZeroMQDeliveryAsync implements DeliverySystem {
 
 	}
 
+	/**
+	 * Writes the structure of the data to be sent over the network.
+	 * This method registers the structure with the ZeroMQ proxy.
+	 *
+	 * @param fields an array of DataField objects representing the structure of the
+	 *               data
+	 * @throws IOException if an I/O error occurs while registering the structure
+	 */
 	@Override
 	public void writeStructure(DataField[] fields) throws IOException {
 		Main.getZmqProxy().registerStructure(name, fields);
 	}
 
+	/**
+	 * Writes a StreamElement to the ZeroMQ publisher socket.
+	 * 
+	 * @param se the StreamElement to be written
+	 * @return true if the StreamElement was successfully written, false otherwise
+	 */
 	@Override
 	public boolean writeStreamElement(StreamElement se) {
 		try {
@@ -70,6 +95,10 @@ public class ZeroMQDeliveryAsync implements DeliverySystem {
 		return true;
 	}
 
+	/**
+	 * Closes the ZeroMQDeliveryAsync instance.
+	 * This method closes the publisher and sets the 'closed' flag to true.
+	 */
 	@Override
 	public void close() {
 		publisher.close();

@@ -30,6 +30,15 @@ public class ZeroMQWrapperAsync extends AbstractWrapper {
 	private boolean isLocal = false;
 	ZMQ.Socket requester = null;
 
+	/**
+	 * Retrieves the output format of the ZeroMQWrapperAsync.
+	 * If the structure is not yet initialized, it sends a request to the ZeroMQ
+	 * requester,
+	 * receives the response, and initializes the structure with the deserialized
+	 * data.
+	 *
+	 * @return the output format as an array of DataField objects
+	 */
 	@Override
 	public DataField[] getOutputFormat() {
 		if (structure == null) {
@@ -47,6 +56,19 @@ public class ZeroMQWrapperAsync extends AbstractWrapper {
 		return structure;
 	}
 
+	/**
+	 * Initializes the ZeroMQWrapper by registering necessary classes, setting up
+	 * communication parameters,
+	 * and establishing a connection to the specified virtual sensor using ZeroMQ.
+	 *
+	 * @return {@code true} if the initialization is successful; otherwise,
+	 *         {@code false}.
+	 * @throws RuntimeException         If the address parameter is missing, or if
+	 *                                  there are issues with URI syntax.
+	 * @throws IllegalArgumentException If there are issues with the specified
+	 *                                  communication configuration or if ZeroMQ is
+	 *                                  not enabled.
+	 */
 	@Override
 	public boolean initialize() {
 
@@ -110,6 +132,18 @@ public class ZeroMQWrapperAsync extends AbstractWrapper {
 		return "ZeroMQ wrapper";
 	}
 
+	/**
+	 * Executes the main loop of the ZeroMQWrapper, continuously receiving and
+	 * processing stream elements from ZeroMQ.
+	 *
+	 * This method sets up a ZeroMQ subscriber socket, connects to the specified
+	 * data communication point, and subscribes
+	 * to stream elements related to the configured virtual sensor. It continuously
+	 * listens for incoming stream elements, processes
+	 * them, and posts the processed stream elements to the GSN platform. If there
+	 * are connection issues, it attempts to reconnect
+	 * to the data communication point.
+	 */
 	@Override
 	public void run() {
 		ZContext context = Main.getZmqContext();

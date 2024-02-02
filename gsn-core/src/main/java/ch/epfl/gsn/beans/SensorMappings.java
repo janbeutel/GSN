@@ -15,6 +15,13 @@ public class SensorMappings {
 		this.mappings = mappings;
 	}
 
+	/**
+	 * Adds a SensorMap to the list of mappings.
+	 * If there is already a mapping with the same begin timestamp, it will be
+	 * replaced.
+	 *
+	 * @param sensorMap the SensorMap to be added
+	 */
 	public void add(SensorMap sensorMap) {
 		Iterator<SensorMap> iter = mappings.iterator();
 		while (iter.hasNext()) {

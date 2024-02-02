@@ -82,6 +82,22 @@ public class CSVHandler {
                 LOCAL_TIMEZONE_ID, "check-poin/" + (new File(dataFile).getName() + ".chk-point"));
     }
 
+    /**
+     * Initializes the CSVHandler with the specified parameters.
+     * 
+     * @param dataFile        The path to the CSV data file.
+     * @param inFields        The field names in the CSV file.
+     * @param inFormats       The formats of the fields in the CSV file.
+     * @param separator       The separator character used in the CSV file.
+     * @param stringSeparator The string separator character used in the CSV file.
+     * @param skipFirstXLines The number of lines to skip at the beginning of the
+     *                        CSV file.
+     * @param nullValues      The values to be treated as null in the CSV file.
+     * @param timeZone        The time zone to be used for date and time fields in
+     *                        the CSV file.
+     * @param checkpointFile  The path to the checkpoint file.
+     * @return True if the initialization is successful, false otherwise.
+     */
     public boolean initialize(String dataFile, String inFields, String inFormats, char separator, char stringSeparator,
             int skipFirstXLines, String nullValues, String timeZone, String checkpointFile) {
 
@@ -125,12 +141,25 @@ public class CSVHandler {
 
     }
 
+    /**
+     * Sets up the checkpoint file if it does not already exist.
+     * Creates the necessary directory and the checkpoint file.
+     *
+     * @throws IOException if an I/O error occurs while creating the directory or
+     *                     the file.
+     */
     public void setupCheckPointFileIfNeeded() throws IOException {
         String chkPointDir = new File(new File(getCheckPointFile()).getParent()).getAbsolutePath();
         new File(chkPointDir).mkdirs();
         new File(getCheckPointFile()).createNewFile();
     }
 
+    /**
+     * Validates the formats used in the CSVHandler.
+     * 
+     * @param formats an array of formats to be validated
+     * @return true if all formats are valid, false otherwise
+     */
     public static boolean validateFormats(String[] formats) {
         for (int i = 0; i < formats.length; i++) {
             if (formats[i].equalsIgnoreCase("numeric") || formats[i].equalsIgnoreCase("string")
@@ -178,6 +207,16 @@ public class CSVHandler {
         return toReturn;
     }
 
+    /**
+     * Reads data from a CSV file and returns a list of tree maps containing the
+     * parsed values.
+     * 
+     * @param dataFile      The reader object representing the CSV file.
+     * @param checkpointDir The directory path where the checkpoint file is stored.
+     * @return An ArrayList of TreeMaps, where each TreeMap represents a row of
+     *         parsed values from the CSV file.
+     * @throws IOException If an I/O error occurs while reading the CSV file.
+     */
     public ArrayList<TreeMap<String, Serializable>> work(Reader dataFile, String checkpointDir) throws IOException {
         ArrayList<TreeMap<String, Serializable>> items = null;
         setupCheckPointFileIfNeeded();
@@ -198,6 +237,21 @@ public class CSVHandler {
 
     private boolean loggedNoChange = false; // to avoid duplicate logging messages when there is no change
 
+    /**
+     * Parses the values from the given Reader object and returns an ArrayList of
+     * TreeMap objects.
+     * Each TreeMap represents a row of values from the CSV file, where the keys are
+     * column names and the values are the corresponding values.
+     * 
+     * @param datainput          The Reader object containing the CSV data.
+     * @param previousCheckPoint The checkpoint value to compare against the
+     *                           timestamp column in each row. Rows with a timestamp
+     *                           less than or equal to the checkpoint will be
+     *                           skipped.
+     * @return An ArrayList of TreeMap objects representing the parsed values from
+     *         the CSV file.
+     * @throws IOException If an I/O error occurs while reading the CSV data.
+     */
     public ArrayList<TreeMap<String, Serializable>> parseValues(Reader datainput, long previousCheckPoint)
             throws IOException {
         ArrayList<TreeMap<String, Serializable>> toReturn = new ArrayList<TreeMap<String, Serializable>>();
@@ -255,6 +309,26 @@ public class CSVHandler {
         return true;
     }
 
+    /**
+     * Converts the given values into a TreeMap of key-value pairs, where the keys
+     * are specified by the 'fields' array
+     * and the values are determined based on the 'formats' array. The 'nullValues'
+     * array is used to identify null values.
+     * The 'separator' character is used to separate timestamp values.
+     *
+     * @param formats    an array of format strings specifying the type of each
+     *                   value
+     * @param fields     an array of field names corresponding to the keys in the
+     *                   resulting TreeMap
+     * @param nullValues an array of strings representing null values
+     * @param values     an array of values to be converted
+     * @param separator  a character used to separate timestamp values
+     * @return a TreeMap containing the converted values
+     * @throws NumberFormatException    if a value cannot be parsed as a numeric or
+     *                                  bigint type
+     * @throws IllegalArgumentException if there is a parsing error with the
+     *                                  timestamp format or value
+     */
     public TreeMap<String, Serializable> convertTo(String[] formats, String[] fields, String nullValues[],
             String[] values, char separator) {
         TreeMap<String, Serializable> streamElement = new TreeMap<String, Serializable>(
@@ -368,6 +442,13 @@ public class CSVHandler {
         return fields;
     }
 
+    /**
+     * Returns an array of DataField objects representing the fields and their
+     * corresponding data types
+     * in the CSV file.
+     *
+     * @return an array of DataField objects
+     */
     public DataField[] getDataFields() {
         HashMap<String, String> fields = new HashMap<String, String>();
         for (int i = 0; i < getFields().length; i++) {

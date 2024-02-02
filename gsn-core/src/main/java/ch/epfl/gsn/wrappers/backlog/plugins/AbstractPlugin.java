@@ -1,6 +1,5 @@
 package ch.epfl.gsn.wrappers.backlog.plugins;
 
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -15,7 +14,6 @@ import ch.epfl.gsn.wrappers.BackLogWrapper;
 import ch.epfl.gsn.wrappers.backlog.BackLogMessage;
 import ch.epfl.gsn.wrappers.backlog.BackLogMessageListener;
 
-
 /**
  * The PluginInterface specifies the functionality a plugin used by
  * {@link BackLogWrapper} has to offer.
@@ -23,13 +21,12 @@ import ch.epfl.gsn.wrappers.backlog.BackLogMessageListener;
  * @author Tonio Gsell
  */
 public abstract class AbstractPlugin extends Thread implements BackLogMessageListener {
-	
+
 	private static final int DEFAULT_PACKET_SEND_PRIORITY = 10;
 	private static final int DEFAULT_ACK_PRIORITY = 90;
 
 	protected BackLogWrapper activeBackLogWrapper = null;
 	protected Integer priority = null;
-
 
 	/**
 	 * Initialize the plugin.
@@ -41,16 +38,16 @@ public abstract class AbstractPlugin extends Thread implements BackLogMessageLis
 	 * received.
 	 * 
 	 * @param backLogWrapper points to the calling
-	 * 			BackLogWrapper. It can be used
-	 * 			to access its functionality.
+	 *                       BackLogWrapper. It can be used
+	 *                       to access its functionality.
 	 * 
 	 * @return true if the initialization was successful otherwise
-	 * 			 false
+	 *         false
 	 */
-	public boolean initialize ( BackLogWrapper backLogWrapper, String coreStationName, String deploymentName ) {
+	public boolean initialize(BackLogWrapper backLogWrapper, String coreStationName, String deploymentName) {
 		activeBackLogWrapper = backLogWrapper;
 		String p = getActiveAddressBean().getPredicateValue("priority");
-		if (p == null){
+		if (p == null) {
 			priority = null;
 		} else {
 			priority = Integer.valueOf(p);
@@ -58,89 +55,82 @@ public abstract class AbstractPlugin extends Thread implements BackLogMessageLis
 		registerListener();
 		return true;
 	}
-	
-	
+
 	public void registerListener(BackLogMessageListener listener) {
 		activeBackLogWrapper.getBLMessageMultiplexer().registerListener(getMessageType(), listener, true);
 	}
-	
-	
+
 	public void registerListener() {
 		activeBackLogWrapper.getBLMessageMultiplexer().registerListener(getMessageType(), this, true);
 	}
-	
-	
+
 	public void deregisterListener() {
 		activeBackLogWrapper.getBLMessageMultiplexer().deregisterListener(getMessageType(), this, true);
 	}
-	
-	
+
 	public void deregisterListener(BackLogMessageListener listener) {
 		activeBackLogWrapper.getBLMessageMultiplexer().deregisterListener(getMessageType(), listener, true);
 	}
-	
-	
+
 	public void dispose() {
 		deregisterListener();
 	}
-	
-	
-	public abstract String getPluginName();
-	
-	
-    /**
-     * This method is called to signal message reception. It must be
-     * implemented by any plugin.
-	 *
-     * @param deviceId the DeviceId the message has been received from
-     * @param timestamp contained in the message {@link BackLogMessage}
-     * @param data of the message. data does not contain time stamps
-     * 		  and device IDs
-     * 
-     * @return true, if the plugin did process the message properly
-     */
-    public abstract boolean messageReceived(int deviceId, long timestamp, Serializable[] data);
 
+	public abstract String getPluginName();
+
+	/**
+	 * This method is called to signal message reception. It must be
+	 * implemented by any plugin.
+	 *
+	 * @param deviceId  the DeviceId the message has been received from
+	 * @param timestamp contained in the message {@link BackLogMessage}
+	 * @param data      of the message. data does not contain time stamps
+	 *                  and device IDs
+	 * 
+	 * @return true, if the plugin did process the message properly
+	 */
+	public abstract boolean messageReceived(int deviceId, long timestamp, Serializable[] data);
 
 	/**
 	 * This function is called if the remote connection to the deployment has
 	 * been established.
-     * 
-     * @param deviceID the device ID of the connecting CoreStation
+	 * 
+	 * @param deviceID the device ID of the connecting CoreStation
 	 */
-	public void remoteConnEstablished(Integer deviceID) { }
-
+	public void remoteConnEstablished(Integer deviceID) {
+	}
 
 	/**
 	 * This function is called if the remote connection to the deployment has
 	 * been lost.
 	 */
-	public void remoteConnLost() { }
-
+	public void remoteConnLost() {
+	}
 
 	/**
 	 * With this function any command can be sent to the plugin.
 	 * <p>
 	 * A virtual sensor can send a command to this plugin using
-	 * {@link BackLogWrapper#sendToWrapper(String, String[], Object[]) sendToWrapper},
+	 * {@link BackLogWrapper#sendToWrapper(String, String[], Object[])
+	 * sendToWrapper},
 	 * which will just forward the command to the plugin.
 	 * 
 	 * This can be either a command directed at the plugin itself
 	 * or a command which can be used to send something to the
 	 * remote sensor.
 	 * 
-	 * @param action the action name
-	 * @param paramNames the name of the different parameters
+	 * @param action      the action name
+	 * @param paramNames  the name of the different parameters
 	 * @param paramValues the different parameter values
 	 * 
 	 * @return true if the plugin could successfully process the
-	 * 			 data otherwise false
-	 * @throws OperationNotSupportedException 
+	 *         data otherwise false
+	 * @throws OperationNotSupportedException
 	 */
-	public InputInfo sendToPlugin ( String action , String [ ] paramNames , Object [ ] paramValues ) throws OperationNotSupportedException {
-		throw new OperationNotSupportedException( "This plugin doesn't support sending data back to the source." );
+	public InputInfo sendToPlugin(String action, String[] paramNames, Object[] paramValues)
+			throws OperationNotSupportedException {
+		throw new OperationNotSupportedException("This plugin doesn't support sending data back to the source.");
 	}
-
 
 	/**
 	 * With this function any object can be sent to the plugin.
@@ -156,23 +146,23 @@ public abstract class AbstractPlugin extends Thread implements BackLogMessageLis
 	 * @param dataItem to be processed
 	 * 
 	 * @return true if the plugin could successfully process the
-	 * 			 data otherwise false
+	 *         data otherwise false
 	 */
 	public boolean sendToPlugin(Object dataItem) throws OperationNotSupportedException {
-		throw new OperationNotSupportedException( "This plugin doesn't support sending data back to the source." );
+		throw new OperationNotSupportedException("This plugin doesn't support sending data back to the source.");
 	}
 
-
 	/**
-	 * Get the {@link gsn.wrappers.backlog.BackLogMessage BackLogMessage} type this plugin is using.
+	 * Get the {@link gsn.wrappers.backlog.BackLogMessage BackLogMessage} type this
+	 * plugin is using.
 	 * <p>
 	 * This function should be implemented as following:
 	 * <ul>
-	 *  public byte getMessageType() {
-	 *  <ul>
-	 *   return gsn.wrappers.backlog.BackLogMessage.<i>MESSAGENAME</i>_MESSAGE_TYPE;
-	 *  </ul>
-	 *  }
+	 * public byte getMessageType() {
+	 * <ul>
+	 * return gsn.wrappers.backlog.BackLogMessage.<i>MESSAGENAME</i>_MESSAGE_TYPE;
+	 * </ul>
+	 * }
 	 * </ul>
 	 * 
 	 * where <i>MESSAGENAME</i> should be a unique name of the plugin.
@@ -180,10 +170,10 @@ public abstract class AbstractPlugin extends Thread implements BackLogMessageLis
 	 * <i>MESSAGENAME</i>_MESSAGE_TYPE has to be implemented and documented in
 	 * BackLogMessage.
 	 * <p>
+	 * 
 	 * @return the message type
 	 */
 	public abstract short getMessageType();
-
 
 	/**
 	 * This function is used to specify the output structure of
@@ -191,7 +181,8 @@ public abstract class AbstractPlugin extends Thread implements BackLogMessageLis
 	 * <p>
 	 * The output structure must agree with the data produced by
 	 * this plugin, meaning that the data passed to
-	 * {@link BackLogWrapper#dataProcessed(long, java.io.Serializable...) dataProcessed} must
+	 * {@link BackLogWrapper#dataProcessed(long, java.io.Serializable...)
+	 * dataProcessed} must
 	 * agree with it.
 	 * <p>
 	 * For further information about the output structure please
@@ -200,9 +191,6 @@ public abstract class AbstractPlugin extends Thread implements BackLogMessageLis
 	 * @return the output structure of the plugin in a DataField
 	 */
 	public abstract DataField[] getOutputFormat();
-
-
-
 
 	/**
 	 * This function can be called by the plugin, if it has processed
@@ -214,19 +202,17 @@ public abstract class AbstractPlugin extends Thread implements BackLogMessageLis
 	 * the plugin's getOutputFormat() function.
 	 * 
 	 * @param timestamp
-	 * 			The timestamp in milliseconds this data has been
-	 * 			generated.
-	 * @param data 
-	 * 			The data to be processed. Its format must correspond
-	 * 			to the one specified by the plugin's getOutputFormat()
-	 * 			function.
+	 *                  The timestamp in milliseconds this data has been
+	 *                  generated.
+	 * @param data
+	 *                  The data to be processed. Its format must correspond
+	 *                  to the one specified by the plugin's getOutputFormat()
+	 *                  function.
 	 * @return false if storing the new item fails otherwise true
 	 */
 	public boolean dataProcessed(long timestamp, Serializable... data) {
 		return activeBackLogWrapper.dataProcessed(timestamp, data);
 	}
-
-
 
 	/**
 	 * This function can be called by the plugin, if it has processed
@@ -236,30 +222,33 @@ public abstract class AbstractPlugin extends Thread implements BackLogMessageLis
 	 * 
 	 * 
 	 * @param timestamp
-	 * 			The timestamp in milliseconds this data has been
-	 * 			generated.
-	 * @param data 
-	 * 			The data to be processed. Its format must correspond
-	 * 			to the one specified by the plugin's getOutputFormat()
-	 * 			function.
+	 *                  The timestamp in milliseconds this data has been
+	 *                  generated.
+	 * @param data
+	 *                  The data to be processed. Its format must correspond
+	 *                  to the one specified by the plugin's getOutputFormat()
+	 *                  function.
 	 * @param priority
-	 *          the priority this message has. The smaller the number the higher the
-	 *          priority to send this message as soon as possible is. It should be somewhere
-	 *          between 10 and 1000. If it is set null, the default priority will be
-	 *          used.
+	 *                  the priority this message has. The smaller the number the
+	 *                  higher the
+	 *                  priority to send this message as soon as possible is. It
+	 *                  should be somewhere
+	 *                  between 10 and 1000. If it is set null, the default priority
+	 *                  will be
+	 *                  used.
 	 * @return false if not connected to the deployment
 	 * 
 	 * @throws IOException if the message length exceeds MAX_PAYLOAD_SIZE+9
 	 */
 	public boolean sendRemote(long timestamp, Serializable[] data, Integer priority) throws IOException {
-		if (priority == null){
-			return activeBackLogWrapper.getBLMessageMultiplexer().sendMessage(new BackLogMessage(getMessageType(), timestamp, data), null, DEFAULT_PACKET_SEND_PRIORITY);
+		if (priority == null) {
+			return activeBackLogWrapper.getBLMessageMultiplexer().sendMessage(
+					new BackLogMessage(getMessageType(), timestamp, data), null, DEFAULT_PACKET_SEND_PRIORITY);
 		} else {
-			return activeBackLogWrapper.getBLMessageMultiplexer().sendMessage(new BackLogMessage(getMessageType(), timestamp, data), null, priority);
-		}	
+			return activeBackLogWrapper.getBLMessageMultiplexer()
+					.sendMessage(new BackLogMessage(getMessageType(), timestamp, data), null, priority);
+		}
 	}
-
-
 
 	/**
 	 * This function can be called by the plugin, if it has processed
@@ -270,36 +259,38 @@ public abstract class AbstractPlugin extends Thread implements BackLogMessageLis
 	 * 
 	 * 
 	 * @param timestamp
-	 * 			The timestamp in milliseconds this data has been
-	 * 			generated.
-	 * @param data 
-	 * 			The data to be processed. Its format must correspond
-	 * 			to the one specified by the plugin's getOutputFormat()
-	 * 			function.
-	 * @param id 
-	 * 			The id of the CoreStation the message should be sent to.
+	 *                  The timestamp in milliseconds this data has been
+	 *                  generated.
+	 * @param data
+	 *                  The data to be processed. Its format must correspond
+	 *                  to the one specified by the plugin's getOutputFormat()
+	 *                  function.
+	 * @param id
+	 *                  The id of the CoreStation the message should be sent to.
 	 * @param priority
-	 *          the priority this message has. The smaller the number the higher the
-	 *          priority to send this message as soon as possible is. It should be somewhere
-	 *          between 10 and 1000. If it is set null, the default priority will be
-	 *          used.
+	 *                  the priority this message has. The smaller the number the
+	 *                  higher the
+	 *                  priority to send this message as soon as possible is. It
+	 *                  should be somewhere
+	 *                  between 10 and 1000. If it is set null, the default priority
+	 *                  will be
+	 *                  used.
 	 * 
 	 * @return false if not connected to the deployment
 	 * 
 	 * @throws IOException if the message length exceeds MAX_PAYLOAD_SIZE+9
-	 * 			or the DeviceId is not connected or does not exist.
+	 *                     or the DeviceId is not connected or does not exist.
 	 */
 	public boolean sendRemote(long timestamp, Serializable[] data, Integer id, Integer priority) throws IOException {
-		if (priority == null){
-			return activeBackLogWrapper.getBLMessageMultiplexer().sendMessage(new BackLogMessage(getMessageType(), timestamp, data), id, DEFAULT_PACKET_SEND_PRIORITY);
+		if (priority == null) {
+			return activeBackLogWrapper.getBLMessageMultiplexer().sendMessage(
+					new BackLogMessage(getMessageType(), timestamp, data), id, DEFAULT_PACKET_SEND_PRIORITY);
 		} else {
-			return activeBackLogWrapper.getBLMessageMultiplexer().sendMessage(new BackLogMessage(getMessageType(), timestamp, data), id, priority);
+			return activeBackLogWrapper.getBLMessageMultiplexer()
+					.sendMessage(new BackLogMessage(getMessageType(), timestamp, data), id, priority);
 		}
 
 	}
-
-
-
 
 	/**
 	 * This function must be called by the plugin, to acknowledge
@@ -313,25 +304,26 @@ public abstract class AbstractPlugin extends Thread implements BackLogMessageLis
 	 * overflow the backlog database!
 	 * 
 	 * @param timestamp
-	 * 			The timestamp is used to acknowledge a message. Thus
-	 * 			it has to be equal to the timestamp from the received
-	 * 			message we want to acknowledge.
+	 *                  The timestamp is used to acknowledge a message. Thus
+	 *                  it has to be equal to the timestamp from the received
+	 *                  message we want to acknowledge.
 	 * @param priority
-	 *          the priority this message has. The smaller the number the higher the
-	 *          priority to send this message as soon as possible is. It should be somewhere
-	 *          between 10 and 1000. If it is set null, the default priority will be
-	 *          used.
+	 *                  the priority this message has. The smaller the number the
+	 *                  higher the
+	 *                  priority to send this message as soon as possible is. It
+	 *                  should be somewhere
+	 *                  between 10 and 1000. If it is set null, the default priority
+	 *                  will be
+	 *                  used.
 	 */
 	public void ackMessage(long timestamp, Integer priority) {
-		if (priority == null){
+		if (priority == null) {
 			activeBackLogWrapper.getBLMessageMultiplexer().sendAck(timestamp, getMessageType(), DEFAULT_ACK_PRIORITY);
 		} else {
 			activeBackLogWrapper.getBLMessageMultiplexer().sendAck(timestamp, getMessageType(), priority);
 		}
-			
+
 	}
-
-
 
 	/**
 	 * Returns true if the connection to the deployment is established.
@@ -341,29 +333,27 @@ public abstract class AbstractPlugin extends Thread implements BackLogMessageLis
 	public boolean isConnected() {
 		return activeBackLogWrapper.getBLMessageMultiplexer().isConnected();
 	}
-	
-	
-//	/**
-//	 * Retruns true if the deploymentClient is connected to the deployment.
-//	 * 
-//	 * @return true if the client is connected otherwise false
-//	 */
-//	public boolean isConnected() {
-//		return activeBackLogWrapper.getBLMessageMultiplexer().isConnected();
-//	}
-	
-	
-	public final AddressBean getActiveAddressBean ( ) {
+
+	// /**
+	// * Retruns true if the deploymentClient is connected to the deployment.
+	// *
+	// * @return true if the client is connected otherwise false
+	// */
+	// public boolean isConnected() {
+	// return activeBackLogWrapper.getBLMessageMultiplexer().isConnected();
+	// }
+
+	public final AddressBean getActiveAddressBean() {
 		return activeBackLogWrapper.getActiveAddressBean();
 	}
-	
-	
+
 	public boolean messageRecv(int deviceId, BackLogMessage message) {
 		long timestamp = System.currentTimeMillis();
 		boolean ret = messageReceived(deviceId, message.getTimestamp(), message.getPayload());
 		if (ret) {
 			try {
-				activeBackLogWrapper.inputEvent(timestamp, activeBackLogWrapper.getRemoteConnectionPoint(), message.getSize());
+				activeBackLogWrapper.inputEvent(timestamp, activeBackLogWrapper.getRemoteConnectionPoint(),
+						message.getSize());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -371,154 +361,188 @@ public abstract class AbstractPlugin extends Thread implements BackLogMessageLis
 		return ret;
 	}
 
-
 	/**
-	 * This function returns the DeviceId of the CoreStation this plugin is connected to
+	 * This function returns the DeviceId of the CoreStation this plugin is
+	 * connected to
 	 * or null if it has not yet been connected to a CoreStation.
 	 * 
-	 * @return the DeviceId of the connected CoreStation or null if not yet connected.
+	 * @return the DeviceId of the connected CoreStation or null if not yet
+	 *         connected.
 	 */
 	public Integer getDeviceID() {
 		return activeBackLogWrapper.getBLMessageMultiplexer().getDeviceID();
 	}
-	
-	
+
 	/**
-	 * This function converts the numbers in the incoming message of type serializable to Java types.
+	 * This function converts the numbers in the incoming message of type
+	 * serializable to Java types.
 	 * The conversion is done according the type in the datafields parameter.
-	 * CAUTION: Only number types are converted! Binary and strings are NOT converted. 
-	 *  
+	 * CAUTION: Only number types are converted! Binary and strings are NOT
+	 * converted.
+	 * 
 	 * @param data
-	 * 			data of the incoming message to convert	
+	 *                        data of the incoming message to convert
 	 * @param dataoffset
-	 * 			data start index
+	 *                        data start index
 	 * @param datafields
-	 * 			data fields of incoming data
+	 *                        data fields of incoming data
 	 * @param datafieldoffset
-	 * 			data field start index
-	 * 			
-	 * @return converted Serializable array containing Java types.          
-	 *          
+	 *                        data field start index
+	 * 
+	 * @return converted Serializable array containing Java types.
+	 * 
 	 */
-	protected static Serializable[] checkAndCastData(Serializable[] data, int dataoffset, DataField[] datafields, int datafieldoffset) throws Exception {
-		if (data.length-dataoffset != datafields.length-datafieldoffset){
+	protected static Serializable[] checkAndCastData(Serializable[] data, int dataoffset, DataField[] datafields,
+			int datafieldoffset) throws Exception {
+		if (data.length - dataoffset != datafields.length - datafieldoffset) {
 			throw new Exception("data length does not correspond with the datafield length");
 		}
-			
-		
-		Serializable [] ret = new Serializable [data.length-dataoffset];
-		for (int i=dataoffset; i<data.length; i++) {
+
+		Serializable[] ret = new Serializable[data.length - dataoffset];
+		for (int i = dataoffset; i < data.length; i++) {
 			try {
-				int type = datafields[i-dataoffset+datafieldoffset].getDataTypeID();
+				int type = datafields[i - dataoffset + datafieldoffset].getDataTypeID();
 				switch (type) {
-				case DataTypes.INTEGER:
-					ret[i-dataoffset] = toInteger(data[i]);
-					break;
-				case DataTypes.BIGINT:
-					ret[i-dataoffset] = toLong(data[i]);
-					break;
-				case DataTypes.SMALLINT:
-					ret[i-dataoffset] = toShort(data[i]);
-					break;
-				case DataTypes.TINYINT:
-					ret[i-dataoffset] = (Byte)data[i];
-					break;
-				case DataTypes.DOUBLE:
-					ret[i-dataoffset] = toDouble(data[i]);
-					break;
-				default:
-					ret[i-dataoffset] = data[i];
-					break;
+					case DataTypes.INTEGER:
+						ret[i - dataoffset] = toInteger(data[i]);
+						break;
+					case DataTypes.BIGINT:
+						ret[i - dataoffset] = toLong(data[i]);
+						break;
+					case DataTypes.SMALLINT:
+						ret[i - dataoffset] = toShort(data[i]);
+						break;
+					case DataTypes.TINYINT:
+						ret[i - dataoffset] = (Byte) data[i];
+						break;
+					case DataTypes.DOUBLE:
+						ret[i - dataoffset] = toDouble(data[i]);
+						break;
+					default:
+						ret[i - dataoffset] = data[i];
+						break;
 				}
-			}
-			catch (Exception e) {
-				throw new Exception("field " + datafields[i-dataoffset+datafieldoffset].getName() + ": " + e.getMessage());
+			} catch (Exception e) {
+				throw new Exception(
+						"field " + datafields[i - dataoffset + datafieldoffset].getName() + ": " + e.getMessage());
 			}
 		}
-		
+
 		return ret;
 	}
-	
-	
+
+	/**
+	 * Concatenates two arrays of the same type.
+	 *
+	 * @param first  the first array
+	 * @param second the second array
+	 * @param <T>    the type of the arrays
+	 * @return a new array containing the elements of both input arrays
+	 */
 	protected static <T> T[] concat(T[] first, T[] second) {
 		T[] result = Arrays.copyOf(first, first.length + second.length);
 		System.arraycopy(second, 0, result, first.length, second.length);
 		return result;
 	}
-	
-	
+
+	/**
+	 * Converts a value to a Long.
+	 *
+	 * @param value the value to be converted
+	 * @return the Long representation of the value
+	 * @throws Exception if the value cannot be cast to Long
+	 */
 	protected static <T> Long toLong(T value) throws Exception {
-		if (value == null){
+		if (value == null) {
 			return null;
 		} else if (value instanceof Byte) {
-			return new Long((Byte)value);
+			return new Long((Byte) value);
 		} else if (value instanceof Short) {
-			return new Long((Short)value);
+			return new Long((Short) value);
 		} else if (value instanceof Integer) {
-			return new Long((Integer)value);
+			return new Long((Integer) value);
 		} else if (value instanceof Long) {
 			return (Long) value;
 		} else {
 			throw new Exception("value can not be cast to Long.");
 		}
-			
+
 	}
-	
-	
+
+	/**
+	 * Converts the given value to a Double.
+	 *
+	 * @param value the value to be converted
+	 * @return the converted Double value
+	 * @throws Exception if the value cannot be cast to Double
+	 */
 	protected static <T> Double toDouble(T value) throws Exception {
-		if (value == null){
+		if (value == null) {
 			return null;
 		} else if (value instanceof Byte) {
-			return new Double((Byte)value);
+			return new Double((Byte) value);
 		} else if (value instanceof Short) {
-			return new Double((Short)value);
+			return new Double((Short) value);
 		} else if (value instanceof Integer) {
-			return new Double((Integer)value);
+			return new Double((Integer) value);
 		} else if (value instanceof Long) {
-			return new Double((Long)value);
+			return new Double((Long) value);
 		} else if (value instanceof Double) {
 			return (Double) value;
 		} else {
 			throw new Exception("value can not be cast to Double.");
 		}
-			
+
 	}
-	
-	
+
+	/**
+	 * Converts the given value to an Integer.
+	 * 
+	 * @param value the value to be converted
+	 * @return the converted Integer value
+	 * @throws Exception if the value cannot be cast to Integer
+	 */
 	protected static <T> Integer toInteger(T value) throws Exception {
-		if (value == null){
+		if (value == null) {
 			return null;
 		} else if (value instanceof Byte) {
-			return new Integer((Byte)value);
+			return new Integer((Byte) value);
 		} else if (value instanceof Short) {
-			return new Integer((Short)value);
+			return new Integer((Short) value);
 		} else if (value instanceof Integer) {
 			return (Integer) value;
 		} else {
-			throw new Exception("value (type=" + value.getClass().getName() + ", value=" + value + ") can not be cast to Integer.");
+			throw new Exception(
+					"value (type=" + value.getClass().getName() + ", value=" + value + ") can not be cast to Integer.");
 		}
-			
+
 	}
-	
-	
+
+	/**
+	 * Converts a value to a Short.
+	 *
+	 * @param value the value to be converted
+	 * @return the converted Short value
+	 * @throws Exception if the value cannot be cast to Short
+	 */
 	protected static <T> Short toShort(T value) throws Exception {
-		if (value == null){
+		if (value == null) {
 			return null;
 		} else if (value instanceof Byte) {
-			return new Short((Byte)value);
+			return new Short((Byte) value);
 		} else if (value instanceof Short) {
 			return (Short) value;
 		} else {
 			throw new Exception("value can not be cast to Short.");
 		}
-			
+
 	}
 }
 
 class NameDataFieldPair {
 	protected Integer typeNumber;
 	protected DataField[] dataField;
-	
+
 	NameDataFieldPair(Integer typeNumber, DataField[] dataField) {
 		this.typeNumber = typeNumber;
 		this.dataField = dataField;

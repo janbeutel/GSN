@@ -35,8 +35,6 @@ import org.slf4j.LoggerFactory;
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.DataTypes;
 import ch.epfl.gsn.beans.StreamElement;
-import ch.epfl.gsn.wrappers.AbstractWrapper;
-import ch.epfl.gsn.wrappers.DiskSpaceWrapper;
 
 import org.slf4j.Logger;
 
@@ -66,6 +64,12 @@ public class DiskSpaceWrapper extends AbstractWrapper {
         return true;
     }
 
+    /**
+     * Runs the disk space monitoring process in a separate thread.
+     * This method continuously checks the available free space on the disk and
+     * posts the information as a stream element.
+     * The monitoring process runs until the wrapper is active.
+     */
     public void run() {
         while (isActive()) {
             try {

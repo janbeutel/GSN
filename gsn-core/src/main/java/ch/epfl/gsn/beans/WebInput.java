@@ -30,8 +30,6 @@ package ch.epfl.gsn.beans;
 
 import java.io.Serializable;
 
-import ch.epfl.gsn.beans.DataField;
-
 public class WebInput implements Serializable {
 
    private static final long serialVersionUID = 1587176728962536853L;

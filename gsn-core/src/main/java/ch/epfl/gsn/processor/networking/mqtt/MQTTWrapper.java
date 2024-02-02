@@ -26,12 +26,23 @@ public class MQTTWrapper extends AbstractWrapper implements MqttCallbackExtended
 	private String topic;
 	private int qos;
 
+	/**
+	 * Returns the output format of the MQTTWrapper.
+	 * 
+	 * @return an array of DataField objects representing the output format.
+	 */
 	@Override
 	public DataField[] getOutputFormat() {
 		return new DataField[] {
 				new DataField("raw_packet", "BINARY", "The packet contains raw data received in the MQTT payload.") };
 	}
 
+	/**
+	 * Initializes the MQTTWrapper by setting up the necessary parameters and
+	 * connecting to the MQTT broker.
+	 * 
+	 * @return true if the initialization is successful, false otherwise.
+	 */
 	@Override
 	public boolean initialize() {
 		try {
@@ -67,6 +78,11 @@ public class MQTTWrapper extends AbstractWrapper implements MqttCallbackExtended
 		return true;
 	}
 
+	/**
+	 * Disposes the MQTTWrapper by unsubscribing from the topic, disconnecting from
+	 * the MQTT client,
+	 * and closing the client connection.
+	 */
 	@Override
 	public void dispose() {
 		try {
@@ -85,6 +101,13 @@ public class MQTTWrapper extends AbstractWrapper implements MqttCallbackExtended
 		return "MQTTWrapper[" + topic + "]";
 	}
 
+	/**
+	 * This method is called when the connection to the MQTT server is lost.
+	 * It attempts to reconnect to the server after a 3-second delay.
+	 * If the reconnection fails, an error message is logged.
+	 *
+	 * @param e the Throwable object representing the cause of the connection loss
+	 */
 	@Override
 	public void connectionLost(Throwable e) {
 		logger.warn("Connection to MQTT server lost. Reconnecting in 3s...", e);
@@ -101,6 +124,15 @@ public class MQTTWrapper extends AbstractWrapper implements MqttCallbackExtended
 		// MQTTWrapper doesn't publish
 	}
 
+	/**
+	 * This method is called when a message is received from the MQTT broker.
+	 * It logs the received message and creates a StreamElement object to post the
+	 * message to the stream.
+	 * 
+	 * @param s The topic on which the message was received.
+	 * @param m The MQTT message received.
+	 * @throws Exception if an error occurs while processing the message.
+	 */
 	@Override
 	public void messageArrived(String s, MqttMessage m) throws Exception {
 		logger.info("Message received on topic " + s + ": " + new String(m.getPayload()));
@@ -109,6 +141,17 @@ public class MQTTWrapper extends AbstractWrapper implements MqttCallbackExtended
 		postStreamElement(streamElement);
 	}
 
+	/**
+	 * This method is called when the MQTT client successfully completes the
+	 * connection to the server.
+	 * If it is not a reconnection, it subscribes to the specified topic with the
+	 * specified quality of service (QoS).
+	 * If it is a reconnection, it logs a debug message indicating that the MQTT
+	 * server has been reconnected.
+	 *
+	 * @param reconnect a boolean indicating whether it is a reconnection or not
+	 * @param s         the server URI that the client has connected to
+	 */
 	@Override
 	public void connectComplete(boolean reconnect, String s) {
 		if (!reconnect) {

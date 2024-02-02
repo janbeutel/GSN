@@ -27,6 +27,20 @@ public class ZeroMQDeliverySync implements DeliverySystem {
 
 	public static transient Logger logger = LoggerFactory.getLogger(ZeroMQDeliverySync.class);
 
+	/**
+	 * Constructs a ZeroMQDeliverySync object with the specified name and remote
+	 * contact point.
+	 *
+	 * This constructor initializes a ZeroMQDeliverySync object, setting up the
+	 * necessary ZeroMQ context, creating a REQ
+	 * socket for communication, and connecting it to the specified remote contact
+	 * point.
+	 *
+	 * @param name               The name associated with the ZeroMQDeliverySync
+	 *                           object.
+	 * @param remoteContactPoint The remote contact point to which the ZeroMQ socket
+	 *                           connects.
+	 */
 	public ZeroMQDeliverySync(String name, String remoteContactPoint) {
 		if (name.endsWith(":")) {
 			name = name.substring(0, name.length() - 1);
@@ -38,11 +52,25 @@ public class ZeroMQDeliverySync implements DeliverySystem {
 		closed = false;
 	}
 
+	/**
+	 * Writes the structure of the data to be sent over the network.
+	 * This method registers the structure with the ZeroMQ proxy.
+	 *
+	 * @param fields an array of DataField objects representing the structure of the
+	 *               data
+	 * @throws IOException if an I/O error occurs while registering the structure
+	 */
 	@Override
 	public void writeStructure(DataField[] fields) throws IOException {
 		Main.getZmqProxy().registerStructure(name, fields);
 	}
 
+	/**
+	 * Writes a StreamElement to the ZeroMQ socket for delivery.
+	 * 
+	 * @param se the StreamElement to be written
+	 * @return true if the StreamElement was successfully written, false otherwise
+	 */
 	@Override
 	public boolean writeStreamElement(StreamElement se) {
 		try {
@@ -66,6 +94,10 @@ public class ZeroMQDeliverySync implements DeliverySystem {
 		return true;
 	}
 
+	/**
+	 * Closes the ZeroMQDeliverySync instance.
+	 * This method closes the sender and sets the 'closed' flag to true.
+	 */
 	@Override
 	public void close() {
 		sender.close();

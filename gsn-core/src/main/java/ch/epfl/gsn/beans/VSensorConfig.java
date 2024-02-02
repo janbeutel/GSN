@@ -119,6 +119,14 @@ public class VSensorConfig implements Serializable {
 		return this.addressing;
 	}
 
+	/**
+	 * Returns a two-dimensional array representing the RPC-friendly addressing of
+	 * the VSensorConfig.
+	 * Each row in the array contains two elements: the key and the value of a
+	 * KeyValue object in the addressing array.
+	 * 
+	 * @return a two-dimensional array representing the RPC-friendly addressing
+	 */
 	public String[][] getRPCFriendlyAddressing() {
 		String[][] toReturn = new String[this.addressing.length][2];
 		for (int i = 0; i < toReturn.length; i++) {
@@ -131,6 +139,14 @@ public class VSensorConfig implements Serializable {
 		return toReturn;
 	}
 
+	/**
+	 * Returns the output structure of the sensor in a format suitable for RPC
+	 * communication.
+	 * The output structure is represented as a 2D array of strings, where each row
+	 * contains the name and type of an output.
+	 *
+	 * @return the output structure of the sensor in a RPC-friendly format
+	 */
 	public String[][] getRPCFriendlyOutputStructure() {
 		String[][] toReturn = new String[this.outputStructure.length][2];
 		for (int i = 0; i < outputStructure.length; i++) {
@@ -293,6 +309,11 @@ public class VSensorConfig implements Serializable {
 		this.initPriority = initPriority;
 	}
 
+	/**
+	 * Returns an array of addressing keys.
+	 *
+	 * @return the array of addressing keys
+	 */
 	public String[] getAddressingKeys() {
 		final String result[] = new String[this.getAddressing().length];
 		int counter = 0;
@@ -303,6 +324,11 @@ public class VSensorConfig implements Serializable {
 		return result;
 	}
 
+	/**
+	 * Returns an array of addressing values.
+	 *
+	 * @return the array of addressing values
+	 */
 	public String[] getAddressingValues() {
 		final String result[] = new String[this.getAddressing().length];
 		int counter = 0;
@@ -367,6 +393,13 @@ public class VSensorConfig implements Serializable {
 		return storageHistorySize;
 	}
 
+	/**
+	 * Validates the configuration of the virtual sensor.
+	 * This method checks if the storage size is valid and sets the parsed storage
+	 * size and storage count based flag accordingly.
+	 * 
+	 * @return true if the configuration is valid, false otherwise.
+	 */
 	public boolean validate() {
 		for (final InputStream inputStream : this.inputStreams) {
 			this.inputStreamNameToInputStreamObjectMapping.put(inputStream.getInputStreamName(), inputStream);
@@ -534,6 +567,13 @@ public class VSensorConfig implements Serializable {
 
 	private boolean isTimestampUnique = false;
 
+	/**
+	 * Preprocesses the addressing information of the VSensorConfig.
+	 * This method parses the addressing key-value pairs and extracts the altitude,
+	 * longitude, and latitude values.
+	 * The extracted values are stored in the corresponding cached variables.
+	 * This method should be called before accessing the cached variables.
+	 */
 	public void preprocess_addressing() {
 		if (!addressing_processed) {
 			for (KeyValue kv : getAddressing()) {

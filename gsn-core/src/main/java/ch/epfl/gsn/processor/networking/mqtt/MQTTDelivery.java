@@ -33,6 +33,12 @@ public class MQTTDelivery implements DeliverySystem {
 		}
 	}
 
+	/**
+	 * Writes the structure of the data fields to the MQTT broker.
+	 * 
+	 * @param fields the data fields to be written
+	 * @throws IOException if an I/O error occurs while writing the structure
+	 */
 	@Override
 	public void writeStructure(DataField[] fields) throws IOException {
 		StreamElement se = new StreamElement(fields, new Integer[fields.length]);
@@ -43,6 +49,13 @@ public class MQTTDelivery implements DeliverySystem {
 		}
 	}
 
+	/**
+	 * Writes a StreamElement to the MQTT topic.
+	 * 
+	 * @param se The StreamElement to be written.
+	 * @return true if the StreamElement was successfully published, false
+	 *         otherwise.
+	 */
 	@Override
 	public boolean writeStreamElement(StreamElement se) {
 		try {
@@ -60,6 +73,11 @@ public class MQTTDelivery implements DeliverySystem {
 		return true;
 	}
 
+	/**
+	 * Closes the MQTT client connection and releases any resources associated with
+	 * it.
+	 * After calling this method, the client is no longer usable.
+	 */
 	@Override
 	public void close() {
 		try {
@@ -71,6 +89,11 @@ public class MQTTDelivery implements DeliverySystem {
 		}
 	}
 
+	/**
+	 * Returns whether the MQTT delivery is closed or not.
+	 *
+	 * @return true if the MQTT delivery is closed, false otherwise.
+	 */
 	@Override
 	public boolean isClosed() {
 		return closed;

@@ -118,12 +118,24 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 		}
 	}
 
+	/**
+	 * Processes the given data and adds it to the receive queue.
+	 *
+	 * @param data  the byte array containing the data to be processed
+	 * @param count the number of bytes to be processed from the data array
+	 */
 	public void processData(byte[] data, int count) {
 		byte[] dataCopy = new byte[count];
 		System.arraycopy(data, 0, dataCopy, 0, count);
 		recvQueue.offer(dataCopy);
 	}
 
+	/**
+	 * Runs the thread for handling incoming messages from the backlog.
+	 * This method reads data from the recvQueue, processes it, and handles the
+	 * messages accordingly.
+	 * It also handles the connection establishment and disconnection.
+	 */
 	public void run() {
 		logger.info("thread started");
 
@@ -254,6 +266,13 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 		logger.info("thread stoped");
 	}
 
+	/**
+	 * Performs packet destuffing on the given input byte array.
+	 * 
+	 * @param in        the input byte array to be destuffed
+	 * @param destuffed the ByteArrayOutputStream to store the destuffed bytes
+	 * @return true if the destuffing is successful, false otherwise
+	 */
 	private boolean pktDestuffing(byte[] in, ByteArrayOutputStream destuffed) {
 		for (int i = 0; i < in.length; i++) {
 			if (in[i] == STUFFING_BYTE && !stuff) {
@@ -283,6 +302,10 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 		return true;
 	}
 
+	/**
+	 * Disposes the BackLogMessageMultiplexer by stopping timers, clearing queues,
+	 * and performing necessary cleanup tasks.
+	 */
 	private void dispose() {
 		logger.info("dispose");
 		// stop ping timer
@@ -477,6 +500,14 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 		return hostPort;
 	}
 
+	/**
+	 * Sends an ACK message with the specified timestamp, message type, and
+	 * priority.
+	 *
+	 * @param timestamp The timestamp of the ACK message.
+	 * @param msgType   The message type of the ACK message.
+	 * @param priority  The priority of the ACK message.
+	 */
 	public void sendAck(long timestamp, int msgType, int priority) {
 		// send ACK with corresponding timestamp and message type
 		BackLogMessage ack;
@@ -493,6 +524,13 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 		}
 	}
 
+	/**
+	 * This method is called when the connection is finished. It performs various
+	 * tasks such as starting the ping timer,
+	 * resetting the watchdog, sending queue limit or queue ready messages, updating
+	 * the connection status, and notifying
+	 * the listeners about the established remote connection.
+	 */
 	private void connectionFinished() {
 		if (logger.isDebugEnabled()) {
 			logger.debug("connection finished");
@@ -536,6 +574,13 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 		}
 	}
 
+	/**
+	 * This method is called when the connection to the server is established.
+	 * It resets the watchdog and sends a hello message to the
+	 * asyncCoreStationClient.
+	 * 
+	 * @throws IOException if an I/O error occurs while sending the hello message
+	 */
 	@Override
 	public void connectionEstablished() {
 		if (logger.isDebugEnabled()) {
@@ -551,6 +596,11 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 		}
 	}
 
+	/**
+	 * This method is called when the connection to the CoreStation is lost.
+	 * It performs the necessary cleanup tasks and notifies the listeners about the
+	 * lost connection.
+	 */
 	@Override
 	public void connectionLost() {
 		logger.info("connection to CoreStation " + hostName + " with device id " + coreStationDeviceId + " at "
@@ -666,6 +716,13 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 		}
 	}
 
+	/**
+	 * Converts a byte array to an unsigned integer.
+	 *
+	 * @param arr   the byte array to convert
+	 * @param start the starting index in the byte array
+	 * @return the converted unsigned integer value
+	 */
 	private static long arr2uint(byte[] arr, int start) {
 		int i = 0;
 		int len = 4;
@@ -684,6 +741,13 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 		return accum;
 	}
 
+	/**
+	 * Converts a byte array to an integer starting from the specified index.
+	 *
+	 * @param arr   the byte array to convert
+	 * @param start the starting index in the byte array
+	 * @return the converted integer value
+	 */
 	private static int arr2int(byte[] arr, int start) {
 		int i = 0;
 		int len = 4;
@@ -742,6 +806,14 @@ class PluginMessageHandler extends Thread {
 		return plugMsgQueue.size() >= BackLogMessageMultiplexer.PLUGIN_MESSAGE_QUEUE_WARN;
 	}
 
+	/**
+	 * Executes the thread's main logic for processing backlog messages.
+	 * This method continuously retrieves messages from the message queue and
+	 * multiplexes them.
+	 * If the queue limit is reached and the message queue becomes ready again, a
+	 * queue ready message is sent.
+	 * The method will exit when the dispose flag is set to true.
+	 */
 	public void run() {
 		logger.info("thread started");
 		BackLogMessage msg = null;

@@ -143,6 +143,13 @@ public class DataTypes {
          new Byte((byte) 12), new Double(3.141592),
          new Date().getTime(), new Integer(1), new Integer(9), new Float(2.02) };
 
+   /**
+    * Converts a given type name to the corresponding GSN type ID.
+    * 
+    * @param type the type name to be converted
+    * @return the GSN type ID corresponding to the given type name
+    * @throws GSNRuntimeException if the type is null or not recognized
+    */
    public static byte convertTypeNameToGSNTypeID(final String type) {
       if (type == null) {
          throw new GSNRuntimeException(new StringBuilder("The type *null* is not recoginzed by GSN.")

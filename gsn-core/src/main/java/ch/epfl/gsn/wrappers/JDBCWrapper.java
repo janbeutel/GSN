@@ -35,7 +35,6 @@ import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.storage.DataEnumerator;
 import ch.epfl.gsn.storage.StorageManager;
 import ch.epfl.gsn.storage.StorageManagerFactory;
-import ch.epfl.gsn.wrappers.AbstractWrapper;
 
 import org.slf4j.Logger;
 import org.apache.commons.io.FileUtils;
@@ -97,6 +96,19 @@ public class JDBCWrapper extends AbstractWrapper {
         return outputFormat;
     }
 
+    /**
+     * Initializes the JDBCWrapper with the configuration obtained from the active
+     * AddressBean.
+     * This method retrieves database connection parameters, including the table
+     * name, JDBC URL,
+     * username, password, and driver. It then establishes a connection to the
+     * database using
+     * the specified parameters.
+     *
+     * @return {@code true} if initialization is successful, {@code false}
+     *         otherwise. If false, warnings
+     *         are logged indicating missing or malformed parameters.
+     */
     public boolean initialize() {
         AddressBean addressBean = getActiveAddressBean();
 
@@ -211,6 +223,12 @@ public class JDBCWrapper extends AbstractWrapper {
         return true;
     }
 
+    /**
+     * Retrieves the latest timestamp from the checkpoint file.
+     * 
+     * @return The latest timestamp from the checkpoint file.
+     * @throws IOException If an I/O error occurs while reading the file.
+     */
     public long getLatestTimeStampFromCheckPoint() throws IOException {
         String val = FileUtils.readFileToString(new File(checkPointFile), "UTF-8");
         long lastItem = 0;
@@ -220,6 +238,13 @@ public class JDBCWrapper extends AbstractWrapper {
         return lastItem;
     }
 
+    /**
+     * Executes the main logic of the JDBCWrapper in a separate thread.
+     * Retrieves data from the database using a specified query and processes it.
+     * The retrieved data is converted into StreamElements and sent to the
+     * postStreamElement method.
+     * The method also updates the checkpoint file with the latest timestamp.
+     */
     public void run() {
         DataEnumerator data;
 
@@ -316,6 +341,11 @@ public class JDBCWrapper extends AbstractWrapper {
         FileUtils.writeStringToFile(new File(checkPointFile), Long.toString(timestamp), "UTF-8");
     }
 
+    /**
+     * Retrieves the latest processed timestamp from the database.
+     * 
+     * @return The latest processed timestamp, or -1 if an error occurs.
+     */
     public long getLatestProcessed() {
         DataEnumerator data;
         long latest = -1;
@@ -342,6 +372,12 @@ public class JDBCWrapper extends AbstractWrapper {
         return latest;
     }
 
+    /**
+     * Checks if the given time string is in ISO format.
+     *
+     * @param time the time string to be checked
+     * @return true if the time string is in ISO format, false otherwise
+     */
     public boolean isISOFormat(String time) {
         // Example: 2009-11-02T00:00:00.000+00:00
         String regexMask = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}[+-]\\d{2}:\\d{2}$";
@@ -356,6 +392,12 @@ public class JDBCWrapper extends AbstractWrapper {
         }
     }
 
+    /**
+     * Checks if a given string represents a long number.
+     *
+     * @param time the string to be checked
+     * @return true if the string represents a long number, false otherwise
+     */
     public boolean isLong(String time) {
 
         String regexMask = "^\\d+$";

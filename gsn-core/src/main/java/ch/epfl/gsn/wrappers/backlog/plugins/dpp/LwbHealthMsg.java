@@ -22,6 +22,15 @@ public class LwbHealthMsg extends AbstractMsg {
 			new DataField("BUS_LOAD", "SMALLINT") /* Bus utilization [%] */
 	};
 
+	/**
+	 * Receives the payload from a ByteBuffer and extracts the values of various
+	 * parameters.
+	 * 
+	 * @param payload the ByteBuffer containing the payload
+	 * @return an array of Serializable objects representing the extracted parameter
+	 *         values
+	 * @throws Exception if an error occurs during the extraction process
+	 */
 	@Override
 	public Serializable[] receivePayload(ByteBuffer payload) throws Exception {
 		Short bootstrap_cnt = null;

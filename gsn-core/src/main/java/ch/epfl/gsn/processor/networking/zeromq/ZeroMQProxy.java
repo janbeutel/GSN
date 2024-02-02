@@ -28,6 +28,23 @@ public class ZeroMQProxy extends Thread implements Runnable {
 	private Kryo kryo = new Kryo();
 	private HashMap<String, DataField[]> structures = new HashMap<String, DataField[]>(); // maybe put into mappings...
 
+	/**
+	 * Constructs a ZeroMQProxy object with the specified output port and metadata
+	 * port.
+	 *
+	 * This constructor initializes a ZeroMQProxy object, registering a Kryo
+	 * serializer, creating XSUB and XPUB sockets
+	 * for data communication, and binding them to the specified output port.
+	 * Additionally, it creates a REP socket for
+	 * handling metadata communication and binds it to the specified metadata port.
+	 * Two threads are spawned to manage data
+	 * proxying and metadata response handling.
+	 *
+	 * @param portOUT  The output port to which the XPUB socket is bound for data
+	 *                 communication.
+	 * @param portMETA The metadata port to which the REP socket is bound for
+	 *                 handling metadata communication.
+	 */
 	public ZeroMQProxy(final int portOUT, final int portMETA) {
 		kryo.register(DataField[].class);
 		ctx = Main.getZmqContext();
@@ -88,10 +105,28 @@ public class ZeroMQProxy extends Thread implements Runnable {
 		metaResponder.start();
 	}
 
+	/**
+	 * Connects the subscriberX socket to the specified virtual sensor using an
+	 * inproc connection.
+	 *
+	 * This method establishes a connection from the subscriberX socket to the
+	 * specified virtual sensor using the
+	 * inproc protocol.
+	 *
+	 * @param vsName The name of the virtual sensor to which the subscriberX socket
+	 *               will be connected.
+	 */
 	public void connectTo(String vsName) {
 		subscriberX.connect("inproc://stream/" + vsName);
 	}
 
+	/**
+	 * Registers a structure with the given name and fields.
+	 * 
+	 * @param name   the name of the structure
+	 * @param fields an array of DataField objects representing the fields of the
+	 *               structure
+	 */
 	public void registerStructure(String name, DataField[] fields) {
 		structures.put(name, fields);
 	}

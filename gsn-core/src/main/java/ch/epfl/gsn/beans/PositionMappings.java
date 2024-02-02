@@ -15,6 +15,13 @@ public class PositionMappings {
 		this.mappings = mappings;
 	}
 
+	/**
+	 * Adds a PositionMap to the list of mappings.
+	 * If there is already a mapping with the same begin value and no end value, it
+	 * is removed before adding the new mapping.
+	 *
+	 * @param positionMap the PositionMap to be added
+	 */
 	public void add(PositionMap positionMap) {
 		Iterator<PositionMap> iter = mappings.iterator();
 		while (iter.hasNext()) {

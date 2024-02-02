@@ -57,6 +57,18 @@ public class ModelDistributer implements VirtualSensorDataListener, VSensorState
     private static HashMap<Class<? extends DeliverySystem>, ModelDistributer> singletonMap = new HashMap<Class<? extends DeliverySystem>, ModelDistributer>();
     private Thread thread;
 
+    /**
+     * Constructs an instance of ModelDistributer, initializing the associated
+     * thread and keep-alive timer.
+     *
+     * This constructor creates a new ModelDistributer instance, starting a
+     * dedicated thread to handle distribution
+     * tasks. It also initializes a keep-alive timer responsible for periodically
+     * sending keep-alive messages to registered
+     * listeners. The keep-alive messages help maintain the connection with
+     * listeners. If any exceptions occur during the
+     * construction or initialization process, a RuntimeException is thrown.
+     */
     private ModelDistributer() {
         try {
             thread = new Thread(this);
@@ -84,6 +96,24 @@ public class ModelDistributer implements VirtualSensorDataListener, VSensorState
         }
     }
 
+    /**
+     * Retrieves the singleton instance of ModelDistributer associated with the
+     * specified DeliverySystem class.
+     *
+     * This method returns the existing singleton instance of ModelDistributer if
+     * available in the singletonMap,
+     * associated with the provided DeliverySystem class. If no instance is found, a
+     * new ModelDistributer instance is
+     * created, associated with the specified DeliverySystem class, and stored in
+     * the singletonMap for future access.
+     * This method ensures that only one ModelDistributer instance is associated
+     * with each unique DeliverySystem class.
+     *
+     * @param c The class object representing the DeliverySystem class for which to
+     *          retrieve the ModelDistributer instance.
+     * @return The singleton instance of ModelDistributer associated with the
+     *         specified DeliverySystem class.
+     */
     public static ModelDistributer getInstance(Class<? extends DeliverySystem> c) {
         ModelDistributer toReturn = singletonMap.get(c);
         if (toReturn == null) {
@@ -93,6 +123,15 @@ public class ModelDistributer implements VirtualSensorDataListener, VSensorState
         return toReturn;
     }
 
+    /**
+     * Returns the keep-alive period for remote connections.
+     * If the keep-alive period is not set, it will be retrieved from the system
+     * property "remoteKeepAlivePeriod".
+     * If the system property is not set, the default keep-alive period will be
+     * used.
+     *
+     * @return the keep-alive period in milliseconds
+     */
     public static int getKeepAlivePeriod() {
         if (keepAlivePeriod == -1) {
             keepAlivePeriod = System.getProperty("remoteKeepAlivePeriod") == null ? KEEP_ALIVE_PERIOD
@@ -110,6 +149,11 @@ public class ModelDistributer implements VirtualSensorDataListener, VSensorState
 
     private ConcurrentHashMap<DistributionRequest, Boolean> candidatesForNextRound = new ConcurrentHashMap<DistributionRequest, Boolean>();
 
+    /**
+     * Adds a DistributionRequest listener to the ModelDistributer.
+     * 
+     * @param listener The DistributionRequest listener to be added.
+     */
     public void addListener(DistributionRequest listener) {
         synchronized (listeners) {
             if (!listeners.contains(listener)) {
@@ -125,6 +169,13 @@ public class ModelDistributer implements VirtualSensorDataListener, VSensorState
         }
     }
 
+    /**
+     * Adds the specified DistributionRequest listener to the candidateListeners
+     * map.
+     *
+     * @param listener The DistributionRequest listener to be added to the
+     *                 candidateListeners map.
+     */
     private void addListenerToCandidates(DistributionRequest listener) {
         /**
          * Locker variable should be modified EXACTLY like candidateListeners variable.
@@ -137,6 +188,15 @@ public class ModelDistributer implements VirtualSensorDataListener, VSensorState
         }
     }
 
+    /**
+     * Removes the specified listener from the candidate list.
+     * If the listener is found in the candidatesForNextRound list, it is removed
+     * from the list and added to the candidateListeners map.
+     * If the listener is not found in the candidatesForNextRound list, it is
+     * removed from the locker and candidateListeners map.
+     * 
+     * @param listener the DistributionRequest listener to be removed
+     */
     private void removeListenerFromCandidates(DistributionRequest listener) {
         /**
          * Locker variable should be modified EXACTLY like candidateListeners variable.
@@ -183,6 +243,11 @@ public class ModelDistributer implements VirtualSensorDataListener, VSensorState
         return true;
     }
 
+    /**
+     * Removes a DistributionRequest listener from the ModelDistributer.
+     * 
+     * @param listener the DistributionRequest listener to be removed
+     */
     public void removeListener(DistributionRequest listener) {
         synchronized (listeners) {
             if (listeners.remove(listener)) {
@@ -194,6 +259,13 @@ public class ModelDistributer implements VirtualSensorDataListener, VSensorState
         }
     }
 
+    /**
+     * Consumes a StreamElement and distributes it to the appropriate listeners
+     * based on the provided VSensorConfig.
+     * 
+     * @param se     the StreamElement to be consumed
+     * @param config the VSensorConfig used to determine the appropriate listeners
+     */
     public void consume(StreamElement se, VSensorConfig config) {
         synchronized (listeners) {
             for (DistributionRequest listener : listeners) {
@@ -210,6 +282,19 @@ public class ModelDistributer implements VirtualSensorDataListener, VSensorState
         }
     }
 
+    /**
+     * The main execution loop of the ModelDistributer thread.
+     *
+     * This method represents the main execution loop of the ModelDistributer
+     * thread. It continuously checks the
+     * locker's status, waiting for requests or data items. If the locker is empty,
+     * it logs a debug message indicating
+     * that it is waiting for requests or data items, along with the total number of
+     * listeners. When the locker is not
+     * empty, it releases the lock and attempts to find interest listeners by
+     * iterating through the candidateListeners
+     * map.
+     */
     public void run() {
         while (true) {
             try {
@@ -245,6 +330,13 @@ public class ModelDistributer implements VirtualSensorDataListener, VSensorState
         return true;
     }
 
+    /**
+     * Unloads a VSensorConfig from the ModelDistributer by removing all listeners
+     * associated with it.
+     * 
+     * @param config the VSensorConfig to be unloaded
+     * @return true if the unloading is successful, false otherwise
+     */
     public boolean vsUnLoading(VSensorConfig config) {
         synchronized (listeners) {
             logger.debug("Distributer unloading: " + listeners.size());
@@ -265,11 +357,23 @@ public class ModelDistributer implements VirtualSensorDataListener, VSensorState
         return true;
     }
 
+    /**
+     * Creates a DataEnumeratorIF object based on the provided DistributionRequest
+     * listener.
+     *
+     * @param listener The DistributionRequest listener containing the query and
+     *                 model information.
+     * @return A DataEnumeratorIF object.
+     */
     private DataEnumeratorIF makeDataEnum(DistributionRequest listener) {
         ModelEnumerator mEnum = new ModelEnumerator(listener.getQuery(), listener.getModel());
         return mEnum;
     }
 
+    /**
+     * Releases the resources held by the ModelDistributer.
+     * This method removes all listeners and stops the keep alive timer.
+     */
     public void release() {
         synchronized (listeners) {
             while (!listeners.isEmpty()) {
@@ -282,6 +386,13 @@ public class ModelDistributer implements VirtualSensorDataListener, VSensorState
 
     }
 
+    /**
+     * Checks if the ModelDistributer contains a specific DeliverySystem.
+     *
+     * @param delivery the DeliverySystem to check for
+     * @return true if the ModelDistributer contains the specified DeliverySystem,
+     *         false otherwise
+     */
     public boolean contains(DeliverySystem delivery) {
         synchronized (listeners) {
             for (DistributionRequest listener : listeners) {

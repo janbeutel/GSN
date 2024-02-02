@@ -57,6 +57,18 @@ public class HibernateStorage implements VirtualSensorStorage {
 
     private static final int PAGE_SIZE = 1000;
 
+    /**
+     * Creates a new instance of HibernateStorage.
+     * 
+     * @param dbInfo     the DBConnectionInfo object containing the database
+     *                   connection information
+     * @param identifier the identifier for the HibernateStorage instance
+     * @param structure  an array of DataField objects representing the structure of
+     *                   the storage
+     * @param unique     a boolean value indicating whether the storage should
+     *                   enforce uniqueness constraints
+     * @return a new instance of HibernateStorage
+     */
     public static HibernateStorage newInstance(DBConnectionInfo dbInfo, String identifier, DataField[] structure,
             boolean unique) {
         try {
@@ -83,6 +95,14 @@ public class HibernateStorage implements VirtualSensorStorage {
         return true;
     }
 
+    /**
+     * Saves a StreamElement object to the database and returns the generated
+     * identifier.
+     *
+     * @param se the StreamElement object to be saved
+     * @return the generated identifier of the saved object
+     * @throws GSNRuntimeException if an error occurs while saving the object
+     */
     public Serializable saveStreamElement(StreamElement se) throws GSNRuntimeException {
         // Create the dynamic map
         try {
@@ -101,6 +121,14 @@ public class HibernateStorage implements VirtualSensorStorage {
         }
     }
 
+    /**
+     * Retrieves a StreamElement from the database based on the provided primary
+     * key.
+     *
+     * @param pk the primary key of the StreamElement to retrieve
+     * @return the retrieved StreamElement object
+     * @throws GSNRuntimeException if an error occurs during the retrieval process
+     */
     public StreamElement getStreamElement(Serializable pk) throws GSNRuntimeException {
         Transaction tx = null;
         try {
@@ -121,6 +149,12 @@ public class HibernateStorage implements VirtualSensorStorage {
         }
     }
 
+    /**
+     * Returns the count of stream elements in the storage.
+     *
+     * @return The count of stream elements.
+     * @throws GSNRuntimeException if an error occurs during the operation.
+     */
     public long countStreamElement() throws GSNRuntimeException {
         Transaction tx = null;
         try {
@@ -144,17 +178,42 @@ public class HibernateStorage implements VirtualSensorStorage {
         }
     }
 
+    /**
+     * Retrieves a stream of elements from the storage.
+     *
+     * @param pageSize   the number of elements to retrieve per page
+     * @param order      the order in which the elements should be retrieved
+     * @param crits      an array of criteria to filter the elements
+     * @param maxResults the maximum number of elements to retrieve
+     * @return a DataEnumeratorIF object representing the stream of elements
+     * @throws GSNRuntimeException if an error occurs while retrieving the elements
+     */
     public DataEnumeratorIF getStreamElements(int pageSize, Order order, Criterion[] crits, int maxResults)
             throws GSNRuntimeException {
         return new PaginatedDataEnumerator(pageSize, order, crits, maxResults);
     }
 
+    /**
+     * Retrieves a stream of elements from the storage.
+     *
+     * @param pageSize the number of elements to retrieve per page
+     * @param order    the order in which the elements should be retrieved
+     * @param crits    the criteria to filter the elements
+     * @return a DataEnumeratorIF object representing the stream of elements
+     * @throws GSNRuntimeException if an error occurs during the retrieval process
+     */
     public DataEnumeratorIF getStreamElements(int pageSize, Order order, Criterion[] crits) throws GSNRuntimeException {
         return getStreamElements(pageSize, order, crits, -1);
     }
 
-    //
-
+    /**
+     * Stores an element in the database using Hibernate.
+     *
+     * @param dm A Map representing the data to be stored in the database.
+     * @return A Serializable representing the primary key of the stored element.
+     * @throws RuntimeException If an error occurs during the transaction, and the
+     *                          transaction cannot be rolled back.
+     */
     private Serializable storeElement(Map dm) {
         Transaction tx = null;
         try {
@@ -175,6 +234,15 @@ public class HibernateStorage implements VirtualSensorStorage {
         }
     }
 
+    /**
+     * This method is called by the garbage collector when the object is no longer
+     * reachable.
+     * It is used to perform any necessary cleanup operations before the object is
+     * destroyed.
+     * In this case, it closes the Hibernate session factory if it is not null.
+     * 
+     * @throws Throwable if an error occurs during finalization
+     */
     protected void finalize() throws Throwable {
         try {
             if (sf != null) {
@@ -215,6 +283,12 @@ public class HibernateStorage implements VirtualSensorStorage {
         return null;
     }
 
+    /**
+     * Converts a map of data fields to a StreamElement object.
+     * 
+     * @param dm The map of data fields.
+     * @return The converted StreamElement object.
+     */
     private StreamElement dm2se(Map<String, Serializable> dm) {
         ArrayList<Serializable> data = new ArrayList<Serializable>();
         long timed = (Long) dm.get("timed");
@@ -226,6 +300,15 @@ public class HibernateStorage implements VirtualSensorStorage {
         return new StreamElement(structure, data.toArray(new Serializable[] { data.size() }), timed);
     }
 
+    /**
+     * Converts a StreamElement object to a map of key-value pairs.
+     * The "timed" field is included as a key-value pair in the map.
+     * All other fields in the StreamElement object are also included as key-value
+     * pairs in the map.
+     * 
+     * @param se The StreamElement object to be converted.
+     * @return A map of key-value pairs representing the StreamElement object.
+     */
     private Map<String, Serializable> se2dm(StreamElement se) {
         Map<String, Serializable> dm = new HashMap<String, Serializable>();
         dm.put("timed", se.getTimeStamp());
@@ -393,6 +476,13 @@ public class HibernateStorage implements VirtualSensorStorage {
             }
         }
 
+        /**
+         * Retrieves the next StreamElement from the DataEnumerator.
+         *
+         * @return the next StreamElement
+         * @throws IndexOutOfBoundsException if there are no more StreamElements or if
+         *                                   the DataEnumerator is closed
+         */
         public StreamElement nextElement() throws RuntimeException {
             if (!hasMoreElements()) {
                 throw new IndexOutOfBoundsException("The DataEnumerator has no more StreamElement or is closed.");

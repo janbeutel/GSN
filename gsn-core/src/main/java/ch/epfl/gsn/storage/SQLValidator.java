@@ -105,10 +105,22 @@ public class SQLValidator implements VSensorStateChangeListener {
 		return in.replaceAll("\"([^\"]|.)*\"", "");
 	}
 
+	/**
+	 * Removes single quotes from a given string.
+	 *
+	 * @param in the input string
+	 * @return the input string with single quotes removed
+	 */
 	public static String removeSingleQuotes(String in) {
 		return in.replaceAll("'([^']|.)*'", "");
 	}
 
+	/**
+	 * Checks if a given SQL query is valid.
+	 *
+	 * @param query the SQL query to be validated
+	 * @return true if the query is valid, false otherwise
+	 */
 	private static boolean isValid(String query) {
 		String simplified = removeSingleQuotes(removeQuotes(query)).toLowerCase().trim();
 		if (simplified.lastIndexOf("select") != simplified.indexOf("select")) {
@@ -121,6 +133,12 @@ public class SQLValidator implements VSensorStateChangeListener {
 		return true;
 	}
 
+	/**
+	 * Adds "order by TIMED desc limit 1" to the given query string.
+	 * 
+	 * @param query the original query string
+	 * @return the modified query string with the added clause
+	 */
 	public static String addTopFirst(String query) {
 		return query + " order by TIMED desc limit 1";
 	}
@@ -147,6 +165,14 @@ public class SQLValidator implements VSensorStateChangeListener {
 		return select.getTables().iterator().next().getName();
 	}
 
+	/**
+	 * Extracts the select columns from the given SQL query based on the provided
+	 * VSensorConfig.
+	 *
+	 * @param query         the SQL query
+	 * @param vSensorConfig the VSensorConfig containing the output structure
+	 * @return an array of DataField objects representing the select columns
+	 */
 	public DataField[] extractSelectColumns(String query, VSensorConfig vSensorConfig) {
 		Select select = queryToSelect(query);
 		if (select == null) {
@@ -156,7 +182,14 @@ public class SQLValidator implements VSensorStateChangeListener {
 		return getFields(select, vSensorConfig.getOutputStructure());
 	}
 
-	// to allow the use of queries over models and not only VS
+	/**
+	 * Extracts the select columns from the given SQL query based on the provided
+	 * data fields.
+	 * 
+	 * @param query      the SQL query
+	 * @param datafields the array of data fields
+	 * @return an array of data fields representing the select columns
+	 */
 	public DataField[] extractSelectColumns(String query, DataField[] datafields) {
 		Select select = queryToSelect(query);
 		if (select == null) {
@@ -171,15 +204,23 @@ public class SQLValidator implements VSensorStateChangeListener {
 	}
 
 	public boolean vsLoading(VSensorConfig config) {
-
 		return false;
 	}
 
 	public boolean vsUnLoading(VSensorConfig config) {
-
 		return false;
 	}
 
+	/**
+	 * Retrieves the data fields from the given Select object based on the provided
+	 * array of fields.
+	 * 
+	 * @param select The Select object from which to retrieve the data fields.
+	 * @param fields The array of DataField objects to match against the column
+	 *               names in the Select object.
+	 * @return An array of DataField objects representing the matched fields,
+	 *         excluding "timed" and "pk" columns.
+	 */
 	private DataField[] getFields(Select select, DataField[] fields) {
 		ArrayList<DataField> toReturn = new ArrayList<DataField>();
 		try {
@@ -205,6 +246,13 @@ public class SQLValidator implements VSensorStateChangeListener {
 
 	}
 
+	/**
+	 * Converts a SQL query string into a Select object.
+	 * 
+	 * @param query the SQL query string to convert
+	 * @return the Select object representing the query, or null if the query is
+	 *         invalid
+	 */
 	private Select queryToSelect(String query) {
 		Select select = null;
 		if (!isValid(query)) {
@@ -227,6 +275,13 @@ public class SQLValidator implements VSensorStateChangeListener {
 		return select;
 	}
 
+	/**
+	 * Adds a primary key field to the given SQL query if it does not already have
+	 * one.
+	 * 
+	 * @param query the SQL query to modify
+	 * @return the modified SQL query with a primary key field added if necessary
+	 */
 	public static String addPkField(String query) {
 		logger.debug("< QUERY IN: " + query);
 		try {
@@ -262,6 +317,12 @@ public class SQLValidator implements VSensorStateChangeListener {
 		return query;
 	}
 
+	/**
+	 * Releases the connection to the database.
+	 * If the connection is not null and not closed, it will be closed.
+	 *
+	 * @throws Exception if an error occurs while closing the connection.
+	 */
 	public void release() throws Exception {
 		if (connection != null && !connection.isClosed()) {
 			connection.close();

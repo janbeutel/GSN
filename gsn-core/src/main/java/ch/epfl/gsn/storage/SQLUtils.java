@@ -113,10 +113,15 @@ public class SQLUtils {
 	 * @param replaceTo
 	 * @return
 	 */
-
 	private static Pattern pattern = Pattern.compile("(\"[^\"]*\")|((\\w+)(\\.((\\w+)|\\*)))",
 			Pattern.CASE_INSENSITIVE);
 
+	/**
+	 * Returns the table name from the given SQL query.
+	 *
+	 * @param query the SQL query
+	 * @return the table name extracted from the query, or null if not found
+	 */
 	public static String getTableName(String query) {
 		String q = SQLValidator.removeSingleQuotes(SQLValidator.removeQuotes(query)).toLowerCase();
 		StringTokenizer tokens = new StringTokenizer(q, " ");
@@ -130,6 +135,25 @@ public class SQLUtils {
 		return null;
 	}
 
+	/**
+	 * Rewrites a SQL query by replacing occurrences of a specific table name with a
+	 * new name.
+	 *
+	 * This static method takes a SQL query, a table name to be replaced, and a
+	 * replacement table name. It uses a regular
+	 * expression pattern to find occurrences of table names in the query and
+	 * replaces them with the new table name. The
+	 * replacement is performed within the FROM clause of the query, maintaining the
+	 * case sensitivity of the original query.
+	 * The modified query is then returned as a StringBuilder.
+	 *
+	 * @param query             The original SQL query to be rewritten.
+	 * @param tableNameToRename The table name to be replaced in the query.
+	 * @param replaceTo         The new table name to replace the occurrences of the
+	 *                          original table name.
+	 * @return A StringBuilder containing the modified SQL query with the specified
+	 *         table name replaced.
+	 */
 	public static StringBuilder newRewrite(CharSequence query, CharSequence tableNameToRename, CharSequence replaceTo) {
 		// Selecting strings between pair of "" : (\"[^\"]*\")
 		// Selecting tableID.tableName or tableID.* : (\\w+(\\.(\w+)|\\*))
@@ -174,6 +198,12 @@ public class SQLUtils {
 		return finalResult;
 	}
 
+	/**
+	 * Extracts the projection from a SQL query.
+	 *
+	 * @param pQuery the SQL query from which to extract the projection
+	 * @return the projection part of the SQL query
+	 */
 	public static String extractProjection(String pQuery) {
 		String query = pQuery.trim().toLowerCase();
 		int indexOfFrom = query.indexOf(" from ");
@@ -181,6 +211,12 @@ public class SQLUtils {
 		return pQuery.substring(indexOfSelect + "select".length(), indexOfFrom);
 	}
 
+	/**
+	 * Extracts the WHERE clause from a SQL query.
+	 *
+	 * @param pQuery the SQL query from which to extract the WHERE clause
+	 * @return the extracted WHERE clause as a String
+	 */
 	public static String extractWhereClause(String pQuery) {
 		int indexOfWhere = pQuery.toLowerCase().indexOf(" where ");
 		if (indexOfWhere < 0) {
@@ -202,14 +238,35 @@ public class SQLUtils {
 		System.out.println(out.toString());
 	}
 
+	/**
+	 * Returns the index of the last occurrence of the substring " where " in the
+	 * given CharSequence.
+	 *
+	 * @param c the CharSequence to search in
+	 * @return the index of the last occurrence of " where ", or -1 if not found
+	 */
 	public static int getWhereIndex(CharSequence c) {
 		return c.toString().toLowerCase().lastIndexOf(" where ");
 	}
 
+	/**
+	 * Returns the index of the last occurrence of the "order by" substring in the
+	 * given CharSequence.
+	 *
+	 * @param c the CharSequence to search in
+	 * @return the index of the last occurrence of "order by", or -1 if not found
+	 */
 	public static int getOrderByIndex(CharSequence c) {
 		return c.toString().toLowerCase().lastIndexOf(" order by ");
 	}
 
+	/**
+	 * Returns the index of the last occurrence of the "GROUP BY" clause in the
+	 * given CharSequence.
+	 *
+	 * @param c the CharSequence to search in
+	 * @return the index of the last occurrence of "GROUP BY", or -1 if not found
+	 */
 	public static int getGroupByIndex(CharSequence c) {
 		return c.toString().toLowerCase().lastIndexOf(" group by ");
 	}

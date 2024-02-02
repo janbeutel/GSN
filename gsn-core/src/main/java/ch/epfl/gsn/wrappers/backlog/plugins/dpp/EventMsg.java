@@ -13,6 +13,15 @@ public class EventMsg extends AbstractMsg {
 			new DataField("VALUE", "BIGINT") /* event value / subtype */
 	};
 
+	/**
+	 * Receives the payload from a ByteBuffer and returns an array of Serializable
+	 * objects.
+	 * 
+	 * @param payload The ByteBuffer containing the payload data.
+	 * @return An array of Serializable objects containing the component ID, type,
+	 *         and value.
+	 * @throws Exception If an error occurs while receiving the payload.
+	 */
 	@Override
 	public Serializable[] receivePayload(ByteBuffer payload) throws Exception {
 		Short component_id = null;

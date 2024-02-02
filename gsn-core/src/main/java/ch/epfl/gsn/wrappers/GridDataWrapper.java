@@ -30,8 +30,6 @@ import org.slf4j.LoggerFactory;
 import ch.epfl.gsn.beans.AddressBean;
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.StreamElement;
-import ch.epfl.gsn.wrappers.AbstractWrapper;
-import ch.epfl.gsn.wrappers.GridDataWrapper;
 
 import org.slf4j.Logger;
 import org.joda.time.format.DateTimeFormat;
@@ -80,6 +78,12 @@ public class GridDataWrapper extends AbstractWrapper {
 
     private long rate;
 
+    /**
+     * Initializes the GridDataWrapper by retrieving the necessary configuration
+     * parameters from the AddressBean.
+     * 
+     * @return true if initialization is successful, false otherwise.
+     */
     public boolean initialize() {
 
         AddressBean addressBean = getActiveAddressBean();
@@ -144,6 +148,12 @@ public class GridDataWrapper extends AbstractWrapper {
                 new DataField("grid", "binary:image/raw", "raw raster data") };
     }
 
+    /**
+     * Runs the GridDataWrapper thread.
+     * This method sleeps for 2000 milliseconds and then enters a loop that checks
+     * for new files in the specified directory
+     * at a specified rate. The loop continues until the thread is no longer active.
+     */
     public void run() {
         try {
             Thread.sleep(2000);
@@ -162,6 +172,13 @@ public class GridDataWrapper extends AbstractWrapper {
         }
     }
 
+    /**
+     * Parses a file and initializes the corresponding fields.
+     *
+     * @param fileName The name of the file to be parsed.
+     * @return {@code true} if the file is successfully parsed and data is
+     *         initialized, {@code false} otherwise.
+     */
     public boolean parseFile(String fileName) {
         boolean success = true;
         String line;
@@ -291,6 +308,16 @@ public class GridDataWrapper extends AbstractWrapper {
         threadCounter--;
     }
 
+    /**
+     * Returns a vector of new files in the specified directory that match the given
+     * regular expression file mask.
+     *
+     * @param dir           The directory path to search for new files.
+     * @param regexFileMask The regular expression file mask to match against file
+     *                      names.
+     * @return A vector of new files that match the given regular expression file
+     *         mask.
+     */
     private Vector<String> listOfNewFiles(String dir, String regexFileMask) {
 
         File f = new File(dir);
@@ -407,6 +434,14 @@ public class GridDataWrapper extends AbstractWrapper {
         return "GridDataWrapper";
     }
 
+    /**
+     * Converts a string representation of time to a long value based on the
+     * specified time format.
+     *
+     * @param s          the string representation of time
+     * @param timeFormat the format of the time string
+     * @return the long value representing the time, or -1 if the conversion fails
+     */
     private long strTime2Long(String s, String timeFormat) {
 
         long l = -1;
@@ -419,6 +454,14 @@ public class GridDataWrapper extends AbstractWrapper {
         return l;
     }
 
+    /**
+     * Extracts the timestamp from a given file name using a regular expression
+     * mask.
+     *
+     * @param fileName  the name of the file
+     * @param regexMask the regular expression mask to match against the file name
+     * @return the extracted timestamp as a string, or null if no match is found
+     */
     private String getTimeStampFromFileName(String fileName, String regexMask) {
 
         Pattern pattern = Pattern.compile(regexMask);

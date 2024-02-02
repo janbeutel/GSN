@@ -40,7 +40,6 @@ import ch.epfl.gsn.beans.AddressBean;
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.storage.DataEnumerator;
-import ch.epfl.gsn.wrappers.AbstractWrapper;
 import ch.epfl.gsn.wrappers.DelayedDataEnumerator;
 import ch.epfl.gsn.wrappers.ReplayWrapper;
 import ch.epfl.gsn.wrappers.ScheduledStreamElement;
@@ -111,6 +110,14 @@ public class ReplayWrapper extends AbstractWrapper {
     return true;
   }
 
+  /**
+   * Starts publishing the stream elements.
+   * This method schedules a TimerTask to execute the publishing of each stream
+   * element
+   * with a delay based on the execution time of the stream element.
+   * If there are no more stream elements to publish, the method returns
+   * immediately.
+   */
   public void start_publishing() {
     if (!dt.hasMoreElements()) {
       return;

@@ -168,6 +168,13 @@ public class AnomalyDetector implements Monitorable {
         }
     }
 
+    /**
+     * Retrieves the DataField object with the specified field name.
+     *
+     * @param fieldName the name of the field to retrieve
+     * @return the DataField object with the specified field name, or null if not
+     *         found
+     */
     private DataField getDataField(String fieldName) {
 
         for (int i = 0; i < fields.length; i++) {
@@ -292,7 +299,16 @@ public class AnomalyDetector implements Monitorable {
 
     }
 
-    // Returns SQL query for outliers
+    /**
+     * Returns the SQL query for outliers for the specified table name, data field,
+     * and direction.
+     *
+     * @param tableName the name of the table to query
+     * @param field     the data field to compare against
+     * @param direction the direction of the outlier (true for positive, false for
+     *                  negative)
+     * @return the outlier query as a string
+     */
     private String getOutlierQuery(String tableName, DataField field, boolean direction) {
 
         StringBuilder toReturn = new StringBuilder();
@@ -309,6 +325,16 @@ public class AnomalyDetector implements Monitorable {
         return toReturn.toString();
     }
 
+    /**
+     * Returns the outlier query by group for the given table name, data field,
+     * group by field, and direction.
+     *
+     * @param tableName The name of the table.
+     * @param field     The data field to compare.
+     * @param groupBy   The data field to group by.
+     * @param direction The direction of the comparison.
+     * @return The outlier query by group as a string.
+     */
     private String getOutlierQueryByGroup(String tableName, DataField field, DataField groupBy, boolean direction) {
 
         StringBuilder toReturn = new StringBuilder();
@@ -328,6 +354,13 @@ public class AnomalyDetector implements Monitorable {
 
     }
 
+    /**
+     * Calculates the interquartile range for the given statistics.
+     * Anomalies are detected based on the interquartile range.
+     * 
+     * @param stat the statistics to analyze
+     * @throws SQLException if there is an error accessing the database
+     */
     private void interQuartileRange(Hashtable<String, Object> stat) throws SQLException {
 
         if (!functions.containsKey("iqr")) {
@@ -389,8 +422,13 @@ public class AnomalyDetector implements Monitorable {
         con.close();
     }
 
-    // TODO: A complex IQR Query. It should be improved.
-    // TODO : Comment the query
+    /**
+     * Returns the IQR query as a string.
+     *
+     * @param tableName the name of the table to query
+     * @param field     the data field to calculate IQR for
+     * @return the IQR query as a string
+     */
     private String getIQRQuery(String tableName, DataField field) {
 
         StringBuilder toReturn = new StringBuilder("SELECT ");
@@ -415,6 +453,15 @@ public class AnomalyDetector implements Monitorable {
         return toReturn.toString();
     }
 
+    /**
+     * Returns the IQR query by group for a given table name, data field, and group
+     * field.
+     * 
+     * @param tableName The name of the table.
+     * @param field     The data field.
+     * @param groupBy   The group field.
+     * @return The IQR query as a string.
+     */
     private String getIQRQueryByGroup(String tableName, DataField field, DataField groupBy) {
         String fieldName = field.getName();
         String groupByName = groupBy.getName();
@@ -456,6 +503,21 @@ public class AnomalyDetector implements Monitorable {
     }
 
     // Count unique values of a field over a specified timed-interval
+    /**
+     * Counts the unique values for the specified anomalies and updates the given
+     * stat hashtable.
+     * If the "unique" function is not present in the functions map, the method
+     * returns without performing any action.
+     * If the anomalies list is empty, the "unique" function is removed from the
+     * functions map.
+     * The unique values are retrieved from the database using the appropriate
+     * queries based on whether the anomaly is grouped by a field or not.
+     * The retrieved values are then stored in the stat hashtable with the
+     * corresponding metric names.
+     * 
+     * @param stat The hashtable to store the unique values.
+     * @throws SQLException If an error occurs while accessing the database.
+     */
     private void countUnique(Hashtable<String, Object> stat) throws SQLException {
 
         if (!functions.containsKey("unique")) {
@@ -515,7 +577,13 @@ public class AnomalyDetector implements Monitorable {
         con.close();
     }
 
-    // Generates SQL query for the number of unique values of a field
+    /**
+     * Generates SQL query for the number of unique values of a field.
+     *
+     * @param tableName the name of the table
+     * @param field     the data field to be counted
+     * @return a unique query string
+     */
     private String getUniqueQuery(String tableName, DataField field) {
 
         StringBuilder toReturn = new StringBuilder("SELECT COUNT (*) FROM (");
@@ -525,6 +593,15 @@ public class AnomalyDetector implements Monitorable {
         return toReturn.toString();
     }
 
+    /**
+     * Returns a unique query string based on the specified table name, data field,
+     * and group by field.
+     *
+     * @param tableName The name of the table.
+     * @param field     The data field to be used in the query.
+     * @param groupBy   The field to group the query results by.
+     * @return A unique query string.
+     */
     private String getUniqueQueryByGroup(String tableName, DataField field, DataField groupBy) {
 
         StringBuilder toReturn = new StringBuilder("SELECT " + groupBy.getName() + ", COUNT(*) ");
@@ -535,7 +612,15 @@ public class AnomalyDetector implements Monitorable {
         return toReturn.toString();
     }
 
-    // Returns the time stamp by subtractive the windowSize from the current time
+    /**
+     * Returns the timestamp representing the start time of the data window to be
+     * analyzed for anomalies.
+     * If the windowSize is -1, it indicates that all stored data will be considered
+     * for anomaly detection.
+     * 
+     * @param windowSize the size of the data window in milliseconds
+     * @return the timestamp representing the start time of the data window
+     */
     private long getTimeStamp(long windowSize) {
 
         // Counter intuitively, zero represents we will look into all the stored data
@@ -568,6 +653,12 @@ public class AnomalyDetector implements Monitorable {
 
     }
 
+    /**
+     * Returns the metric name for the given Anomaly.
+     *
+     * @param anomaly the Anomaly object
+     * @return the metric name as a String
+     */
     public String getMetricName(Anomaly anomaly) {
 
         StringBuilder sb = new StringBuilder(
@@ -585,6 +676,14 @@ public class AnomalyDetector implements Monitorable {
 
     }
 
+    /**
+     * Retrieves the statistics related to anomaly detection.
+     * This method counts the number of outliers in the positive and negative
+     * direction,
+     * calculates the interquartile range, and counts the number of unique values.
+     * 
+     * @return a Hashtable containing the statistics
+     */
     public Hashtable<String, Object> getStatistics() {
 
         Hashtable<String, Object> stat = new Hashtable<String, Object>();

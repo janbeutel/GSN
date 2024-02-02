@@ -51,6 +51,22 @@ public class ZeroMQWrapperPush extends AbstractWrapper {
 	private int lport = 0;
 	private String laddress;
 
+	/**
+	 * Initializes the ZeroMQ wrapper by registering required classes with Kryo,
+	 * configuring the output structure,
+	 * and setting up a ZeroMQ REP socket to listen for incoming requests.
+	 *
+	 * This method registers the {@code StreamElement4Rest} and {@code DataField[]}
+	 * classes with Kryo, retrieves the
+	 * configured output structure from the active address bean, and validates the
+	 * local address and port parameters. It then
+	 * creates a ZeroMQ REP socket, binds it to the specified local address and
+	 * port, and sets a receive timeout of 10 seconds.
+	 * The method returns {@code true} upon successful initialization.
+	 *
+	 * @return {@code true} if the initialization is successful; {@code false}
+	 *         otherwise.
+	 */
 	@Override
 	public boolean initialize() {
 
@@ -96,6 +112,18 @@ public class ZeroMQWrapperPush extends AbstractWrapper {
 		return "ZeroMQ wrapper Push";
 	}
 
+	/**
+	 * Runs the main logic of the ZeroMQ wrapper in a continuous loop while the
+	 * wrapper is active.
+	 *
+	 * This method continuously listens for incoming requests on the configured
+	 * ZeroMQ REP socket. Upon receiving a request,
+	 * it deserializes the data into a {@code StreamElement}, attempts to post the
+	 * element, and sends a response indicating
+	 * the success or failure of the operation. In case of a protocol error or
+	 * exception, the socket is re-initialized, and
+	 * the loop continues.
+	 */
 	@Override
 	public void run() {
 

@@ -18,6 +18,14 @@ public class WgpsStatusMsg extends AbstractMsg {
 			new DataField("STATUS", "INTEGER") /* Bit0: gps power state (on/off) */
 	};
 
+	/**
+	 * Receives the payload from a ByteBuffer and converts it into an array of
+	 * Serializable objects.
+	 * 
+	 * @param payload the ByteBuffer containing the payload
+	 * @return an array of Serializable objects representing the received payload
+	 * @throws Exception if an error occurs during the conversion process
+	 */
 	@Override
 	public Serializable[] receivePayload(ByteBuffer payload) throws Exception {
 		Integer inc_x = null;

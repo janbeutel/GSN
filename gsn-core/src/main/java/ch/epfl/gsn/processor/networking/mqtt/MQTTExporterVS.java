@@ -24,6 +24,12 @@ public class MQTTExporterVS extends AbstractVirtualSensor {
 	public MQTTExporterVS() {
 	}
 
+	/**
+	 * Initializes the MQTTExporterVS by setting up the MQTT client connection and
+	 * configuring the necessary parameters.
+	 * 
+	 * @return true if the initialization is successful, false otherwise
+	 */
 	@Override
 	public boolean initialize() {
 
@@ -56,6 +62,11 @@ public class MQTTExporterVS extends AbstractVirtualSensor {
 		return true;
 	}
 
+	/**
+	 * Disposes the MQTTExporterVS instance by disconnecting and closing the MQTT
+	 * client.
+	 * Any exceptions that occur during the process are logged as warnings.
+	 */
 	@Override
 	public void dispose() {
 		try {
@@ -66,6 +77,13 @@ public class MQTTExporterVS extends AbstractVirtualSensor {
 		}
 	}
 
+	/**
+	 * This method is called when data is available in the specified input stream.
+	 * It publishes the data to the MQTT server.
+	 *
+	 * @param inputStreamName The name of the input stream.
+	 * @param streamElement   The StreamElement containing the data to be published.
+	 */
 	@Override
 	public void dataAvailable(String inputStreamName, StreamElement streamElement) {
 		try {

@@ -44,6 +44,14 @@ public class DPPMessagePlugin extends AbstractPlugin {
 
 	private ch.epfl.gsn.wrappers.backlog.plugins.dpp.Message msgClass;
 
+	/**
+	 * Initializes the DPPMessagePlugin with the specified parameters.
+	 * 
+	 * @param backlogwrapper  The BackLogWrapper instance.
+	 * @param coreStationName The name of the core station.
+	 * @param deploymentName  The name of the deployment.
+	 * @return true if the initialization is successful, false otherwise.
+	 */
 	@Override
 	public boolean initialize(BackLogWrapper backlogwrapper, String coreStationName, String deploymentName) {
 		activeBackLogWrapper = backlogwrapper;
@@ -85,6 +93,15 @@ public class DPPMessagePlugin extends AbstractPlugin {
 		return "DPPMessagPlugin-" + messageConstructor.getName();
 	}
 
+	/**
+	 * This method is called when a message is received.
+	 * It processes the received message and performs necessary actions.
+	 *
+	 * @param deviceId  The ID of the device that received the message.
+	 * @param timestamp The timestamp of the received message.
+	 * @param data      The data array containing the message information.
+	 * @return True if the message was successfully processed, false otherwise.
+	 */
 	@Override
 	public boolean messageReceived(int deviceId, long timestamp, Serializable[] data) {
 		try {
@@ -121,6 +138,23 @@ public class DPPMessagePlugin extends AbstractPlugin {
 		return false;
 	}
 
+	/**
+	 * Sends a message to a plugin with the specified action, parameter names, and
+	 * parameter values.
+	 * The method constructs a message header and payload based on the provided
+	 * parameters and sends
+	 * the message to the remote plugin. It also handles the response and returns an
+	 * InputInfo object
+	 * indicating the success or failure of the message upload.
+	 *
+	 * @param action      The action to be performed by the plugin.
+	 * @param paramNames  An array of parameter names associated with the action.
+	 * @param paramValues An array of parameter values corresponding to the
+	 *                    parameter names.
+	 * @return An InputInfo object representing the result of the message upload.
+	 * @throws Exception If an error occurs during the message creation or upload
+	 *                   process.
+	 */
 	@Override
 	public InputInfo sendToPlugin(String action, String[] paramNames, Object[] paramValues) {
 		Long timestamp = System.currentTimeMillis();

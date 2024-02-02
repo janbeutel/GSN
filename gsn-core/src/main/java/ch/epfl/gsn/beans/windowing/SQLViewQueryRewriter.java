@@ -61,6 +61,11 @@ public abstract class SQLViewQueryRewriter extends QueryRewriter {
     }
     protected StringBuilder cachedSqlQuery;
 
+    /**
+     * Initializes the SQLViewQueryRewriter.
+     * 
+     * @return true if initialization is successful, false otherwise.
+     */
     @Override
     public boolean initialize() {
         if (streamSource == null) {
@@ -79,6 +84,14 @@ public abstract class SQLViewQueryRewriter extends QueryRewriter {
         return true;
     }
 
+    /**
+     * Rewrites the given SQL query using the provided stream source.
+     * If the stream source is null, a RuntimeException is thrown.
+     * 
+     * @param query the SQL query to be rewritten
+     * @return a StringBuilder object containing the rewritten query
+     * @throws RuntimeException if the stream source is null
+     */
     @Override
     public StringBuilder rewrite(String query) {
         if (streamSource == null) {
@@ -87,6 +100,11 @@ public abstract class SQLViewQueryRewriter extends QueryRewriter {
         return SQLUtils.newRewrite(query, streamSource.getAlias(), streamSource.getUIDStr());
     }
 
+    /**
+     * Disposes the SQLViewQueryRewriter by dropping the associated view from the
+     * storage manager.
+     * If the streamSource is null, a RuntimeException is thrown.
+     */
     @Override
     public void dispose() {
         if (streamSource == null) {
@@ -99,6 +117,12 @@ public abstract class SQLViewQueryRewriter extends QueryRewriter {
         }
     }
 
+    /**
+     * Checks if data is available at the specified timestamp.
+     * 
+     * @param timestamp The timestamp to check for data availability.
+     * @return true if data is available, false otherwise.
+     */
     @Override
     public boolean dataAvailable(long timestamp) {
         try {

@@ -99,6 +99,24 @@ public class DataEnumerator implements DataEnumeratorIF {
 		this(storageManager, preparedStatement, binaryLinked, false);
 	}
 
+	/**
+	 * Constructs a DataEnumerator object for iterating over query results from the
+	 * specified PreparedStatement.
+	 *
+	 * This constructor initializes a DataEnumerator object for iterating over the
+	 * results of the provided
+	 * PreparedStatement. It associates the DataEnumerator with the given
+	 * StorageManager and sets the manualCloseConnection
+	 * flag accordingly.
+	 * 
+	 * @param storageManager    The StorageManager instance associated with the
+	 *                          DataEnumerator.
+	 * @param preparedStatement The PreparedStatement containing the query results
+	 *                          to iterate over.
+	 * @param binaryLinked      A boolean indicating whether binary data is linked.
+	 * @param manualClose       A boolean indicating whether the connection should
+	 *                          be manually closed.
+	 */
 	public DataEnumerator(StorageManager storageManager, PreparedStatement preparedStatement, boolean binaryLinked,
 			boolean manualClose) {
 		this.storageManager = storageManager;
@@ -266,6 +284,12 @@ public class DataEnumerator implements DataEnumeratorIF {
 		return streamElement; // BUG -> if a SQLException occurs, the last stream element will be returned.
 	}
 
+	/**
+	 * Closes the DataEnumerator and releases any associated resources.
+	 * If a ResultSet is present, it closes the ResultSet, Statement, and
+	 * Connection.
+	 * If manualCloseConnection is set to true, only the ResultSet is closed.
+	 */
 	public void close() {
 		this.hasNext = false;
 		if (resultSet == null) {

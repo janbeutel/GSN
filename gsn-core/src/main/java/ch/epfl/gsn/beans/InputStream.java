@@ -39,9 +39,6 @@ import org.slf4j.LoggerFactory;
 import ch.epfl.gsn.Main;
 import ch.epfl.gsn.VirtualSensor;
 import ch.epfl.gsn.VirtualSensorInitializationFailedException;
-import ch.epfl.gsn.beans.InputStream;
-import ch.epfl.gsn.beans.StreamElement;
-import ch.epfl.gsn.beans.StreamSource;
 import ch.epfl.gsn.utils.CaseInsensitiveComparator;
 import ch.epfl.gsn.vsensor.AbstractVirtualSensor;
 
@@ -260,6 +257,18 @@ public class InputStream implements Serializable {
 
 	private transient boolean cachedValidationResult = false;
 
+	/**
+	 * Validates the input stream by checking if it has valid sources.
+	 * If the input stream has already been validated, the cached validation result
+	 * is returned.
+	 * If the input stream has no sources specified, an error message is logged and
+	 * false is returned.
+	 * If any of the stream sources are not valid, an error message is logged and
+	 * false is returned.
+	 * Otherwise, the input stream is considered valid and true is returned.
+	 *
+	 * @return true if the input stream is valid, false otherwise
+	 */
 	public boolean validate() {
 		if (this.hasValidated) {
 			return this.cachedValidationResult;
@@ -300,6 +309,22 @@ public class InputStream implements Serializable {
 		rewrittenSQL = null;
 	}
 
+	/**
+	 * Executes a query on the specified stream source alias and processes the
+	 * results.
+	 * The method handles various conditions such as the VSensorInstance not being
+	 * set,
+	 * reaching the maximum count, and rate limiting. If the query is cached and
+	 * there are
+	 * results, it executes the main query and passes the stream elements to the
+	 * corresponding
+	 * virtual sensor.
+	 *
+	 * @param alias The alias of the stream source.
+	 * @return {@code true} if the query is successfully executed, {@code false}
+	 *         otherwise.
+	 * @throws SQLException If a SQL exception occurs during query execution.
+	 */
 	public boolean executeQuery(final CharSequence alias) throws SQLException {
 		logger.debug("Notified by StreamSource on the alias: " + alias);
 		if (this.pool == null) {
@@ -363,6 +388,14 @@ public class InputStream implements Serializable {
 		return true;
 	}
 
+	/**
+	 * Rewrites the query by applying rewriting rules from the stream sources.
+	 * If the rewriting fails for any source, an error message is logged and the
+	 * query is not rewritten.
+	 * The rewritten query is stored in the 'rewrittenSQL' variable.
+	 * The 'queryCached' flag is set to true indicating that the query has been
+	 * rewritten and cached.
+	 */
 	private void rewriteQuery() {
 		String query = getQuery().trim().toLowerCase();
 		for (int i = 0; i < sources.length; i++) {

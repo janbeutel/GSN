@@ -69,16 +69,37 @@ public class VSensorLoader extends Thread {
 	private static VSensorLoader singleton = null;
 	private static transient Logger logger = LoggerFactory.getLogger(VSensorLoader.class);
 
+	/**
+	 * Adds a VSensorStateChangeListener to the list of listeners.
+	 * If the listener is not already in the list, it will be added.
+	 *
+	 * @param listener the VSensorStateChangeListener to be added
+	 */
 	public void addVSensorStateChangeListener(VSensorStateChangeListener listener) {
 		if (!changeListeners.contains(listener)) {
 			changeListeners.add(listener);
 		}
 	}
 
+	/**
+	 * Removes a VSensorStateChangeListener from the list of registered listeners.
+	 *
+	 * @param listener the VSensorStateChangeListener to be removed
+	 */
 	public void removeVSensorStateChangeListener(VSensorStateChangeListener listener) {
 		changeListeners.remove(listener);
 	}
 
+	/**
+	 * Fires the loading of a virtual sensor with the given configuration.
+	 * Notifies all registered VSensorStateChangeListeners and returns true if all
+	 * listeners
+	 * successfully handle the loading event, otherwise returns false.
+	 *
+	 * @param config the configuration of the virtual sensor to be loaded
+	 * @return true if all listeners handle the loading event successfully, false
+	 *         otherwise
+	 */
 	public boolean fireVSensorLoading(VSensorConfig config) {
 		for (VSensorStateChangeListener listener : changeListeners) {
 			if (!listener.vsLoading(config)) {
@@ -89,6 +110,12 @@ public class VSensorLoader extends Thread {
 		return true;
 	}
 
+	/**
+	 * Fires the event to unload a virtual sensor.
+	 * 
+	 * @param config the configuration of the virtual sensor to be unloaded
+	 * @return true if the unloading is successful, false otherwise
+	 */
 	public boolean fireVSensorUnLoading(VSensorConfig config) {
 		for (VSensorStateChangeListener listener : changeListeners) {
 			if (!listener.vsUnLoading(config)) {
@@ -107,6 +134,15 @@ public class VSensorLoader extends Thread {
 		this.pluginsDir = pluginsPath;
 	}
 
+	/**
+	 * Gets the singleton instance of the VSensorLoader based on the specified path.
+	 *
+	 * If the singleton instance is not already created, a new VSensorLoader
+	 * instance is instantiated using the provided path.
+	 *
+	 * @param path The path used to initialize the VSensorLoader instance.
+	 * @return The singleton instance of the VSensorLoader.
+	 */
 	public static VSensorLoader getInstance(String path) {
 		if (singleton == null) {
 			singleton = new VSensorLoader(path);
@@ -115,12 +151,25 @@ public class VSensorLoader extends Thread {
 		return singleton;
 	}
 
+	/**
+	 * Starts the loading process by creating a new thread and starting it.
+	 */
 	public void startLoading() {
 		Thread thread = new Thread(this);
 		thread.setName("VSensorLoader-Thread" + VSENSOR_LOADER_THREAD_COUNTER++);
 		thread.start();
 	}
 
+	/**
+	 * Executes the continuous loading of the plugin in a loop.
+	 *
+	 * This method runs in a loop, attempting to load the plugin at regular
+	 * intervals. It checks if the default storage
+	 * and window storage are defined before attempting to load the plugin. If
+	 * either of them is null, an error message is logged.
+	 *
+	 * The loop continues until the {@code isActive} flag is set to false.
+	 */
 	public void run() {
 		if (Main.getStorage((VSensorConfig) null) == null || Main.getWindowStorage() == null) { // Checks only if the
 																								// default storage and
@@ -143,6 +192,26 @@ public class VSensorLoader extends Thread {
 		}
 	}
 
+	/**
+	 * Loads a Virtual Sensor from the given configuration content and file name.
+	 *
+	 * This method synchronizes the loading process to ensure thread safety. It
+	 * first checks if a Virtual Sensor configuration
+	 * file with the specified file name already exists. If not, it creates the
+	 * configuration file and writes the provided
+	 * configuration content. Next, it attempts to load the Virtual Sensor plugin
+	 * using the specified file name. If the loading
+	 * fails due to a syntax error in the configuration file, an exception is
+	 * thrown, and the newly created configuration file
+	 * is deleted.
+	 *
+	 * @param vsConfigurationFileContent The content of the Virtual Sensor
+	 *                                   configuration file.
+	 * @param fileName                   The name of the Virtual Sensor
+	 *                                   configuration file.
+	 * @throws Exception If an error occurs during the loading process, such as a
+	 *                   syntax error in the configuration file.
+	 */
 	public synchronized void loadVirtualSensor(String vsConfigurationFileContent, String fileName) throws Exception {
 		String filePath = getVSConfigurationFilePath(fileName);
 		File file = new File(filePath);
@@ -171,10 +240,29 @@ public class VSensorLoader extends Thread {
 		}
 	}
 
+	/**
+	 * Returns the file path for the virtual sensor configuration file with the
+	 * specified file name.
+	 *
+	 * @param fileName the name of the virtual sensor configuration file (without
+	 *                 the file extension)
+	 * @return the file path for the virtual sensor configuration file
+	 */
 	public static String getVSConfigurationFilePath(String fileName) {
 		return Main.virtualSensorDirectory + File.separator + fileName + ".xml";
 	}
 
+	/**
+	 * Loads the plugins by updating the sensor configuration based on the
+	 * modifications obtained from the plugins directory.
+	 * This method synchronizes the loading process to ensure thread safety.
+	 * It removes the virtual sensors specified in the remove list and adds the
+	 * virtual sensors specified in the add list.
+	 * If a virtual sensor has an initialization priority and is a root node in the
+	 * sensor graph, it is added first.
+	 *
+	 * @throws SQLException if there is an error accessing the database
+	 */
 	public synchronized void loadPlugin() throws SQLException {
 
 		Modifications modifications = getUpdateStatus(pluginsDir);
@@ -208,6 +296,13 @@ public class VSensorLoader extends Thread {
 		}
 	}
 
+	/**
+	 * Loads a plugin with the specified file filter name.
+	 * 
+	 * @param fileFilterName the name of the file filter
+	 * @return true if the plugin was successfully loaded, false otherwise
+	 * @throws SQLException if there is an error during the loading process
+	 */
 	public synchronized boolean loadPlugin(String fileFilterName) throws SQLException {
 		Modifications modifications = getUpdateStatus(pluginsDir, fileFilterName);
 		ArrayList<VSensorConfig> addIt = modifications.getAdd();
@@ -227,6 +322,29 @@ public class VSensorLoader extends Thread {
 
 	}
 
+	/**
+	 * Loads a Virtual Sensor based on the provided VirtualSensorConfig.
+	 *
+	 * This method synchronizes the loading process to ensure thread safety. It
+	 * validates the given VirtualSensorConfig
+	 * to ensure it is in a valid state. If the configuration is valid, it creates a
+	 * VirtualSensor instance and prepares
+	 * input streams for it. It then checks if the corresponding table already
+	 * exists in the database specified in the
+	 * container configuration. If the table does not exist, it creates a new table
+	 * using the output structure specified
+	 * in the VirtualSensorConfig. If the table already exists and the
+	 * "overwrite-tables" option is not set to true,
+	 * an error message is logged. Finally, it adds the VirtualSensor instance to
+	 * the Mappings and starts the VirtualSensor.
+	 *
+	 * @param vs The VirtualSensorConfig containing the configuration details for
+	 *           the Virtual Sensor.
+	 * @return {@code true} if the Virtual Sensor is successfully loaded,
+	 *         {@code false} otherwise.
+	 * @throws SQLException If an SQL error occurs during table creation or
+	 *                      validation.
+	 */
 	private synchronized boolean loadPlugin(VSensorConfig vs) throws SQLException {
 
 		if (!isVirtualSensorValid(vs)) {
@@ -290,6 +408,13 @@ public class VSensorLoader extends Thread {
 
 	}
 
+	/**
+	 * Removes a virtual sensor from the system.
+	 * This method removes the specified virtual sensor configuration file,
+	 * along with its associated resources.
+	 *
+	 * @param configFile The virtual sensor configuration file to be removed.
+	 */
 	private void removeVirtualSensor(VSensorConfig configFile) {
 		logger.info("removing : " + configFile.getName());
 		VirtualSensor sensorInstance = Mappings.getVSensorInstanceByFileName(configFile.getFileName());
@@ -297,6 +422,22 @@ public class VSensorLoader extends Thread {
 		removeAllVSResources(sensorInstance);
 	}
 
+	/**
+	 * Checks the validity of a Virtual Sensor configuration.
+	 *
+	 * This method validates the given VirtualSensorConfig to ensure its
+	 * InputStreams are valid and do not contain
+	 * any configuration errors. It also checks if the Virtual Sensor name is a
+	 * valid Java identifier, ensuring it follows
+	 * the specified requirements. Additionally, it checks if the Virtual Sensor
+	 * name is unique within the existing
+	 * Virtual Sensors. If any validation checks fail, appropriate error messages
+	 * are logged.
+	 *
+	 * @param configuration The VirtualSensorConfig to be validated.
+	 * @return {@code true} if the Virtual Sensor configuration is valid,
+	 *         {@code false} otherwise.
+	 */
 	public boolean isVirtualSensorValid(VSensorConfig configuration) {
 		for (InputStream is : configuration.getInputStreams()) {
 			if (!is.validate()) {
@@ -329,6 +470,12 @@ public class VSensorLoader extends Thread {
 		return true;
 	}
 
+	/**
+	 * Checks if the given string is a valid Java identifier.
+	 *
+	 * @param name the string to be checked
+	 * @return true if the string is a valid Java identifier, false otherwise
+	 */
 	static protected boolean isValidJavaIdentifier(final String name) {
 		boolean valid = false;
 		while (true) {
@@ -348,6 +495,13 @@ public class VSensorLoader extends Thread {
 		return valid;
 	}
 
+	/**
+	 * Removes all the resources associated with the given VirtualSensor.
+	 * This method closes the pool, releases input streams, and fires the
+	 * VSensorUnLoading event.
+	 * 
+	 * @param pool The VirtualSensor for which the resources need to be removed.
+	 */
 	public void removeAllVSResources(VirtualSensor pool) {
 		VSensorConfig config = pool.getConfig();
 		pool.closePool();
@@ -363,6 +517,13 @@ public class VSensorLoader extends Thread {
 		fireVSensorUnLoading(pool.getConfig());
 	}
 
+	/**
+	 * Releases the resources associated with the given StreamSource.
+	 * This method removes the renaming mapping for the StreamSource's alias
+	 * and removes the StreamSource as a listener from its wrapper.
+	 *
+	 * @param streamSource the StreamSource to release
+	 */
 	public void releaseStreamSource(StreamSource streamSource) {
 		final AbstractWrapper wrapper = streamSource.getWrapper();
 		streamSource.getInputStream().getRenamingMapping().remove(streamSource.getAlias());
@@ -373,10 +534,38 @@ public class VSensorLoader extends Thread {
 		}
 	}
 
+	/**
+	 * Retrieves the update status for Virtual Sensors from the specified path.
+	 *
+	 * @param virtualSensorsPath The path where Virtual Sensors are located. If
+	 *                           {@code null}, the default path is used.
+	 * @return The Modifications object containing information about the update
+	 *         status.
+	 */
 	public static Modifications getUpdateStatus(String virtualSensorsPath) {
 		return getUpdateStatus(virtualSensorsPath, null);
 	}
 
+	/**
+	 * Retrieves the update status for Virtual Sensors from the specified path with
+	 * an optional filter on the file name.
+	 *
+	 * This method checks for updates in the Virtual Sensors located at the given
+	 * path. If the path is not specified,
+	 * it uses the default path. The update status includes information about
+	 * modifications made to the Virtual Sensors,
+	 * such as additions, updates, or deletions. The optional {@code filterFileName}
+	 * parameter allows filtering the
+	 * update status based on a specific file name.
+	 *
+	 * @param virtualSensorsPath The path where Virtual Sensors are located. If
+	 *                           {@code null}, the default path is used.
+	 * @param filterFileName     Optional filter for the file name. If not
+	 *                           {@code null}, only updates related to the
+	 *                           specified file name are considered.
+	 * @return The Modifications object containing information about the update
+	 *         status.
+	 */
 	public static Modifications getUpdateStatus(String virtualSensorsPath, String filterFileName) {
 		ArrayList<String> remove = new ArrayList<String>();
 		ArrayList<String> add = new ArrayList<String>();
@@ -510,6 +699,31 @@ public class VSensorLoader extends Thread {
 		return wrapper;
 	}
 
+	/**
+	 * Prepares a StreamSource associated with an InputStream in the context of a
+	 * VirtualSensor configuration.
+	 *
+	 * This method initializes the provided StreamSource by associating it with the
+	 * given InputStream and
+	 * configuring addressing details. It iterates over the addressing information
+	 * of the StreamSource,
+	 * creating a corresponding wrapper using the provided AddressBean, and attempts
+	 * to prepare the StreamSource
+	 * with the wrapper's output format. If the preparation is successful, it breaks
+	 * out of the loop, and the
+	 * associated wrapper is retained. If any errors occur during the preparation,
+	 * the method logs an error message
+	 * and releases acquired resources.
+	 *
+	 * @param vsensorConfig The configuration of the VirtualSensor.
+	 * @param inputStream   The InputStream associated with the StreamSource.
+	 * @param streamSource  The StreamSource to be prepared.
+	 * @return {@code true} if the preparation is successful, {@code false}
+	 *         otherwise.
+	 * @throws InstantiationException If an instantiation error occurs during the
+	 *                                process.
+	 * @throws IllegalAccessException If an access error occurs during the process.
+	 */
 	public boolean prepareStreamSource(VSensorConfig vsensorConfig, InputStream inputStream, StreamSource streamSource)
 			throws InstantiationException, IllegalAccessException {
 		streamSource.setInputStream(inputStream);
@@ -544,6 +758,18 @@ public class VSensorLoader extends Thread {
 		return wrapper != null;
 	}
 
+	/**
+	 * Prepares the stream source by setting the wrapper, adding renaming mapping,
+	 * and validating the output format.
+	 * 
+	 * @param streamSource the stream source to prepare
+	 * @param outputformat the desired output format
+	 * @param wrapper      the wrapper to use
+	 * @return true if the stream source is prepared successfully, false otherwise
+	 * @throws InstantiationException if an error occurs during instantiation
+	 * @throws IllegalAccessException if an error occurs due to illegal access
+	 * @throws SQLException           if an error occurs during SQL operations
+	 */
 	public boolean prepareStreamSource(StreamSource streamSource, DataField[] outputformat, AbstractWrapper wrapper)
 			throws InstantiationException, IllegalAccessException, SQLException {
 		if (outputformat == null) {
@@ -556,6 +782,14 @@ public class VSensorLoader extends Thread {
 		return true;
 	}
 
+	/**
+	 * Stops the loading process of the VSensorLoader.
+	 * This method sets the isActive flag to false, interrupts the thread, and
+	 * removes all associated resources for each virtual sensor.
+	 * It also shuts down the window storage and storage for each VSensorConfig.
+	 * 
+	 * @throws SQLException if there is an error during the shutdown of the storage.
+	 */
 	public void stopLoading() {
 		this.isActive = false;
 		this.interrupt();

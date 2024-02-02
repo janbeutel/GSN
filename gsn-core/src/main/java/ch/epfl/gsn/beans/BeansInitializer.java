@@ -13,6 +13,15 @@ import ch.epfl.gsn.config.*;
 public class BeansInitializer {
 	private transient static final Logger logger = LoggerFactory.getLogger(BeansInitializer.class);
 
+	/**
+	 * Constructs a ContainerConfig based on the provided GsnConf configuration.
+	 * If sliding configuration is defined in GsnConf, it sets up the sliding
+	 * configuration.
+	 * Otherwise, the sliding configuration is set to null.
+	 *
+	 * @param gsn The GsnConf configuration object.
+	 * @return A ContainerConfig representing the configuration for the container.
+	 */
 	public static ContainerConfig container(GsnConf gsn) {
 		SlidingConfig sliding = new SlidingConfig();
 		if (gsn.slidingConf().isDefined()) {
@@ -28,6 +37,14 @@ public class BeansInitializer {
 		return con;
 	}
 
+	/**
+	 * Constructs a StorageConfig based on the provided StorageConf configuration.
+	 * If the identifier is defined in StorageConf, it sets up the identifier.
+	 * Otherwise, the identifier is set to null.
+	 *
+	 * @param st The StorageConf configuration object.
+	 * @return A StorageConfig representing the configuration for storage.
+	 */
 	public static StorageConfig storage(StorageConf st) {
 		StorageConfig con = new StorageConfig();
 		if (st.identifier().isDefined()) {
@@ -42,6 +59,16 @@ public class BeansInitializer {
 		return con;
 	}
 
+	/**
+	 * Constructs a DataField based on the provided FieldConf configuration.
+	 * Sets the name, type, description, index, and unit attributes of the
+	 * DataField.
+	 * If the index or unit is not defined in FieldConf, it sets the corresponding
+	 * attribute to null.
+	 *
+	 * @param fc The FieldConf configuration object.
+	 * @return A DataField representing the configuration for a data field.
+	 */
 	public static DataField dataField(FieldConf fc) {
 		DataField f = new DataField();
 		f.setName(fc.name().toLowerCase());
@@ -60,6 +87,13 @@ public class BeansInitializer {
 		return f;
 	}
 
+	/**
+	 * Constructs a WebInput based on the provided WebInputCommand configuration.
+	 * Sets the parameters and name attributes of the WebInput.
+	 *
+	 * @param wi The WebInputCommand configuration object.
+	 * @return A WebInput representing the configuration for a web input.
+	 */
 	public static WebInput webInput(WebInputCommand wi) {
 		WebInput w = new WebInput();
 		DataField[] par = new DataField[(wi.params().size())];
@@ -71,6 +105,16 @@ public class BeansInitializer {
 		return w;
 	}
 
+	/**
+	 * Constructs a DataField based on the provided FieldConf configuration.
+	 * Sets the name, type, description, index, and unit attributes of the
+	 * DataField.
+	 * If the index or unit is not defined in FieldConf, it sets the corresponding
+	 * attribute to null.
+	 *
+	 * @param fc The FieldConf configuration object.
+	 * @return A DataField representing the configuration for a data field.
+	 */
 	public static StreamSource source(SourceConf sc) {
 		StreamSource s = new StreamSource();
 		s.setAlias(sc.alias());
@@ -101,6 +145,15 @@ public class BeansInitializer {
 		return s;
 	}
 
+	/**
+	 * Constructs an AddressBean based on the provided WrapperConf configuration.
+	 * Sets the parameters, partial order key, and output attributes of the
+	 * AddressBean.
+	 *
+	 * @param w The WrapperConf configuration object.
+	 * @return An AddressBean representing the configuration for an address
+	 *         (wrapper).
+	 */
 	public static AddressBean address(WrapperConf w) {
 		KeyValueImp[] p = new KeyValueImp[w.params().size()];
 		Iterable<String> keys = JavaConversions.asJavaIterable(w.params().keys());
@@ -121,6 +174,17 @@ public class BeansInitializer {
 		return a;
 	}
 
+	/**
+	 * Constructs an InputStream based on the provided StreamConf configuration.
+	 * Sets the input stream name, count, rate, query, and sources attributes of the
+	 * InputStream.
+	 *
+	 * @param s The StreamConf configuration object.
+	 * @return An InputStream representing the configuration for a data stream.
+	 * @see StreamConf
+	 * @see InputStream
+	 * @see StreamSource
+	 */
 	public static InputStream stream(StreamConf s) {
 		InputStream is = new InputStream();
 		is.setInputStreamName(s.name());
@@ -135,6 +199,18 @@ public class BeansInitializer {
 		return is;
 	}
 
+	/**
+	 * Constructs a VSensorConfig based on the provided VsConf configuration.
+	 * Sets the main class, description, name, timestamp uniqueness, lifecycle pool
+	 * size,
+	 * output stream rate, priority, initialization priority, addressing, input
+	 * streams,
+	 * web input parameters, output structure, main class initial parameters, and
+	 * storage configuration.
+	 *
+	 * @param vs The VsConf configuration object.
+	 * @return A VSensorConfig representing the configuration for a virtual sensor.
+	 */
 	public static VSensorConfig vsensor(VsConf vs) {
 		VSensorConfig v = new VSensorConfig();
 		v.setMainClass(vs.processing().className());

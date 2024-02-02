@@ -92,6 +92,13 @@ public class HttpGetWrapper extends AbstractWrapper {
       return true;
    }
 
+   /**
+    * Executes the continuous HTTP GET requests and processes the response.
+    * This method runs in a separate thread and continues until the isActive flag
+    * is set to false.
+    * It sleeps for a specified rate before each request and handles any exceptions
+    * that occur.
+    */
    public void run() {
       ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream(1024 * 20);
       byte[] buffer = new byte[16 * 1024];

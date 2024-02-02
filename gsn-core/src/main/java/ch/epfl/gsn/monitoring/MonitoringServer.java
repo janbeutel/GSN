@@ -73,6 +73,11 @@ public class MonitoringServer extends Thread {
 		}
 	}
 
+	/**
+	 * Executes the main logic of the MonitoringServer in a separate thread.
+	 * Continuously accepts incoming connections and handles monitoring requests.
+	 * For each incoming connection, a new thread is created to handle the request.
+	 */
 	@Override
 	public void run() {
 
@@ -130,6 +135,13 @@ public class MonitoringServer extends Thread {
 		}
 	}
 
+	/**
+	 * Stops the monitoring server.
+	 * This method sets the 'running' flag to false, closes the socket, and waits
+	 * for a short period of time before returning.
+	 * 
+	 * @throws Exception if an error occurs while stopping the server.
+	 */
 	public void stopServer() {
 		try {
 			running = false;

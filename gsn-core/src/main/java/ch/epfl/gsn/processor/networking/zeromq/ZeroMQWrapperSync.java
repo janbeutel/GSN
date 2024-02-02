@@ -38,6 +38,16 @@ public class ZeroMQWrapperSync extends AbstractWrapper {
 	private int lport = 0;
 	private String laddress;
 
+	/**
+	 * Retrieves the output format of the ZeroMQWrapperSync.
+	 * This method sends a request to the remote contact point and receives the
+	 * output format as a response.
+	 * If the output format has already been retrieved, it is returned directly
+	 * without making a new request.
+	 * 
+	 * @return an array of DataField objects representing the output format, or null
+	 *         if the request fails or no output format is available
+	 */
 	@Override
 	public DataField[] getOutputFormat() {
 		if (structure == null) {
@@ -62,6 +72,32 @@ public class ZeroMQWrapperSync extends AbstractWrapper {
 		return structure;
 	}
 
+	/**
+	 * Initializes the ZeroMQ wrapper, configuring communication parameters,
+	 * establishing connections, and preparing for data retrieval.
+	 *
+	 * This method sets up the ZeroMQ context, registers necessary classes for Kryo
+	 * serialization, and retrieves configuration parameters
+	 * from the provided {@code AddressBean}. The method establishes the REP socket
+	 * for receiving requests and initializes the REQ socket for sending requests to
+	 * the meta-data
+	 * server. It handles both local and remote configurations, ensuring proper
+	 * connectivity and preparing for data retrieval.
+	 *
+	 * If a local address is specified, the REP socket is bound to the provided port
+	 * or a randomly chosen port within a specified range.
+	 * The REQ socket connects to the meta-data server, sends a request including
+	 * the virtual sensor information and local address details,
+	 * and receives the structure of the data. Additionally, if a start time is
+	 * specified, the method adjusts the request accordingly to
+	 * retrieve data from the specified start time, taking into account the existing
+	 * data in the local storage.
+	 *
+	 * @return {@code true} if the ZeroMQ wrapper is successfully initialized;
+	 *         otherwise, an exception is thrown.
+	 * @throws RuntimeException if configuration parameters are missing or invalid,
+	 *                          or if an error occurs during initialization.
+	 */
 	@Override
 	public boolean initialize() {
 
@@ -190,6 +226,18 @@ public class ZeroMQWrapperSync extends AbstractWrapper {
 		return "ZeroMQ wrapper";
 	}
 
+	/**
+	 * Runs the main loop of the ZeroMQ wrapper, continuously receiving data from
+	 * the REP socket and processing incoming requests.
+	 *
+	 * The method operates within a loop while the ZeroMQ wrapper is in an active
+	 * state. It listens for incoming requests on the REP
+	 * socket, expecting serialized {@code StreamElement} data. Upon receiving data,
+	 * it deserializes the content and invokes the
+	 * {@code postStreamElement} method to handle the received stream element. The
+	 * success of processing is communicated back to the sender
+	 * by sending an acknowledgment message through the REP socket.
+	 */
 	@Override
 	public void run() {
 

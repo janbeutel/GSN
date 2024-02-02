@@ -32,6 +32,15 @@ public class NodeInfoMsg extends AbstractMsg {
 												 */
 	};
 
+	/**
+	 * Receives the payload from a ByteBuffer and extracts the necessary
+	 * information.
+	 * 
+	 * @param payload The ByteBuffer containing the payload data.
+	 * @return An array of Serializable objects containing the extracted
+	 *         information.
+	 * @throws Exception If an error occurs while receiving the payload.
+	 */
 	@Override
 	public Serializable[] receivePayload(ByteBuffer payload) throws Exception {
 		Short component_id = null;
@@ -71,6 +80,12 @@ public class NodeInfoMsg extends AbstractMsg {
 				compile_date, fw_name, fw_ver, sw_rev_id, config };
 	}
 
+	/**
+	 * Converts a byte array to a string using the UTF-8 character encoding.
+	 * 
+	 * @param array the byte array to be converted
+	 * @return the resulting string
+	 */
 	private String byteArrayToString(byte[] array) {
 		int i;
 		for (i = 0; i < array.length && array[i] != 0; i++) {

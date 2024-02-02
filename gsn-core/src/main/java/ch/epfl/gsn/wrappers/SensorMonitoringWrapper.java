@@ -7,7 +7,6 @@ import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.DataTypes;
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.utils.ParamParser;
-import ch.epfl.gsn.wrappers.AbstractWrapper;
 
 import ch.epfl.gsn.Main;
 import ch.epfl.gsn.monitoring.*;
@@ -39,6 +38,15 @@ public class SensorMonitoringWrapper extends AbstractWrapper {
             "INPUT_PRODUCED_COUNTER"
     };
 
+    /**
+     * Initializes the SensorMonitoringWrapper.
+     * This method retrieves the sampling rate from the active address bean and sets
+     * it as the sampling rate for the wrapper.
+     * If the sampling rate is not specified or is not a positive number, the
+     * default sampling rate is used.
+     * 
+     * @return true if the initialization is successful, false otherwise.
+     */
     public boolean initialize() {
         AddressBean addressBean = getActiveAddressBean();
         if (addressBean.getPredicateValue("sampling-rate") != null) {
@@ -54,6 +62,11 @@ public class SensorMonitoringWrapper extends AbstractWrapper {
         return true;
     }
 
+    /**
+     * Executes the main logic of the SensorMonitoringWrapper in a separate thread.
+     * This method continuously monitors the sensor data and posts the collected
+     * data to a stream.
+     */
     public void run() {
         while (isActive()) {
             try {

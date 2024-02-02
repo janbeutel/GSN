@@ -42,7 +42,6 @@ import org.slf4j.LoggerFactory;
 import ch.epfl.gsn.beans.AddressBean;
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.StreamElement;
-import ch.epfl.gsn.wrappers.AbstractWrapper;
 
 import org.slf4j.Logger;
 
@@ -98,6 +97,13 @@ public class SystemTime extends AbstractWrapper implements ActionListener {
     return true;
   }
 
+  /**
+   * Runs the process of posting stream elements with optional delay.
+   * If delayPostingElements is true, the method will continuously check for
+   * stream elements in the buffer,
+   * and if available, it will post them with a random delay.
+   * The method will keep running until isActive() returns false.
+   */
   public void run() {
     timer.start();
     if (delayPostingElements) {
@@ -133,6 +139,16 @@ public class SystemTime extends AbstractWrapper implements ActionListener {
     return collection;
   }
 
+  /**
+   * Performs the action associated with this event.
+   * Creates a StreamElement object with empty field list, empty field types,
+   * empty data part, and the timestamp from the action event.
+   * If delayPostingElements is true, adds the stream element to the buffer and
+   * notifies all threads waiting on the object lock.
+   * Otherwise, directly posts the stream element.
+   *
+   * @param actionEvent the action event associated with this action
+   */
   public void actionPerformed(ActionEvent actionEvent) {
     StreamElement streamElement = new StreamElement(EMPTY_FIELD_LIST, EMPTY_FIELD_TYPES, EMPTY_DATA_PART,
         actionEvent.getWhen());

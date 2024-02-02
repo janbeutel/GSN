@@ -28,6 +28,13 @@ package ch.epfl.gsn.beans.windowing;
 
 public class WindowingUtil {
 
+    /**
+     * Calculates the greatest common divisor (GCD) of two numbers.
+     *
+     * @param a the first number
+     * @param b the second number
+     * @return the GCD of the two numbers
+     */
     public static long GCD(long a, long b) {
         if (a == 0 || b == 0) {
             return 0;
@@ -35,6 +42,14 @@ public class WindowingUtil {
         return GCDHelper(a, b);
     }
 
+    /**
+     * Calculates the greatest common divisor (GCD) of two numbers using the
+     * Euclidean algorithm.
+     *
+     * @param a the first number
+     * @param b the second number
+     * @return the GCD of the two numbers
+     */
     private static long GCDHelper(long a, long b) {
         if (b == 0) {
             return a;

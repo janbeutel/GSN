@@ -44,6 +44,15 @@ public class WrappersUtil {
 
   public static final String DEFAULT_WRAPPER_PROPERTIES_FILE = Main.gsnConfFolder + "/wrappers.properties";
 
+  /**
+   * Loads the wrappers specified in the configuration file and returns them as a
+   * Properties object.
+   *
+   * @param wrappers a HashMap containing the wrapper names and their
+   *                 corresponding classes
+   * @param location the location of the configuration file
+   * @return a Properties object containing the loaded wrappers
+   */
   public static Properties loadWrappers(HashMap<String, Class<?>> wrappers, String location) {
     Properties config = new Properties();
     try {// Trying to load the wrapper specified in the configuration file of the

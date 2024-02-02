@@ -15,7 +15,6 @@ import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.DataTypes;
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.utils.ParamParser;
-import ch.epfl.gsn.wrappers.AbstractWrapper;
 
 import org.slf4j.Logger;
 
@@ -81,6 +80,15 @@ public class SystemMonitoringWrapper extends AbstractWrapper {
 
    private static final RuntimeMXBean rbean = ManagementFactory.getRuntimeMXBean();
 
+   /**
+    * Initializes the SystemMonitoringWrapper.
+    * Retrieves the sampling rate from the active AddressBean and sets it as the
+    * samplingRate.
+    * If the sampling rate is not specified or is less than or equal to 0, the
+    * default sampling rate is used.
+    * 
+    * @return true if the initialization is successful, false otherwise.
+    */
    public boolean initialize() {
       AddressBean addressBean = getActiveAddressBean();
       if (addressBean.getPredicateValue("sampling-rate") != null) {
@@ -95,6 +103,14 @@ public class SystemMonitoringWrapper extends AbstractWrapper {
       return true;
    }
 
+   /**
+    * Executes the monitoring process in a loop until the isActive flag is set to
+    * false.
+    * The monitoring process collects various system metrics such as memory usage,
+    * thread count, and system load average.
+    * It then creates a StreamElement object with the collected metrics and posts
+    * it to the stream.
+    */
    public void run() {
       while (isActive()) {
          try {

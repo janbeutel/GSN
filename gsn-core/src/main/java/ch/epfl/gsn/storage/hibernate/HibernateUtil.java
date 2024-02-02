@@ -93,6 +93,11 @@ public class HibernateUtil {
         return session;
     }
 
+    /**
+     * Closes the given SessionFactory.
+     *
+     * @param sessionFactory the SessionFactory to be closed
+     */
     public static void closeSessionFactory(SessionFactory sessionFactory) {
         sessionFactory.close();
     }

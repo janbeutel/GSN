@@ -30,8 +30,6 @@ package ch.epfl.gsn.beans;
 
 import ch.epfl.gsn.config.VsConf;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -42,12 +40,6 @@ import org.slf4j.LoggerFactory;
 
 import ch.epfl.gsn.Main;
 import ch.epfl.gsn.Mappings;
-import ch.epfl.gsn.beans.AddressBean;
-import ch.epfl.gsn.beans.BeansInitializer;
-import ch.epfl.gsn.beans.InputStream;
-import ch.epfl.gsn.beans.Modifications;
-import ch.epfl.gsn.beans.StreamSource;
-import ch.epfl.gsn.beans.VSensorConfig;
 import ch.epfl.gsn.delivery.LocalDeliveryWrapper;
 import ch.epfl.gsn.storage.SQLUtils;
 import ch.epfl.gsn.utils.ValidityTools;

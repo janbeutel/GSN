@@ -71,6 +71,17 @@ public class LocalTimeBasedSlidingHandler implements SlidingHandler {
         this.wrapper = wrapper;
     }
 
+    /**
+     * Adds a StreamSource to the LocalTimeBasedSlidingHandler.
+     * If the StreamSource's windowing type is not TIME_BASED_SLIDE_ON_EACH_TUPLE,
+     * it updates the slidingHashMap and timerTick values accordingly.
+     * If the timerTick value changes, it cancels the current timer task and
+     * schedules a new one.
+     * If the StreamSource's windowing type is TIME_BASED_SLIDE_ON_EACH_TUPLE,
+     * it simply adds the StreamSource to the streamSources list.
+     *
+     * @param streamSource the StreamSource to be added
+     */
     public void addStreamSource(StreamSource streamSource) {
         SQLViewQueryRewriter rewriter = new LTBSQLViewQueryRewriter();
         rewriter.setStreamSource(streamSource);
@@ -112,6 +123,15 @@ public class LocalTimeBasedSlidingHandler implements SlidingHandler {
 
     private class LTBTimerTask extends TimerTask {
 
+        /**
+         * Executes the sliding window operation for each stream source in the
+         * slidingHashMap.
+         * If the slide variable is greater than or equal to the parsed slide value of
+         * the stream source,
+         * the slide variable is reset to 0 and the dataAvailable method of the stream
+         * source's query rewriter is called.
+         * The slide variable is then updated in the slidingHashMap.
+         */
         @Override
         public void run() {
             synchronized (slidingHashMap) {
@@ -127,6 +147,12 @@ public class LocalTimeBasedSlidingHandler implements SlidingHandler {
         }
     }
 
+    /**
+     * Checks if data is available for processing in the sliding window.
+     *
+     * @param streamElement the stream element to check for availability
+     * @return true if data is available, false otherwise
+     */
     public boolean dataAvailable(StreamElement streamElement) {
         boolean toReturn = false;
         synchronized (streamSources) {
@@ -139,6 +165,17 @@ public class LocalTimeBasedSlidingHandler implements SlidingHandler {
         return toReturn;
     }
 
+    /**
+     * Retrieves the cutting condition for the windowing process.
+     * The cutting condition is a string representation of the condition used to
+     * determine the boundaries of the window.
+     * It is based on the maximum window size, maximum slide value, and maximum
+     * tuple count of the stream sources.
+     * If the cutting condition cannot be determined, the method returns a default
+     * condition.
+     *
+     * @return The cutting condition as a string.
+     */
     public String getCuttingCondition() {
         long timed1 = -1;
         long timed2 = -1;
@@ -207,6 +244,16 @@ public class LocalTimeBasedSlidingHandler implements SlidingHandler {
         return "timed < " + ((timed1 == -1) ? timed2 : timed1);
     }
 
+    /**
+     * Removes a stream source from the sliding handler.
+     * This method removes the specified stream source from the list of stream
+     * sources,
+     * removes its corresponding entry from the sliding hash map,
+     * disposes the query rewriter associated with the stream source,
+     * and updates the timer tick.
+     *
+     * @param streamSource the stream source to be removed
+     */
     public void removeStreamSource(StreamSource streamSource) {
         streamSources.remove(streamSource);
         slidingHashMap.remove(streamSource);
@@ -214,6 +261,13 @@ public class LocalTimeBasedSlidingHandler implements SlidingHandler {
         updateTimerTick();
     }
 
+    /**
+     * Updates the timer tick value and schedules a new timer task if necessary.
+     * The timer tick value is calculated based on the windowing type and slide
+     * value of each stream source.
+     * If the timer tick value has changed and is greater than 0, a new timer task
+     * is scheduled.
+     */
     private void updateTimerTick() {
         long oldTimerTick = timerTick;
         // recalculating timer tick
@@ -248,6 +302,11 @@ public class LocalTimeBasedSlidingHandler implements SlidingHandler {
         }
     }
 
+    /**
+     * Disposes the resources used by the LocalTimeBasedSlidingHandler.
+     * This method releases any acquired resources and clears the internal data
+     * structures.
+     */
     public void dispose() {
         synchronized (streamSources) {
             for (StreamSource streamSource : streamSources) {
@@ -269,6 +328,15 @@ public class LocalTimeBasedSlidingHandler implements SlidingHandler {
 
     private class LTBSQLViewQueryRewriter extends SQLViewQueryRewriter {
 
+        /**
+         * Overrides the createViewSQL method to generate a SQL query for creating a
+         * view.
+         *
+         * @return A CharSequence representing the SQL query for creating the view.
+         * @throws GSNRuntimeException If certain conditions are not met, such as a null
+         *                             wrapper object or failed validation.
+         * @see GSNRuntimeException
+         */
         @Override
         public CharSequence createViewSQL() {
             if (cachedSqlQuery != null) {

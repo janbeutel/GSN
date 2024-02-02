@@ -28,7 +28,6 @@ package ch.epfl.gsn.wrappers;
 import ch.epfl.gsn.beans.AddressBean;
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.networking.mqtt.MQTTWrapper;
-import ch.epfl.gsn.wrappers.AbstractWrapper;
 import java.io.Serializable;
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.CoapResponse;
@@ -52,6 +51,13 @@ public class CoAPWrapper extends AbstractWrapper implements CoapHandler {
 				new DataField("raw_packet", "BINARY", "The packet contains raw data received in the CoAP payload.") };
 	}
 
+	/**
+	 * Initializes the CoAPWrapper by retrieving the server URI from the active
+	 * address bean.
+	 * If the server URI is missing or empty, the initialization fails.
+	 * 
+	 * @return true if the initialization is successful, false otherwise.
+	 */
 	@Override
 	public boolean initialize() {
 		try {
@@ -78,6 +84,13 @@ public class CoAPWrapper extends AbstractWrapper implements CoapHandler {
 		return "CoAP Wrapper";
 	}
 
+	/**
+	 * Runs the CoAP client and continuously observes the server for updates.
+	 * The client sends an observe request to the server at regular intervals and
+	 * waits for updates.
+	 * If an update is received, the client's callback method will be invoked.
+	 * This method runs in a loop until the client is deactivated.
+	 */
 	public void run() {
 
 		client = new CoapClient(serverURI);
@@ -98,6 +111,13 @@ public class CoAPWrapper extends AbstractWrapper implements CoapHandler {
 		logger.error("CoAP observation error...");
 	}
 
+	/**
+	 * This method is called when a CoAP response is loaded.
+	 * It updates the next expected message time and posts the response payload to
+	 * the stream element.
+	 * 
+	 * @param response The CoAP response object.
+	 */
 	@Override
 	public void onLoad(CoapResponse response) {
 		OptionSet os = response.getOptions();
