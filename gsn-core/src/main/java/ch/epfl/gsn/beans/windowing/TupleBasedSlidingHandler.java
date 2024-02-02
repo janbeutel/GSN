@@ -176,7 +176,10 @@ public class TupleBasedSlidingHandler implements SlidingHandler {
 						.append(Main.getWindowStorage().tableNameGeneratorInString(wrapper.getDBAliasInStr()));
 				query.append(" order by pk desc) where rownum = ").append(maxTupleCount);
 			}
-			logger.debug("Query1 for getting oldest timestamp : " + query);
+			if(logger.isDebugEnabled()){
+				logger.debug("Query1 for getting oldest timestamp : " + query);
+			}
+			
 			Connection conn = null;
 			try {
 				ResultSet resultSet = Main.getWindowStorage().executeQueryWithResultSet(query,
@@ -198,7 +201,11 @@ public class TupleBasedSlidingHandler implements SlidingHandler {
 			query.append(" select min(pk) from ").append(wrapper.getDBAliasInStr())
 					.append(" where timed > (select max(timed) from ").append(wrapper.getDBAliasInStr()).append(") - ")
 					.append(maxWindowSize);
-			logger.debug("Query2 for getting oldest timestamp : " + query);
+			
+			if(logger.isDebugEnabled()){
+				logger.debug("Query2 for getting oldest timestamp : " + query);
+			}
+			
 			Connection conn = null;
 			try {
 				ResultSet resultSet = Main.getWindowStorage().executeQueryWithResultSet(query,
@@ -413,14 +420,16 @@ public class TupleBasedSlidingHandler implements SlidingHandler {
 			}
 
 			toReturn = new StringBuilder(SQLUtils.newRewrite(toReturn, rewritingMapping));
-			logger.debug(
+			if(logger.isDebugEnabled()){
+				logger.debug(
 					new StringBuilder().append("The original Query : ").append(streamSource.getSqlQuery()).toString());
-			logger.debug(new StringBuilder().append("The merged query : ").append(toReturn.toString())
-					.append(" of the StreamSource ").append(streamSource.getAlias()).append(" of the InputStream: ")
-					.append(
-							streamSource.getInputStream().getInputStreamName())
-					.append("").toString());
-
+				logger.debug(new StringBuilder().append("The merged query : ").append(toReturn.toString())
+						.append(" of the StreamSource ").append(streamSource.getAlias()).append(" of the InputStream: ")
+						.append(
+								streamSource.getInputStream().getInputStreamName())
+						.append("").toString());
+			}
+			
 			return cachedSqlQuery = toReturn;
 		}
 	}

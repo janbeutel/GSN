@@ -664,8 +664,11 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 				for (StreamElementInputStreamNameTuple se : streamElementTuples) {
 					if (filterDuplicates && se.getStreamElement().equalsIgnoreTimedAndFields(streamElement,
 							duplicatesIgnoreFields)) {
-						logger.debug("discard duplicate in streamElementTuples container: (incoming)["
+						
+						if(logger.isDebugEnabled()){
+							logger.debug("discard duplicate in streamElementTuples container: (incoming)["
 								+ streamElement.toString() + "], (existing)[" + se.getStreamElement().toString() + "]");
+						}
 						return false;
 					}
 					if (filterInputStreamDuplicates && inputStreamName.compareTo(se.getInputStreamName()) == 0) {

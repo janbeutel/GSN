@@ -106,25 +106,34 @@ public class ProtocolManager {
 			AbstractHCIQuery query = protocol.getQuery(queryName);
 
 			if (query != null) {
-				logger.debug("Retrieved query " + queryName + ", trying to build raw query.");
-
+				if(logger.isDebugEnabled()){
+					logger.debug("Retrieved query " + queryName + ", trying to build raw query.");
+				}
 				byte[] queryBytes = query.buildRawQuery(params);
 				if (queryBytes != null) {
 					try {
-						logger.debug("Built query, it looks like: " + new String(queryBytes));
+						if(logger.isDebugEnabled()){
+							logger.debug("Built query, it looks like: " + new String(queryBytes));
+						}
 						outputWrapper.sendToWrapper(null, null, new Object[] { queryBytes });
 						lastExecutedQuery = query;
 						lastParams = params;
 						answer = queryBytes;
-						logger.debug("Query succesfully sent!");
+						if(logger.isDebugEnabled()){
+							logger.debug("Query succesfully sent!");
+						}
 						if (query.needsAnswer(params)) {
-							logger.debug("Now entering wait mode for answer.");
+							if(logger.isDebugEnabled()){
+								logger.debug("Now entering wait mode for answer.");
+							}
 							timer = new Timer();
 							currentState = ProtocolStates.WAITING;
 							timer.schedule(answerTimeout, new Date());
 						}
 					} catch (OperationNotSupportedException e) {
-						logger.debug("Query could not be sent ! See error message.");
+						if(logger.isDebugEnabled()){
+							logger.debug("Query could not be sent ! See error message.");
+						}
 						logger.error(e.getMessage(), e);
 						currentState = ProtocolStates.READY;
 					}

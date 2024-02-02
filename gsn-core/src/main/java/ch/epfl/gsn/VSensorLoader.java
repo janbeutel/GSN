@@ -630,8 +630,10 @@ public class VSensorLoader extends Thread {
 	 * @throws InstantiationException
 	 */
 	public boolean createInputStreams(VirtualSensor pool) throws InstantiationException, IllegalAccessException {
-		logger.debug(new StringBuilder().append("Preparing input streams for: ").append(pool.getConfig().getName())
+		if (logger.isDebugEnabled()) {
+			logger.debug(new StringBuilder().append("Preparing input streams for: ").append(pool.getConfig().getName())
 				.toString());
+		}
 		if (pool.getConfig().getInputStreams().size() == 0) {
 			logger.warn(new StringBuilder("There is no input streams defined for *").append(pool.getConfig().getName())
 					.append("*").toString());

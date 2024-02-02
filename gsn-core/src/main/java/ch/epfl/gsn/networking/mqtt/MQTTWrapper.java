@@ -161,7 +161,9 @@ public class MQTTWrapper extends AbstractWrapper implements MqttCallbackExtended
 				logger.error("Error while subscribing to topic " + topic + " with qos " + qos, e);
 			}
 		} else {
-			logger.debug("MQTT server reconnected " + s);
+			if(logger.isDebugEnabled()){
+				logger.debug("MQTT server reconnected " + s);
+			}
 		}
 	}
 }

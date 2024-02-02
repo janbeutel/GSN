@@ -129,10 +129,14 @@ public class PushRemoteWrapper extends AbstractWrapper {
                 int sc = response.getStatusLine().getStatusCode();
                 //
                 if (sc == HttpStatus.SC_OK) {
-                    logger.debug(new StringBuilder().append("Wants to consume the structure packet from ")
+                    if(logger.isDebugEnabled()){
+                        logger.debug(new StringBuilder().append("Wants to consume the structure packet from ")
                             .append(initParams.getRemoteContactPoint()).toString());
+                    }
                     structure = (DataField[]) XSTREAM.fromXML(response.getEntity().getContent());
-                    logger.debug("Connection established for: " + initParams.getRemoteContactPoint());
+                    if(logger.isDebugEnabled()){
+                        logger.debug("Connection established for: " + initParams.getRemoteContactPoint());
+                    }
                     break;
                 } else {
                     if (sc == HttpStatus.SC_UNAUTHORIZED) {
@@ -187,7 +191,9 @@ public class PushRemoteWrapper extends AbstractWrapper {
     }
 
     public boolean manualDataInsertion(String Xstream4Rest) {
-        logger.debug(new StringBuilder().append("Received Stream Element at the push wrapper.").toString());
+        if(logger.isDebugEnabled()){
+            logger.debug(new StringBuilder().append("Received Stream Element at the push wrapper.").toString());
+        }
         StreamElement4Rest se = (StreamElement4Rest) XSTREAM.fromXML(Xstream4Rest);
         StreamElement streamElement = se.toStreamElement();
 

@@ -229,7 +229,9 @@ public class RemoteRestAPIWrapper extends AbstractWrapper {
 		try {
 			getData.releaseConnection();
 		} catch (Exception e) {
-			logger.debug(e.getMessage(), e);
+			if(logger.isDebugEnabled()){
+				logger.debug(e.getMessage(), e);
+			}
 		}
 	}
 
@@ -262,7 +264,9 @@ public class RemoteRestAPIWrapper extends AbstractWrapper {
 						Thread.sleep(60000);
 					}
 				} catch (Exception err) {
-					logger.debug(err.getMessage(), err);
+					if(logger.isDebugEnabled()){
+						logger.debug(err.getMessage(), err);
+					}
 				}
 			}
 		}

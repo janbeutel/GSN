@@ -65,9 +65,11 @@ public class GridTools {
 
             deserial = (Double[][]) in.readObject();
             in.close();
-
-            logger.debug("deserial.length" + deserial.length);
-            logger.debug("deserial[0].length" + deserial[0].length);
+            
+            if(logger.isDebugEnabled()){
+				logger.debug("deserial.length" + deserial.length);
+                logger.debug("deserial[0].length" + deserial[0].length);
+			}
 
             for (int i = 0; i < deserial.length; i++) {
 
@@ -111,8 +113,10 @@ public class GridTools {
             deserial = (Double[][]) in.readObject();
             in.close();
 
-            logger.debug("deserial.length" + deserial.length);
-            logger.debug("deserial[0].length" + deserial[0].length);
+            if(logger.isDebugEnabled()){
+				logger.debug("deserial.length" + deserial.length);
+                logger.debug("deserial[0].length" + deserial[0].length);
+			}
 
             value = deserial[ycell][xcell];
 
@@ -152,9 +156,11 @@ public class GridTools {
 
             deserial = (Double[][]) in.readObject();
             in.close();
-
-            logger.debug("deserial.length" + deserial.length);
-            logger.debug("deserial[0].length" + deserial[0].length);
+            
+            if(logger.isDebugEnabled()){
+				logger.debug("deserial.length" + deserial.length);
+                logger.debug("deserial[0].length" + deserial[0].length);
+			}
 
             for (int i = ymin; i <= ymax; i++) {
 
@@ -192,14 +198,18 @@ public class GridTools {
             deserial = (Double[][]) in.readObject();
             in.close();
 
-            logger.debug("deserial.length : " + deserial.length + ", deserial[0].length" + deserial[0].length);
+            if(logger.isDebugEnabled()){
+				logger.debug("deserial.length : " + deserial.length + ", deserial[0].length" + deserial[0].length);
+			}
 
             for (int i = 0; i < deserial.length; i++) {
                 StringBuilder sb = new StringBuilder();
                 for (int j = 0; j < deserial[0].length; j++) {
                     sb.append(deserial[i][j]).append(" ");
                 }
-                logger.debug(sb.toString());
+                if(logger.isDebugEnabled()){
+                    logger.debug(sb.toString());
+                }
             }
 
         } catch (IOException e) {

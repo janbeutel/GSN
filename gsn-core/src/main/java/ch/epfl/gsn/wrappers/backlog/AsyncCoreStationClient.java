@@ -330,8 +330,10 @@ public class AsyncCoreStationClient extends Thread {
 			socketChannel.finishConnect();
 		} catch (IOException e) {
 			if (!dispose && socketToListenerList.containsKey(socketChannel)) {
-				logger.debug("could not connect to " + socketToListenerList.get(socketChannel).getCoreStationName()
+				if(logger.isDebugEnabled()){
+					logger.debug("could not connect to " + socketToListenerList.get(socketChannel).getCoreStationName()
 						+ ": " + e.getMessage());
+				}
 				reconnect(socketToListenerList.get(socketChannel));
 			}
 			return;
@@ -341,7 +343,9 @@ public class AsyncCoreStationClient extends Thread {
 			CoreStationListener listener;
 			listener = socketToListenerList.get(socketChannel);
 			listener.connectionEstablished();
-			logger.debug("connection established to core station: " + listener.getCoreStationName());
+			if(logger.isDebugEnabled()){
+				logger.debug("connection established to core station: " + listener.getCoreStationName());
+			}
 
 			// Register an interest in reading on this channel
 			key.interestOps(SelectionKey.OP_READ);
@@ -365,12 +369,16 @@ public class AsyncCoreStationClient extends Thread {
 				this.start();
 			}
 		} catch (IllegalThreadStateException e) {
-			logger.debug("thread already running");
+			if(logger.isDebugEnabled()){
+				logger.debug("thread already running");
+			}
 		}
 
 		SocketChannel socketChannel = SocketChannel.open();
 		socketChannel.configureBlocking(false);
-		logger.debug("trying to connect to core station: " + listener.getCoreStationName());
+		if(logger.isDebugEnabled()){
+			logger.debug("trying to connect to core station: " + listener.getCoreStationName());
+		}
 		try {
 			socketChannel.connect(new InetSocketAddress(listener.getInetAddress(), listener.getPort()));
 		} catch (UnknownHostException e) {

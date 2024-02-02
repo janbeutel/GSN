@@ -122,8 +122,10 @@ public class DataEnumerator implements DataEnumeratorIF {
 		this.storageManager = storageManager;
 		this.manualCloseConnection = manualClose;
 		if (preparedStatement == null) {
-			logger.debug(new StringBuilder().append("resultSetToStreamElements").append(" is supplied with null input.")
+			if(logger.isDebugEnabled()){
+				logger.debug(new StringBuilder().append("resultSetToStreamElements").append(" is supplied with null input.")
 					.toString());
+			}
 			hasNext = false;
 			return;
 		}
@@ -309,7 +311,9 @@ public class DataEnumerator implements DataEnumeratorIF {
 				try {
 					resultSet.close();
 				} catch (SQLException e) {
-					logger.debug(e.getMessage(), e);
+					if(logger.isDebugEnabled()){
+						logger.debug(e.getMessage(), e);
+					}
 				}
 			}
 

@@ -326,9 +326,14 @@ public class InputStream implements Serializable {
 	 * @throws SQLException If a SQL exception occurs during query execution.
 	 */
 	public boolean executeQuery(final CharSequence alias) throws SQLException {
-		logger.debug("Notified by StreamSource on the alias: " + alias);
+		if(logger.isDebugEnabled()){
+			logger.debug("Notified by StreamSource on the alias: " + alias);
+		}
+		
 		if (this.pool == null) {
-			logger.debug("The input is dropped b/c the VSensorInstance is not set yet.");
+			if(logger.isDebugEnabled()){
+				logger.debug("The input is dropped b/c the VSensorInstance is not set yet.");
+			}
 			return false;
 		}
 
@@ -347,9 +352,11 @@ public class InputStream implements Serializable {
 		if (!queryCached) {
 			rewriteQuery();
 			if (queryCached) {
-				logger.debug(new StringBuilder().append("Rewritten SQL: ").append(this.rewrittenSQL).append("(")
+				if(logger.isDebugEnabled()){
+					logger.debug(new StringBuilder().append("Rewritten SQL: ").append(this.rewrittenSQL).append("(")
 						.append(Main.getWindowStorage().isThereAnyResult(this.rewrittenSQL)).append(")")
 						.toString());
+				}
 			}
 
 		}
@@ -357,8 +364,10 @@ public class InputStream implements Serializable {
 		if (queryCached && Main.getWindowStorage().isThereAnyResult(this.rewrittenSQL)) {
 			this.currentCount++;
 			AbstractVirtualSensor sensor = null;
-			logger.debug(new StringBuilder().append("Executing the main query for InputStream : ")
+			if(logger.isDebugEnabled()){
+				logger.debug(new StringBuilder().append("Executing the main query for InputStream : ")
 					.append(this.getInputStreamName()).toString());
+			}
 
 			final Enumeration<StreamElement> resultOfTheQuery = Main.getWindowStorage().executeQuery(this.rewrittenSQL,
 					false);
@@ -382,9 +391,11 @@ public class InputStream implements Serializable {
 			}
 
 		}
-		logger.debug(new StringBuilder().append("Input Stream's result has *").append(elementCounterForDebugging)
+		if(logger.isDebugEnabled()){
+			logger.debug(new StringBuilder().append("Input Stream's result has *").append(elementCounterForDebugging)
 				.append("* stream elements").toString());
-
+		}
+		
 		return true;
 	}
 

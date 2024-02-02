@@ -383,9 +383,13 @@ public class JDBCWrapper extends AbstractWrapper {
         String regexMask = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}[+-]\\d{2}:\\d{2}$";
         Pattern pattern = Pattern.compile(regexMask);
         Matcher matcher = pattern.matcher(time);
-        logger.debug("Testing... " + time + " <==> " + regexMask);
+        if(logger.isDebugEnabled()){
+            logger.debug("Testing... " + time + " <==> " + regexMask);
+        }
         if (matcher.find()) {
-            logger.debug(">>>>>    ISO FORMAT");
+            if(logger.isDebugEnabled()){
+                logger.debug(">>>>>    ISO FORMAT");
+            }
             return true;
         } else {
             return false;
@@ -403,9 +407,13 @@ public class JDBCWrapper extends AbstractWrapper {
         String regexMask = "^\\d+$";
         Pattern pattern = Pattern.compile(regexMask);
         Matcher matcher = pattern.matcher(time);
-        logger.debug("Testing... " + time + " <==> " + regexMask);
+        if(logger.isDebugEnabled()){
+            logger.debug("Testing... " + time + " <==> " + regexMask);
+        }
         if (matcher.find()) {
-            logger.debug(">>>>>    LONG number");
+            if(logger.isDebugEnabled()){
+                logger.debug(">>>>>    LONG number");
+            }
             return true;
         } else {
             return false;

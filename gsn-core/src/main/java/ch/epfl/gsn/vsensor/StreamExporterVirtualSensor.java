@@ -100,7 +100,9 @@ public class StreamExporterVirtualSensor extends AbstractVirtualSensor {
 		try {
 			Class.forName(params.get(PARAM_DRIVER));
 			connection = getConnection();
-			logger.debug("jdbc connection established.");
+			if(logger.isDebugEnabled()){
+				logger.debug("jdbc connection established.");
+			}
 			if (!Main.getStorage(table_name.toString()).tableExists(table_name,
 					getVirtualSensorConfiguration().getOutputStructure(), connection)) {
 				Main.getStorage(table_name.toString()).executeCreateTable(table_name,

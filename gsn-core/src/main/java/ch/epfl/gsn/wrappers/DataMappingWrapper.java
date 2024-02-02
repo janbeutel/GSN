@@ -236,7 +236,9 @@ public class DataMappingWrapper extends AbstractWrapper {
 					rs = Main.getStorage(getActiveAddressBean().getVirtualSensorConfig()).executeQueryWithResultSet(
 							query, Main.getStorage(getActiveAddressBean().getVirtualSensorConfig()).getConnection());
 				} catch (SQLException e) {
-					logger.debug(e.getMessage());
+					if(logger.isDebugEnabled()){
+						logger.debug(e.getMessage());
+					}
 				}
 
 				try {
@@ -602,9 +604,11 @@ public class DataMappingWrapper extends AbstractWrapper {
 
 					if (convResult != null) {
 						// physical_signal, conversion, input, value
-						logger.debug(vsName + "[source=" + inputStreamName + "]: physical_signal:" + convResult[0]
+						if(logger.isDebugEnabled()){
+							logger.debug(vsName + "[source=" + inputStreamName + "]: physical_signal:" + convResult[0]
 								+ " conversion:" + convResult[1] +
 								" input:" + convResult[2] + " value:" + convResult[3]);
+						}
 
 						try {
 							synchronized (converterList) {
@@ -628,11 +632,15 @@ public class DataMappingWrapper extends AbstractWrapper {
 							logger.error(e.getMessage(), e);
 						}
 					} else {
-						logger.debug(vsName + "[source=" + inputStreamName + "]: no conversion found for >" + convName
+						if(logger.isDebugEnabled()){
+							logger.debug(vsName + "[source=" + inputStreamName + "]: no conversion found for >" + convName
 								+ "<");
+						}
 					}
 				} else {
-					logger.debug(vsName + "[source=" + inputStreamName + "]: ignoring >" + convName + "<");
+					if(logger.isDebugEnabled()){
+						logger.debug(vsName + "[source=" + inputStreamName + "]: ignoring >" + convName + "<");
+					}
 				}
 			}
 			if (!map.isEmpty()) {
@@ -893,7 +901,9 @@ public class DataMappingWrapper extends AbstractWrapper {
 			}
 
 			if (!m.isPositionAvailable() && !m.isGeoAvailable() && !m.isSensorAvailable()) {
-				logger.debug("remove " + deployment + " deployment");
+				if(logger.isDebugEnabled()){
+					logger.debug("remove " + deployment + " deployment");
+				}
 				deployments.remove(deployment);
 			}
 
@@ -908,7 +918,9 @@ public class DataMappingWrapper extends AbstractWrapper {
 				}
 
 				if (web != null) {
-					logger.debug("shut down h2 webserver");
+					if(logger.isDebugEnabled()){
+						logger.debug("shut down h2 webserver");
+					}
 					web.shutdown();
 					web.stop();
 					web = null;

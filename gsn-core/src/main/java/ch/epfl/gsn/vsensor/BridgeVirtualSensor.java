@@ -75,10 +75,14 @@ public class BridgeVirtualSensor extends AbstractVirtualSensor {
             if (!areAllFieldsNull(data)) {
                 dataProduced(data);
             } else {
-                logger.debug("Nulls received for timestamp (" + data.getTimeStamp() + "), discarded");
+                if(logger.isDebugEnabled()){
+                    logger.debug("Nulls received for timestamp (" + data.getTimeStamp() + "), discarded");
+                }
             }
         }
-        logger.debug("Data received under the name: " + inputStreamName);
+        if(logger.isDebugEnabled()){
+            logger.debug("Data received under the name: " + inputStreamName);
+        }
     }
 
     /**

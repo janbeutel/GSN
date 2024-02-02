@@ -214,7 +214,9 @@ public class ValidityTools {
 			}
 			return hostAddress.isLoopbackAddress();
 		} catch (UnknownHostException e) {
-			logger.debug(e.getMessage());
+			if(logger.isDebugEnabled()){
+				logger.debug(e.getMessage());
+			}
 			return false;
 		}
 	}

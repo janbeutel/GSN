@@ -131,7 +131,9 @@ public class RestRemoteWrapper extends AbstractWrapper {
                 inputStream.close();
                 inputStream = null;
             } catch (Exception e) {
-                logger.debug(e.getMessage(), e);
+                if(logger.isDebugEnabled()){
+                    logger.debug(e.getMessage(), e);
+                }
             }
         }
         //
@@ -146,10 +148,12 @@ public class RestRemoteWrapper extends AbstractWrapper {
                 if (sc == HttpStatus.SC_OK) {
                     // logger.debug(new StringBuilder().append("Wants to consume the structure
                     // packet from ").append(initParams.getRemoteContactPoint()));
-                    logger.debug(new StringBuilder()
+                    if(logger.isDebugEnabled()){
+                        logger.debug(new StringBuilder()
                             .append("Wants to consume the structure packet from ")
                             .append(initParams.getRemoteContactPoint())
                             .toString());
+                    }
                     inputStream = XSTREAM.createObjectInputStream(response.getEntity().getContent());
                     structure = (DataField[]) inputStream.readObject();
                     logger.warn("Connection established for: " + initParams.getRemoteContactPoint());
@@ -213,7 +217,9 @@ public class RestRemoteWrapper extends AbstractWrapper {
         try {
             httpclient.getConnectionManager().shutdown(); // This closes the connection already in use by the response
         } catch (Exception e) {
-            logger.debug(e.getMessage(), e);
+            if(logger.isDebugEnabled()){
+                logger.debug(e.getMessage(), e);
+            }
         }
     }
 
@@ -237,7 +243,9 @@ public class RestRemoteWrapper extends AbstractWrapper {
                             inputStream = null;
                         }
                     } else {
-                        logger.debug("Received a keep alive message.");
+                        if(logger.isDebugEnabled()){
+                            logger.debug("Received a keep alive message.");
+                        }
                     }
 
                 }
@@ -253,7 +261,9 @@ public class RestRemoteWrapper extends AbstractWrapper {
                         connectToRemote();
                     }
                 } catch (Exception err) {
-                    logger.debug(err.getMessage(), err);
+                    if(logger.isDebugEnabled()){
+                        logger.debug(err.getMessage(), err);
+                    }
                 }
             }
         }

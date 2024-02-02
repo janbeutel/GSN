@@ -65,18 +65,24 @@ public class DataDistributerRest implements VirtualSensorDataListener, VSensorSt
 					synchronized (MyListeners) {
 						MyListenersCopy = (ArrayList<ListenerEntry>) MyListeners.clone();
 					}
-					logger.debug("keep alive event, " + MyListenersCopy.size() + " listeners.");
+					if(logger.isDebugEnabled()){
+						logger.debug("keep alive event, " + MyListenersCopy.size() + " listeners.");
+					}
 					try {
 						Iterator<ListenerEntry> i = MyListenersCopy.iterator();
 						while (i.hasNext()) {
 							ListenerEntry listener = i.next();
-							logger.debug("about to send keep alive to listener: " + listener.request.toString());
+							if(logger.isDebugEnabled()){
+								logger.debug("about to send keep alive to listener: " + listener.request.toString());
+							}
 							if (!listener.request.deliverKeepAliveMessage()) {
 								synchronized (MyListeners) {
 									removeListenerEntry(listener);
 								}
 							} else {
-								logger.debug("sent keep alive to listener: " + listener.request.toString());
+								if(logger.isDebugEnabled()){
+									logger.debug("sent keep alive to listener: " + listener.request.toString());
+								}
 							}
 						}
 					} catch (RuntimeException re) {
@@ -98,7 +104,9 @@ public class DataDistributerRest implements VirtualSensorDataListener, VSensorSt
 
 						Connection c = connections.get(sm);
 						if (c == null) {
-							logger.debug("get new connection.");
+							if(logger.isDebugEnabled()){
+								logger.debug("get new connection.");
+							}
 							c = sm.getConnection();
 							c.setReadOnly(true);
 							connections.put(sm, c);
@@ -113,10 +121,14 @@ public class DataDistributerRest implements VirtualSensorDataListener, VSensorSt
 							while (true) {
 								try {
 									ListenerEntry listener = DataUpdateQueue.take();
-									logger.debug("Fetching data for listener: " + listener.request.toString() + ".");
+									if(logger.isDebugEnabled()){
+										logger.debug("Fetching data for listener: " + listener.request.toString() + ".");
+									}
 									synchronized (MyListeners) {
 										if (listener.removed || listener.request.isClosed()) {
-											logger.debug("Listener was removed: " + listener.request.toString() + ".");
+											if(logger.isDebugEnabled()){
+												logger.debug("Listener was removed: " + listener.request.toString() + ".");
+											}
 											continue;
 										}
 									}
@@ -152,14 +164,18 @@ public class DataDistributerRest implements VirtualSensorDataListener, VSensorSt
 										listener.setResources(dataEnum, prepareStatement);
 										if (!listener.removed) {
 											if (dataEnum.hasMoreElements()) {
-												logger.debug("Fetching data done for listener: "
+												if(logger.isDebugEnabled()){
+													logger.debug("Fetching data done for listener: "
 														+ listener.request.toString() + ".");
+												}
 												DataDistributerRestQueue.add(listener);
 												listener.current_queue = DataDistributerRestQueue;
 											} else { // no new data found
 												listener.releaseResources();
-												logger.debug("Fetching data done, empty resultset. listener: "
+												if(logger.isDebugEnabled()){
+													logger.debug("Fetching data done, empty resultset. listener: "
 														+ listener.request.toString() + ".");
+												}
 												// try again if there was an error or when the check flag is set
 												if (dataEnum.hadError() || listener.check_for_new_data) {
 													DataUpdateQueue.put(listener);
@@ -252,7 +268,9 @@ public class DataDistributerRest implements VirtualSensorDataListener, VSensorSt
 	 */
 	private boolean flushStreamElement(DataEnumerator dataEnum, DistributionRequest request) {
 		if (request.isClosed()) {
-			logger.debug("Flushing an stream element failed, isClosed=true [Listener: " + request.toString() + "]");
+			if(logger.isDebugEnabled()){
+				logger.debug("Flushing an stream element failed, isClosed=true [Listener: " + request.toString() + "]");
+			}
 			return false;
 		}
 		StreamElement se = dataEnum.nextElement();
@@ -260,10 +278,14 @@ public class DataDistributerRest implements VirtualSensorDataListener, VSensorSt
 		boolean success = request.deliverStreamElement(se); // This could take some time if db tables are locked (Local
 															// delivery)
 		if (!success) {
-			logger.debug("FLushing an stream element failed, delivery failure [Listener: " + request.toString() + "]");
+			if(logger.isDebugEnabled()){
+				logger.debug("FLushing an stream element failed, delivery failure [Listener: " + request.toString() + "]");
+			}
 			return false;
 		}
-		logger.debug("Flushing an stream element succeed [Listener: " + request.toString() + "]");
+		if(logger.isDebugEnabled()){
+			logger.debug("Flushing an stream element succeed [Listener: " + request.toString() + "]");
+		}
 		return true;
 	}
 
@@ -283,8 +305,10 @@ public class DataDistributerRest implements VirtualSensorDataListener, VSensorSt
 		synchronized (MyListeners) {
 			for (ListenerEntry listener : MyListeners) {
 				if (listener.request.getVSensorConfig() == config) {
-					logger.debug("sending stream element " + (se == null ? "second-chance-se" : se.toString())
+					if(logger.isDebugEnabled()){
+						logger.debug("sending stream element " + (se == null ? "second-chance-se" : se.toString())
 							+ " produced by " + config.getName() + " to listener =>" + listener.request.toString());
+					}
 					if (listener.current_queue == null) {
 						moveListenerToQueue(listener, DataUpdateQueue);
 					} else {
@@ -302,11 +326,15 @@ public class DataDistributerRest implements VirtualSensorDataListener, VSensorSt
 			while (true) {
 				try {
 					if (DataDistributerRestQueue.isEmpty()) {
-						logger.debug("Waiting(locked) for requests or data items, Number of total listeners: "
+						if(logger.isDebugEnabled()){
+							logger.debug("Waiting(locked) for requests or data items, Number of total listeners: "
 								+ MyListeners.size() + " [" + delivery_system_name + "]");
+						}
 						DataDistributerRestQueue.put(DataDistributerRestQueue.take());
-						logger.debug("Lock released, trying to find interest listeners (total listeners:"
+						if(logger.isDebugEnabled()){
+							logger.debug("Lock released, trying to find interest listeners (total listeners:"
 								+ MyListeners.size() + " [" + delivery_system_name + "])");
+						}
 					}
 				} catch (InterruptedException e) {
 					logger.error(e.getMessage(), e);
@@ -376,7 +404,9 @@ public class DataDistributerRest implements VirtualSensorDataListener, VSensorSt
 
 	public boolean vsUnLoading(VSensorConfig config) {
 		synchronized (MyListeners) {
-			logger.debug("Distributer unloading: " + MyListeners.size() + " [" + delivery_system_name + "]");
+			if(logger.isDebugEnabled()){
+				logger.debug("Distributer unloading: " + MyListeners.size() + " [" + delivery_system_name + "]");
+			}
 			Iterator<ListenerEntry> i = MyListeners.iterator();
 			while (i.hasNext()) {
 				ListenerEntry listener = i.next();
@@ -384,7 +414,9 @@ public class DataDistributerRest implements VirtualSensorDataListener, VSensorSt
 					i.remove();
 					listener.removed = true;
 					listener.request.close();
-					logger.debug("remove the listener: " + listener.request.toString());
+					if(logger.isDebugEnabled()){
+						logger.debug("remove the listener: " + listener.request.toString());
+					}
 				}
 			}
 		}
@@ -432,7 +464,9 @@ public class DataDistributerRest implements VirtualSensorDataListener, VSensorSt
 			MyListeners.remove(listener);
 			listener.removed = true;
 			listener.request.close();
-			logger.debug("remove the listener: " + listener.request.toString());
+			if(logger.isDebugEnabled()){
+				logger.debug("remove the listener: " + listener.request.toString());
+			}
 		}
 	}
 

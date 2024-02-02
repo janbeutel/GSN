@@ -38,7 +38,9 @@ public class RemoteWrapperParamParser {
 
 		query = addressBean.getPredicateValueWithException("query");
 
-		logger.debug("Remote wrapper parameter [keep-alive: " + isPushBased + "], Query=> " + query);
+		if(logger.isDebugEnabled()){
+            logger.debug("Remote wrapper parameter [keep-alive: " + isPushBased + "], Query=> " + query);
+        }
 
 		if (isPushBased) {
 			deliveryContactPoint = addressBean.getPredicateValueWithException(PushDelivery.LOCAL_CONTACT_POINT);
@@ -190,7 +192,8 @@ public class RemoteWrapperParamParser {
 		// logger.debug ( new StringBuilder ("Wants to connect to
 		// ").append(getRemoteContactPoint()+query+"/"+getStartTimeInString(lastModifiedTime)).append(
 		// "==Encoded==> "+toSend));
-		logger.debug(new StringBuilder("Wants to connect to ")
+		if(logger.isDebugEnabled()){
+            logger.debug(new StringBuilder("Wants to connect to ")
 				.append(getRemoteContactPoint())
 				.append(query)
 				.append("/")
@@ -198,6 +201,7 @@ public class RemoteWrapperParamParser {
 				.append("==Encoded==> ")
 				.append(toSend)
 				.toString());
+        }
 		return toSend;
 	}
 

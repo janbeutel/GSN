@@ -240,7 +240,9 @@ public class CSVWrapper extends AbstractWrapper {
                     try {
                         reader.close();
                     } catch (IOException e) {
-                        logger.debug(e.getMessage(), e);
+                        if(logger.isDebugEnabled()){
+                            logger.debug(e.getMessage(), e);
+                        }
                     }
                 }
             }

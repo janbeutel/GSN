@@ -190,7 +190,10 @@ public class RemoteTimeBasedSlidingHandler implements SlidingHandler {
 			query.append("select max(timed) - ").append(maxWindowSize).append(" from ")
 					.append(wrapper.getDBAliasInStr());
 
-			logger.debug("Query1 for getting oldest timestamp : " + query);
+			if(logger.isDebugEnabled()){
+				logger.debug("Query1 for getting oldest timestamp : " + query);
+			}
+			
 			Connection conn = null;
 			try {
 				ResultSet resultSet = Main.getWindowStorage().executeQueryWithResultSet(query,
@@ -222,8 +225,9 @@ public class RemoteTimeBasedSlidingHandler implements SlidingHandler {
 						.append(System.currentTimeMillis() - timediff - maxSlideForTupleBased)
 						.append(" order by timed desc) as X  ");
 			}
-
-			logger.debug("Query2 for getting oldest timestamp : " + query);
+			if(logger.isDebugEnabled()){
+				logger.debug("Query2 for getting oldest timestamp : " + query);
+			}
 			Connection conn = null;
 			try {
 				ResultSet resultSet = Main.getWindowStorage().executeQueryWithResultSet(query,
@@ -380,14 +384,15 @@ public class RemoteTimeBasedSlidingHandler implements SlidingHandler {
 			}
 
 			toReturn = new StringBuilder(SQLUtils.newRewrite(toReturn, rewritingMapping));
-
-			logger.debug(
+			if(logger.isDebugEnabled()){
+				logger.debug(
 					new StringBuilder().append("The original Query : ").append(streamSource.getSqlQuery()).toString());
-			logger.debug(new StringBuilder().append("The merged query : ").append(toReturn.toString())
-					.append(" of the StreamSource ").append(streamSource.getAlias()).append(" of the InputStream: ")
-					.append(
-							streamSource.getInputStream().getInputStreamName())
-					.append("").toString());
+				logger.debug(new StringBuilder().append("The merged query : ").append(toReturn.toString())
+						.append(" of the StreamSource ").append(streamSource.getAlias()).append(" of the InputStream: ")
+						.append(
+								streamSource.getInputStream().getInputStreamName())
+						.append("").toString());
+			}
 
 			return cachedSqlQuery = toReturn;
 		}

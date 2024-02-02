@@ -172,7 +172,9 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				if (!pktDestuffing(in, baos)) {
-					logger.debug("stuffing mark reached");
+					if(logger.isDebugEnabled()){
+						logger.debug("stuffing mark reached");
+					}
 					connecting = true;
 					conn = false;
 					newPacket = true;
@@ -547,7 +549,9 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 			logger.warn("message queue limit reached => sending queue limit message");
 		} else if (pluginMessageHandler.isMsgQueueReady()) {
 			sendQueueReadyMsg();
-			logger.debug("message queue ready => sending queue ready message");
+			if(logger.isDebugEnabled()){
+				logger.debug("message queue ready => sending queue ready message");
+			}
 		}
 
 		synchronized (connected) {

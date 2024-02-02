@@ -196,10 +196,14 @@ public class ImageFileWrapper extends AbstractWrapper {
         Pattern pattern = Pattern.compile(regexMask);
         Matcher matcher = pattern.matcher(fileName);
         if (matcher.find()) {
-            logger.debug("Date => " + matcher.group(1));
+            if(logger.isDebugEnabled()){
+                logger.debug("Date => " + matcher.group(1));
+            }
             return matcher.group(1);
         } else {
-            logger.debug("Date => null");
+            if(logger.isDebugEnabled()){
+                logger.debug("Date => null");
+            }
             return null;
         }
     }
@@ -217,18 +221,26 @@ public class ImageFileWrapper extends AbstractWrapper {
         Arrays.sort(files);
 
         Vector<String> v = new Vector<String>();
-        logger.debug("*** found " + files.length + " files ***");
+        if(logger.isDebugEnabled()){
+            logger.debug("*** found " + files.length + " files ***");
+        }
         for (int i = 0; i < files.length; i++) {
             String file = files[i];
             Pattern pattern = Pattern.compile(regexFileMask);
             Matcher matcher = pattern.matcher(file);
-            logger.debug("(" + i + ") Testing... " + file);
+            if(logger.isDebugEnabled()){
+                logger.debug("(" + i + ") Testing... " + file);
+            }
             if (matcher.find()) {
                 String date = getTimeStampFromFileName(file, regexFileMask);
                 long epoch = strTime2Long(date, timeFormat);
-                logger.debug("Matching => " + file + " date = " + date + " epoch = " + epoch);
+                if(logger.isDebugEnabled()){
+                    logger.debug("Matching => " + file + " date = " + date + " epoch = " + epoch);
+                }
                 if (epoch > latestProcessedTimestamp) {
-                    logger.debug("New image => " + epoch);
+                    if(logger.isDebugEnabled()){
+                        logger.debug("New image => " + epoch);
+                    }
                     latestProcessedTimestamp = epoch;
                     v.add(file);
                     postData(dir + "/" + file, epoch);
@@ -243,8 +255,10 @@ public class ImageFileWrapper extends AbstractWrapper {
      * Posting data to database
      */
     private boolean postData(String imagePath, long timed) {
-
-        logger.debug("trying to post... " + imagePath);
+        
+        if(logger.isDebugEnabled()){
+            logger.debug("trying to post... " + imagePath);
+        }
 
         boolean success = true;
 
@@ -253,7 +267,9 @@ public class ImageFileWrapper extends AbstractWrapper {
         try {
             FileInputStream fileinputstream = new FileInputStream(imagePath);
             int numberBytes = fileinputstream.available();
-            logger.debug("Image file has size: " + numberBytes + " bytes");
+            if(logger.isDebugEnabled()){
+                logger.debug("Image file has size: " + numberBytes + " bytes");
+            }
             byte bytearray[] = new byte[numberBytes];
             fileinputstream.read(bytearray);
             fileinputstream.close();

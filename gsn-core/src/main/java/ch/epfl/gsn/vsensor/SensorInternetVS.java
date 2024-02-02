@@ -166,13 +166,18 @@ public class SensorInternetVS extends AbstractVirtualSensor {
 			PrintWriter out = new PrintWriter(siConnection.getOutputStream());
 			String postParams = buildParameters(streamElement.getFieldNames(), streamElement.getData(),
 					streamElement.getTimeStamp());
-			logger.debug("POST parameters: " + postParams);
+			
+			if(logger.isDebugEnabled()){
+				logger.debug("POST parameters: " + postParams);
+			}
 			out.print(postParams);
 			out.flush();
 			out.close();
 
 			if (siConnection.getResponseCode() == 200) {
-				logger.debug("data successfully sent");
+				if(logger.isDebugEnabled()){
+					logger.debug("data successfully sent");
+				}
 			} else {
 				logger.error("Unable to send the data. Check you configuration file. "
 						+ siConnection.getResponseMessage() + " Code (" + siConnection.getResponseCode() + ")");
@@ -229,7 +234,9 @@ public class SensorInternetVS extends AbstractVirtualSensor {
 		try {
 			return paramName + URLEncoder.encode(paramValue, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			logger.debug(e.getMessage(), e);
+			if(logger.isDebugEnabled()){
+				logger.debug(e.getMessage(), e);
+			}
 		}
 		return null;
 	}

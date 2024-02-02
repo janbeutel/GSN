@@ -221,16 +221,22 @@ public class GridDataWrapper extends AbstractWrapper {
                 // System.out.println(lines.get(i));
             }
 
-            logger.debug("size " + lines.size());
+            if(logger.isDebugEnabled()){
+                logger.debug("size " + lines.size());
+            }
 
             try {
                 for (int i = 0; i < 6; i++) {
                     String[] split = lines.get(i).split(" ");
 
                     header[i] = split[1];
-                    logger.debug(split[0] + " <=> " + ESRI_Format[i]);
+                    if(logger.isDebugEnabled()){
+                        logger.debug(split[0] + " <=> " + ESRI_Format[i]);
+                    }
                     if (!split[0].equals(ESRI_Format[i])) {
-                        logger.debug("=> inCorrect");
+                        if(logger.isDebugEnabled()){
+                            logger.debug("=> inCorrect");
+                        }
                         success = false;
                     }
                 }
@@ -247,13 +253,15 @@ public class GridDataWrapper extends AbstractWrapper {
                 yllcorner = Double.parseDouble(header[3]);
                 cellsize = Double.parseDouble(header[4]);
                 NODATA_value = Double.parseDouble(header[5]);
-
-                logger.debug("ncols " + ncols);
-                logger.debug("nrows " + nrows);
-                logger.debug("xllcorner " + xllcorner);
-                logger.debug("yllcorner " + yllcorner);
-                logger.debug("cellsize " + cellsize);
-                logger.debug("NODATA_value " + NODATA_value);
+                
+                if(logger.isDebugEnabled()){
+                    logger.debug("ncols " + ncols);
+                    logger.debug("nrows " + nrows);
+                    logger.debug("xllcorner " + xllcorner);
+                    logger.debug("yllcorner " + yllcorner);
+                    logger.debug("cellsize " + cellsize);
+                    logger.debug("NODATA_value " + NODATA_value);
+                }
             }
 
             // parse raw data
@@ -279,9 +287,11 @@ public class GridDataWrapper extends AbstractWrapper {
                     }
 
                 }
-
-                logger.debug("Size of list => " + raw.size() + " ? " + ncols * nrows);
-                logger.debug(raw.toString());
+                
+                if(logger.isDebugEnabled()){
+                    logger.debug("Size of list => " + raw.size() + " ? " + ncols * nrows);
+                    logger.debug(raw.toString());
+                }
 
                 if (raw.size() == nrows * ncols) {
                     rawData = new Double[nrows][ncols];
@@ -292,8 +302,10 @@ public class GridDataWrapper extends AbstractWrapper {
                         }
                     }
 
-                    logger.debug("rawData.length " + rawData.length);
-                    logger.debug("rawData[0].length " + rawData[0].length);
+                    if(logger.isDebugEnabled()){
+                        logger.debug("rawData.length " + rawData.length);
+                        logger.debug("rawData[0].length " + rawData[0].length);
+                    }
                 } else {
                     success = false;
                 }
@@ -326,12 +338,16 @@ public class GridDataWrapper extends AbstractWrapper {
         Arrays.sort(files);
 
         Vector<String> v = new Vector<String>();
-        logger.debug("*** found " + files.length + " files ***");
+        if(logger.isDebugEnabled()){
+            logger.debug("*** found " + files.length + " files ***");
+        }
         for (int i = 0; i < files.length; i++) {
             String file = files[i];
             Pattern pattern = Pattern.compile(regexFileMask);
             Matcher matcher = pattern.matcher(file);
-            logger.debug("(" + i + ") Testing... " + file);
+            if(logger.isDebugEnabled()){
+                logger.debug("(" + i + ") Testing... " + file);
+            }
             if (matcher.find()) {
                 String date = getTimeStampFromFileName(file, regexFileMask);
                 long epoch = strTime2Long(date, timeFormat);
@@ -378,7 +394,9 @@ public class GridDataWrapper extends AbstractWrapper {
             stream[5] = new Double(NODATA_value);
             stream[6] = bos.toByteArray();
 
-            logger.debug("size => " + bos.toByteArray().length);
+            if(logger.isDebugEnabled()){
+                logger.debug("size => " + bos.toByteArray().length);
+            }
 
             // testDeserialize(bos.toByteArray());
 
@@ -412,8 +430,10 @@ public class GridDataWrapper extends AbstractWrapper {
             deserial = (Double[][]) in.readObject();
             in.close();
 
-            logger.debug("deserial.length" + deserial.length);
-            logger.debug("deserial[0].length" + deserial[0].length);
+            if(logger.isDebugEnabled()){
+                logger.debug("deserial.length" + deserial.length);
+                logger.debug("deserial[0].length" + deserial[0].length);
+            }
 
             for (int i = 0; i < deserial.length; i++) {
                 StringBuilder sb = new StringBuilder();
@@ -467,10 +487,14 @@ public class GridDataWrapper extends AbstractWrapper {
         Pattern pattern = Pattern.compile(regexMask);
         Matcher matcher = pattern.matcher(fileName);
         if (matcher.find()) {
-            logger.debug("Date => " + matcher.group(1));
+            if(logger.isDebugEnabled()){
+                logger.debug("Date => " + matcher.group(1));
+            }
             return matcher.group(1);
         } else {
-            logger.debug("Date => null");
+            if(logger.isDebugEnabled()){
+                logger.debug("Date => null");
+            }
             return null;
         }
     }

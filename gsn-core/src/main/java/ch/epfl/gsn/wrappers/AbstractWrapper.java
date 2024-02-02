@@ -116,7 +116,9 @@ public abstract class AbstractWrapper extends Thread implements Monitorable {
 		}
 
 		listeners.add(ss);
-		logger.debug("Adding listeners: " + ss.toString());
+		if(logger.isDebugEnabled()){
+			logger.debug("Adding listeners: " + ss.toString());
+		}
 	}
 
 	public void addSlidingHandler(SlidingHandler slidingHandler) {
@@ -259,8 +261,9 @@ public abstract class AbstractWrapper extends Thread implements Monitorable {
 				return false;
 			}
 			boolean toReturn = false;
-
-			logger.debug("Size of the listeners to be evaluated - " + listeners.size());
+			if(logger.isDebugEnabled()){
+				logger.debug("Size of the listeners to be evaluated - " + listeners.size());
+			}
 
 			for (SlidingHandler slidingHandler : slidingHandlers.values()) {
 				toReturn = slidingHandler.dataAvailable(streamElement)
@@ -297,8 +300,10 @@ public abstract class AbstractWrapper extends Thread implements Monitorable {
 		try {
 			if (isOutOfOrder(se)) {
 				oooCount = oooCount == Long.MAX_VALUE ? 0 : oooCount + 1;
-				logger.debug("Out of order data item detected, it is not propagated into the system : [" + se.toString()
+				if(logger.isDebugEnabled()){
+					logger.debug("Out of order data item detected, it is not propagated into the system : [" + se.toString()
 						+ "]");
+				}
 				return false;
 			}
 			conn = Main.getWindowStorage().getConnection();
@@ -412,7 +417,9 @@ public abstract class AbstractWrapper extends Thread implements Monitorable {
 				condition.append(slidingHandler.getCuttingCondition());
 			}
 		}
-		logger.debug("Cutting condition : " + condition);
+		if(logger.isDebugEnabled()){
+			logger.debug("Cutting condition : " + condition);
+		}
 		if (condition.length() == 0) {
 			return null;
 		}
@@ -439,13 +446,17 @@ public abstract class AbstractWrapper extends Thread implements Monitorable {
 		if (query == null) {
 			return 0;
 		}
-		logger.debug(new StringBuilder().append(
+		if(logger.isDebugEnabled()){
+			logger.debug(new StringBuilder().append(
 				"RESULTING QUERY FOR Table Size Enforce ").append(query)
 				.toString());
+		}
 		int deletedRows = Main.getWindowStorage().executeUpdate(query);
-		logger.debug(new StringBuilder().append(deletedRows).append(
+		if(logger.isDebugEnabled()){
+			logger.debug(new StringBuilder().append(deletedRows).append(
 				" old rows dropped from ").append(getDBAliasInStr())
 				.toString());
+		}
 		return deletedRows;
 	}
 

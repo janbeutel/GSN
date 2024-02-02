@@ -387,7 +387,10 @@ public class StreamSource implements Serializable {
   }
 
   public boolean windowSlided() throws SQLException {
-    logger.debug("Data availble in the stream *" + getAlias() + "*");
+    if(logger.isDebugEnabled()){
+      logger.debug("Data availble in the stream *" + getAlias() + "*");
+    }
+    
     return inputStream.executeQuery(getUIDStr());
 
   }
@@ -512,9 +515,12 @@ public class StreamSource implements Serializable {
 
     toReturn = new StringBuilder(SQLUtils.newRewrite(toReturn, rewritingMapping));
     // toReturn.append(" order by timed desc ");
-    logger.debug("The original query : " + getSqlQuery());
-    logger.debug("The merged query : " + toReturn + " of the StreamSource " + getAlias() + " of the InputStream: "
-        + inputStream.getInputStreamName());
+    if(logger.isDebugEnabled()){
+      logger.debug("The original query : " + getSqlQuery());
+      logger.debug("The merged query : " + toReturn + " of the StreamSource " + getAlias() + " of the InputStream: "
+          + inputStream.getInputStreamName());
+    }
+    
     return cachedSqlQuery = toReturn;
   }
 

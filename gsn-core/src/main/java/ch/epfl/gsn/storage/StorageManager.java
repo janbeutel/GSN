@@ -449,7 +449,9 @@ public abstract class StorageManager {
                 conn.close();
             }
         } catch (SQLException e) {
-            logger.debug(e.getMessage(), e);
+            if(logger.isDebugEnabled()){
+                logger.debug(e.getMessage(), e);
+		    }
         }
     }
 
@@ -535,7 +537,9 @@ public abstract class StorageManager {
         PreparedStatement prepareStatement = null;
         try {
             String stmt = getStatementDropTable(tableName, connection).toString();
-            logger.debug("Dropping table structure: " + tableName + " With query: " + stmt);
+            if(logger.isDebugEnabled()){
+                logger.debug("Dropping table structure: " + tableName + " With query: " + stmt);
+		    }
             prepareStatement = connection.prepareStatement(stmt);
             prepareStatement.execute();
         } catch (SQLException e) {
@@ -571,7 +575,9 @@ public abstract class StorageManager {
      *                      operation
      */
     public void executeDropView(StringBuilder tableName, Connection connection) throws SQLException {
-        logger.debug("Dropping table structure: " + tableName);
+        if(logger.isDebugEnabled()){
+            logger.debug("Dropping table structure: " + tableName);
+        }
         PreparedStatement prepareStatement = connection
                 .prepareStatement(getStatementDropView(tableName, connection).toString());
         prepareStatement.execute();
@@ -611,13 +617,17 @@ public abstract class StorageManager {
     public void executeCreateTable(CharSequence tableName, DataField[] structure, boolean unique, Connection connection)
             throws SQLException {
         StringBuilder sql = getStatementCreateTable(tableName, structure, connection);
-        logger.debug(new StringBuilder().append("The create table statement is : ").append(sql).toString());
+        if(logger.isDebugEnabled()){
+            logger.debug(new StringBuilder().append("The create table statement is : ").append(sql).toString());
+        }
 
         PreparedStatement prepareStatement = connection.prepareStatement(sql.toString());
         prepareStatement.execute();
         prepareStatement.close();
         sql = getStatementCreateIndexOnTimed(tableName, unique);
-        logger.debug(new StringBuilder().append("The create index statement is : ").append(sql).toString());
+        if(logger.isDebugEnabled()){
+            logger.debug(new StringBuilder().append("The create index statement is : ").append(sql).toString());
+        }
         prepareStatement = connection.prepareStatement(sql.toString());
         prepareStatement.execute();
         prepareStatement.close();
@@ -728,7 +738,9 @@ public abstract class StorageManager {
      */
     public DataEnumerator executeQuery(StringBuilder query, boolean binaryFieldsLinked, Connection connection)
             throws SQLException {
-        logger.debug("Executing query: " + query + "( Binary Field Linked:" + binaryFieldsLinked + ")");
+        if(logger.isDebugEnabled()){
+            logger.debug("Executing query: " + query + "( Binary Field Linked:" + binaryFieldsLinked + ")");
+        }
         return new DataEnumerator(this, connection.prepareStatement(query.toString()), binaryFieldsLinked);
     }
 
@@ -748,7 +760,9 @@ public abstract class StorageManager {
         }
         String query = addLimit(abstractQuery.getStandardQuery().toString(),
                 abstractQuery.getLimitCriterion().getSize(), abstractQuery.getLimitCriterion().getOffset());
-        logger.debug("Executing query: " + query + "(" + binaryFieldsLinked + ")");
+        if(logger.isDebugEnabled()){
+            logger.debug("Executing query: " + query + "(" + binaryFieldsLinked + ")");
+        }
         return new DataEnumerator(this, connection.prepareStatement(query.toString()), binaryFieldsLinked);
     }
 
@@ -768,7 +782,9 @@ public abstract class StorageManager {
         }
         String query = addLimit(abstractQuery.getStandardQuery().toString(),
                 abstractQuery.getLimitCriterion().getSize(), abstractQuery.getLimitCriterion().getOffset());
-        logger.debug("Executing query: " + query + "(" + binaryFieldsLinked + ")");
+        if(logger.isDebugEnabled()){
+            logger.debug("Executing query: " + query + "(" + binaryFieldsLinked + ")");
+        }
         return streamedExecuteQuery(query, binaryFieldsLinked, connection);
     }
 
@@ -839,7 +855,9 @@ public abstract class StorageManager {
     public void executeCreateView(CharSequence viewName, CharSequence selectQuery, Connection connection)
             throws SQLException {
         StringBuilder statement = getStatementCreateView(viewName, selectQuery);
-        logger.debug("Creating a view:" + statement);
+        if(logger.isDebugEnabled()){
+            logger.debug("Creating a view:" + statement);
+        }
         final PreparedStatement prepareStatement = connection.prepareStatement(statement.toString());
         prepareStatement.execute();
         close(prepareStatement);
@@ -1226,8 +1244,10 @@ public abstract class StorageManager {
      * @throws SQLException
      */
     public Connection getConnection() throws SQLException {
-        logger.debug("Asking a con. to DB: " + pool.getUrl() + " => busy: " + pool.getNumActive() + ", max-size: "
+        if(logger.isDebugEnabled()){
+            logger.debug("Asking a con. to DB: " + pool.getUrl() + " => busy: " + pool.getNumActive() + ", max-size: "
                 + pool.getMaxTotal() + ", idle: " + pool.getNumIdle());
+        }
         return pool.getConnection();
     }
 

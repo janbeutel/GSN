@@ -99,7 +99,9 @@ public class StatsBridgeVirtualSensor extends AbstractVirtualSensor {
         logging_counter++;
 
         dataProduced(data);
-        logger.debug("Data received under the name: " + inputStreamName);
+        if(logger.isDebugEnabled()){
+            logger.debug("Data received under the name: " + inputStreamName);
+        }
     }
 
     public void dispose() {

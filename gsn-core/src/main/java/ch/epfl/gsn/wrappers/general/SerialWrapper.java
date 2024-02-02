@@ -255,7 +255,9 @@ public class SerialWrapper extends AbstractWrapper implements SerialPortEventLis
 		wnetPort.addEventListener(this);
 		is = wnetPort.getInputStream();
 
-		logger.debug("Serial port wrapper successfully opened port and registered itself as listener.");
+		if(logger.isDebugEnabled()){
+			logger.debug("Serial port wrapper successfully opened port and registered itself as listener.");
+		}
 
 		inputBuffer = new byte[MAXBUFFERSIZE];
 		dataField = new DataField[] {

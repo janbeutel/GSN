@@ -287,7 +287,9 @@ public class ScriptletProcessor extends AbstractVirtualSensor {
             try {
                 persistant = Boolean.parseBoolean(parameters.get(PARAM_PERSITANT));
             } catch (Exception e) {
-                logger.debug(e.getMessage(), e);
+                if(logger.isDebugEnabled()){
+                    logger.debug(e.getMessage(), e);
+                }
             }
         }
 

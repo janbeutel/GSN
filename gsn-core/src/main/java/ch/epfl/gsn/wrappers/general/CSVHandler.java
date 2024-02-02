@@ -273,11 +273,15 @@ public class CSVHandler {
 
                 if (logger.isDebugEnabled()) {
                     String symbol = (currentLine < previousCheckPoint) ? " < " : " >= ";
-                    logger.debug("currentLine=" + currentLine + symbol + "checkpoint=" + previousCheckPoint);
+                    if(logger.isDebugEnabled()){
+                        logger.debug("currentLine=" + currentLine + symbol + "checkpoint=" + previousCheckPoint);
+                    }
                 }
 
                 if (currentLine < previousCheckPoint) {// skipping already read lines, based on line count
-                    logger.debug("skipping");
+                    if(logger.isDebugEnabled()){
+                        logger.debug("skipping");
+                    }
                     currentLine++;
                     continue;
                 }

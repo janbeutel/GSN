@@ -137,7 +137,9 @@ public abstract class AbstractScheduledVirtualSensor extends AbstractVirtualSens
 			logger.error(e.getMessage(), e);
 			return;
 		}
-		logger.debug("Data received under the name: " + inputStreamName);
+		if(logger.isDebugEnabled()){
+			logger.debug("Data received under the name: " + inputStreamName);
+		}
 		dataItem = data;
 
 	}

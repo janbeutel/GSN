@@ -107,7 +107,9 @@ public class SystemTime extends AbstractWrapper implements ActionListener {
   public void run() {
     timer.start();
     if (delayPostingElements) {
-      logger.debug("Starting <" + getWrapperName() + "> with delayed elements.");
+      if(logger.isDebugEnabled()){
+        logger.debug("Starting <" + getWrapperName() + "> with delayed elements.");
+      }
       while (isActive()) {
         synchronized (objectLock) {
           while (streamElementBuffer.isEmpty()) {

@@ -67,7 +67,9 @@ public abstract class AbstractHCIProtocol {
 	 * @param name the name of the protocol
 	 */
 	public AbstractHCIProtocol(String name) {
-		logger.debug("Initializing protocol " + name);
+		if(logger.isDebugEnabled()){
+			logger.debug("Initializing protocol " + name);
+		}
 		protocolName = name;
 		queries = new HashMap<String, AbstractHCIQuery>();
 	}
@@ -79,7 +81,9 @@ public abstract class AbstractHCIProtocol {
 	 */
 	protected void addQuery(AbstractHCIQuery query) {
 		queries.put(query.getName(), query);
-		logger.debug("added query: " + query.getName());
+		if(logger.isDebugEnabled()){
+			logger.debug("added query: " + query.getName());
+		}
 	}
 
 	/*
@@ -88,7 +92,9 @@ public abstract class AbstractHCIProtocol {
 	 */
 
 	public Collection<AbstractHCIQuery> getQueries() {
-		logger.debug("returning query values: " + queries.values());
+		if(logger.isDebugEnabled()){
+			logger.debug("returning query values: " + queries.values());
+		}
 		return queries.values();
 	}
 
@@ -134,7 +140,9 @@ public abstract class AbstractHCIProtocol {
 		if (query == null) {
 			return null;
 		} else {
-			logger.debug("Protocol " + getName() + " has built a raw query of type " + query.getName());
+			if(logger.isDebugEnabled()){
+				logger.debug("Protocol " + getName() + " has built a raw query of type " + query.getName());
+			}
 			return query.buildRawQuery(params);
 		}
 	}

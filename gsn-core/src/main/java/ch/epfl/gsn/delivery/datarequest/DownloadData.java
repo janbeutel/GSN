@@ -260,7 +260,9 @@ public class DownloadData extends AbstractDataRequest {
             }
 
         } catch (SQLException e) {
-            logger.debug(e.getMessage());
+            if(logger.isDebugEnabled()){
+				logger.debug(e.getMessage());
+			}
         } finally {
             respond.flush();
             if (de != null) {

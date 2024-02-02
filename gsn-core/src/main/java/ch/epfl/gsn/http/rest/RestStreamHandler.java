@@ -58,7 +58,9 @@ public class RestStreamHandler extends HttpServlet implements ContinuationListen
 		Continuation continuation = ContinuationSupport.getContinuation(request);
 
 		if (continuation.isExpired()) {
-			logger.debug("Continuation has expired.");
+			if(logger.isDebugEnabled()){
+				logger.debug("Continuation has expired.");
+			}
 			return;
 		}
 
@@ -80,7 +82,9 @@ public class RestStreamHandler extends HttpServlet implements ContinuationListen
 																											// challenge
 							response.sendError(HttpStatus.SC_UNAUTHORIZED, "Unauthorized access.");
 						} catch (IOException e) {
-							logger.debug(e.getMessage(), e);
+							if(logger.isDebugEnabled()){
+								logger.debug(e.getMessage(), e);
+							}
 						}
 						return;
 					}
@@ -154,14 +158,20 @@ public class RestStreamHandler extends HttpServlet implements ContinuationListen
 			try {
 				status = !continuation.getServletResponse().getWriter().checkError();
 			} catch (Exception e) {
-				logger.debug(e.getMessage(), e);
+				if(logger.isDebugEnabled()){
+					logger.debug(e.getMessage(), e);
+				}
 			}
 			continuation.suspend();
 			try {
-				logger.debug("continuation supended, set status.");
+				if(logger.isDebugEnabled()){
+					logger.debug("continuation supended, set status.");
+				}
 				((LinkedBlockingQueue<Boolean>) continuation.getAttribute("status")).put(status);
 			} catch (InterruptedException e) {
-				logger.debug(e.getMessage(), e);
+				if(logger.isDebugEnabled()){
+					logger.debug(e.getMessage(), e);
+				}
 			}
 			if (((RestDelivery) streamingReq.getDeliverySystem()).isLimitReached()) {
 				if (timeoutTimer != null) {
@@ -192,7 +202,9 @@ public class RestStreamHandler extends HttpServlet implements ContinuationListen
 																										// challenge
 						response.sendError(HttpStatus.SC_UNAUTHORIZED, "Unauthorized access.");
 					} catch (IOException e) {
-						logger.debug(e.getMessage(), e);
+						if(logger.isDebugEnabled()){
+							logger.debug(e.getMessage(), e);
+						}
 					}
 					return;
 				}
@@ -220,7 +232,7 @@ public class RestStreamHandler extends HttpServlet implements ContinuationListen
 			boolean isExist = DataDistributerRest.getInstance(delivery.getClass()).contains(delivery);
 			if (isExist) {
 				if(logger.isDebugEnabled()){
-					ogger.debug("Keep alive request received for the notification-id:" + notificationId);
+					logger.debug("Keep alive request received for the notification-id:" + notificationId);
 				}
 				response.setStatus(SUCCESS_200);
 				delivery.close();
@@ -293,7 +305,9 @@ public class RestStreamHandler extends HttpServlet implements ContinuationListen
 						};
 					}
 				} catch (IOException e) {
-					logger.debug(e.getMessage(), e);
+					if(logger.isDebugEnabled()){
+						logger.debug(e.getMessage(), e);
+					}
 				}
 			}
 		}

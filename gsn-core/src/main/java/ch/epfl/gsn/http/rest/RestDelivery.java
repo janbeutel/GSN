@@ -62,13 +62,17 @@ public class RestDelivery implements DeliverySystem {
 
             return ((LinkedBlockingQueue<Boolean>) continuation.getAttribute("status")).take();
         } catch (Exception e) {
-            logger.debug(e.getMessage(), e);
+            if(logger.isDebugEnabled()){
+                logger.debug(e.getMessage(), e);
+            }
             return false;
         }
     }
 
     public boolean writeKeepAliveStreamElement() {
-        logger.debug("Sending the keepalive message.");
+        if(logger.isDebugEnabled()){
+            logger.debug("Sending the keepalive message.");
+        }
         keepAliveMsg.setTimeStamp(System.currentTimeMillis());
         if (limit != null) {
             limit++;
@@ -84,7 +88,9 @@ public class RestDelivery implements DeliverySystem {
                 continuation.complete();
             }
         } catch (Exception e) {
-            logger.debug(e.getMessage(), e);
+            if(logger.isDebugEnabled()){
+                logger.debug(e.getMessage(), e);
+            }
         }
     }
 

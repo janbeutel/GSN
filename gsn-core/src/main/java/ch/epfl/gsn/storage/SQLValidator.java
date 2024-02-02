@@ -240,7 +240,9 @@ public class SQLValidator implements VSensorStateChangeListener {
 			}
 			return toReturn.toArray(new DataField[] {});
 		} catch (Exception e) {
-			logger.debug(e.getMessage(), e);
+			if(logger.isDebugEnabled()){
+				logger.debug(e.getMessage(), e);
+			}
 			return new DataField[0];
 		}
 
@@ -283,7 +285,9 @@ public class SQLValidator implements VSensorStateChangeListener {
 	 * @return the modified SQL query with a primary key field added if necessary
 	 */
 	public static String addPkField(String query) {
-		logger.debug("< QUERY IN: " + query);
+		if(logger.isDebugEnabled()){
+			logger.debug("< QUERY IN: " + query);
+		}
 		try {
 			SQLValidator sv = getInstance();
 			Select select = sv.queryToSelect(query);
@@ -313,7 +317,9 @@ public class SQLValidator implements VSensorStateChangeListener {
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		logger.debug("> QUERY OUT: " + query);
+		if(logger.isDebugEnabled()){
+			logger.debug("> QUERY OUT: " + query);
+		}
 		return query;
 	}
 

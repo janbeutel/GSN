@@ -343,8 +343,9 @@ public class OracleStorageManager extends StorageManager {
     public void executeCreateTable(CharSequence tableName, DataField[] structure, boolean unique, Connection connection)
             throws SQLException {
         StringBuilder sql = getStatementCreateTable(tableName, structure, connection);
-        logger.debug(new StringBuilder().append("The create table statement is : ").append(sql).toString());
-
+        if(logger.isDebugEnabled()){
+            logger.debug(new StringBuilder().append("The create table statement is : ").append(sql).toString());
+        }
         PreparedStatement prepareStatement = connection.prepareStatement(sql.toString());
         prepareStatement.execute();
         prepareStatement.close();
@@ -354,13 +355,18 @@ public class OracleStorageManager extends StorageManager {
         String oracleTrigger = "create or replace trigger " + tableNamePostFixAppender(tableName, "_TRIG")
                 + " before insert on " + tableName + " for each row begin select "
                 + tableNamePostFixAppender(tableName, "_SEQ") + ".nextval into :NEW.pk from dual; end;";
-        logger.debug(oracleSeq);
-        logger.debug(oracleTrigger);
+        
+        if(logger.isDebugEnabled()){
+            logger.debug(oracleSeq);
+            logger.debug(oracleTrigger);
+        }
         executeCommand(oracleSeq, connection);
         executeCommand(oracleTrigger, connection);
 
         sql = getStatementCreateIndexOnTimed(tableName, unique);
-        logger.debug(new StringBuilder().append("The create index statement is : ").append(sql).toString());
+        if(logger.isDebugEnabled()){
+            logger.debug(new StringBuilder().append("The create index statement is : ").append(sql).toString());
+        }
         prepareStatement = connection.prepareStatement(sql.toString());
         prepareStatement.execute();
 
