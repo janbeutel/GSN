@@ -39,7 +39,6 @@ import java.util.Vector;
 
 import org.slf4j.LoggerFactory;
 
-import ch.epfl.gsn.Main;
 import ch.epfl.gsn.beans.DataTypes;
 import ch.epfl.gsn.beans.StreamElement;
 

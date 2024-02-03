@@ -42,7 +42,6 @@ import ch.epfl.gsn.Main;
 import ch.epfl.gsn.Mappings;
 import ch.epfl.gsn.delivery.LocalDeliveryWrapper;
 import ch.epfl.gsn.storage.SQLUtils;
-import ch.epfl.gsn.utils.ValidityTools;
 import ch.epfl.gsn.utils.graph.Graph;
 import ch.epfl.gsn.utils.graph.Node;
 import ch.epfl.gsn.utils.graph.NodeNotExistsExeption;

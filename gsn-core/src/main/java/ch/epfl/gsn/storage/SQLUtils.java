@@ -32,8 +32,6 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
-
 import ch.epfl.gsn.utils.CaseInsensitiveComparator;
 
 public class SQLUtils {

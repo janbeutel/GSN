@@ -34,8 +34,6 @@ import ch.epfl.gsn.utils.jndi.GSNContext;
 import org.slf4j.Logger;
 
 import javax.naming.NamingException;
-import javax.sql.DataSource;
-import java.sql.Connection;
 
 public class DataSources {
 

@@ -27,8 +27,6 @@
 
 package ch.epfl.gsn.utils;
 
-import java.util.Properties;
-
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;

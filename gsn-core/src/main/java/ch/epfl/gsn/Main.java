@@ -56,7 +56,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
-import java.sql.Connection;
 
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
