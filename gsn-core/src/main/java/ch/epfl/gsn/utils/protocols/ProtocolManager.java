@@ -105,7 +105,10 @@ public class ProtocolManager {
 		if (currentState == ProtocolStates.READY) {
 			AbstractHCIQuery query = protocol.getQuery(queryName);
 
-			if (query != null) {
+			if (query == null) {
+				logger.warn("Query " + queryName
+						+ " found but no bytes produced to send to device. Implementation may be missing.");
+			} else {
 				if(logger.isDebugEnabled()){
 					logger.debug("Retrieved query " + queryName + ", trying to build raw query.");
 				}
@@ -138,9 +141,6 @@ public class ProtocolManager {
 						currentState = ProtocolStates.READY;
 					}
 				}
-			} else {
-				logger.warn("Query " + queryName
-						+ " found but no bytes produced to send to device. Implementation may be missing.");
 			}
 
 		}

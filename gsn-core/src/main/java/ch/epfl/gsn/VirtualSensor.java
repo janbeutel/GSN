@@ -114,15 +114,15 @@ public class VirtualSensor {
      * virtual sensor was already released.
      */
     public synchronized void closePool() {
-        if (virtualSensor != null) {
+        if (virtualSensor == null) {
+            if(logger.isDebugEnabled()){
+                logger.debug("VS " + config.getName() + " was already released.");
+            }       
+        } else {
             virtualSensor.dispose_decorated();
             if(logger.isDebugEnabled()){
                 logger.debug("VS " + config.getName() + " is now released.");
-            }
-        } else {
-            if(logger.isDebugEnabled()){
-                logger.debug("VS " + config.getName() + " was already released.");
-            }        
+            } 
         }
 
     }

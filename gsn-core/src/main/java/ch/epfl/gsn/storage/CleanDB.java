@@ -41,7 +41,7 @@ public class CleanDB {
 
   public static void main(String[] args) throws Exception {
     ContainerConfig cc = Main.getContainerConfig();
-    StorageConfig sc = cc.getSliding() != null ? cc.getSliding().getStorage() : cc.getStorage();
+    StorageConfig sc = cc.getSliding() == null ? cc.getStorage() : cc.getSliding().getStorage(); 
     Class.forName(sc.getJdbcDriver());
     StorageManager sm = StorageManagerFactory.getInstance(sc.getJdbcDriver(), sc.getJdbcUsername(),
         sc.getJdbcPassword(), sc.getJdbcURL(), Main.DEFAULT_MAX_DB_CONNECTIONS);

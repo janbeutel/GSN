@@ -168,6 +168,9 @@ public class DPPMessagePlugin extends AbstractPlugin {
 		}
 
 		if (getDeviceID() != null) {
+			processPayload = msgClass.sendPayloadSuccess(false);
+			inputInfo = new InputInfo(getActiveAddressBean().toString(), "device ID is null ", false);
+		} else {
 			boolean ret = false;
 			try {
 				if (logger.isDebugEnabled()) {
@@ -243,9 +246,6 @@ public class DPPMessagePlugin extends AbstractPlugin {
 				inputInfo = new InputInfo(getActiveAddressBean().toString(),
 						"DPP message upload not successfull: " + e.getMessage(), false);
 			}
-		} else {
-			processPayload = msgClass.sendPayloadSuccess(false);
-			inputInfo = new InputInfo(getActiveAddressBean().toString(), "device ID is null ", false);
 		}
 
 		if (processPayload != null) {

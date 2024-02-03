@@ -84,14 +84,13 @@ public class ZeroMQWrapperPush extends AbstractWrapper {
 			throw new RuntimeException("The >local_address< parameter is missing from the ZeroMQ wrapper.");
 		}
 
-		if (_lport != null) {
+		if (_lport == null) {
+			throw new RuntimeException("The >local_port< parameter is missing from the ZeroMQ wrapper.");
+		} else {
 			lport = Integer.parseInt(_lport);
 			if (lport <= 0 || lport > 65535) {
 				throw new RuntimeException("The >local_port< parameter must be a valid port number.");
 			}
-
-		} else {
-			throw new RuntimeException("The >local_port< parameter is missing from the ZeroMQ wrapper.");
 		}
 
 		ZContext ctx = Main.getZmqContext();

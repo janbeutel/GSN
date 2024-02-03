@@ -154,15 +154,15 @@ public class MQTTWrapper extends AbstractWrapper implements MqttCallbackExtended
 	 */
 	@Override
 	public void connectComplete(boolean reconnect, String s) {
-		if (!reconnect) {
+		if (reconnect) {
+			if(logger.isDebugEnabled()){
+				logger.debug("MQTT server reconnected " + s);
+			}
+		} else {
 			try {
 				client.subscribe(topic, qos);
 			} catch (MqttException e) {
 				logger.error("Error while subscribing to topic " + topic + " with qos " + qos, e);
-			}
-		} else {
-			if(logger.isDebugEnabled()){
-				logger.debug("MQTT server reconnected " + s);
 			}
 		}
 	}

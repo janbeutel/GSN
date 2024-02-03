@@ -299,29 +299,29 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 		logger.info("Maximum buffered stream age: " + bufferSizeInMs + "ms");
 		logger.info("Number of streams needed to merge: " + bucketSpace);
 		logger.info("Timeline: " + timeline);
-		if (bucketSizeInMs != null) {
+		if (bucketSizeInMs == null) {
+			logger.info("Timed bucket sorting not used");
+		} else {
 			logger.info("Bucket size: " + bucketSizeInMs + "ms");
 			logger.info("Bucket edge type: " + bucketEdgeTypeStr);
-		} else {
-			logger.info("Timed bucket sorting not used");
 		}
 
-		if (defaultMergeOperator != null) {
-			logger.info("Default merge operator: " + defaultMergeOperator);
-		} else {
+		if (defaultMergeOperator == null) {
 			logger.info("No default merge operator specified");
+		} else {
+			logger.info("Default merge operator: " + defaultMergeOperator);
 		}
 
-		if (matchingFieldName1 != null) {
-			logger.info("Matching field 1: " + matchingFieldName1);
-		} else {
+		if (matchingFieldName1 == null) {
 			logger.info("No matching field 1 specified");
+		} else {
+			logger.info("Matching field 1: " + matchingFieldName1);
 		}
 
-		if (matchingFieldName2 != null) {
-			logger.info("Matching field 2: " + matchingFieldName2);
-		} else {
+		if (matchingFieldName2 == null) {
 			logger.info("No matching field 2 specified");
+		} else {
+			logger.info("Matching field 2: " + matchingFieldName2);
 		}
 
 		if (filterDuplicates) {

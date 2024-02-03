@@ -117,8 +117,11 @@ public class GridDataWrapper extends AbstractWrapper {
         }
 
         String rateStr = addressBean.getPredicateValue(PARAM_RATE);
-        if (rateStr != null) {
-
+        if (rateStr == null) {
+            logger.warn("The > " + PARAM_RATE + " < parameter is missing from the wrapper in VS "
+                    + this.getActiveAddressBean().getVirtualSensorName());
+            return false;
+        } else {
             try {
                 rate = Integer.parseInt(rateStr);
             } catch (NumberFormatException e) {
@@ -126,10 +129,6 @@ public class GridDataWrapper extends AbstractWrapper {
                         + this.getActiveAddressBean().getVirtualSensorName());
                 return false;
             }
-        } else {
-            logger.warn("The > " + PARAM_RATE + " < parameter is missing from the wrapper in VS "
-                    + this.getActiveAddressBean().getVirtualSensorName());
-            return false;
         }
 
         latestProcessedTimestamp = -1;
@@ -274,10 +273,10 @@ public class GridDataWrapper extends AbstractWrapper {
 
                         try {
                             Double d = Double.parseDouble(aLine[j]);
-                            if (d != null) {
-                                raw.add(d);
-                            } else {
+                            if (d == null) {
                                 raw.add(NODATA_value);
+                            } else {
+                                raw.add(d);
                             }
                         } catch (java.lang.NumberFormatException e) {
                             logger.warn(j + ": \"" + aLine[j] + "\"");

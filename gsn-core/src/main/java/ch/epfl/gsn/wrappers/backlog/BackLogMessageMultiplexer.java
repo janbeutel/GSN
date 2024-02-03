@@ -198,17 +198,17 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 						}
 
 						connecting = false;
-						if (tmp[0] != HELLO_BYTE) {
-							logger.error("connection hello message does not match -> reconnect");
-							asyncCoreStationClient.reconnect(this);
-							recvQueue.clear();
-						} else {
+						if (tmp[0] == HELLO_BYTE) {
 							coreStationDeviceId = arr2int(tmp, 1);
 							logger.info("connected successfully to CoreStation " + hostName + " with device id "
 									+ coreStationDeviceId + " at " + deploymentName + " deployment");
 							asyncCoreStationClient.addDeviceId(deploymentName, coreStationDeviceId, this);
 							connectionFinished();
 							conn = true;
+						} else {
+							logger.error("connection hello message does not match -> reconnect");
+							asyncCoreStationClient.reconnect(this);
+							recvQueue.clear();
 						}
 					}
 				}

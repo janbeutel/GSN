@@ -308,10 +308,10 @@ public abstract class AbstractWrapper extends Thread implements Monitorable {
 			}
 			conn = Main.getWindowStorage().getConnection();
 			Main.getWindowStorage().executeInsert(aliasCodeS, getOutputFormat(), se, conn);
-			if (getPartialOrdersKey() != null) {
-				lastInOrderTimestamp.put(se.getData(getPartialOrdersKey()), se.getTimeStamp());
-			} else {
+			if (getPartialOrdersKey() == null) {
 				lastInOrderTimestamp.put(0, se.getTimeStamp());
+			} else {
+				lastInOrderTimestamp.put(se.getData(getPartialOrdersKey()), se.getTimeStamp());
 			}
 			elementCount = elementCount == Long.MAX_VALUE ? 0 : elementCount + 1;
 			return true;

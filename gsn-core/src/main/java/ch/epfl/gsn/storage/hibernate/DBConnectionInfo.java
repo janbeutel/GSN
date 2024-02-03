@@ -91,16 +91,16 @@ public class DBConnectionInfo {
 
         DBConnectionInfo that = (DBConnectionInfo) o;
 
-        if (driverClass != null ? !driverClass.equals(that.driverClass) : that.driverClass != null) {
+        if (driverClass == null ? that.driverClass != null : !driverClass.equals(that.driverClass)) {
             return false;
         }
-        if (password != null ? !password.equals(that.password) : that.password != null) {
+        if (password == null ?  that.password != null : !password.equals(that.password)) {
             return false;
         }
-        if (url != null ? !url.equals(that.url) : that.url != null) {
+        if (url == null ? that.url != null : !url.equals(that.url)) {
             return false;
         }
-        if (userName != null ? !userName.equals(that.userName) : that.userName != null) {
+        if (userName == null ? that.userName != null : !userName.equals(that.userName)) {
             return false;
         }
 
@@ -124,10 +124,10 @@ public class DBConnectionInfo {
     }
 
     public int hashCode() {
-        int result = driverClass != null ? driverClass.hashCode() : 0;
-        result = 31 * result + (url != null ? url.hashCode() : 0);
-        result = 31 * result + (userName != null ? userName.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
+        int result = driverClass == null ? 0 : driverClass.hashCode();
+        result = 31 * result + (url == null ? 0 : url.hashCode());
+        result = 31 * result + (userName == null ? 0 : userName.hashCode());
+        result = 31 * result + (password == null ? 0 : password.hashCode());
         return Math.abs(result);
     }
 

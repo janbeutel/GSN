@@ -597,12 +597,21 @@ public class DataMappingWrapper extends AbstractWrapper {
 		try {
 			while (list.hasNext()) {
 				convName = list.next().toLowerCase();
-				if (data.getData(convName) != null) {
+				if (data.getData(convName) == null) {
+					if(logger.isDebugEnabled()){
+						logger.debug(vsName + "[source=" + inputStreamName + "]: ignoring >" + convName + "<");
+					}
+				} else {
 					convResult = m.executeConversionSelect(((Integer) data.getData("position")).intValue(),
 							((Long) data.getData("generation_time")).longValue(),
 							convName);
 
-					if (convResult != null) {
+					if (convResult == null) {
+						if(logger.isDebugEnabled()){
+							logger.debug(vsName + "[source=" + inputStreamName + "]: no conversion found for >" + convName
+								+ "<");
+						}
+					} else {
 						// physical_signal, conversion, input, value
 						if(logger.isDebugEnabled()){
 							logger.debug(vsName + "[source=" + inputStreamName + "]: physical_signal:" + convResult[0]
@@ -631,15 +640,6 @@ public class DataMappingWrapper extends AbstractWrapper {
 						} catch (Exception e) {
 							logger.error(e.getMessage(), e);
 						}
-					} else {
-						if(logger.isDebugEnabled()){
-							logger.debug(vsName + "[source=" + inputStreamName + "]: no conversion found for >" + convName
-								+ "<");
-						}
-					}
-				} else {
-					if(logger.isDebugEnabled()){
-						logger.debug(vsName + "[source=" + inputStreamName + "]: ignoring >" + convName + "<");
 					}
 				}
 			}
@@ -1000,7 +1000,9 @@ public class DataMappingWrapper extends AbstractWrapper {
 		 */
 		public ArrayList<Serializable[]> executePositionInsert(VSensorConfig vSensorConfig, int deviceId,
 				short deviceType, Long begin, Long end, int pos, String comment, boolean check) throws Exception {
-			if (position_insert != null) {
+			if (position_insert == null) {
+				throw new Exception("no position mapping available");
+			} else {
 				synchronized (position_insert) {
 					ArrayList<Serializable[]> ret = new ArrayList<Serializable[]>(2);
 					if (check) {
@@ -1045,10 +1047,7 @@ public class DataMappingWrapper extends AbstractWrapper {
 									pos + " AND device_id = " +
 									deviceId + " AND end IS null AND begin < " + end);
 
-							if (!rs.next()) {
-								throw new Exception(
-										"new mapping does not end an existing entry with the same position and device_id");
-							} else {
+							if (rs.next()) {
 								if (!rs.isLast()) {
 									logger.error("there are too many result sets");
 								}
@@ -1078,6 +1077,9 @@ public class DataMappingWrapper extends AbstractWrapper {
 								}
 
 								return ret;
+							} else {
+								throw new Exception(
+										"new mapping does not end an existing entry with the same position and device_id");
 							}
 						} else if (end == null) {
 							// check for overlapping position in this open time period
@@ -1180,8 +1182,6 @@ public class DataMappingWrapper extends AbstractWrapper {
 
 					return ret;
 				}
-			} else {
-				throw new Exception("no position mapping available");
 			}
 
 		}
@@ -1306,7 +1306,9 @@ public class DataMappingWrapper extends AbstractWrapper {
 		 */
 		public ArrayList<Serializable[]> executeGeoInsert(VSensorConfig vSensorConfig, Integer pos, Double longitude,
 				Double latitude, Double altitude, String comment, boolean check) throws Exception {
-			if (geo_insert != null) {
+			if (geo_insert == null) {
+				throw new Exception("no geo mapping available");
+			} else {
 				synchronized (geo_insert) {
 					ArrayList<Serializable[]> ret = new ArrayList<Serializable[]>(1);
 					if (check) {
@@ -1345,8 +1347,6 @@ public class DataMappingWrapper extends AbstractWrapper {
 
 					return ret;
 				}
-			} else {
-				throw new Exception("no geo mapping available");
 			}
 
 		}
@@ -1429,7 +1429,9 @@ public class DataMappingWrapper extends AbstractWrapper {
 		 */
 		public ArrayList<Serializable[]> executeSensorInsert(VSensorConfig vSensorConfig, Integer pos, Long begin,
 				Long end, String type, Long typeArgs, String comment, boolean check) throws Exception {
-			if (sensor_insert != null) {
+			if (sensor_insert == null) {
+				throw new Exception("no sensor mapping available");
+			} else {
 				synchronized (sensor_insert) {
 					ArrayList<Serializable[]> ret = new ArrayList<Serializable[]>(2);
 					if (check) {
@@ -1464,10 +1466,7 @@ public class DataMappingWrapper extends AbstractWrapper {
 									pos + " AND sensortype LIKE '" +
 									type + "' AND end IS null AND begin < " + end);
 
-							if (!rs.next()) {
-								throw new Exception(
-										"new sensor mapping does not end an existing entry or sensortype is not matching");
-							} else {
+							if (rs.next()) {
 								if (!rs.isLast()) {
 									logger.error("there are too many result sets");
 								}
@@ -1491,6 +1490,9 @@ public class DataMappingWrapper extends AbstractWrapper {
 								}
 
 								return ret;
+							} else {
+								throw new Exception(
+										"new sensor mapping does not end an existing entry or sensortype is not matching");
 							}
 						} else if (end == null) {
 							// check for overlapping position in this open time period
@@ -1523,7 +1525,9 @@ public class DataMappingWrapper extends AbstractWrapper {
 								logger.error("there are too many result sets");
 							}
 
-							if (end != null) {
+							if (end == null) {
+								throw new Exception("the same begin for this position is already existing");
+							} else {
 								long h2pk = rs.getLong(1);
 								String h2comment = rs.getString(7);
 
@@ -1540,8 +1544,6 @@ public class DataMappingWrapper extends AbstractWrapper {
 											end + ", comment = '" + comment + "' WHERE pk = " + h2pk);
 									ret.add(new Serializable[] { pos, begin, end, type, typeArgs, comment });
 								}
-							} else {
-								throw new Exception("the same begin for this position is already existing");
 							}
 
 							return ret;
@@ -1594,8 +1596,6 @@ public class DataMappingWrapper extends AbstractWrapper {
 
 					return ret;
 				}
-			} else {
-				throw new Exception("no sensor mapping available");
 			}
 
 		}

@@ -184,11 +184,11 @@ public class JDBCWrapper extends AbstractWrapper {
         if (usePreviousCheckPoint) {
             logger.warn("trying to read latest timestamp from chekpoint file ... " + checkPointFile);
             try {
-                if (getLatestTimeStampFromCheckPoint() != 0) {
+                if (getLatestTimeStampFromCheckPoint() == 0) {
+                    logger.warn("wrong value for latest ts (" + getLatestTimeStampFromCheckPoint() + "), ignored");
+                } else {
                     latest_timed = getLatestTimeStampFromCheckPoint();
                     logger.warn("latest ts => " + latest_timed);
-                } else {
-                    logger.warn("wrong value for latest ts (" + getLatestTimeStampFromCheckPoint() + "), ignored");
                 }
             } catch (IOException e) {
                 logger.warn("Checkpoints couldn't be used due to IO exception.");

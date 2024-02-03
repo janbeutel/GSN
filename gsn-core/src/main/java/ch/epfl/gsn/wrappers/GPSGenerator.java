@@ -96,7 +96,10 @@ public class GPSGenerator extends AbstractWrapper {
             samplingRate = DEFAULT_SAMPLING_RATE;
          }
       }
-      if (addressBean.getPredicateValue("picture") != null) {
+      if (addressBean.getPredicateValue("picture") == null) {
+         logger.warn("The >picture< parameter is missing from the GPSGenerator wrapper.");
+         return false;
+      } else {
          String picture = addressBean.getPredicateValue("picture");
          File pictureF = new File(picture);
          if (!pictureF.isFile() || !pictureF.canRead()) {
@@ -120,9 +123,6 @@ public class GPSGenerator extends AbstractWrapper {
             logger.warn(e.getMessage(), e);
             return false;
          }
-      } else {
-         logger.warn("The >picture< parameter is missing from the GPSGenerator wrapper.");
-         return false;
       }
       ArrayList<DataField> output = new ArrayList<DataField>();
       for (int i = 0; i < FIELD_NAMES.length; i++) {

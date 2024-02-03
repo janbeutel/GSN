@@ -72,12 +72,12 @@ public class BridgeVirtualSensor extends AbstractVirtualSensor {
         if (allow_nulls) {
             dataProduced(data);
         } else {
-            if (!areAllFieldsNull(data)) {
-                dataProduced(data);
-            } else {
+            if (areAllFieldsNull(data)) {
                 if(logger.isDebugEnabled()){
                     logger.debug("Nulls received for timestamp (" + data.getTimeStamp() + "), discarded");
                 }
+            } else {
+                dataProduced(data);
             }
         }
         if(logger.isDebugEnabled()){

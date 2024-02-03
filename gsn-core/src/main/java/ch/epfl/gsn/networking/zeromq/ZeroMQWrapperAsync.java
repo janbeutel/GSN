@@ -90,16 +90,16 @@ public class ZeroMQWrapperAsync extends AbstractWrapper {
 		} catch (URISyntaxException e) {
 			throw new IllegalArgumentException(e);
 		}
-		if (!isLocal) {
-			remoteContactPoint_DATA = address.trim() + ":" + dport;
-			remoteContactPoint_META = address.trim() + ":" + mport;
-		} else {
+		if (isLocal) {
 			if (!Main.getContainerConfig().isZMQEnabled()) {
 				throw new IllegalArgumentException(
 						"The \"inproc\" communication can only be used if the current GSN server has zeromq enabled. Please add <zmq-enable>true</zmq-enable> to conf/ch.epfl.gsn.xml.");
 			}
 			remoteContactPoint_DATA = address.trim();
 			remoteContactPoint_META = "tcp://127.0.0.1:" + Main.getContainerConfig().getZMQMetaPort();
+		} else {
+			remoteContactPoint_DATA = address.trim() + ":" + dport;
+			remoteContactPoint_META = address.trim() + ":" + mport;
 		}
 
 		ZContext ctx = Main.getZmqContext();
@@ -157,17 +157,17 @@ public class ZeroMQWrapperAsync extends AbstractWrapper {
 		while (isActive()) {
 			try {
 				byte[] rec = subscriber.recv();
-				if (rec != null) {
-					ByteArrayInputStream bais = new ByteArrayInputStream(rec);
-					bais.skip(vsensor.getBytes().length + 2);
-					StreamElement se = kryo.readObjectOrNull(new Input(bais), StreamElement.class);
-					postStreamElement(se);
-				} else {
+				if (rec == null) {
 					if (isLocal && !connected) {
 						subscriber.disconnect(remoteContactPoint_DATA);
 						connected = subscriber.base().connect(remoteContactPoint_DATA);
 					}
 					subscriber.subscribe((vsensor + ":").getBytes());
+				} else {
+					ByteArrayInputStream bais = new ByteArrayInputStream(rec);
+					bais.skip(vsensor.getBytes().length + 2);
+					StreamElement se = kryo.readObjectOrNull(new Input(bais), StreamElement.class);
+					postStreamElement(se);
 				}
 			} catch (Exception e) {
 				logger.error("ZMQ wrapper error: ", e);

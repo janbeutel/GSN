@@ -484,10 +484,10 @@ public class HibernateStorage implements VirtualSensorStorage {
          *                                   the DataEnumerator is closed
          */
         public StreamElement nextElement() throws RuntimeException {
-            if (!hasMoreElements()) {
-                throw new IndexOutOfBoundsException("The DataEnumerator has no more StreamElement or is closed.");
-            } else {
+            if (hasMoreElements()) {
                 return dm2se(pci.next());
+            } else {
+                throw new IndexOutOfBoundsException("The DataEnumerator has no more StreamElement or is closed.");
             }
         }
 

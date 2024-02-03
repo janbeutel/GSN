@@ -474,23 +474,23 @@ public class AsyncCoreStationClient extends Thread {
 			logger.debug("removing DeviceId: " + id + " for " + deployment + " deployment");
 		}
 		try {
-			if (deployment != null) {
+			if (deployment == null) {
+				logger.error("deployment is null");
+			} else {
 				Map<Integer, CoreStationListener> list = deploymentToIdListenerMapList.get(deployment);
 				if (list == null) {
 					logger.error("there is no core station listener for deployment " + deployment);
 					return;
 				}
-				if (id != null) {
-					list.remove(id);
-				} else {
+				if (id == null) {
 					logger.error("id is null for " + deployment + " deployment");
+				} else {
+					list.remove(id);
 				}
 
 				if (list.isEmpty()) {
 					deploymentToIdListenerMapList.remove(deployment);
 				}
-			} else {
-				logger.error("deployment is null");
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -563,7 +563,9 @@ public class AsyncCoreStationClient extends Thread {
 			throw new IOException("The " + deployment + " deployment is not connected or does not exist");
 		}
 
-		if (id != null) {
+		if (id == null) {
+			ret = send(listener, priority, data, true);
+		} else {
 			if (id == 65535) {
 				Iterator<Integer> iter = corestationMap.keySet().iterator();
 				while (iter.hasNext()) {
@@ -581,8 +583,6 @@ public class AsyncCoreStationClient extends Thread {
 
 				ret = send(listener, priority, data, true);
 			}
-		} else {
-			ret = send(listener, priority, data, true);
 		}
 		return ret;
 	}
@@ -668,7 +668,9 @@ public class AsyncCoreStationClient extends Thread {
 	 */
 	public void reconnect(CoreStationListener listener) {
 		SocketChannel sc = listenerToSocketList.get(listener);
-		if (sc != null) {
+		if (sc == null) {
+			logger.warn("no socket for listener (" + listener.getCoreStationName() + ") in list");
+		} else {
 			try {
 				synchronized (changeRequests) {
 					if (logger.isDebugEnabled()) {
@@ -681,8 +683,6 @@ public class AsyncCoreStationClient extends Thread {
 			} catch (Exception e) {
 				logger.error(e.getMessage(), e);
 			}
-		} else {
-			logger.warn("no socket for listener (" + listener.getCoreStationName() + ") in list");
 		}
 
 	}

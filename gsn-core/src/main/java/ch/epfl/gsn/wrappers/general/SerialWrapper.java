@@ -546,10 +546,10 @@ public class SerialWrapper extends AbstractWrapper implements SerialPortEventLis
 		predicates.add(new KeyValueImp("host", "localhost"));
 		predicates.add(new KeyValueImp("port", "22001"));
 		serialWrapper.setActiveAddressBean(new AddressBean("SerialWrapper", predicates.toArray(new KeyValueImp[] {})));
-		if (!serialWrapper.initialize()) {
-			System.out.println("initialization failed\n");
-		} else {
+		if (serialWrapper.initialize()) {
 			System.out.println("initialization successful\n");
+		} else {
+			System.out.println("initialization failed\n");
 		}
 	}
 

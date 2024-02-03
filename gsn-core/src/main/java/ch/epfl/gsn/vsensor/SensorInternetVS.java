@@ -86,48 +86,48 @@ public class SensorInternetVS extends AbstractVirtualSensor {
 		String param = null;
 
 		param = params.get(SI_URL);
-		if (param != null) {
+		if (param == null) {
+			logger.error(
+					"The required parameter: >" + SI_URL + "<+ is missing from the virtual sensor configuration file.");
+			return false;
+		} else {
 			try {
 				siUrl = new URL(param);
 			} catch (MalformedURLException e) {
 				logger.error(e.getMessage(), e);
 				return false;
 			}
-		} else {
-			logger.error(
-					"The required parameter: >" + SI_URL + "<+ is missing from the virtual sensor configuration file.");
-			return false;
 		}
 
 		param = params.get(SI_USERNAME);
-		if (param != null) {
-			siUsername = param;
-		} else {
+		if (param == null) {
 			logger.error("The required parameter: >" + SI_USERNAME
 					+ "<+ is missing from the virtual sensor configuration file.");
 			return false;
+		} else {
+			siUsername = param;
 		}
 
 		param = params.get(SI_PASSWORD);
-		if (param != null) {
-			siPassword = param;
-		} else {
+		if (param == null) {
 			logger.error("The required parameter: >" + SI_PASSWORD
 					+ "<+ is missing from the virtual sensor configuration file.");
 			return false;
+		} else {
+			siPassword = param;
 		}
 
 		param = params.get(SI_STREAM_MAPPING);
-		if (param != null) {
+		if (param == null) {
+			logger.error("The required parameter: >" + SI_STREAM_MAPPING
+					+ "<+ is missing from the virtual sensor configuration file.");
+			return false;
+		} else {
 			siStreamMapping = initStreamMapping(param);
 			if (siStreamMapping == null) {
 				logger.error("Failed to parse the required parameter: >" + SI_STREAM_MAPPING + "< (" + param + ")");
 				return false;
 			}
-		} else {
-			logger.error("The required parameter: >" + SI_STREAM_MAPPING
-					+ "<+ is missing from the virtual sensor configuration file.");
-			return false;
 		}
 
 		// Enabling Basic authentication

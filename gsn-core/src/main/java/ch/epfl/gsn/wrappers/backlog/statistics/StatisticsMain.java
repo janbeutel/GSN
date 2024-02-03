@@ -41,10 +41,10 @@ public class StatisticsMain {
 			singletonObject = new StatisticsMain();
 		}
 
-		if (!deploymentToDeploymentStatsList.containsKey(deploymentName)) {
-			deploymentToDeploymentStatsList.put(deploymentName, new DeploymentStatistics(statswrapper));
-		} else {
+		if (deploymentToDeploymentStatsList.containsKey(deploymentName)) {
 			deploymentToDeploymentStatsList.get(deploymentName).setStatsWrapper(statswrapper);
+		} else {
+			deploymentToDeploymentStatsList.put(deploymentName, new DeploymentStatistics(statswrapper));
 		}
 
 		return deploymentToDeploymentStatsList.get(deploymentName);

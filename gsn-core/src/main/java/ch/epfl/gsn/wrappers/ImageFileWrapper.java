@@ -110,19 +110,18 @@ public class ImageFileWrapper extends AbstractWrapper {
         }
 
         String rateStr = addressBean.getPredicateValue(PARAM_RATE);
-        if (rateStr != null) {
-
+        if (rateStr == null) {
+            logger.warn("The > " + PARAM_RATE + " < parameter is missing from the wrapper in VS "
+                    + this.getActiveAddressBean().getVirtualSensorName());
+            return false;
+        } else {
             try {
                 rate = Integer.parseInt(rateStr);
             } catch (NumberFormatException e) {
                 logger.warn("The > " + PARAM_RATE + " < parameter is invalid for wrapper in VS "
                         + this.getActiveAddressBean().getVirtualSensorName());
                 return false;
-            }
-        } else {
-            logger.warn("The > " + PARAM_RATE + " < parameter is missing from the wrapper in VS "
-                    + this.getActiveAddressBean().getVirtualSensorName());
-            return false;
+            }  
         }
 
         latestProcessedTimestamp = -1;

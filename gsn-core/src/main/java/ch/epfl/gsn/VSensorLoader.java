@@ -215,7 +215,10 @@ public class VSensorLoader extends Thread {
 	public synchronized void loadVirtualSensor(String vsConfigurationFileContent, String fileName) throws Exception {
 		String filePath = getVSConfigurationFilePath(fileName);
 		File file = new File(filePath);
-		if (!file.exists()) {
+		if (file.exists()) {
+			logger.warn("The configuration file:" + filePath + " already exist.");
+			throw new Exception("The configuration file:" + filePath + " already exist.");
+		} else {
 			try {
 				// Create the VS configuration file
 				Writer fw = new BufferedWriter(new FileWriter(filePath, true));
@@ -234,9 +237,6 @@ public class VSensorLoader extends Thread {
 				}
 				throw e;
 			}
-		} else {
-			logger.warn("The configuration file:" + filePath + " already exist.");
-			throw new Exception("The configuration file:" + filePath + " already exist.");
 		}
 	}
 
@@ -314,10 +314,10 @@ public class VSensorLoader extends Thread {
 				break;
 			}
 		}
-		if (!found) {
-			return false;
-		} else {
+		if (found) {
 			return loadPlugin(addIt.get(0));
+		} else {
+			return false;
 		}
 
 	}

@@ -61,11 +61,11 @@ public class DummyModel extends AbstractModel {
 	@Override
 	public StreamElement[] query(StreamElement params) {
 
-		if (lastone != null) {
-			return new StreamElement[] { lastone };
-		} else {
+		if (lastone == null) {
 			return new StreamElement[] { new StreamElement(new String[] { "value" },
 					new Byte[] { DataTypes.INTEGER }, new Integer[] { defaultValue }) };
+		} else {
+			return new StreamElement[] { lastone };
 		}
 	}
 

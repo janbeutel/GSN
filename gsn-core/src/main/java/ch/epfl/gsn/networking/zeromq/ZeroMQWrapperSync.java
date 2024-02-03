@@ -131,14 +131,14 @@ public class ZeroMQWrapperSync extends AbstractWrapper {
 		} catch (URISyntaxException e) {
 			throw new IllegalArgumentException(e);
 		}
-		if (!isLocal) {
-			remoteContactPoint_META = address.trim() + ":" + mport;
-		} else {
+		if (isLocal) {
 			if (!Main.getContainerConfig().isZMQEnabled()) {
 				throw new IllegalArgumentException(
 						"The \"inproc\" communication can only be used if the current GSN server has zeromq enabled. Please add <zmq-enable>true</zmq-enable> to conf/ch.epfl.gsn.xml.");
 			}
 			remoteContactPoint_META = "tcp://127.0.0.1:" + Main.getContainerConfig().getZMQMetaPort();
+		} else {
+			remoteContactPoint_META = address.trim() + ":" + mport;
 		}
 		remoteContactPoint_META = remoteContactPoint_META.trim();
 		ctx = Main.getZmqContext();
