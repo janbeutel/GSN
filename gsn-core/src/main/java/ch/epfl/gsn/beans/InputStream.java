@@ -352,12 +352,10 @@ public class InputStream implements Serializable {
 
 		if (!queryCached) {
 			rewriteQuery();
-			if (queryCached) {
-				if(logger.isDebugEnabled()){
+			if (queryCached && logger.isDebugEnabled()) {
 					logger.debug(new StringBuilder().append("Rewritten SQL: ").append(this.rewrittenSQL).append("(")
 						.append(Main.getWindowStorage().isThereAnyResult(this.rewrittenSQL)).append(")")
 						.toString());
-				}
 			}
 
 		}

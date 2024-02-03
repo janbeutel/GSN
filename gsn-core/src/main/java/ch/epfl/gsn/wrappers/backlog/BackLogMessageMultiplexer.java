@@ -188,8 +188,7 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 
 				pkt.write(baos.toByteArray());
 
-				if (connecting) {
-					if (pkt.size() >= 5) {
+				if (connecting && pkt.size() >= 5) {
 						byte[] tmp = pkt.toByteArray();
 						pkt = new ByteArrayOutputStream();
 
@@ -210,7 +209,6 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 							asyncCoreStationClient.reconnect(this);
 							recvQueue.clear();
 						}
-					}
 				}
 
 				boolean hasMorePkt = true;

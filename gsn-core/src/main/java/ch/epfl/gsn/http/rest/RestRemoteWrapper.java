@@ -199,10 +199,8 @@ public class RestRemoteWrapper extends AbstractWrapper {
                 httpget.abort();
                 throw ex;
             } finally {
-                if (structure == null) {
-                    if (response != null && response.getEntity() != null) {
+                if (structure == null && response != null && response.getEntity() != null) {
                         response.getEntity().consumeContent();
-                    }
                 }
             }
         }

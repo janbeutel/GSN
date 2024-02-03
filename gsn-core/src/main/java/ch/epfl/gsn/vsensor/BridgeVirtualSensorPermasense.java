@@ -115,17 +115,15 @@ public class BridgeVirtualSensorPermasense extends ScriptletProcessor {
 	@Override
 	public void dataAvailable(String inputStreamName, StreamElement data) {
 		String s;
-		if (position_mapping && data.getData("device_id") != null) {
-			if (data.getData("generation_time") != null) {
-				Integer position = DataMappingWrapper.getPosition(((Integer) data.getData("device_id")).intValue(),
-						((Long) data.getData("generation_time")).longValue(),
-						deployment, getVirtualSensorConfiguration().getName(), inputStreamName);
-				data = new StreamElement(data,
-						new String[] { "position" },
-						new Byte[] { DataTypes.INTEGER },
-						new Serializable[] { position });
+		if (position_mapping && data.getData("device_id") != null && data.getData("generation_time") != null) {
+			Integer position = DataMappingWrapper.getPosition(((Integer) data.getData("device_id")).intValue(),
+					((Long) data.getData("generation_time")).longValue(),
+					deployment, getVirtualSensorConfiguration().getName(), inputStreamName);
+			data = new StreamElement(data,
+					new String[] { "position" },
+					new Byte[] { DataTypes.INTEGER },
+					new Serializable[] { position });
 
-			}
 		}
 		if (sensortype_mapping &&
 				data.getData("position") != null && data.getData("generation_time") != null) {

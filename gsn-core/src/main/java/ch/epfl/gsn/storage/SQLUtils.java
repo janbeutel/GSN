@@ -162,12 +162,10 @@ public class SQLUtils {
 				continue;
 			}
 			String tableName = matcher.group(3);
-			if (tableName.equals(tableNameToRename)) {
+			if (tableName.equals(tableNameToRename) && replaceTo != null) {
 				// $4 means that the 4th group of the match should be appended to the
 				// string (the forth group contains the field name).
-				if (replaceTo != null) {
-					matcher.appendReplacement(result, new StringBuilder(replaceTo).append("$4").toString());
-				}
+				matcher.appendReplacement(result, new StringBuilder(replaceTo).append("$4").toString());
 			}
 		}
 		String toReturn = matcher.appendTail(result).toString().toLowerCase();
