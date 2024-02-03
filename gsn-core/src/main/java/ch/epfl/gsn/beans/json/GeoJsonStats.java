@@ -1,6 +1,8 @@
 package ch.epfl.gsn.beans.json;
 
 public class GeoJsonStats {
+    private Long startDatetime;
+    private Long endDatetime;
     public Long getStartDatetime() {
         return startDatetime;
     }
@@ -17,6 +19,5 @@ public class GeoJsonStats {
         this.endDatetime = endDatetime;
     }
 
-    private Long startDatetime;
-    private Long endDatetime;
+
 }

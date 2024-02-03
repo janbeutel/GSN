@@ -87,7 +87,11 @@ public abstract class AbstractWrapper extends Thread implements Monitorable {
 	private Long oooCount = 0L;
 
 	private Long elementCount = 0L;
+	private long noOfCallsToPostSE = 0;
 
+	private final transient int aliasCode = Main.getWindowStorage().tableNameGenerator();
+	private final CharSequence aliasCodeS = Main.getWindowStorage().tableNameGeneratorInString(aliasCode);
+	public static final String TIME_FIELD = "timed";
 	/**
 	 * Returns the view name created for this listener. Note that, GSN creates
 	 * one view per listener.
@@ -206,10 +210,7 @@ public abstract class AbstractWrapper extends Thread implements Monitorable {
 		this.activeAddressBean = newVal;
 	}
 
-	private long noOfCallsToPostSE = 0;
-
-	private final transient int aliasCode = Main.getWindowStorage().tableNameGenerator();
-	private final CharSequence aliasCodeS = Main.getWindowStorage().tableNameGeneratorInString(aliasCode);
+	
 
 	public int getDBAlias() {
 		return aliasCode;
@@ -481,7 +482,7 @@ public abstract class AbstractWrapper extends Thread implements Monitorable {
 		Main.getWindowStorage().executeDropTable(aliasCodeS);
 	}
 
-	public static final String TIME_FIELD = "timed";
+
 
 	public final boolean initialize_wrapper() {
 		boolean r = initialize();

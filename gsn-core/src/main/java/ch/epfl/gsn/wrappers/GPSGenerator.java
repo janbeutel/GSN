@@ -70,6 +70,7 @@ public class GPSGenerator extends AbstractWrapper {
    private byte[] picture;
 
    private DataField[] outputStrcture;
+   private static int step = 1;
 
    public DataField[] getOutputFormat() {
       return outputStrcture;
@@ -132,7 +133,7 @@ public class GPSGenerator extends AbstractWrapper {
       return true;
    }
 
-   private static int step = 1;
+
 
    /**
     * Runs the GPSGenerator thread.

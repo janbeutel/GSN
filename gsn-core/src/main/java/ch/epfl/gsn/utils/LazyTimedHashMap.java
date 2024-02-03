@@ -40,7 +40,9 @@ public class LazyTimedHashMap {
    private Map<Object, Object> keyToValueMapping = new ConcurrentHashMap();
 
    private List<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
+   public static final String ITEM_REMOVED = "REMOVED";
 
+   public static final String ITEM_ADDED = "ADDED";
    /**
     * This class is thread-safe .
     * 
@@ -174,9 +176,6 @@ public class LazyTimedHashMap {
       }
    }
 
-   public static final String ITEM_REMOVED = "REMOVED";
-
-   public static final String ITEM_ADDED = "ADDED";
 
    /**
     * Updates the values of all keys in the LazyTimedHashMap.

@@ -79,6 +79,10 @@ public class InputStream implements Serializable {
 
 	private boolean queryCached;
 
+	private transient boolean hasValidated = false;
+
+	private transient boolean cachedValidationResult = false;
+
 	/**
 	 * For making one initial delay.
 	 */
@@ -253,9 +257,6 @@ public class InputStream implements Serializable {
 	public void release(final HashMap context) {
 	}
 
-	private transient boolean hasValidated = false;
-
-	private transient boolean cachedValidationResult = false;
 
 	/**
 	 * Validates the input stream by checking if it has valid sources.

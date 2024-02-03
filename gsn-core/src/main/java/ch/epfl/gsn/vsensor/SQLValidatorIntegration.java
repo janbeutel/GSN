@@ -40,7 +40,7 @@ import org.slf4j.Logger;
 public class SQLValidatorIntegration implements VSensorStateChangeListener {
 
 	private SQLValidator validator;
-
+	private static final transient Logger logger = LoggerFactory.getLogger(SQLValidatorIntegration.class);
 	/**
 	 * Constructor for SQLValidatorIntegration.
 	 * Initializes the SQLValidator instance.
@@ -51,7 +51,6 @@ public class SQLValidatorIntegration implements VSensorStateChangeListener {
 		this.validator = validator;
 	}
 
-	private static final transient Logger logger = LoggerFactory.getLogger(SQLValidatorIntegration.class);
 
 	/**
 	 * Validates the SQL for creating the table for the given virtual sensor

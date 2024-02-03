@@ -62,12 +62,6 @@ public class CSVHandler {
     private static Logger logger = LoggerFactory.getLogger(CSVHandler.class);
 
     private static final String TIMESTAMP = "timed";
-
-    public static DateTime parseTimeStamp(String format, String value) throws IllegalArgumentException {
-        DateTimeFormatter fmt = DateTimeFormat.forPattern(format);
-        return fmt.parseDateTime(value);
-    }
-
     private char stringSeparator, separator;
     private String dataFile;
     private DateTimeZone timeZone;
@@ -75,6 +69,12 @@ public class CSVHandler {
     private String[] fields, formats, nulls;
 
     private String checkPointFile;
+    private boolean loggedNoChange = false; // to avoid duplicate logging messages when there is no change
+    
+    public static DateTime parseTimeStamp(String format, String value) throws IllegalArgumentException {
+        DateTimeFormatter fmt = DateTimeFormat.forPattern(format);
+        return fmt.parseDateTime(value);
+    }
 
     public boolean initialize(String dataFile, String inFields, String inFormats, char separator, char stringSeparator,
             int skipFirstXLines, String nullValues) {
@@ -235,7 +235,7 @@ public class CSVHandler {
         FileUtils.writeStringToFile(new File(checkPointFile), Long.toString(timestamp), "UTF-8");
     }
 
-    private boolean loggedNoChange = false; // to avoid duplicate logging messages when there is no change
+   
 
     /**
      * Parses the values from the given Reader object and returns an ArrayList of

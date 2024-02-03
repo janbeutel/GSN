@@ -48,6 +48,7 @@ public class ContainerImpl {
 
 	private static ContainerImpl singleton;
 	private static final Object psLock = new Object();
+	private ArrayList<VirtualSensorDataListener> dataListeners = new ArrayList<VirtualSensorDataListener>();
 
 	private ContainerImpl() {
 	}
@@ -103,8 +104,6 @@ public class ContainerImpl {
 			listener.consume(data, sensor.getVirtualSensorConfiguration());
 		}
 	}
-
-	private ArrayList<VirtualSensorDataListener> dataListeners = new ArrayList<VirtualSensorDataListener>();
 
 	/**
 	 * Adds a VirtualSensorDataListener to the list of data listeners if it is not

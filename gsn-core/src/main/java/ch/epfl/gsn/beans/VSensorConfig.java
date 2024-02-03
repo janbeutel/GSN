@@ -104,6 +104,16 @@ public class VSensorConfig implements Serializable {
 	private String access_protected = "false";
 	private Boolean stats = null;
 	private String statistics = Boolean.toString(DEFAULT_STATISTICS);
+	private boolean nameInitialized = false;
+	private boolean isStorageCountBased = true;
+	public static final int STORAGE_SIZE_NOT_SET = -1;
+	private long parsedStorageSize = STORAGE_SIZE_NOT_SET;
+	private transient Double cached_altitude = null;
+	private transient Double cached_longitude = null;
+	private transient Double cached_latitude = null;
+	private boolean addressing_processed = false;
+
+	private boolean isTimestampUnique = false;
 
 	/**
 	 * @return Returns the addressing.
@@ -186,11 +196,13 @@ public class VSensorConfig implements Serializable {
 	}
 
 	/**
-	 * The <code>nameInitialized</code> is used to cache the virtual sensor's
-	 * name for preformance.
+	 * Returns the name of the VSensorConfig.
+	 * If the name has not been initialized, it removes spaces, trims leading and
+	 * trailing whitespace,
+	 * and converts the name to lowercase before returning it.
+	 *
+	 * @return the name of the VSensorConfig
 	 */
-	private boolean nameInitialized = false;
-
 	public String getName() {
 		if (this.nameInitialized == false) {
 			this.name = this.name.replace(" ", "").trim().toLowerCase();
@@ -365,12 +377,6 @@ public class VSensorConfig implements Serializable {
 		this.fileName = fileName;
 	}
 
-	private boolean isStorageCountBased = true;
-
-	public static final int STORAGE_SIZE_NOT_SET = -1;
-
-	private long parsedStorageSize = STORAGE_SIZE_NOT_SET;
-
 	/**
 	 * @return Returns the storageHistorySize.
 	 */
@@ -487,7 +493,7 @@ public class VSensorConfig implements Serializable {
 	}
 
 	public int hashCode() {
-		if (name == null){
+		if (name == null) {
 			return super.hashCode();
 		} else {
 			return name.hashCode();
@@ -549,16 +555,6 @@ public class VSensorConfig implements Serializable {
 
 		return Boolean.parseBoolean(sensorMap);
 	}
-
-	/**
-	 * Addressing Helper methods.
-	 */
-	private transient Double cached_altitude = null;
-	private transient Double cached_longitude = null;
-	private transient Double cached_latitude = null;
-	private boolean addressing_processed = false;
-
-	private boolean isTimestampUnique = false;
 
 	/**
 	 * Preprocesses the addressing information of the VSensorConfig.

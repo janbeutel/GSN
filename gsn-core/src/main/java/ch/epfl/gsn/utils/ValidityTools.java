@@ -55,7 +55,7 @@ public class ValidityTools {
 	static Pattern hostAndPortPattern = Pattern.compile("(.+):(\\d+)$");
 
 	public static final transient Logger logger = LoggerFactory.getLogger(ValidityTools.class);
-
+	public static final ArrayList<InetAddress> NETWORK_LOCAL_INETADDRESSES = new ArrayList<InetAddress>();
 	/**
 	 * Checks to see if the specified address is accessible. 3sec is used as the
 	 * default
@@ -222,7 +222,7 @@ public class ValidityTools {
 	// public static final ArrayList < String > NETWORK_LOCAL_ADDRESS = new
 	// ArrayList < String >( );
 
-	public static final ArrayList<InetAddress> NETWORK_LOCAL_INETADDRESSES = new ArrayList<InetAddress>();
+	
 	static {
 		try {
 			Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();

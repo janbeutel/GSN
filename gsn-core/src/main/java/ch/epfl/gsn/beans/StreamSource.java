@@ -89,6 +89,20 @@ public class StreamSource implements Serializable {
   private AddressBean activeAddressBean; // To be used by the gui
 
   private transient QueryRewriter queryRewriter;
+  private transient boolean isStorageCountBased = false;
+
+  private WindowType windowingType = DEFAULT_WINDOW_TYPE;
+
+  public static final long STORAGE_SIZE_NOT_SET = -1;
+  public static final long DEFAULT_SLIDE_VALUE = 1;
+  public static final WindowType DEFAULT_WINDOW_TYPE = WindowType.TUPLE_BASED_SLIDE_ON_EACH_TUPLE;
+
+  private transient long parsedStorageSize = STORAGE_SIZE_NOT_SET;
+
+  private transient long parsedSlideValue = DEFAULT_SLIDE_VALUE;
+
+  private transient boolean isValidated = false;
+  private transient boolean validationResult = false;
 
   public StreamSource() {
   }
@@ -215,21 +229,6 @@ public class StreamSource implements Serializable {
 
     return wrapper;
   }
-
-  private transient boolean isStorageCountBased = false;
-
-  private WindowType windowingType = DEFAULT_WINDOW_TYPE;
-
-  public static final long STORAGE_SIZE_NOT_SET = -1;
-  public static final long DEFAULT_SLIDE_VALUE = 1;
-  public static final WindowType DEFAULT_WINDOW_TYPE = WindowType.TUPLE_BASED_SLIDE_ON_EACH_TUPLE;
-
-  private transient long parsedStorageSize = STORAGE_SIZE_NOT_SET;
-
-  private transient long parsedSlideValue = DEFAULT_SLIDE_VALUE;
-
-  private transient boolean isValidated = false;
-  private transient boolean validationResult = false;
 
   /**
    * ;

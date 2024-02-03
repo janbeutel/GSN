@@ -48,6 +48,9 @@ public final class AddressBean implements Serializable {
 	private DataField[] wrapperOutputStructure = new DataField[0];
 
 	private double random = Math.random();
+	private String inputStreamName;
+	private String virtualSensorName;
+	private VSensorConfig vsconfig;
 
 	public AddressBean() {
 		this.predicates = EMPTY_PREDICATES;
@@ -229,9 +232,6 @@ public final class AddressBean implements Serializable {
 		return result.toString();
 	}
 
-	private String inputStreamName;
-	private String virtualSensorName;
-	private VSensorConfig vsconfig;
 
 	public DataField[] getOutputStructure() {
 		return wrapperOutputStructure;

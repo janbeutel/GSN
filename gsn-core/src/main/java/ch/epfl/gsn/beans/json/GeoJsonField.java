@@ -1,6 +1,9 @@
 package ch.epfl.gsn.beans.json;
 
 public class GeoJsonField {
+
+    private String type;
+    private String unit;
     private String name;
 
     public String getName() {
@@ -27,6 +30,4 @@ public class GeoJsonField {
         this.unit = unit;
     }
 
-    private String type;
-    private String unit;
 }

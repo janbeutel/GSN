@@ -22,7 +22,7 @@ public class RestDelivery implements DeliverySystem {
     private String remoteHost;
     private ObjectOutputStream objectStream;
     private Integer limit = null;
-
+    private static transient Logger logger = LoggerFactory.getLogger(RestDelivery.class);
     private static final StreamElement keepAliveMsg = new StreamElement(
             new DataField[] { new DataField("keepalive", "string") }, new Serializable[] { "keep-alive message" });
 
@@ -43,7 +43,7 @@ public class RestDelivery implements DeliverySystem {
                 .createObjectOutputStream((new WriterOutputStream(continuation.getServletResponse().getWriter())));
     }
 
-    private static transient Logger logger = LoggerFactory.getLogger(RestDelivery.class);
+   
 
     public void writeStructure(DataField[] fields) throws IOException {
         objectStream.writeObject(fields);

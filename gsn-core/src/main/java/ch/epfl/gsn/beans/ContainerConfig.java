@@ -90,6 +90,8 @@ public class ContainerConfig {
 
 	private int maxDBConnections;
 	private int maxSlidingDBConnections;
+	private ArrayList<KeyValueImp> msrMap;
+	private HashMap<String, String> msrMapCached;
 
 	public ContainerConfig() {
 
@@ -321,8 +323,6 @@ public class ContainerConfig {
 	/**
 	 * MSR MAP PART.
 	 */
-	private ArrayList<KeyValueImp> msrMap;
-	private HashMap<String, String> msrMapCached;
 
 	public HashMap<String, String> getMsrMap() {
 		if (msrMapCached == null) {

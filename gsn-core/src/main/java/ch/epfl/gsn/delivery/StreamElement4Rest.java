@@ -41,7 +41,7 @@ import ch.epfl.gsn.beans.StreamElement;
 public class StreamElement4Rest {
 
 	private List<Field4Rest> fields = new ArrayList<Field4Rest>();
-
+	private Date timestamp;
 	/**
 	 * Default constructor.
 	 */
@@ -78,7 +78,7 @@ public class StreamElement4Rest {
 		return sb.toString();
 	}
 
-	private Date timestamp;
+
 
 	/**
 	 * Converts the StreamElement4Rest object to a StreamElement object.

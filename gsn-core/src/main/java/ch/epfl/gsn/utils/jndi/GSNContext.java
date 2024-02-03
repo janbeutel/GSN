@@ -41,7 +41,7 @@ public class GSNContext  implements Context {
     private static final transient Logger logger = LoggerFactory.getLogger(GSNContext.class);
 
     private static InitialContext mainContext;
-
+    private ConcurrentHashMap<String,Object> map = new ConcurrentHashMap();
     static {
         Properties props = new Properties();
         props.put(Context.INITIAL_CONTEXT_FACTORY, GSNContextFactory.class.getCanonicalName());
@@ -56,7 +56,6 @@ public class GSNContext  implements Context {
         return mainContext;
     }
 
-    private ConcurrentHashMap<String,Object> map = new ConcurrentHashMap();
 
     public Object lookup(Name name) throws NamingException {
         throw new OperationNotSupportedException();

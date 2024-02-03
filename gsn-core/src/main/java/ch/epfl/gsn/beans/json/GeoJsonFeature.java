@@ -1,6 +1,11 @@
 package ch.epfl.gsn.beans.json;
 
 public class GeoJsonFeature {
+    private String type;
+    private GeoJsonProperties properties;
+    private GeoJsonGeometry geometry;
+    private int total_size;
+    private int page_size;
 
     public String getType() {
         return type;
@@ -42,10 +47,6 @@ public class GeoJsonFeature {
         this.page_size = page_size;
     }
 
-    private String type;
-    private GeoJsonProperties properties;
-    private GeoJsonGeometry geometry;
-    private int total_size;
-    private int page_size;
+
 
 }

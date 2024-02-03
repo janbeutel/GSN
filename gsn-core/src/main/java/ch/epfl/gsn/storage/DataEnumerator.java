@@ -80,6 +80,7 @@ public class DataEnumerator implements DataEnumeratorIF {
 
 	private boolean manualCloseConnection;
 	private boolean hadError = false;
+	private StreamElement streamElement = null;
 
 	/**
 	 * Creats an empty data enumerator.
@@ -196,7 +197,7 @@ public class DataEnumerator implements DataEnumeratorIF {
 		}
 	}
 
-	private StreamElement streamElement = null;
+	
 
 	public boolean hasMoreElements() {
 		return hasNext;

@@ -71,14 +71,13 @@ public class LocalDeliveryWrapper extends AbstractWrapper implements DeliverySys
 	private static transient Logger logger = LoggerFactory.getLogger(LocalDeliveryWrapper.class);
 
 	private VSensorConfig vSensorConfig;
+	private DataField[] structure;
+
+	private DefaultDistributionRequest distributionRequest;
 
 	public VSensorConfig getVSensorConfig() {
 		return vSensorConfig;
 	}
-
-	private DataField[] structure;
-
-	private DefaultDistributionRequest distributionRequest;
 
 	public String getWrapperName() {
 		return "Local-wrapper";

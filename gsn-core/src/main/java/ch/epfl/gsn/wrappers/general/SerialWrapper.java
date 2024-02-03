@@ -110,6 +110,9 @@ public class SerialWrapper extends AbstractWrapper implements SerialPortEventLis
 	private int output_format;
 
 	private int packet_length = 100;
+	private static final int MAXBUFFERSIZE = 1024;
+
+	private byte[] inputBuffer;
 
 	/*
 	 * Needs the following information from XML file : serialport : the name of
@@ -467,9 +470,7 @@ public class SerialWrapper extends AbstractWrapper implements SerialPortEventLis
 		threadCounter--;
 	}
 
-	private static final int MAXBUFFERSIZE = 1024;
 
-	private byte[] inputBuffer;
 
 	public void serialEvent(SerialPortEvent e) {
 		// if ( logger.isDebugEnabled( ) ) logger.debug( "Serial wrapper received a

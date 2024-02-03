@@ -13,6 +13,7 @@ import com.thoughtworks.xstream.XStream;
 public class StreamElement4Rest {
 
 	private List<Field4Rest> fields = new ArrayList<Field4Rest>();
+	private Date timestamp;
 
 	public StreamElement4Rest(StreamElement se) {
 		this.timestamp = new Date(se.getTimeStamp());
@@ -33,7 +34,6 @@ public class StreamElement4Rest {
 		return sb.toString();
 	}
 
-	private Date timestamp;
 
 	public StreamElement toStreamElement() {
 		String[] names = new String[fields.size()];

@@ -68,6 +68,15 @@ public class DataDistributer implements VirtualSensorDataListener, VSensorStateC
     private Thread thread;
     private HashMap<StorageManager, Connection> connections = new HashMap<StorageManager, Connection>();
 
+    private HashMap<DistributionRequest, PreparedStatement> preparedStatements = new HashMap<DistributionRequest, PreparedStatement>();
+
+    private ArrayList<DistributionRequest> listeners = new ArrayList<DistributionRequest>();
+
+    private ConcurrentHashMap<DistributionRequest, DataEnumerator> candidateListeners = new ConcurrentHashMap<DistributionRequest, DataEnumerator>();
+
+    private LinkedBlockingQueue<DistributionRequest> locker = new LinkedBlockingQueue<DistributionRequest>();
+
+    private ConcurrentHashMap<DistributionRequest, Boolean> candidatesForNextRound = new ConcurrentHashMap<DistributionRequest, Boolean>();
     /**
      * Private constructor for the DataDistributer class.
      *
@@ -146,15 +155,6 @@ public class DataDistributer implements VirtualSensorDataListener, VSensorStateC
         return keepAlivePeriod;
     }
 
-    private HashMap<DistributionRequest, PreparedStatement> preparedStatements = new HashMap<DistributionRequest, PreparedStatement>();
-
-    private ArrayList<DistributionRequest> listeners = new ArrayList<DistributionRequest>();
-
-    private ConcurrentHashMap<DistributionRequest, DataEnumerator> candidateListeners = new ConcurrentHashMap<DistributionRequest, DataEnumerator>();
-
-    private LinkedBlockingQueue<DistributionRequest> locker = new LinkedBlockingQueue<DistributionRequest>();
-
-    private ConcurrentHashMap<DistributionRequest, Boolean> candidatesForNextRound = new ConcurrentHashMap<DistributionRequest, Boolean>();
 
     /**
      * Adds a new listener to the Distributer.

@@ -47,6 +47,7 @@ public final class DataField implements Serializable {
    private String unit = "";
 
    private boolean index = false;
+   transient boolean fieldNameConvertedToLowerCase = false;
 
    public DataField() {
    }
@@ -86,7 +87,7 @@ public final class DataField implements Serializable {
       return this.description;
    }
 
-   transient boolean fieldNameConvertedToLowerCase = false;
+
 
    public String getName() {
       if (fieldNameConvertedToLowerCase == false) {

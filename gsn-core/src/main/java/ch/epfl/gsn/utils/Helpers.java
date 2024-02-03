@@ -39,6 +39,12 @@ import org.joda.time.format.ISODateTimeFormat;
  * formatting.
  */
 public class Helpers {
+	private static final long GPS_OFFSET = 315964800L;
+
+	private static final long[] leaps = { 46828800L, 78364801L, 109900802L, 173059203L, 252028804L,
+			315187205L, 346723206L, 393984007L, 425520008L, 457056009L, 504489610L,
+			551750411L, 599184012L, 820108813L, 914803214L, 1025136015L, 1119744016L, 1167264017L };
+
 
 	/**
 	 * Formats the given timestamp into a human-readable time period string.
@@ -161,12 +167,7 @@ public class Helpers {
 	 * times 46828800.5 and 46828800 map to unix time 362793599.5
 	 */
 
-	private static final long GPS_OFFSET = 315964800L;
-
-	private static final long[] leaps = { 46828800L, 78364801L, 109900802L, 173059203L, 252028804L,
-			315187205L, 346723206L, 393984007L, 425520008L, 457056009L, 504489610L,
-			551750411L, 599184012L, 820108813L, 914803214L, 1025136015L, 1119744016L, 1167264017L };
-
+	
 	/**
 	 * Converts GPS time to Unix time.
 	 * 

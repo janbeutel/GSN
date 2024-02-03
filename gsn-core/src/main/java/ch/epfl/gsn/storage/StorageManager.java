@@ -61,6 +61,13 @@ public abstract class StorageManager {
 
     private int Idcounter = 0;
 
+    private String driver = null;
+    protected boolean isH2;
+    protected boolean isMysql;
+    protected boolean isOracle;
+    protected boolean isSqlServer;
+    protected boolean isPostgres;
+
     /**
      * Initializes the StorageManager with the specified database driver, username,
      * password, database URL, and maximum number of database connections.
@@ -1211,7 +1218,7 @@ public abstract class StorageManager {
         return new StringBuilder("create view ").append(viewName).append(" AS ( ").append(selectQuery).append(" ) ");
     }
 
-    private String driver = null;
+
 
     /**
      * The prefix is in lower case
@@ -1349,12 +1356,6 @@ public abstract class StorageManager {
 
     }
 
-    // deprecated
-    protected boolean isH2;
-    protected boolean isMysql;
-    protected boolean isOracle;
-    protected boolean isSqlServer;
-    protected boolean isPostgres;
 
     public boolean isOracle() {
         return isOracle;

@@ -56,6 +56,13 @@ public class ModelDistributer implements VirtualSensorDataListener, VSensorState
 
     private static HashMap<Class<? extends DeliverySystem>, ModelDistributer> singletonMap = new HashMap<Class<? extends DeliverySystem>, ModelDistributer>();
     private Thread thread;
+    private ArrayList<DistributionRequest> listeners = new ArrayList<DistributionRequest>();
+
+    private LinkedBlockingQueue<DistributionRequest> locker = new LinkedBlockingQueue<DistributionRequest>();
+
+    private ConcurrentHashMap<DistributionRequest, DataEnumeratorIF> candidateListeners = new ConcurrentHashMap<DistributionRequest, DataEnumeratorIF>();
+
+    private ConcurrentHashMap<DistributionRequest, Boolean> candidatesForNextRound = new ConcurrentHashMap<DistributionRequest, Boolean>();
 
     /**
      * Constructs an instance of ModelDistributer, initializing the associated
@@ -143,13 +150,6 @@ public class ModelDistributer implements VirtualSensorDataListener, VSensorState
         return keepAlivePeriod;
     }
 
-    private ArrayList<DistributionRequest> listeners = new ArrayList<DistributionRequest>();
-
-    private LinkedBlockingQueue<DistributionRequest> locker = new LinkedBlockingQueue<DistributionRequest>();
-
-    private ConcurrentHashMap<DistributionRequest, DataEnumeratorIF> candidateListeners = new ConcurrentHashMap<DistributionRequest, DataEnumeratorIF>();
-
-    private ConcurrentHashMap<DistributionRequest, Boolean> candidatesForNextRound = new ConcurrentHashMap<DistributionRequest, Boolean>();
 
     /**
      * Adds a DistributionRequest listener to the ModelDistributer.

@@ -1,6 +1,8 @@
 package ch.epfl.gsn.beans.json;
 
 public class GeoJsonGeometry {
+    private String type;
+    private double[] coordinates;
     public String getType() {
         return type;
     }
@@ -16,7 +18,4 @@ public class GeoJsonGeometry {
     public void setCoordinates(double[] coordinates) {
         this.coordinates = coordinates;
     }
-
-    private String type;
-    private double[] coordinates;
 }

@@ -3,6 +3,12 @@ package ch.epfl.gsn.beans.json;
 import java.io.Serializable;
 
 public class GeoJsonProperties {
+    private String vs_name;
+    private Serializable[][] values;
+    private GeoJsonField[] fields;
+    private GeoJsonStats stats;
+    private String geographical;
+    private String description;
     public String getVs_name() {
         return vs_name;
     }
@@ -51,10 +57,5 @@ public class GeoJsonProperties {
         this.description = description;
     }
 
-    private String vs_name;
-    private Serializable[][] values;
-    private GeoJsonField[] fields;
-    private GeoJsonStats stats;
-    private String geographical;
-    private String description;
+
 }
