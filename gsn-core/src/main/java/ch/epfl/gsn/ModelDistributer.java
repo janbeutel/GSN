@@ -158,15 +158,16 @@ public class ModelDistributer implements VirtualSensorDataListener, VSensorState
      */
     public void addListener(DistributionRequest listener) {
         synchronized (listeners) {
-            if (!listeners.contains(listener)) {
+            if (listeners.contains(listener)) {
+                logger.info(
+                    "Adding a listener to ModelDistributer failed, duplicated listener! " + listener.toString());
+
+            } else {
                 logger.info("Adding a listener to ModelDistributer:" + listener.toString());
 
                 listeners.add(listener);
                 addListenerToCandidates(listener);
-
-            } else {
-                logger.info(
-                        "Adding a listener to ModelDistributer failed, duplicated listener! " + listener.toString());
+                
             }
         }
     }
@@ -288,10 +289,10 @@ public class ModelDistributer implements VirtualSensorDataListener, VSensorState
                         logger.debug("sending stream element " + (se == null ? "second-chance-se" : se.toString())
                             + " produced by " + config.getName() + " to listener =>" + listener.toString());
                     }
-                    if (!candidateListeners.containsKey(listener)) {
-                        addListenerToCandidates(listener);
-                    } else {
+                    if (candidateListeners.containsKey(listener)) {
                         candidatesForNextRound.put(listener, Boolean.TRUE);
+                    } else {
+                        addListenerToCandidates(listener);
                     }
                 }
             }

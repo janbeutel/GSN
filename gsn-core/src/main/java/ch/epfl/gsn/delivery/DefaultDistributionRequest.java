@@ -199,13 +199,13 @@ public class DefaultDistributionRequest implements DistributionRequest {
 
 		DefaultDistributionRequest that = (DefaultDistributionRequest) o;
 
-		if (deliverySystem != null ? !deliverySystem.equals(that.deliverySystem) : that.deliverySystem != null) {
+		if (deliverySystem == null ? that.deliverySystem != null : !deliverySystem.equals(that.deliverySystem)) {
 			return false;
 		}
-		if (query != null ? !query.equals(that.query) : that.query != null) {
+		if (query == null ? that.query != null : !query.equals(that.query) ) {
 			return false;
 		}
-		if (vSensorConfig != null ? !vSensorConfig.equals(that.vSensorConfig) : that.vSensorConfig != null) {
+		if (vSensorConfig == null ? that.vSensorConfig != null : !vSensorConfig.equals(that.vSensorConfig)) {
 			return false;
 		}
 
@@ -221,9 +221,9 @@ public class DefaultDistributionRequest implements DistributionRequest {
 	 */
 	@Override
 	public int hashCode() {
-		int result = query != null ? query.hashCode() : 0;
-		result = 31 * result + (deliverySystem != null ? deliverySystem.hashCode() : 0);
-		result = 31 * result + (vSensorConfig != null ? vSensorConfig.hashCode() : 0);
+		int result = query == null ? 0 :query.hashCode();
+		result = 31 * result + (deliverySystem == null ? 0:deliverySystem.hashCode());
+		result = 31 * result + (vSensorConfig == null ?  0:vSensorConfig.hashCode());
 		return result;
 	}
 

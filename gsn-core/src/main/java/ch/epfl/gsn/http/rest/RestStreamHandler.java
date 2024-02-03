@@ -261,7 +261,10 @@ public class RestStreamHandler extends HttpServlet implements ContinuationListen
 		double notificationId = Double.parseDouble(request.getParameter(PushDelivery.NOTIFICATION_ID_KEY));
 		PushRemoteWrapper notification = NotificationRegistry.getInstance().getNotification(notificationId);
 		try {
-			if (notification != null) {
+			if (notification == null) {
+				logger.warn("Received a Http put request for an INVALID notificationId: " + notificationId);
+				response.sendError(_300);
+			} else {
 				boolean status = notification.manualDataInsertion(request.getParameter(PushDelivery.DATA));
 				if (status) {
 					response.setStatus(SUCCESS_200);
@@ -269,9 +272,6 @@ public class RestStreamHandler extends HttpServlet implements ContinuationListen
 					response.setStatus(_300);
 				}
 
-			} else {
-				logger.warn("Received a Http put request for an INVALID notificationId: " + notificationId);
-				response.sendError(_300);
 			}
 		} catch (IOException e) {
 			logger.warn("Failed in writing the status code into the connection.\n" + e.getMessage(), e);

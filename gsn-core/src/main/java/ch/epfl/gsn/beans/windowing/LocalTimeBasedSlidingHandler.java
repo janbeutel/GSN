@@ -86,7 +86,9 @@ public class LocalTimeBasedSlidingHandler implements SlidingHandler {
         SQLViewQueryRewriter rewriter = new LTBSQLViewQueryRewriter();
         rewriter.setStreamSource(streamSource);
         rewriter.initialize();
-        if (streamSource.getWindowingType() != WindowType.TIME_BASED_SLIDE_ON_EACH_TUPLE) {
+        if (streamSource.getWindowingType() == WindowType.TIME_BASED_SLIDE_ON_EACH_TUPLE) {
+            streamSources.add(streamSource);
+        } else {
             long oldTimerTick = timerTick;
             if (streamSource.getWindowingType() == WindowType.TIME_BASED) {
                 slidingHashMap.put(streamSource,
@@ -114,8 +116,6 @@ public class LocalTimeBasedSlidingHandler implements SlidingHandler {
                 }
                 timer.schedule(new LTBTimerTask(), 500, timerTick);
             }
-        } else {
-            streamSources.add(streamSource);
         }
     }
 

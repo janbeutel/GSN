@@ -172,11 +172,11 @@ public class RemoteTimeBasedSlidingHandler implements SlidingHandler {
 
 		synchronized (streamSources) {
 			for (StreamSource streamSource : streamSources) {
-				if (streamSource.getWindowingType() != WindowType.TUPLE_BASED_WIN_TIME_BASED_SLIDE) {
-					maxWindowSize = Math.max(maxWindowSize, streamSource.getParsedStorageSize());
-				} else {
+				if (streamSource.getWindowingType() == WindowType.TUPLE_BASED_WIN_TIME_BASED_SLIDE) {
 					maxSlideForTupleBased = Math.max(maxSlideForTupleBased, streamSource.getParsedSlideValue());
 					maxTupleCount = Math.max(maxTupleCount, streamSource.getParsedStorageSize());
+				} else {
+					maxWindowSize = Math.max(maxWindowSize, streamSource.getParsedStorageSize());
 				}
 				if (streamSource.getWindowingType() == WindowType.TIME_BASED) {
 					maxWindowSize = Math.max(maxWindowSize,

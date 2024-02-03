@@ -172,19 +172,19 @@ public class StandardCriterion extends AbstractCriterion {
 
 		StandardCriterion that = (StandardCriterion) o;
 
-		if (critField != null ? !critField.equals(that.critField) : that.critField != null) {
+		if (critField == null ? that.critField != null : !critField.equals(that.critField)) {
 			return false;
 		}
-		if (critJoin != null ? !critJoin.equals(that.critJoin) : that.critJoin != null) {
+		if (critJoin == null ?  that.critJoin != null : !critJoin.equals(that.critJoin)) {
 			return false;
 		}
-		if (critNeg != null ? !critNeg.equals(that.critNeg) : that.critNeg != null) {
+		if (critNeg == null ?  that.critNeg != null : !critNeg.equals(that.critNeg)) {
 			return false;
 		}
-		if (critOperator != null ? !critOperator.equals(that.critOperator) : that.critOperator != null) {
+		if (critOperator == null ? that.critOperator != null :!critOperator.equals(that.critOperator)) {
 			return false;
 		}
-		if (critVsname != null ? !critVsname.equals(that.critVsname) : that.critVsname != null) {
+		if (critVsname == null ?  that.critVsname != null : !critVsname.equals(that.critVsname)) {
 			return false;
 		}
 
@@ -200,11 +200,11 @@ public class StandardCriterion extends AbstractCriterion {
 	 */
 	@Override
 	public int hashCode() {
-		int result = critJoin != null ? critJoin.hashCode() : 0;
-		result = 31 * result + (critNeg != null ? critNeg.hashCode() : 0);
-		result = 31 * result + (critField != null ? critField.hashCode() : 0);
-		result = 31 * result + (critVsname != null ? critVsname.hashCode() : 0);
-		result = 31 * result + (critOperator != null ? critOperator.hashCode() : 0);
+		int result = critJoin == null ? 0 : critJoin.hashCode();
+		result = 31 * result + (critNeg == null ? 0 : critNeg.hashCode());
+		result = 31 * result + (critField == null ? 0 : critField.hashCode());
+		result = 31 * result + (critVsname == null ? 0 : critVsname.hashCode());
+		result = 31 * result + (critOperator == null ? 0 : critOperator.hashCode());
 		return result;
 	}
 }

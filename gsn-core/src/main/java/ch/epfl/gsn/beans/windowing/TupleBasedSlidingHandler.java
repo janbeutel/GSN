@@ -83,15 +83,15 @@ public class TupleBasedSlidingHandler implements SlidingHandler {
 	 * @param streamSource the stream source to be added
 	 */
 	public void addStreamSource(StreamSource streamSource) {
-		if (streamSource.getWindowingType() != WindowType.TUPLE_BASED_SLIDE_ON_EACH_TUPLE) {
+		if (streamSource.getWindowingType() == WindowType.TUPLE_BASED_SLIDE_ON_EACH_TUPLE) {
+			streamSources.add(streamSource);
+		} else {
 			if (streamSource.getWindowingType() == WindowType.TUPLE_BASED) {
 				slidingHashMap.put(streamSource,
 						streamSource.getParsedSlideValue() - streamSource.getParsedStorageSize());
 			} else {
 				slidingHashMap.put(streamSource, 0L);
 			}
-		} else {
-			streamSources.add(streamSource);
 		}
 		SQLViewQueryRewriter rewriter = new TupleBasedSQLViewQueryRewriter();
 		rewriter.setStreamSource(streamSource);

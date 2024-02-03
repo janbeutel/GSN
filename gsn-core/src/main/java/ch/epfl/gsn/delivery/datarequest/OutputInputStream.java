@@ -151,10 +151,10 @@ public class OutputInputStream {
 			}
 			int nextValue = -1;
 			try {
-				if (!oisoClosed) {
-					nextValue = circularBuffer.take();
-				} else {
+				if (oisoClosed) {
 					nextValue = available() > 0 ? circularBuffer.take() : -1;
+				} else {
+					nextValue = circularBuffer.take();
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();

@@ -75,13 +75,13 @@ public class DataDistributerRest implements VirtualSensorDataListener, VSensorSt
 							if(logger.isDebugEnabled()){
 								logger.debug("about to send keep alive to listener: " + listener.request.toString());
 							}
-							if (!listener.request.deliverKeepAliveMessage()) {
-								synchronized (MyListeners) {
-									removeListenerEntry(listener);
-								}
-							} else {
+							if (listener.request.deliverKeepAliveMessage()) {
 								if(logger.isDebugEnabled()){
 									logger.debug("sent keep alive to listener: " + listener.request.toString());
+								}
+							} else {
+								synchronized (MyListeners) {
+									removeListenerEntry(listener);
 								}
 							}
 						}
@@ -162,7 +162,9 @@ public class DataDistributerRest implements VirtualSensorDataListener, VSensorSt
 											prepareStatement, false, true);
 									synchronized (MyListeners) {
 										listener.setResources(dataEnum, prepareStatement);
-										if (!listener.removed) {
+										if (listener.removed) {
+											listener.releaseResources();
+										} else {
 											if (dataEnum.hasMoreElements()) {
 												if(logger.isDebugEnabled()){
 													logger.debug("Fetching data done for listener: "
@@ -185,8 +187,6 @@ public class DataDistributerRest implements VirtualSensorDataListener, VSensorSt
 													listener.current_queue = null;
 												}
 											}
-										} else {
-											listener.releaseResources();
 										}
 									}
 								} catch (InterruptedException e) {
@@ -350,7 +350,18 @@ public class DataDistributerRest implements VirtualSensorDataListener, VSensorSt
 							continue;
 						}
 					}
-					if (!listener.dataEnum.hasMoreElements()) {
+					if (listener.dataEnum.hasMoreElements()) {
+						boolean success = flushStreamElement(listener.dataEnum, listener.request);
+						if (success == false) {
+							i.remove();
+							synchronized (MyListeners) {
+								removeListenerEntry(listener);
+								listener.releaseResources();
+							}
+						} else {
+							listener.delivery_count--;
+						}
+					} else {
 						synchronized (MyListeners) {
 							i.remove();
 							listener.releaseResources();
@@ -375,17 +386,6 @@ public class DataDistributerRest implements VirtualSensorDataListener, VSensorSt
 								listener.current_queue = DataUpdateQueue;
 								DataUpdateQueue.add(listener);
 							}
-						}
-					} else {
-						boolean success = flushStreamElement(listener.dataEnum, listener.request);
-						if (success == false) {
-							i.remove();
-							synchronized (MyListeners) {
-								removeListenerEntry(listener);
-								listener.releaseResources();
-							}
-						} else {
-							listener.delivery_count--;
 						}
 					}
 				}

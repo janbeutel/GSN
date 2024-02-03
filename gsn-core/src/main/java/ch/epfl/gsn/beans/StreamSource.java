@@ -185,7 +185,7 @@ public class StreamSource implements Serializable {
    * @return the slide value
    */
   public String getSlideValue() {
-    return rawSlideValue != null ? rawSlideValue : String.valueOf(DEFAULT_SLIDE_VALUE);
+    return rawSlideValue == null ? String.valueOf(DEFAULT_SLIDE_VALUE): rawSlideValue;
   }
 
   /**
@@ -404,11 +404,11 @@ public class StreamSource implements Serializable {
   }
 
   public StringBuilder rewrite(String query) {
-    if (queryRewriter != null) {
-      return queryRewriter.rewrite(query);
-    } else {
+    if(queryRewriter == null){
       // TODO ??
       return null;
+    } else {
+      return queryRewriter.rewrite(query);
     }
   }
 

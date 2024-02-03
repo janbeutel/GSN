@@ -494,10 +494,10 @@ public class VSensorConfig implements Serializable {
 	}
 
 	public int hashCode() {
-		if (name != null) {
-			return name.hashCode();
-		} else {
+		if (name == null){
 			return super.hashCode();
+		} else {
+			return name.hashCode();
 		}
 	}
 

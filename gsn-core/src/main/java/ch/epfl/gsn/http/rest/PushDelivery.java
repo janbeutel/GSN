@@ -115,7 +115,7 @@ public class PushDelivery implements DeliverySystem {
 		if (Double.compare(that.notificationId, notificationId) != 0) {
 			return false;
 		}
-		if (httpPut != null ? !httpPut.getURI().equals(that.httpPut.getURI()) : that.httpPut != null) {
+		if (httpPut == null ? that.httpPut != null : !httpPut.getURI().equals(that.httpPut.getURI())) {
 			return false;
 		}
 		return true;
@@ -125,8 +125,8 @@ public class PushDelivery implements DeliverySystem {
 	public int hashCode() {
 		int result;
 		long temp;
-		result = httpPut != null ? httpPut.getURI().hashCode() : 0;
-		temp = notificationId != +0.0d ? Double.doubleToLongBits(notificationId) : 0L;
+		result = httpPut == null ? 0 : httpPut.getURI().hashCode();
+		temp = notificationId == +0.0d ? 0L : Double.doubleToLongBits(notificationId);
 		result = 31 * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}

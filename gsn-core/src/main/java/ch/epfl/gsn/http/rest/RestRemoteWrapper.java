@@ -234,17 +234,17 @@ public class RestRemoteWrapper extends AbstractWrapper {
                         inputEvent(initParams.getRemoteContactPoint(), streamElement.getVolume());
                     }
 
-                    if (!(streamElement.getFieldNames().length == 1
+                    if ((streamElement.getFieldNames().length == 1
                             && streamElement.getFieldNames()[0].equals("keepalive"))) {
+                                if(logger.isDebugEnabled()){
+                                    logger.debug("Received a keep alive message.");
+                                }
+                    } else {
                         boolean status = manualDataInsertion(streamElement);
                         if (!status && inputStream != null) {
                             response.getEntity().consumeContent();
                             inputStream.close();
                             inputStream = null;
-                        }
-                    } else {
-                        if(logger.isDebugEnabled()){
-                            logger.debug("Received a keep alive message.");
                         }
                     }
 

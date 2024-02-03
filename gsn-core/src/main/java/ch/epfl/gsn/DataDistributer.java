@@ -175,7 +175,10 @@ public class DataDistributer implements VirtualSensorDataListener, VSensorStateC
      */
     public void addListener(DistributionRequest listener) {
         synchronized (listeners) {
-            if (!listeners.contains(listener)) {
+            if (listeners.contains(listener)) {
+                logger.info("Adding a listener to Distributer failed, duplicated listener! " + listener.toString());
+
+            } else {
                 logger.info("Adding a listener to Distributer:" + listener.toString());
                 boolean needsAnd = SQLValidator.removeSingleQuotes(SQLValidator.removeQuotes(listener.getQuery()))
                         .indexOf(" where ") > 0;
@@ -200,9 +203,6 @@ public class DataDistributer implements VirtualSensorDataListener, VSensorStateC
                 preparedStatements.put(listener, prepareStatement);
                 listeners.add(listener);
                 addListenerToCandidates(listener);
-
-            } else {
-                logger.info("Adding a listener to Distributer failed, duplicated listener! " + listener.toString());
             }
         }
     }
@@ -346,10 +346,10 @@ public class DataDistributer implements VirtualSensorDataListener, VSensorStateC
                         logger.debug("sending stream element " + (se == null ? "second-chance-se" : se.toString())
                             + " produced by " + config.getName() + " to listener =>" + listener.toString());
                     }
-                    if (!candidateListeners.containsKey(listener)) {
-                        addListenerToCandidates(listener);
-                    } else {
+                    if (candidateListeners.containsKey(listener)) {
                         candidatesForNextRound.put(listener, Boolean.TRUE);
+                    } else {
+                        addListenerToCandidates(listener);
                     }
                 }
             }

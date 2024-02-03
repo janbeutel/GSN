@@ -153,8 +153,7 @@ public final class Main {
 				containerConfig.getStorage().getJdbcUsername(), containerConfig.getStorage().getJdbcPassword(),
 				containerConfig.getStorage().getJdbcURL(), maxDBConnections);
 
-		StorageConfig sc = containerConfig.getSliding() != null ? containerConfig.getSliding().getStorage()
-				: containerConfig.getStorage();
+		StorageConfig sc = containerConfig.getSliding() == null ? containerConfig.getStorage(): containerConfig.getSliding().getStorage();
 		windowStorage = StorageManagerFactory.getInstance(sc.getJdbcDriver(), sc.getJdbcUsername(),
 				sc.getJdbcPassword(), sc.getJdbcURL(), maxSlidingDBConnections);
 

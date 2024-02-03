@@ -81,12 +81,12 @@ public class AbstractQuery {
 				cc = criteria.get(i);
 				if (cc.getVsname().compareTo("") == 0 || cc.getVsname().compareToIgnoreCase(vsName) == 0) {
 
-					if (lastStandardCriterionLinkedToVs != null) {
-						partStandardCriteria.append(lastStandardCriterionLinkedToVs.getCritJoin() + " "
-								+ cc.getNegation() + " " + cc.getField() + " " + cc.getOperator() + " ");
-					} else {
+					if (lastStandardCriterionLinkedToVs == null) {
 						partStandardCriteria
 								.append(cc.getNegation() + " " + cc.getField() + " " + cc.getOperator() + " ");
+					} else {
+						partStandardCriteria.append(lastStandardCriterionLinkedToVs.getCritJoin() + " "
+						+ cc.getNegation() + " " + cc.getField() + " " + cc.getOperator() + " ");
 					}
 
 					lastStandardCriterionLinkedToVs = cc;
@@ -127,13 +127,13 @@ public class AbstractQuery {
 
 		}
 
-		if (aggregation != null) {
+		if (aggregation == null) {
+			partFields.append(" ");
+		} else {
 			if (partFields.length() > 0) {
 				partFields.append(", ");
 			}
 			partFields.append("floor(timed/" + aggregation.getTimeRange() + ") as aggregation_interval ");
-		} else {
-			partFields.append(" ");
 		}
 
 		// Build a final query
@@ -220,10 +220,10 @@ public class AbstractQuery {
 	 */
 	public void updateCriterion(StandardCriterion criterion) {
 		int index = criteria.indexOf(criterion);
-		if (index != -1) {
-			criteria.set(index, criterion);
-		} else {
+		if (index == -1) {
 			criteria.add(criterion);
+		} else {
+			criteria.set(index, criterion);
 		}
 
 	}

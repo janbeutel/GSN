@@ -242,7 +242,7 @@ public class InputStream implements Serializable {
 	}
 
 	public int hashCode() {
-		return (this.inputStreamName != null ? this.inputStreamName.hashCode() : 0);
+		return (this.inputStreamName == null ? 0: this.inputStreamName.hashCode());
 	}
 
 	public void release() {

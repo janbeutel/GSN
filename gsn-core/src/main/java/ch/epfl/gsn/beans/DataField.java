@@ -107,7 +107,7 @@ public final class DataField implements Serializable {
       }
 
       final DataField dataField = (DataField) o;
-      if (this.name != null ? !this.name.equals(dataField.name) : dataField.name != null) {
+      if (this.name == null ?  dataField.name != null : !this.name.equals(dataField.name)) {
          return false;
       }
       return true;
@@ -124,7 +124,7 @@ public final class DataField implements Serializable {
    }
 
    public int hashCode() {
-      return (this.name != null ? this.name.hashCode() : 0);
+      return (this.name == null ? 0 : this.name.hashCode());
    }
 
    public String toString() {
