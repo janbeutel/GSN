@@ -217,8 +217,7 @@ public class SQLUtils {
 		if (indexOfWhere < 0) {
 			return " true ";
 		}
-		String toReturn = pQuery.substring(indexOfWhere + " where".length(), pQuery.length());
-		return toReturn;
+		return pQuery.substring(indexOfWhere + " where".length(), pQuery.length());
 	}
 
 	public static void main(String[] args) {

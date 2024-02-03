@@ -390,8 +390,8 @@ public class ModelDistributer implements VirtualSensorDataListener, VSensorState
      * @return A DataEnumeratorIF object.
      */
     private DataEnumeratorIF makeDataEnum(DistributionRequest listener) {
-        ModelEnumerator mEnum = new ModelEnumerator(listener.getQuery(), listener.getModel());
-        return mEnum;
+        return new ModelEnumerator(listener.getQuery(), listener.getModel());
+
     }
 
     /**

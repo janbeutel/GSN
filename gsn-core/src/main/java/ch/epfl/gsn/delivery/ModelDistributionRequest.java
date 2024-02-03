@@ -96,8 +96,7 @@ public class ModelDistributionRequest implements DistributionRequest {
 	}
 
 	public boolean deliverStreamElement(StreamElement se) {
-		boolean success = deliverySystem.writeStreamElement(se);
-		return success;
+		return deliverySystem.writeStreamElement(se);
 	}
 
 	public String getQuery() {
@@ -189,8 +188,7 @@ public class ModelDistributionRequest implements DistributionRequest {
 	 */
 	public static ModelDistributionRequest create(DeliverySystem delivery,
 			VSensorConfig vSensorConfig, String query, AbstractModel modelClass) throws IOException, SQLException {
-		ModelDistributionRequest toReturn = new ModelDistributionRequest(delivery, vSensorConfig, query, modelClass);
-		return toReturn;
+		return new ModelDistributionRequest(delivery, vSensorConfig, query, modelClass);
 	}
 
 	@Override

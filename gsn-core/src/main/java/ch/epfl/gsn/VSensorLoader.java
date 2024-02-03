@@ -616,8 +616,8 @@ public class VSensorLoader extends Thread {
 			}
 			add.add(cur.getAbsolutePath());
 		}
-		Modifications result = new Modifications(add, remove);
-		return result;
+		return new Modifications(add, remove);
+
 	}
 
 	/**

@@ -783,8 +783,7 @@ public final class StreamElement implements Serializable {
 	}
 
 	public StreamElement4Rest toRest() {
-		StreamElement4Rest toReturn = new StreamElement4Rest(this);
-		return toReturn;
+		return new StreamElement4Rest(this);
 	}
 
 	/**
