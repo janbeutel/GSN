@@ -31,7 +31,6 @@ import java.sql.Types;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-import ch.epfl.gsn.beans.DataTypes;
 import ch.epfl.gsn.utils.GSNRuntimeException;
 
 public class DataTypes {

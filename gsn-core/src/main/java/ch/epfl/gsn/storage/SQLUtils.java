@@ -34,7 +34,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
-import ch.epfl.gsn.storage.SQLValidator;
 import ch.epfl.gsn.utils.CaseInsensitiveComparator;
 
 public class SQLUtils {

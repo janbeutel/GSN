@@ -27,7 +27,6 @@ package ch.epfl.gsn;
 
 import org.slf4j.LoggerFactory;
 
-import ch.epfl.gsn.VirtualSensor;
 import ch.epfl.gsn.beans.InputStream;
 import ch.epfl.gsn.beans.StreamSource;
 import ch.epfl.gsn.beans.VSensorConfig;

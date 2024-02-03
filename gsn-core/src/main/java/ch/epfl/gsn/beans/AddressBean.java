@@ -33,8 +33,6 @@ import java.io.Serializable;
 
 import org.apache.commons.collections.KeyValue;
 
-import ch.epfl.gsn.beans.AddressBean;
-
 public final class AddressBean implements Serializable {
 
 	private static final long serialVersionUID = -8975180532136014200L;

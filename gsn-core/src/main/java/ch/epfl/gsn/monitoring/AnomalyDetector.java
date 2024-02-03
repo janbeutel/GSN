@@ -14,7 +14,6 @@ import ch.epfl.gsn.Main;
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.DataTypes;
 import ch.epfl.gsn.beans.VSensorConfig;
-import ch.epfl.gsn.monitoring.Anomaly;
 import ch.epfl.gsn.storage.StorageManager;
 import ch.epfl.gsn.vsensor.AbstractVirtualSensor;
 

@@ -33,7 +33,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.LoggerFactory;
 
-import ch.epfl.gsn.Mappings;
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.VSensorConfig;
 

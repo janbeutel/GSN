@@ -28,8 +28,6 @@ package ch.epfl.gsn.storage;
 
 import org.slf4j.LoggerFactory;
 
-import ch.epfl.gsn.storage.StorageManager;
-import ch.epfl.gsn.storage.StorageManagerFactory;
 import ch.epfl.gsn.storage.db.*;
 
 import org.slf4j.Logger;

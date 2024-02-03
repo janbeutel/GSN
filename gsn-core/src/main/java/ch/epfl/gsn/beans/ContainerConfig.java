@@ -41,7 +41,6 @@ import java.util.TimeZone;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
-import ch.epfl.gsn.beans.ContainerConfig;
 import ch.epfl.gsn.utils.KeyValueImp;
 
 public class ContainerConfig {

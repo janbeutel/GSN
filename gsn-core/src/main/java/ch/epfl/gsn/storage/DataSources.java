@@ -28,7 +28,6 @@ package ch.epfl.gsn.storage;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.LoggerFactory;
 
-import ch.epfl.gsn.storage.DataSources;
 import ch.epfl.gsn.storage.hibernate.DBConnectionInfo;
 import ch.epfl.gsn.utils.jndi.GSNContext;
 

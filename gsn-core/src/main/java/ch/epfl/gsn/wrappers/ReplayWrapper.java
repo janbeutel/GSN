@@ -40,9 +40,6 @@ import ch.epfl.gsn.beans.AddressBean;
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.storage.DataEnumerator;
-import ch.epfl.gsn.wrappers.DelayedDataEnumerator;
-import ch.epfl.gsn.wrappers.ReplayWrapper;
-import ch.epfl.gsn.wrappers.ScheduledStreamElement;
 
 import org.slf4j.Logger;
 

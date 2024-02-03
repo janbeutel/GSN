@@ -40,7 +40,6 @@ import java.util.Iterator;
 
 import org.slf4j.LoggerFactory;
 
-import ch.epfl.gsn.VSensorLoader;
 import ch.epfl.gsn.beans.AddressBean;
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.InputStream;

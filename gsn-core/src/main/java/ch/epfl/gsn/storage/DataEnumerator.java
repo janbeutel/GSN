@@ -42,9 +42,6 @@ import org.slf4j.LoggerFactory;
 import ch.epfl.gsn.Main;
 import ch.epfl.gsn.beans.DataTypes;
 import ch.epfl.gsn.beans.StreamElement;
-import ch.epfl.gsn.storage.DataEnumerator;
-import ch.epfl.gsn.storage.DataEnumeratorIF;
-import ch.epfl.gsn.storage.StorageManager;
 
 import org.slf4j.Logger;
 

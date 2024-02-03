@@ -31,8 +31,6 @@ import java.io.Serializable;
 import org.apache.commons.collections.KeyValue;
 import org.slf4j.LoggerFactory;
 
-import ch.epfl.gsn.utils.KeyValueImp;
-
 import org.slf4j.Logger;
 
 /**

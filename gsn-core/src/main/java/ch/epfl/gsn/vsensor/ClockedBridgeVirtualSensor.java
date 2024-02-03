@@ -43,7 +43,6 @@ import org.slf4j.Logger;
 import ch.epfl.gsn.Main;
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.storage.DataEnumerator;
-import ch.epfl.gsn.vsensor.ClockedBridgeVirtualSensor;
 
 /**
  * ClockedBridgeVirtualSensor extends AbstractVirtualSensor and implements

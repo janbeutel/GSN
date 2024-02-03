@@ -30,8 +30,6 @@ package ch.epfl.gsn.beans;
 
 import java.io.Serializable;
 
-import ch.epfl.gsn.beans.DataField;
-import ch.epfl.gsn.beans.DataTypes;
 import ch.epfl.gsn.utils.GSNRuntimeException;
 
 public final class DataField implements Serializable {

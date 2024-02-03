@@ -35,8 +35,6 @@ import ch.epfl.gsn.Main;
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.beans.VSensorConfig;
 import ch.epfl.gsn.utils.GSNRuntimeException;
-import ch.epfl.gsn.vsensor.AbstractVirtualSensor;
-import ch.epfl.gsn.vsensor.StreamExporterVirtualSensor;
 
 import org.slf4j.Logger;
 

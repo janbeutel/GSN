@@ -31,9 +31,6 @@ import org.slf4j.LoggerFactory;
 
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.StreamElement;
-import ch.epfl.gsn.storage.DataEnumeratorIF;
-import ch.epfl.gsn.storage.ModelEnumerator;
-import ch.epfl.gsn.storage.SQLUtils;
 import ch.epfl.gsn.utils.models.AbstractModel;
 
 import org.slf4j.Logger;

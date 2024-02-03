@@ -37,13 +37,6 @@ import org.apache.commons.collections.KeyValue;
 import org.slf4j.LoggerFactory;
 
 import ch.epfl.gsn.Main;
-import ch.epfl.gsn.beans.AddressBean;
-import ch.epfl.gsn.beans.DataField;
-import ch.epfl.gsn.beans.InputStream;
-import ch.epfl.gsn.beans.StorageConfig;
-import ch.epfl.gsn.beans.StreamSource;
-import ch.epfl.gsn.beans.VSensorConfig;
-import ch.epfl.gsn.beans.WebInput;
 import ch.epfl.gsn.utils.CaseInsensitiveComparator;
 import ch.epfl.gsn.utils.Pair;
 import ch.epfl.gsn.utils.Utils;

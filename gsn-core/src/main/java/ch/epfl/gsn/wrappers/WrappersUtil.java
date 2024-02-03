@@ -34,8 +34,6 @@ import java.util.Properties;
 import org.slf4j.LoggerFactory;
 
 import ch.epfl.gsn.Main;
-import ch.epfl.gsn.wrappers.WrappersUtil;
-
 import org.slf4j.Logger;
 
 public class WrappersUtil {

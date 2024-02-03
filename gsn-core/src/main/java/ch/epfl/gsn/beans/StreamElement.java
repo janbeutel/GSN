@@ -43,9 +43,6 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import ch.epfl.gsn.beans.json.*;
-import ch.epfl.gsn.beans.DataField;
-import ch.epfl.gsn.beans.DataTypes;
-import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.delivery.StreamElement4Rest;
 import ch.epfl.gsn.utils.CaseInsensitiveComparator;
 

@@ -31,8 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import ch.epfl.gsn.utils.ChangeListener;
-
 public class LazyTimedHashMap {
 
    private int lifeTimeOfEachElement;

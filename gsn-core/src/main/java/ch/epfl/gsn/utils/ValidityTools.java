@@ -46,8 +46,6 @@ import java.util.regex.Pattern;
 
 import org.slf4j.LoggerFactory;
 
-import ch.epfl.gsn.utils.ValidityTools;
-
 import org.slf4j.Logger;
 
 public class ValidityTools {

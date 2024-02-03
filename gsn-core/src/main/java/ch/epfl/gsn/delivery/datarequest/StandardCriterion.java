@@ -31,7 +31,6 @@ import java.util.Date;
 import java.util.Hashtable;
 
 import ch.epfl.gsn.Main;
-import ch.epfl.gsn.delivery.datarequest.StandardCriterion;
 
 public class StandardCriterion extends AbstractCriterion {
 

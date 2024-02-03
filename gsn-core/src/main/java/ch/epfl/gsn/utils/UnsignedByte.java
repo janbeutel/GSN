@@ -25,8 +25,6 @@
 
 package ch.epfl.gsn.utils;
 
-import ch.epfl.gsn.utils.UnsignedByte;
-
 public class UnsignedByte {
     private byte byteValue;
     private int intValue;

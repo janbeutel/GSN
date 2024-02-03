@@ -27,9 +27,6 @@ package ch.epfl.gsn.utils;
 
 import org.slf4j.LoggerFactory;
 
-import ch.epfl.gsn.utils.Pair;
-import ch.epfl.gsn.utils.Utils;
-
 import org.slf4j.Logger;
 
 import java.io.FileInputStream;

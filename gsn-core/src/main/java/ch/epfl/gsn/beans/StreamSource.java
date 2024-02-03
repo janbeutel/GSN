@@ -37,9 +37,6 @@ import java.util.TreeMap;
 import org.slf4j.LoggerFactory;
 
 import ch.epfl.gsn.Main;
-import ch.epfl.gsn.beans.AddressBean;
-import ch.epfl.gsn.beans.InputStream;
-import ch.epfl.gsn.beans.StreamSource;
 import ch.epfl.gsn.beans.windowing.QueryRewriter;
 import ch.epfl.gsn.beans.windowing.WindowType;
 import ch.epfl.gsn.storage.SQLUtils;

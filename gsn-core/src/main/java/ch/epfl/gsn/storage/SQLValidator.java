@@ -39,7 +39,6 @@ import org.slf4j.LoggerFactory;
 import ch.epfl.gsn.VSensorStateChangeListener;
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.VSensorConfig;
-import ch.epfl.gsn.storage.SQLValidator;
 
 import org.slf4j.Logger;
 import org.h2.command.CommandInterface;
