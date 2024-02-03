@@ -191,7 +191,7 @@ public class DataEnumerator implements DataEnumeratorIF {
 			logger.error(e.getMessage(), e);
 			hasNext = false;
 		} finally {
-			if (hasNext == false) {
+			if (!hasNext) {
 				close();
 			}
 		}
@@ -208,7 +208,7 @@ public class DataEnumerator implements DataEnumeratorIF {
 	 * resultset doesn't have anymore elements or closed.")<
 	 */
 	public StreamElement nextElement() throws RuntimeException {
-		if (hasNext == false) {
+		if (!hasNext) {
 			throw new IndexOutOfBoundsException("The resultset doesn't have anymore elements or closed.");
 		}
 		long timestamp = -1;
@@ -273,7 +273,7 @@ public class DataEnumerator implements DataEnumeratorIF {
 				streamElement.setInternalPrimayKey(pkValue);
 			}
 			hasNext = resultSet.next();
-			if (hasNext == false) {
+			if (!hasNext) {
 				close();
 			}
 

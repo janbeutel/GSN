@@ -376,15 +376,15 @@ public class DataDistributer implements VirtualSensorDataListener, VSensorStateC
 
             for (Entry<DistributionRequest, DataEnumerator> item : candidateListeners.entrySet()) {
                 boolean success = flushStreamElement(item.getValue(), item.getKey());
-                if (success == false) {
-                    removeListener(item.getKey());
-                } else {
+                if (success) {
                     if (!item.getValue().hasMoreElements()) {
                         removeListenerFromCandidates(item.getKey());
                         // As we are limiting the number of elements returned by the JDBC driver
                         // we consume the eventual remaining items.
                         consume(null, item.getKey().getVSensorConfig());
                     }
+                } else {
+                    removeListener(item.getKey());
                 }
             }
         }

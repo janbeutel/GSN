@@ -204,7 +204,7 @@ public class VSensorConfig implements Serializable {
 	 * @return the name of the VSensorConfig
 	 */
 	public String getName() {
-		if (this.nameInitialized == false) {
+		if (!this.nameInitialized) {
 			this.name = this.name.replace(" ", "").trim().toLowerCase();
 			this.nameInitialized = true;
 		}

@@ -479,7 +479,7 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 			BackLogMessageListener temp = en.nextElement();
 			// send the message to the listener
 			try {
-				if (temp.messageRecv(coreStationDeviceId, message) == true) {
+				if (temp.messageRecv(coreStationDeviceId, message)) {
 					ReceiverCount++;
 				}
 			} catch (Exception e) {

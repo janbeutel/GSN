@@ -352,7 +352,7 @@ public class VSensorLoader extends Thread {
 
 		VirtualSensor pool = new VirtualSensor(vs);
 		try {
-			if (createInputStreams(pool) == false) {
+			if (!createInputStreams(pool)) {
 				logger.error("loading the >" + vs.getName()
 						+ "< virtual sensor is stoped due to error(s) in preparing the input streams.");
 				return false;
@@ -478,13 +478,13 @@ public class VSensorLoader extends Thread {
 	static protected boolean isValidJavaIdentifier(final String name) {
 		boolean valid = false;
 		while (true) {
-			if (false == Character.isJavaIdentifierStart(name.charAt(0))) {
+			if (!Character.isJavaIdentifierStart(name.charAt(0))) {
 				break;
 			}
 			valid = true;
 			final int count = name.length();
 			for (int i = 1; i < count; i++) {
-				if (false == Character.isJavaIdentifierPart(name.charAt(i))) {
+				if (!Character.isJavaIdentifierPart(name.charAt(i))) {
 					valid = false;
 					break;
 				}
@@ -682,7 +682,7 @@ public class VSensorLoader extends Thread {
 		AbstractWrapper wrapper = (AbstractWrapper) Main.getWrapperClass(addressBean.getWrapper()).newInstance();
 		wrapper.setActiveAddressBean(addressBean);
 		boolean initializationResult = wrapper.initialize_wrapper();
-		if (initializationResult == false) {
+		if (!initializationResult) {
 			return null;
 		}
 		try {

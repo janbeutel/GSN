@@ -352,7 +352,7 @@ public class DataDistributerRest implements VirtualSensorDataListener, VSensorSt
 					}
 					if (listener.dataEnum.hasMoreElements()) {
 						boolean success = flushStreamElement(listener.dataEnum, listener.request);
-						if (success == false) {
+						if (!success) {
 							i.remove();
 							synchronized (MyListeners) {
 								removeListenerEntry(listener);

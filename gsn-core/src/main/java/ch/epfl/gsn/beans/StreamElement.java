@@ -731,7 +731,7 @@ public final class StreamElement implements Serializable {
 					break;
 				}
 			}
-			if (found == false) {
+			if (!found) {
 				continue;
 			}
 

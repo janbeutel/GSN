@@ -79,7 +79,7 @@ public class VirtualSensor {
             } catch (Exception e) {
                 throw new VirtualSensorInitializationFailedException(e.getMessage(), e);
             }
-            if (virtualSensor.initialize_wrapper() == false) {
+            if (!virtualSensor.initialize_wrapper()) {
                 virtualSensor = null;
                 throw new VirtualSensorInitializationFailedException();
             }

@@ -148,7 +148,7 @@ public class DPPMessageMultiplexer implements BackLogMessageListener {
 					logger.error(e.getMessage());
 				}
 				// send the message to the listener
-				if (temp.messageReceived(deviceID, message.getTimestamp(), message.getPayload()) == true) {
+				if (temp.messageReceived(deviceID, message.getTimestamp(), message.getPayload())) {
 					ReceiverCount++;
 				}
 

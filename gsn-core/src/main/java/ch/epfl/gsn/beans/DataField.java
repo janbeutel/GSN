@@ -90,7 +90,7 @@ public final class DataField implements Serializable {
 
 
    public String getName() {
-      if (fieldNameConvertedToLowerCase == false) {
+      if (!fieldNameConvertedToLowerCase) {
          fieldNameConvertedToLowerCase = true;
          this.name = name.toLowerCase();
       }

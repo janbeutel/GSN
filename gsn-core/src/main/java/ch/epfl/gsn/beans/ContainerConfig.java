@@ -250,7 +250,7 @@ public class ContainerConfig {
 	 * @return The database system associated with the configuration.
 	 */
 	public String getdatabaseSystem() {
-		if (isdatabaseSystemInitialzied == false) {
+		if (!isdatabaseSystemInitialzied) {
 			isdatabaseSystemInitialzied = true;
 
 			for (int i = 0; i < JDBC_URLS_PREFIX.length; i++) {

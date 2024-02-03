@@ -252,7 +252,7 @@ public class SerialWrapper extends AbstractWrapper implements SerialPortEventLis
 
 		// TASK : TRYING TO CONNECT USING THE ADDRESS
 		wnetPort = new SerialConnection(serialPort);
-		if (wnetPort.openConnection() == false) {
+		if (!wnetPort.openConnection()) {
 			return false;
 		}
 		wnetPort.addEventListener(this);

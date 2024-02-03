@@ -395,7 +395,7 @@ public abstract class AbstractWrapper extends Thread implements Monitorable {
 
 	public boolean sendToWrapper(Object dataItem)
 			throws OperationNotSupportedException {
-		if (isActive == false) {
+		if (!isActive) {
 			throw new GSNRuntimeException(
 					"Sending to an inactive/disabled wrapper is not allowed !");
 		}

@@ -294,7 +294,7 @@ public class CSVHandler {
                 break; // Move outside the loop as in each call we only read 250 values;
             }
         }
-        if (logger.isDebugEnabled() && toReturn.size() == 0 && loggedNoChange == false) {
+        if (logger.isDebugEnabled() && toReturn.size() == 0 && !loggedNoChange) {
             logger.debug("There is no new item after most recent checkpoint(previousCheckPoint:"
                     + new DateTime(previousCheckPoint) + ").");
             loggedNoChange = true;

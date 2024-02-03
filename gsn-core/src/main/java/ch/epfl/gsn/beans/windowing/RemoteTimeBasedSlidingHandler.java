@@ -280,7 +280,7 @@ public class RemoteTimeBasedSlidingHandler implements SlidingHandler {
 			if (streamSource.getWrapper() == null) {
 				throw new GSNRuntimeException("Wrapper object is null, most probably a bug, please report it !");
 			}
-			if (streamSource.validate() == false) {
+			if (!streamSource.validate()) {
 				throw new GSNRuntimeException(
 						"Validation of this object the stream source failed, please check the logs.");
 			}

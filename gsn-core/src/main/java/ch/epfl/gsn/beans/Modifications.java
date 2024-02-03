@@ -165,13 +165,13 @@ public final class Modifications {
 			VSensorConfig vSensorConfig = Mappings.getConfigurationObject(fileName);
 			if (vSensorConfig != null) {
 				Node<VSensorConfig> node = graph.findNode(vSensorConfig);
-				if (node != null && removeVirtualSensorConf.contains(vSensorConfig) == false) {
+				if (node != null && !removeVirtualSensorConf.contains(vSensorConfig)) {
 					// adding to removed list the removed vs and all virtual sensors that depend on
 					// it
 					List<Node<VSensorConfig>> nodesAffectedByRemoval = graph.nodesAffectedByRemoval(node);
 					for (Node<VSensorConfig> toRemoveNode : nodesAffectedByRemoval) {
 						VSensorConfig config = toRemoveNode.getObject();
-						if (removeVirtualSensorConf.contains(config) == false) {
+						if (!removeVirtualSensorConf.contains(config)) {
 							removeVirtualSensorConf.add(config);
 						}
 

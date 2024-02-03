@@ -332,9 +332,7 @@ public class ModelDistributer implements VirtualSensorDataListener, VSensorState
 
             for (Entry<DistributionRequest, DataEnumeratorIF> item : candidateListeners.entrySet()) {
                 boolean success = flushStreamElement(item.getValue(), item.getKey());
-                if (success == false) {
-                    removeListener(item.getKey());
-                } else {
+                if (success) {
                     if (!item.getValue().hasMoreElements()) {
                         removeListenerFromCandidates(item.getKey());
                         // As we are limiting the number of elements returned by the JDBC driver
@@ -342,6 +340,9 @@ public class ModelDistributer implements VirtualSensorDataListener, VSensorState
                         // consume(null, item.getKey().getVSensorConfig()); //do not activate for models
                         // !!!!!
                     }
+                    
+                } else {
+                    removeListener(item.getKey());
                 }
             }
         }
