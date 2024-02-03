@@ -102,6 +102,9 @@ public class CoAPWrapper extends AbstractWrapper implements CoapHandler {
 			try {
 				Thread.sleep(60000);
 			} catch (Exception ex) {
+				if(logger.isDebugEnabled()){
+					logger.debug(ex.getMessage(), ex);
+				}
 			}
 		}
 	}

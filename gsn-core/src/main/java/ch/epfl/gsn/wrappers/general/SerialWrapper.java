@@ -360,7 +360,9 @@ public class SerialWrapper extends AbstractWrapper implements SerialPortEventLis
 			try {
 				sPort.enableReceiveTimeout(30);
 			} catch (UnsupportedCommOperationException e) {
-
+				if(logger.isDebugEnabled()){
+					logger.debug(e.getMessage(), e);
+				}
 			}
 			open = true;
 			return true;

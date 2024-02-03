@@ -241,6 +241,9 @@ public class ScriptletProcessor extends AbstractVirtualSensor {
             try {
                 period = Long.parseLong(p);
             } catch (Exception e) {
+                if(logger.isDebugEnabled()){
+                    logger.debug(e.getMessage(), e);
+                }
                 // ...
             }
         }
@@ -367,6 +370,9 @@ public class ScriptletProcessor extends AbstractVirtualSensor {
             Long timed = (Long) binding.getVariable("TIMED");
             seo.setTimeStamp(timed);
         } catch (MissingPropertyException e) {
+            if(logger.isDebugEnabled()){
+                logger.debug(e.getMessage(), e);
+            }
             // ...
         }
         return seo;

@@ -93,7 +93,9 @@ public class ValidityTools {
 			socket.connect(inetSocketAddress, timeOutInMSec);
 			toReturn = true;
 		} catch (ConnectException e) {
-
+			if(logger.isDebugEnabled()){
+				logger.debug(e.getMessage(), e);
+			}
 		} catch (Exception e) {
 			logger.info(e.getMessage(), e);
 		} finally {
@@ -101,6 +103,9 @@ public class ValidityTools {
 				try {
 					socket.close();
 				} catch (Exception e) {
+					if(logger.isDebugEnabled()){
+						logger.debug(e.getMessage(), e);
+					}
 				}
 			}
 		}

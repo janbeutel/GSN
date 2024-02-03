@@ -129,6 +129,9 @@ public class MonitoringServer extends Thread {
 				t.start();
 
 			} catch (SocketTimeoutException ste) {
+				if(logger.isDebugEnabled()){
+					logger.debug(ste.getMessage(), ste);
+				}
 				// just keep trying until someone connects
 			} catch (IOException ioe) {
 				logger.error("IO Error on monitoring connection.", ioe);
@@ -152,6 +155,9 @@ public class MonitoringServer extends Thread {
 			Thread.sleep(100);
 
 		} catch (Exception e) {
+			if(logger.isDebugEnabled()){
+				logger.debug(e.getMessage(), e);
+			}
 		}
 	}
 

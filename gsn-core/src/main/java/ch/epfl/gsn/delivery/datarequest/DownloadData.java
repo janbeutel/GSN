@@ -212,6 +212,9 @@ public class DownloadData extends AbstractDataRequest {
                                 valsForAvg = (int) Math.ceil(numOfVals / left);
                             }
                         } catch (Exception e) {
+                            if(logger.isDebugEnabled()){
+                                logger.debug(e.getMessage(), e);
+                            }
                         }
                     }
 
