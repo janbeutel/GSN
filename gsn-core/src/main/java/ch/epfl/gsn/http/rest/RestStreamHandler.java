@@ -3,9 +3,9 @@ package ch.epfl.gsn.http.rest;
 import ch.epfl.gsn.Main;
 import ch.epfl.gsn.Mappings;
 import ch.epfl.gsn.beans.VSensorConfig;
-import ch.epfl.gsn.ac.DataSource;
-import ch.epfl.gsn.ac.GeneralServicesAPI;
-import ch.epfl.gsn.ac.User;
+//import ch.epfl.gsn.ac.DataSource;
+//import ch.epfl.gsn.ac.GeneralServicesAPI;
+//import ch.epfl.gsn.ac.User;
 import ch.epfl.gsn.storage.SQLUtils;
 import ch.epfl.gsn.storage.SQLValidator;
 import ch.epfl.gsn.utils.Helpers;
@@ -52,7 +52,7 @@ public class RestStreamHandler extends HttpServlet implements ContinuationListen
 			DataDistributerRest.getInstance(streamingReq.getDeliverySystem().getClass()).removeListener(streamingReq);
 		}
 	}
-
+	/* 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 
 		Continuation continuation = ContinuationSupport.getContinuation(request);
@@ -183,10 +183,12 @@ public class RestStreamHandler extends HttpServlet implements ContinuationListen
 			}
 		}
 	}
+	*/
 
 	/**
 	 * This happens at the server
 	 */
+	/* 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
 			URLParser parser = new URLParser(request);
@@ -253,7 +255,7 @@ public class RestStreamHandler extends HttpServlet implements ContinuationListen
 			return;
 		}
 	}
-
+	*/
 	/**
 	 * This happens at the client
 	 */
