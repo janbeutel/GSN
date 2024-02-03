@@ -256,6 +256,7 @@ public class HibernateStorage implements VirtualSensorStorage {
     //
 
     /**
+     * Converts GSN types to local types.
      * @param gsnType
      * @return
      */
@@ -279,8 +280,9 @@ public class HibernateStorage implements VirtualSensorStorage {
                 return "float";
             case DataTypes.BINARY:
                 return "binary";
+            default:
+                return null;
         }
-        return null;
     }
 
     /**

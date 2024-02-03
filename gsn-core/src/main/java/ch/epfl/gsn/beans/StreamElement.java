@@ -291,6 +291,8 @@ public final class StreamElement implements Serializable {
 				}
 
 				break;
+			default:
+				break;
 		}
 	}
 
@@ -905,6 +907,8 @@ public final class StreamElement implements Serializable {
 							volume += ((String) fieldValues[i]).getBytes().length;
 						}
 
+						break;
+					default:
 						break;
 				}
 			}

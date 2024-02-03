@@ -259,6 +259,8 @@ public class DataEnumerator implements DataEnumeratorIF {
 								output[innerIndex] = resultSet.getBytes(actualColIndex);
 							}
 							break;
+						default:
+							break;
 					}
 					if (resultSet.wasNull()) {
 						output[innerIndex] = null;

@@ -633,6 +633,8 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 						bucketStartTime = time - (bucketSizeInMs / 2);
 						bucketEndTime = bucketStartTime + bucketSizeInMs;
 						break;
+					default:
+						break;
 				}
 			}
 		}
@@ -744,6 +746,8 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 						break;
 					case MAX:
 						mergedData[i] = max(mergedDataFields[i]);
+						break;
+					default:
 						break;
 				}
 			}

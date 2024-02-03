@@ -304,6 +304,8 @@ public class JDBCWrapper extends AbstractWrapper {
                             case DataTypes.BINARY:
                                 output[i] = resultSet.getBytes(i + 3);
                                 break;
+                            default:
+                                break;
                         }
                         // logger.warn(i+" (type: "+dataFieldTypes[i]+" ) => "+output[i]);
                     }

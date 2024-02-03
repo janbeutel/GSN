@@ -180,6 +180,8 @@ public class SerialWrapper extends AbstractWrapper implements SerialPortEventLis
 				case 8:
 					dataBits = SerialPort.DATABITS_8;
 					break;
+				default:
+					break;
 			}
 		}
 
@@ -502,6 +504,8 @@ public class SerialWrapper extends AbstractWrapper implements SerialPortEventLis
 			// If break event append BREAK RECEIVED message.
 			case SerialPortEvent.BI:
 				// messageAreaIn.append("\n--- BREAK RECEIVED ---\n");
+			default:
+				break;
 		}
 
 		if (logger.isDebugEnabled()) {

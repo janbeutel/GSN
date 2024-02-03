@@ -219,6 +219,8 @@ public class DataMappingWrapper extends AbstractWrapper {
 							return false;
 						}
 						break;
+					default:
+						break;
 				}
 
 				h2Stat = h2DBconn.createStatement();
@@ -309,6 +311,8 @@ public class DataMappingWrapper extends AbstractWrapper {
 							if (sensortype_args_available) {
 								mapping.setConversionQuery();
 							}
+							break;
+						default:
 							break;
 					}
 					if (isEmpty) {
@@ -864,6 +868,8 @@ public class DataMappingWrapper extends AbstractWrapper {
 						return new InputInfo(getActiveAddressBean().toString(), e.getMessage(), false);
 					}
 					break;
+				default:
+					break;
 			}
 
 			if (streamElements != null) {
@@ -897,6 +903,8 @@ public class DataMappingWrapper extends AbstractWrapper {
 				case SENSOR_MAPPING:
 					deployments.get(deployment).resetSensorQueries();
 					deployments.get(deployment).resetConversionQuery();
+					break;
+				default:
 					break;
 			}
 
