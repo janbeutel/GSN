@@ -205,7 +205,7 @@ public class AnomalyDetector implements Monitorable {
             anomalies = functions.get("negative_outlier");
 
         }
-        if (anomalies == null || anomalies.size() == 0) {
+        if (anomalies == null || anomalies.isEmpty()) {
             return;
         }
         StorageManager storageMan = Main.getStorage(sensor.getVirtualSensorConfiguration().getName());
@@ -367,7 +367,7 @@ public class AnomalyDetector implements Monitorable {
         ArrayList<Anomaly> anomalies = functions.get("iqr");
 
         // TODO: remove key iqr
-        if (anomalies == null || anomalies.size() == 0) {
+        if (anomalies == null || anomalies.isEmpty()) {
             return;
         }
         StorageManager storageMan = Main.getStorage(sensor.getVirtualSensorConfiguration().getName());
@@ -524,7 +524,7 @@ public class AnomalyDetector implements Monitorable {
         ArrayList<Anomaly> anomalies = functions.get("unique");
 
         // TODO: remove key iqr
-        if (anomalies == null || anomalies.size() == 0) {
+        if (anomalies == null || anomalies.isEmpty()) {
             functions.remove("unique");
             return;
         }

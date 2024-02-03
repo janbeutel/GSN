@@ -72,7 +72,7 @@ public class MappingVirtualSensor extends BridgeVirtualSensorPermasense {
 			logger.error("ERROR IN EXECUTING, query: " + query);
 			logger.error(e.getMessage(), e);
 		}
-		if (latestvalues.size() > 0) {
+		if (!latestvalues.isEmpty()) {
 			IBindingFactory bfact;
 			try {
 				Serializable s = latestvalues.get(latestvalues.size() - 1).getData()[0];

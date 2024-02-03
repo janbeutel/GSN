@@ -93,14 +93,14 @@ public class DPPMessageMultiplexer implements BackLogMessageListener {
 		// Remove all occurrences
 		while (vec.removeElement(listener))
 			;
-		if (vec.size() == 0) {
+		if (vec.isEmpty()) {
 			msgTypeListener.remove(msgTypeInt);
 		}
 		if (logger.isDebugEnabled()) {
 			logger.debug("Listener for DPP message type " + msgTypeInt + " deregistered");
 		}
 
-		if (msgTypeListener.size() == 0) {
+		if (msgTypeListener.isEmpty()) {
 			dispose();
 			return false;
 		}

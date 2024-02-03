@@ -142,7 +142,7 @@ public abstract class AbstractWrapper extends Thread implements Monitorable {
 				slidingHandler.removeStreamSource(ss);
 			}
 		}
-		if (listeners.size() == 0) {
+		if (listeners.isEmpty()) {
 			releaseResources();
 		}
 
@@ -255,7 +255,7 @@ public abstract class AbstractWrapper extends Thread implements Monitorable {
 			return false;
 		}
 		try {
-			if (!isActive() || listeners.size() == 0) {
+			if (!isActive() || listeners.isEmpty()) {
 				return false;
 			}
 			if (!insertIntoWrapperTable(streamElement)) {
@@ -294,7 +294,7 @@ public abstract class AbstractWrapper extends Thread implements Monitorable {
 	 * @throws SQLException
 	 */
 	public boolean insertIntoWrapperTable(StreamElement se) throws SQLException {
-		if (listeners.size() == 0) {
+		if (listeners.isEmpty()) {
 			return false;
 		}
 		Connection conn = null;
@@ -329,7 +329,7 @@ public abstract class AbstractWrapper extends Thread implements Monitorable {
 	 * @throws SQLException if there is an error accessing the database.
 	 */
 	public boolean isOutOfOrder(StreamElement se) throws SQLException {
-		if (listeners.size() == 0) {
+		if (listeners.isEmpty()) {
 			return false;
 		}
 

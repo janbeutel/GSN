@@ -442,7 +442,7 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 			logger.debug("Listener for message type " + msgTypeInt + " deregistered");
 		}
 
-		if (vec.size() == 0) {
+		if (vec.isEmpty()) {
 			msgTypeListener.remove(msgTypeInt);
 		}
 
