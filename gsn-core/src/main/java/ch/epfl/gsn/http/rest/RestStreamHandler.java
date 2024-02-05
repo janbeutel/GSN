@@ -404,7 +404,7 @@ public class RestStreamHandler extends HttpServlet implements ContinuationListen
 	@Override
 	public void onComplete(Continuation continuation) {
 		logger.warn("continuation completed: " + continuation);
-		((LinkedBlockingQueue<Boolean>) continuation.getAttribute("status")).offer(new Boolean(false));
+		((LinkedBlockingQueue<Boolean>) continuation.getAttribute("status")).offer(Boolean.FALSE);
 	}
 
 	@Override

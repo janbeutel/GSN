@@ -87,6 +87,7 @@ public class Field4RestConverter implements Converter {
 				if (input.getValue() != null) {
 					value = base64.encode((byte[]) input.getValue());
 				}
+				break;
 		}
 
 		writer.addAttribute("type", type);

@@ -40,7 +40,11 @@ public class Anomaly {
 
     private DataField groupByField; // groupByField
 
+    /**
+     * default Constructor
+     */
     public Anomaly() {
+        //default constructor
     }
 
     public Anomaly(String function, DataField field, String timeStr, DataField groupByField) {
@@ -103,6 +107,7 @@ public class Anomaly {
                 toReturn = -1;
                 logger.info("Invalid time specifer in anomaly: " + this.toString()
                         + ". Anomaly would be detected over entire data\nValid time specifiers include m, d and h preceeded by a number");
+                break;
         }
 
         return toReturn;

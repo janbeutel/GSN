@@ -7,6 +7,7 @@ public class InputInfo {
 	private ArrayList<ProducerInfo> infoList = new ArrayList<ProducerInfo>();
 
 	public InputInfo() {
+		//default constructor
 	};
 
 	public InputInfo(String producer, String info, boolean success) {

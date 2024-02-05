@@ -7,7 +7,11 @@ public class PositionMap {
 	public Long end;
 	public String comment;
 
+	/**
+	 * default Constructor
+	 */
 	public PositionMap() {
+		//default constructor
 	}
 
 	public PositionMap(Integer id, Short type, Long begin, Long end, String comment) {

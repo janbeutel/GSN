@@ -106,9 +106,8 @@ public class BackLogStatsWrapper extends AbstractWrapper implements StatisticLis
 				Iterator<Integer> iter = connected.keySet().iterator();
 
 				if (iter != null) {
-					for (; iter.hasNext();) {
+					while(iter.hasNext()){
 						int deviceid = iter.next();
-
 						generateStreamElement(timestamp, deviceid, connected);
 					}
 				}

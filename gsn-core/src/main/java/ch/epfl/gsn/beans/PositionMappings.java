@@ -7,7 +7,11 @@ public class PositionMappings {
 	public Integer position;
 	public ArrayList<PositionMap> mappings;
 
+	/**
+	 * default Constructor
+	 */
 	public PositionMappings() {
+		//default constructor
 	}
 
 	public PositionMappings(Integer position, ArrayList<PositionMap> mappings) {

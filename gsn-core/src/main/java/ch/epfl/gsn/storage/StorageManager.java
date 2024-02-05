@@ -370,7 +370,9 @@ public abstract class StorageManager {
             PreparedStatement prepareStatement = connection.prepareStatement(
                     sqlQuery.toString());
             ResultSet resultSet = prepareStatement.executeQuery();
-            toreturn = resultSet.next();
+            if(resultSet.next()){
+                toreturn = true;
+            }
         } catch (SQLException error) {
             logger.error(error.getMessage(), error);
         } finally {
@@ -1061,6 +1063,7 @@ public abstract class StorageManager {
                         logger.error("The type conversion is not supported for : "
                                 + dataField.getName() + "("
                                 + dataField.getDataTypeID() + ") : ");
+                        break;
                 }
                 counter++;
             }
@@ -1270,9 +1273,10 @@ public abstract class StorageManager {
             long time1 = System.currentTimeMillis();
             ResultSet resultSet;
             resultSet = prepareStatement.executeQuery();
-            resultSet.next();
-            long time2 = System.currentTimeMillis();
-            return resultSet.getLong(1) - time2 + (time2 - time1) / 2;
+            if(resultSet.next()){
+                long time2 = System.currentTimeMillis();
+                return resultSet.getLong(1) - time2 + (time2 - time1) / 2;
+            }
         } catch (SQLException error) {
             logger.error(error.getMessage(), error);
         } finally {

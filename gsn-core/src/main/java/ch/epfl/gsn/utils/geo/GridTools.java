@@ -241,11 +241,13 @@ public class GridTools {
                     ResultSet.CONCUR_READ_ONLY);
             results = statement.executeQuery(query);
             ResultSetMetaData metaData; // Additional information about the results
-            int numCols, numRows; // How many rows and columns in the table
+            int numCols, numRows = 0; // How many rows and columns in the table
             metaData = results.getMetaData(); // Get metadata on them
             numCols = metaData.getColumnCount(); // How many columns?
-            results.last(); // Move to last row
-            numRows = results.getRow(); // How many rows?
+            if(results.last()){// Move to last row
+                numRows = results.getRow(); // How many rows?
+            }
+            
 
             String s;
 
@@ -326,11 +328,13 @@ public class GridTools {
                     ResultSet.CONCUR_READ_ONLY);
             results = statement.executeQuery(query);
             ResultSetMetaData metaData; // Additional information about the results
-            int numCols, numRows; // How many rows and columns in the table
+            int numCols, numRows = 0; // How many rows and columns in the table
             metaData = results.getMetaData(); // Get metadata on them
             numCols = metaData.getColumnCount(); // How many columns?
-            results.last(); // Move to last row
-            numRows = results.getRow(); // How many rows?
+            if(results.last()){// Move to last row
+                numRows = results.getRow(); // How many rows?
+            } 
+            
 
             String s;
 
@@ -417,11 +421,13 @@ public class GridTools {
                     ResultSet.CONCUR_READ_ONLY);
             results = statement.executeQuery(query);
             ResultSetMetaData metaData; // Additional information about the results
-            int numCols, numRows; // How many rows and columns in the table
+            int numCols, numRows = 0; // How many rows and columns in the table
             metaData = results.getMetaData(); // Get metadata on them
             numCols = metaData.getColumnCount(); // How many columns?
-            results.last(); // Move to last row
-            numRows = results.getRow(); // How many rows?
+            if(results.last()){// Move to last row
+                numRows = results.getRow(); // How many rows?
+            }
+            
 
             String s;
 
@@ -517,11 +523,12 @@ public class GridTools {
                     ResultSet.CONCUR_READ_ONLY);
             results = statement.executeQuery(query);
             ResultSetMetaData metaData; // Additional information about the results
-            int numCols, numRows; // How many rows and columns in the table
+            int numCols, numRows = 0; // How many rows and columns in the table
             metaData = results.getMetaData(); // Get metadata on them
             numCols = metaData.getColumnCount(); // How many columns?
-            results.last(); // Move to last row
-            numRows = results.getRow(); // How many rows?
+            if(results.last()){// Move to last row
+                numRows = results.getRow(); // How many rows?
+            } 
 
             String s;
 
@@ -589,3 +596,4 @@ public class GridTools {
         return listOfStrings;
     }
 }
+

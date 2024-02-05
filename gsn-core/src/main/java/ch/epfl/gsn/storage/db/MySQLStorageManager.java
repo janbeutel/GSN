@@ -190,9 +190,10 @@ public class MySQLStorageManager extends StorageManager {
     public void initDatabaseAccess(Connection con) throws Exception {
         Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery("select version();");
-        rs.next();
-        String versionInfo = rs.getString(1);
-        logger.info(new StringBuilder().append("You are using MySQL version : ").append(versionInfo).toString());
+        if(rs.next()){
+            String versionInfo = rs.getString(1);
+            logger.info(new StringBuilder().append("You are using MySQL version : ").append(versionInfo).toString());
+        }
         super.initDatabaseAccess(con);
     }
 

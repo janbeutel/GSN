@@ -164,6 +164,7 @@ public class ConditionalDeleteVirtualSensor extends BridgeVirtualSensorPermasens
 								break;
 							default:
 								logger.error("unknown data type");
+								break;
 						}
 					}
 				}

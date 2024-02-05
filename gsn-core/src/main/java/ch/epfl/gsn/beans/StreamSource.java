@@ -104,7 +104,11 @@ public class StreamSource implements Serializable {
   private transient boolean isValidated = false;
   private transient boolean validationResult = false;
 
+  /**
+	 * default Constructor
+	 */
   public StreamSource() {
+    //default constructor
   }
 
   public String getRawHistorySize() {

@@ -93,8 +93,11 @@ public class ContainerConfig {
 	private ArrayList<KeyValueImp> msrMap;
 	private HashMap<String, String> msrMapCached;
 
+	/**
+	 * default Constructor
+	 */
 	public ContainerConfig() {
-
+		//default constructor
 	}
 
 	public ContainerConfig(int port, String timeFormat, boolean zmqEnabled, int zmqProxyPort, int zmqMetaPort,

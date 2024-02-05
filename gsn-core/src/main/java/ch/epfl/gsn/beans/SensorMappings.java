@@ -7,7 +7,11 @@ public class SensorMappings {
 	public Integer position;
 	public ArrayList<SensorMap> mappings;
 
+	/**
+	 * default Constructor
+	 */
 	public SensorMappings() {
+		//default constructor
 	}
 
 	public SensorMappings(Integer position, ArrayList<SensorMap> mappings) {

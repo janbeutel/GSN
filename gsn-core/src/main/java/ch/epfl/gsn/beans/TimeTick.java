@@ -4,6 +4,7 @@ public class TimeTick {
 	public Long tick;
 
 	public TimeTick() {
+		//default constructor
 	}
 
 	public TimeTick(Long tick) {

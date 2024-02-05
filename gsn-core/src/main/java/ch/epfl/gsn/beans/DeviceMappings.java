@@ -16,7 +16,11 @@ public class DeviceMappings {
 	public Long sensorTimeMax = null;
 	public ArrayList<TimeTick> sensorTimeTicks;
 
+	/**
+	 * default Constructor
+	 */
 	public DeviceMappings() {
+		//default constructor
 	}
 
 	public DeviceMappings(ArrayList<PositionMappings> positionMappings, ArrayList<SensorMappings> sensorMappings,

@@ -143,7 +143,8 @@ public class DemoVSensor extends AbstractVirtualSensor {
 				default:
 					logger.warn(
 							new StringBuilder().append("Shouldn't happen.>").append(counter).append("<").toString());
-			}
+					break;
+				}
 			graphics.fillOval(locX, locY, size, size);
 			try {
 				ImageIO.write(bufferedImage, "jpeg", outputStream);

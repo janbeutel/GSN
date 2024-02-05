@@ -7,7 +7,11 @@ public class GeoMapping {
 	public Double altitude;
 	public String comment;
 
+	/**
+	 * default Constructor
+	 */
 	public GeoMapping() {
+		//default constructor
 	}
 
 	public GeoMapping(Integer position, Double longitude, Double latitude, Double altitude, String comment) {

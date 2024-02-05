@@ -49,7 +49,11 @@ public final class DataField implements Serializable {
    private boolean index = false;
    transient boolean fieldNameConvertedToLowerCase = false;
 
+   /**
+	 * default Constructor
+	 */
    public DataField() {
+      //default constructor
    }
 
    public DataField(final String fieldName, final String type, final String description) throws GSNRuntimeException {

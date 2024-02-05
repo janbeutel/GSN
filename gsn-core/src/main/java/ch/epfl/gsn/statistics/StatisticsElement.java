@@ -10,7 +10,11 @@ public final class StatisticsElement {
 
 	private Long timestamp = null;
 
+	/**
+	 * default Constructor
+	 */
 	public StatisticsElement() {
+		//default constructor
 	}
 
 	/**
