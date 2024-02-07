@@ -247,19 +247,16 @@ public final class Modifications {
 						}
 						String vsensorName = addressing[addressingIndex].getPredicateValue("query");
 						
-						if(vsensorName==null){
-							vsensorName = addressing[addressingIndex].getPredicateValueWithDefault("name",
-							Double.toString(Math.random() * 10000000.0));
-						} else if (isLocalZeroMQ) {
-							vsensorName = addressing[addressingIndex].getPredicateValue("vsensor");
-							if (vsensorName == null) {
-								vsensorName = Double.toString(Math.random() * 1000000000.0);
-							}
-						} else {
+						if (vsensorName!=null) {
 							vsensorName = SQLUtils.getTableName(vsensorName);
-							if (vsensorName == null) {
-								vsensorName = Double.toString(Math.random() * 1000000000.0);
-							}
+							if(vsensorName ==null)
+								vsensorName=Double.toString(Math.random()*1000000000.0);
+						}else if(isLocalZeroMQ){
+							vsensorName = addressing[addressingIndex].getPredicateValue("vsensor");
+							if(vsensorName ==null)
+								vsensorName=Double.toString(Math.random()*1000000000.0);
+						}else {
+							vsensorName = addressing[addressingIndex].getPredicateValueWithDefault("name",Double.toString(Math.random()*10000000.0));
 						}
 						vsensorName = vsensorName.toLowerCase();
 
