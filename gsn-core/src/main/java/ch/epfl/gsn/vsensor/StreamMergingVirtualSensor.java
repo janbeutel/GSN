@@ -704,11 +704,7 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 				oldSE = streamElement;
 			}
 
-			if (streamElementTuples.size() == bucketSpace) {
-				return true;
-			} else {
-				return false;
-			}
+			return streamElementTuples.size() == bucketSpace;
 		}
 
 		protected int getNumberOfStreams() {

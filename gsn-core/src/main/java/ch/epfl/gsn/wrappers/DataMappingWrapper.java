@@ -981,12 +981,7 @@ public class DataMappingWrapper extends AbstractWrapper {
 		}
 
 		public boolean isPositionAvailable() {
-			if (position_select == null) {
-				return false;
-			} else {
-				return true;
-			}
-
+			return position_select != null;
 		}
 
 		/**
@@ -1290,12 +1285,7 @@ public class DataMappingWrapper extends AbstractWrapper {
 		}
 
 		public boolean isGeoAvailable() {
-			if (geo_select == null) {
-				return false;
-			} else {
-				return true;
-			}
-
+			return geo_select!= null;
 		}
 
 		/**
@@ -1410,12 +1400,7 @@ public class DataMappingWrapper extends AbstractWrapper {
 		}
 
 		public boolean isSensorAvailable() {
-			if (sensor_select == null) {
-				return false;
-			} else {
-				return true;
-			}
-
+			return sensor_select!= null;
 		}
 
 		/**
@@ -1720,12 +1705,7 @@ public class DataMappingWrapper extends AbstractWrapper {
 		}
 
 		public boolean isConversionAvailable() {
-			if (conversion_select == null) {
-				return false;
-			} else {
-				return true;
-			}
-
+			return conversion_select!= null;
 		}
 	}
 

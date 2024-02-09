@@ -100,7 +100,7 @@ public class VirtualSensor {
             return;
         }
         if (++noOfCallsToReturnVS % GARBAGE_COLLECTOR_INTERVAL == 0) {
-            DoUselessDataRemoval();
+            doUselessDataRemoval();
         }
 
     }
@@ -183,7 +183,7 @@ public class VirtualSensor {
      * the storage.
      * The number of rows affected by the removal operation is logged.
      */
-    public void DoUselessDataRemoval() {
+    public void doUselessDataRemoval() {
         if (config.getParsedStorageSize() == VSensorConfig.STORAGE_SIZE_NOT_SET) {
             return;
         }
