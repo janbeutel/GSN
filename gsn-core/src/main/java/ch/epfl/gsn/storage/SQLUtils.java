@@ -36,6 +36,9 @@ import ch.epfl.gsn.utils.CaseInsensitiveComparator;
 
 public class SQLUtils {
 
+	private static Pattern pattern = Pattern.compile("(\"[^\"]*\")|((\\w+)(\\.((\\w+)|\\*)))",
+			Pattern.CASE_INSENSITIVE);
+
 	/**
 	 * Table renaming, note that the renameMapping should be a tree map. This
 	 * method gets a sql query and changes the table names using the mappings
@@ -99,19 +102,6 @@ public class SQLUtils {
 				.append(toReturn.substring(indexOfWhere));
 		return finalResult;
 	}
-
-	/**
-	 * This method gets a sql query and changes the table names which are equal to
-	 * <code>tableNameToRename</code> to the <code>replacement</code>
-	 * provided in the second argument.<br>
-	 * 
-	 * @param query
-	 * @param tableNameToRename Table name to be replaced
-	 * @param replaceTo
-	 * @return
-	 */
-	private static Pattern pattern = Pattern.compile("(\"[^\"]*\")|((\\w+)(\\.((\\w+)|\\*)))",
-			Pattern.CASE_INSENSITIVE);
 
 	/**
 	 * Returns the table name from the given SQL query.

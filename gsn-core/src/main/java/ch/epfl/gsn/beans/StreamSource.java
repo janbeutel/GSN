@@ -96,6 +96,8 @@ public class StreamSource implements Serializable {
   private transient boolean isValidated = false;
   private transient boolean validationResult = false;
 
+  private StringBuilder cachedSqlQuery = null;
+
   public String getRawHistorySize() {
     return rawHistorySize;
   }
@@ -419,8 +421,6 @@ public class StreamSource implements Serializable {
   // ).toString( ) );
   // return inputStream.dataAvailable( getUIDStr() );
   // }
-
-  private StringBuilder cachedSqlQuery = null;
 
   /**
    * This method gets a stream source specification and generates the appropriate

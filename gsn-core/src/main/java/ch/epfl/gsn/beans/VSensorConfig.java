@@ -115,6 +115,11 @@ public class VSensorConfig implements Serializable {
 
 	private boolean isTimestampUnique = false;
 
+	private boolean isGetMainClassInitParamsInitialized = false;
+
+	private final TreeMap<String, String> mainClassInitParams = new TreeMap<String, String>(
+			new CaseInsensitiveComparator());
+
 	/**
 	 * @return Returns the addressing.
 	 */
@@ -343,11 +348,6 @@ public class VSensorConfig implements Serializable {
 
 		return result;
 	}
-
-	private boolean isGetMainClassInitParamsInitialized = false;
-
-	private final TreeMap<String, String> mainClassInitParams = new TreeMap<String, String>(
-			new CaseInsensitiveComparator());
 
 	/**
 	 * Note that the key and value both are trimmed before being inserted into

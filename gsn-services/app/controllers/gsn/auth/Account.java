@@ -25,6 +25,16 @@ import controllers.gsn.auth.routes;
 
 public class Account extends Controller {
 
+	private final Form<Accept> ACCEPT_FORM;
+	private final Form<Account.PasswordChange> PASSWORD_CHANGE_FORM;
+	private final Form<Account.EditProfile> EDIT_PROFILE_FORM;
+
+	private final PlayAuthenticate auth;
+	private final UserProvider userProvider;
+	private final GSNUsernamePasswordAuthProvider gsnUsrPaswProvider;
+
+	private final MessagesApi msg;
+
 	public static class Accept {
 
 		@Required
@@ -103,16 +113,6 @@ public class Account extends Controller {
 			this.lastname = lastname;
 		}
 	}
-
-	private final Form<Accept> ACCEPT_FORM;
-	private final Form<Account.PasswordChange> PASSWORD_CHANGE_FORM;
-	private final Form<Account.EditProfile> EDIT_PROFILE_FORM;
-
-	private final PlayAuthenticate auth;
-	private final UserProvider userProvider;
-	private final GSNUsernamePasswordAuthProvider gsnUsrPaswProvider;
-
-	private final MessagesApi msg;
 
 	@Inject
 	public Account(final PlayAuthenticate auth, final UserProvider userProvider,

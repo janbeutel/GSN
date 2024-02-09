@@ -23,26 +23,6 @@ import javax.inject.Inject;
 
 public class Signup extends Controller {
 
-	public static class PasswordReset extends Account.PasswordChange {
-
-		public PasswordReset() {
-		}
-
-		public PasswordReset(final String token) {
-			this.token = token;
-		}
-
-		public String token;
-
-		public String getToken() {
-			return token;
-		}
-
-		public void setToken(String token) {
-			this.token = token;
-		}
-	}
-
 	private final Form<PasswordReset> PASSWORD_RESET_FORM;
 
 	private final Form<MyIdentity> FORGOT_PASSWORD_FORM;
@@ -54,6 +34,26 @@ public class Signup extends Controller {
 	private final GSNUsernamePasswordAuthProvider userPaswAuthProvider;
 
 	private final MessagesApi msg;
+
+	public static class PasswordReset extends Account.PasswordChange {
+
+		public String token;
+
+		public PasswordReset() {
+		}
+
+		public PasswordReset(final String token) {
+			this.token = token;
+		}
+
+		public String getToken() {
+			return token;
+		}
+
+		public void setToken(String token) {
+			this.token = token;
+		}
+	}
 
 	@Inject
 	public Signup(final PlayAuthenticate auth, final UserProvider userProvider,

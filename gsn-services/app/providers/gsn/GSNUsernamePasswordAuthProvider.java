@@ -44,6 +44,10 @@ public class GSNUsernamePasswordAuthProvider
 
 	private static final String EMAIL_TEMPLATE_FALLBACK_LANGUAGE = "en";
 
+	private final Provider<Application> appProvider;
+	private final Form<MySignup> SIGNUP_FORM;
+	private final Form<MyLogin> LOGIN_FORM;
+
 	@Override
 	protected List<String> neededSettingKeys() {
 		final List<String> needed = new ArrayList<String>(
@@ -56,16 +60,16 @@ public class GSNUsernamePasswordAuthProvider
 
 	public static class MyIdentity {
 
+		@Required
+		@Email
+		public String email;
+
 		public MyIdentity() {
 		}
 
 		public MyIdentity(final String email) {
 			this.email = email;
 		}
-
-		@Required
-		@Email
-		public String email;
 
 	}
 
@@ -128,10 +132,6 @@ public class GSNUsernamePasswordAuthProvider
 			this.repeatPassword = repeatPassword;
 		}
 	}
-
-	private final Provider<Application> appProvider;
-	private final Form<MySignup> SIGNUP_FORM;
-	private final Form<MyLogin> LOGIN_FORM;
 
 	@Inject
 	public GSNUsernamePasswordAuthProvider(final Provider<Application> appProvider, final PlayAuthenticate auth, final FormFactory formFactory,
