@@ -97,9 +97,9 @@ public final class AddressBean implements Serializable {
 	 * @throws RuntimeException if the key is not found in the predicates list
 	 */
 	public String getPredicateValueWithException(String key) {
-		key = key.trim();
+		String keyTrimmed = key.trim();
 		for (KeyValue predicate : this.predicates) {
-			if (predicate.getKey().toString().trim().equalsIgnoreCase(key)) {
+			if (predicate.getKey().toString().trim().equalsIgnoreCase(keyTrimmed)) {
 				final String value = (String) predicate.getValue();
 				if (value.trim().length() > 0) {
 					return value;

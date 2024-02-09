@@ -74,7 +74,7 @@ public class Anomaly {
      */
     private long parseTime(String timeStr) {
 
-        timeStr = timeStr.trim();
+        String timeStrTrimmed = timeStr.trim();
 
         if (timeStr.equals("-1")) { // timeStr == -1 means anomaly has to be detected over all the historical data
             return -1;
@@ -82,7 +82,7 @@ public class Anomaly {
         long toReturn = 0;
 
         // timeSpecifer could be m (minutes) , h (hours) or d (days)
-        Character timeSpecifier = timeStr.toLowerCase().charAt(timeStr.length() - 1);
+        Character timeSpecifier = timeStrTrimmed.toLowerCase().charAt(timeStrTrimmed.length() - 1);
 
         double rawTime = 0;
 
@@ -90,17 +90,17 @@ public class Anomaly {
 
             case 'm':
                 // Converting minutes to milliseconds
-                rawTime = Double.parseDouble(timeStr.substring(0, timeStr.length() - 1));
+                rawTime = Double.parseDouble(timeStrTrimmed.substring(0, timeStrTrimmed.length() - 1));
                 toReturn = (long) (rawTime * 60 * 1000);
                 break;
             case 'h':
                 // Converting hours ti milliseconds
-                rawTime = Double.parseDouble(timeStr.substring(0, timeStr.length() - 1));
+                rawTime = Double.parseDouble(timeStrTrimmed.substring(0, timeStrTrimmed.length() - 1));
                 toReturn = (long) (rawTime * 60 * 60 * 1000);
                 break;
             case 'd':
                 // Converting days to milliseconds
-                rawTime = Double.parseDouble(timeStr.substring(0, timeStr.length() - 1));
+                rawTime = Double.parseDouble(timeStrTrimmed.substring(0, timeStrTrimmed.length() - 1));
                 toReturn = (long) (rawTime * 24 * 60 * 60 * 1000);
                 break;
             default:

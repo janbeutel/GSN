@@ -66,14 +66,15 @@ public class Utils {
 	 * @throws NumberFormatException if the window size cannot be parsed
 	 */
 	public static Pair<Boolean, Long> parseWindowSize(String s) throws NumberFormatException {
-		s = s.replace(" ", "").trim().toLowerCase();
-		int mIndex = s.indexOf("m");
-		int hIndex = s.indexOf("h");
-		int sIndex = s.indexOf("s");
+		String windowSize = s;
+		windowSize = windowSize.replace(" ", "").trim().toLowerCase();
+		int mIndex = windowSize.indexOf("m");
+		int hIndex = windowSize.indexOf("h");
+		int sIndex = windowSize.indexOf("s");
 		if (mIndex < 0 && hIndex < 0 && sIndex < 0) {
-			return new Pair<Boolean, Long>(false, Long.parseLong(s));
+			return new Pair<Boolean, Long>(false, Long.parseLong(windowSize));
 		} else {
-			StringBuilder shs = new StringBuilder(s);
+			StringBuilder shs = new StringBuilder(windowSize);
 			long value = 0;
 			if (mIndex >= 0 && mIndex == shs.length() - 1) {
 				value = Long.parseLong(shs.deleteCharAt(mIndex).toString()) * 60000;

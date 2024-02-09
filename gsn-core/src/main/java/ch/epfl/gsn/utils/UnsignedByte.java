@@ -55,9 +55,10 @@ public class UnsignedByte {
      * @param i the integer value to be converted to an unsigned byte
      */
     public UnsignedByte(int i) {
-        i = i & 0xff;
-        byteValue = (byte) i;
-        intValue = i;
+        int value = i;
+        value = value & 0xff;
+        byteValue = (byte) value;
+        intValue = value;
     }
 
     /**

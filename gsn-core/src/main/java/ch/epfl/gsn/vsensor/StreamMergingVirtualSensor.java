@@ -398,8 +398,9 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 	@Override
 	public void dataAvailable(String inputStreamName, StreamElement data) {
 		Serializable match1 = null;
+		StreamElement se = data;
 		if (matchingFieldName1 != null) {
-			match1 = data.getData(matchingFieldName1);
+			match1 = se.getData(matchingFieldName1);
 		}
 		try {
 			cleanupLock.acquire();
@@ -408,7 +409,7 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 		}
 		try {
 			// add missing fields to stream element
-			data = addMissingFields(data);
+			se = addMissingFields(se);
 
 			if (!streamElementBuffer.containsKey(match1)) {
 				streamElementBuffer.put(match1,
@@ -419,7 +420,7 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 
 			}
 
-			Long dataTime = (Long) data.getData(timeline);
+			Long dataTime = (Long) se.getData(timeline);
 			if (bufferNow == null) {
 				bufferNow = dataTime;
 			} else if (dataTime.compareTo(bufferNow) > 0 && dataTime.compareTo(bufferNow + bufferSizeInMs) <= 0) {
@@ -429,7 +430,7 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 				newestData = dataTime;
 			}
 
-			processPerDeviceData(inputStreamName, data, streamElementBuffer.get(match1));
+			processPerDeviceData(inputStreamName, se, streamElementBuffer.get(match1));
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}

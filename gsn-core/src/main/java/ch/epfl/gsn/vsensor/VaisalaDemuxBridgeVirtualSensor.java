@@ -49,17 +49,18 @@ public class VaisalaDemuxBridgeVirtualSensor extends BridgeVirtualSensorPermasen
 	 */
 	@Override
 	public void dataAvailable(String inputStreamName, StreamElement data) {
+		StreamElement se = data;
 		Serializable[] serialized_data = new Serializable[dataField.length];
 
-		serialized_data[0] = data.getData(dataField[0].getName());
-		serialized_data[1] = data.getData(dataField[1].getName());
-		serialized_data[2] = data.getData(dataField[2].getName());
-		serialized_data[3] = data.getData(dataField[3].getName());
+		serialized_data[0] = se.getData(dataField[0].getName());
+		serialized_data[1] = se.getData(dataField[1].getName());
+		serialized_data[2] = se.getData(dataField[2].getName());
+		serialized_data[3] = se.getData(dataField[3].getName());
 
-		String[] r1 = ((String) data.getData("wu")).split(",");
-		String[] r2 = ((String) data.getData("tu")).split(",");
-		String[] r3 = ((String) data.getData("ru")).split(",");
-		String[] r5 = ((String) data.getData("su")).split(",");
+		String[] r1 = ((String) se.getData("wu")).split(",");
+		String[] r2 = ((String) se.getData("tu")).split(",");
+		String[] r3 = ((String) se.getData("ru")).split(",");
+		String[] r5 = ((String) se.getData("su")).split(",");
 
 		int index = 5;
 		try {
@@ -67,16 +68,16 @@ public class VaisalaDemuxBridgeVirtualSensor extends BridgeVirtualSensorPermasen
 
 			// check input correctness
 			if (Integer.parseInt(r1[0].split("R")[1]) != 1) {
-				throw new Exception("wu should start with #R1:timestamp=" + data.getTimeStamp());
+				throw new Exception("wu should start with #R1:timestamp=" + se.getTimeStamp());
 			}
 			if (Integer.parseInt(r2[0].split("R")[1]) != 2) {
-				throw new Exception("tu should start with #R2:timestamp=" + data.getTimeStamp());
+				throw new Exception("tu should start with #R2:timestamp=" + se.getTimeStamp());
 			}
 			if (Integer.parseInt(r3[0].split("R")[1]) != 3) {
-				throw new Exception("ru should start with #R3:timestamp=" + data.getTimeStamp());
+				throw new Exception("ru should start with #R3:timestamp=" + se.getTimeStamp());
 			}
 			if (Integer.parseInt(r5[0].split("R")[1]) != 5) {
-				throw new Exception("su should start with #R5:timestamp=" + data.getTimeStamp());
+				throw new Exception("su should start with #R5:timestamp=" + se.getTimeStamp());
 			}
 
 			for (int i = 1; i < r1.length; i++) {
@@ -123,7 +124,7 @@ public class VaisalaDemuxBridgeVirtualSensor extends BridgeVirtualSensorPermasen
 			return;
 		}
 
-		data = new StreamElement(dataField, serialized_data, data.getTimeStamp());
-		super.dataAvailable(inputStreamName, data);
+		se = new StreamElement(dataField, serialized_data, se.getTimeStamp());
+		super.dataAvailable(inputStreamName, se);
 	}
 }

@@ -284,14 +284,15 @@ public class SQLValidator implements VSensorStateChangeListener {
 	 * @return the modified SQL query with a primary key field added if necessary
 	 */
 	public static String addPkField(String query) {
+		String queryString = query;
 		if(logger.isDebugEnabled()){
-			logger.debug("< QUERY IN: " + query);
+			logger.debug("< QUERY IN: " + queryString);
 		}
 		try {
 			SQLValidator sv = getInstance();
-			Select select = sv.queryToSelect(query);
+			Select select = sv.queryToSelect(queryString);
 			if (select == null) {
-				return query;
+				return queryString;
 			}
 			boolean hasPk = false;
 			boolean hasWildCard = false;
@@ -308,18 +309,18 @@ public class SQLValidator implements VSensorStateChangeListener {
 			}
 			//
 			if (!hasPk && !hasWildCard) {
-				int is = query.toUpperCase().indexOf("SELECT");
-				query = new StringBuilder(query.substring(is, is + 6))
+				int is = queryString.toUpperCase().indexOf("SELECT");
+				queryString = new StringBuilder(queryString.substring(is, is + 6))
 						.append(" pk, ")
-						.append(query.substring(is + 7)).toString();
+						.append(queryString.substring(is + 7)).toString();
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
 		if(logger.isDebugEnabled()){
-			logger.debug("> QUERY OUT: " + query);
+			logger.debug("> QUERY OUT: " + queryString);
 		}
-		return query;
+		return queryString;
 	}
 
 	/**

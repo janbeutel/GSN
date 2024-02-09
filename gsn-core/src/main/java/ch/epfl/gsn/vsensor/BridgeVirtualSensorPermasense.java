@@ -115,48 +115,49 @@ public class BridgeVirtualSensorPermasense extends ScriptletProcessor {
 	@Override
 	public void dataAvailable(String inputStreamName, StreamElement data) {
 		String s;
-		if (position_mapping && data.getData("device_id") != null && data.getData("generation_time") != null) {
-			Integer position = DataMappingWrapper.getPosition(((Integer) data.getData("device_id")).intValue(),
-					((Long) data.getData("generation_time")).longValue(),
+		StreamElement se = data;
+		if (position_mapping && se.getData("device_id") != null && se.getData("generation_time") != null) {
+			Integer position = DataMappingWrapper.getPosition(((Integer) se.getData("device_id")).intValue(),
+					((Long) se.getData("generation_time")).longValue(),
 					deployment, getVirtualSensorConfiguration().getName(), inputStreamName);
-			data = new StreamElement(data,
+			se = new StreamElement(se,
 					new String[] { "position" },
 					new Byte[] { DataTypes.INTEGER },
 					new Serializable[] { position });
 
 		}
 		if (sensortype_mapping &&
-				data.getData("position") != null && data.getData("generation_time") != null) {
+				se.getData("position") != null && se.getData("generation_time") != null) {
 			Serializable[] sensortype = DataMappingWrapper.getSensorType(
-					((Integer) data.getData("position")).intValue(),
-					((Long) data.getData("generation_time")).longValue(),
+					((Integer) se.getData("position")).intValue(),
+					((Long) se.getData("generation_time")).longValue(),
 					deployment, getVirtualSensorConfiguration().getName(), inputStreamName);
-			data = new StreamElement(data,
+			se = new StreamElement(se,
 					new String[] { "sensortype", "sensortype_serialid" },
 					new Byte[] { DataTypes.VARCHAR, DataTypes.BIGINT },
 					sensortype);
 		}
-		if (sensorvalue_conversion && data.getData("position") != null && data.getData("generation_time") != null) {
-			data = DataMappingWrapper.getConvertedValues(data, deployment, getVirtualSensorConfiguration().getName(),
+		if (sensorvalue_conversion && se.getData("position") != null && se.getData("generation_time") != null) {
+			se = DataMappingWrapper.getConvertedValues(se, deployment, getVirtualSensorConfiguration().getName(),
 					inputStreamName);
 		}
-		if (gps_time_conversion && data.getData("gps_time") != null && data.getData("gps_week") != null) {
-			data = new StreamElement(data,
+		if (gps_time_conversion && se.getData("gps_time") != null && se.getData("gps_week") != null) {
+			se = new StreamElement(se,
 					new String[] { "gps_unixtime" },
 					new Byte[] { DataTypes.BIGINT },
 					new Serializable[] { (long) (Helpers.convertGPSTimeToUnixTime(
-							(double) ((Integer) data.getData("gps_time") / 1000.0), (Short) data.getData("gps_week"))
+							(double) ((Integer) se.getData("gps_time") / 1000.0), (Short) se.getData("gps_week"))
 							* 1000.0) });
 		}
 
 		for (Enumeration<String> elem = jpeg_scaled.elements(); elem.hasMoreElements();) {
 			// scale image to given width
 			s = elem.nextElement();
-			if (data.getData(s) != null) {
+			if (se.getData(s) != null) {
 				try {
 					BufferedImage image;
 					try {
-						image = ImageIO.read(new ByteArrayInputStream((byte[]) data.getData(s)));
+						image = ImageIO.read(new ByteArrayInputStream((byte[]) se.getData(s)));
 					} catch (IOException e) {
 						logger.error("Could not read image: skip image!", e);
 						return;
@@ -179,7 +180,7 @@ public class BridgeVirtualSensorPermasense extends ScriptletProcessor {
 					ByteArrayOutputStream os = new ByteArrayOutputStream();
 					ImageIO.write(scaled, "jpeg", os);
 
-					data.setData(s, os.toByteArray());
+					se.setData(s, os.toByteArray());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
 				}
@@ -187,9 +188,9 @@ public class BridgeVirtualSensorPermasense extends ScriptletProcessor {
 		}
 
 		if (processScriptlet) {
-			super.dataAvailable(inputStreamName, data);
+			super.dataAvailable(inputStreamName, se);
 		} else {
-			dataProduced(data);
+			dataProduced(se);
 		}
 	}
 

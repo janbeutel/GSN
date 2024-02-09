@@ -552,6 +552,8 @@ public class AsyncCoreStationClient extends Thread {
 	 */
 	public Serializable[] send(String deployment, Integer id, CoreStationListener listener, int priority, byte[] data)
 			throws IOException {
+
+		CoreStationListener coreStationListener = listener;
 		Serializable[] ret = new Serializable[] { false, null };
 		if (deployment == null) {
 			logger.error("deployment should not be null...");
@@ -564,7 +566,7 @@ public class AsyncCoreStationClient extends Thread {
 		}
 
 		if (id == null) {
-			ret = send(listener, priority, data, true);
+			ret = send(coreStationListener, priority, data, true);
 		} else {
 			if (id == 65535) {
 				Iterator<Integer> iter = corestationMap.keySet().iterator();
@@ -575,13 +577,13 @@ public class AsyncCoreStationClient extends Thread {
 					}
 				}
 			} else {
-				listener = corestationMap.get(id);
-				if (listener == null) {
+				coreStationListener = corestationMap.get(id);
+				if (coreStationListener == null) {
 					throw new IOException("The DeviceId " + id + " is not connected or does not exist for the "
 							+ deployment + " deployment");
 				}
 
-				ret = send(listener, priority, data, true);
+				ret = send(coreStationListener, priority, data, true);
 			}
 		}
 		return ret;

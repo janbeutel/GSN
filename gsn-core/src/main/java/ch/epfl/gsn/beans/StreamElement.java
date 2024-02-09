@@ -383,7 +383,7 @@ public final class StreamElement implements Serializable {
 	 */
 	public void setTimeStamp(long timeStamp) {
 		if (timeStamp <= 0) {
-			timeStamp = 0;
+			this.timeStamp = 0;
 		} else {
 			this.timeStamp = timeStamp;
 		}

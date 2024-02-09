@@ -62,9 +62,10 @@ public class ApproxSwissProj {
 		double x_aux = (x - 200000) / 1000000;
 
 		// Process height
-		h = (h + 49.55) - (12.60 * y_aux) - (22.64 * x_aux);
+		double height = h;
+		height = (height + 49.55) - (12.60 * y_aux) - (22.64 * x_aux);
 
-		return h;
+		return height;
 	}
 
 	/**
@@ -224,21 +225,22 @@ public class ApproxSwissProj {
 	 */
 	private static double WGStoCHh(double lat, double lng, double h) {
 		// Converts degrees dec to sex
-		lat = DecToSexAngle(lat);
-		lng = DecToSexAngle(lng);
+		double latitude = DecToSexAngle(lat);
+		double longitude = DecToSexAngle(lng);
 
 		// Converts degrees to seconds (sex)
-		lat = SexAngleToSeconds(lat);
-		lng = SexAngleToSeconds(lng);
+		latitude = SexAngleToSeconds(latitude);
+		longitude = SexAngleToSeconds(longitude);
 
 		// Axiliary values (% Bern)
-		double lat_aux = (lat - 169028.66) / 10000;
-		double lng_aux = (lng - 26782.5) / 10000;
+		double lat_aux = (latitude - 169028.66) / 10000;
+		double lng_aux = (longitude - 26782.5) / 10000;
 
 		// Process h
-		h = (h - 49.55) + (2.73 * lng_aux) + (6.94 * lat_aux);
+		double height = h;
+		height = (height - 49.55) + (2.73 * lng_aux) + (6.94 * lat_aux);
 
-		return h;
+		return height;
 	}
 
 	/**

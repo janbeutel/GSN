@@ -581,6 +581,8 @@ public class DataMappingWrapper extends AbstractWrapper {
 	 */
 	public static StreamElement getConvertedValues(StreamElement data, String deployment, String vsName,
 			String inputStreamName) {
+		
+		StreamElement se = data;
 		String convName;
 		String[] convResult;
 		Converter converter;
@@ -597,17 +599,17 @@ public class DataMappingWrapper extends AbstractWrapper {
 			return null;
 		}
 
-		ListIterator<String> list = Arrays.asList(data.getFieldNames()).listIterator();
+		ListIterator<String> list = Arrays.asList(se.getFieldNames()).listIterator();
 		try {
 			while (list.hasNext()) {
 				convName = list.next().toLowerCase();
-				if (data.getData(convName) == null) {
+				if (se.getData(convName) == null) {
 					if(logger.isDebugEnabled()){
 						logger.debug(vsName + "[source=" + inputStreamName + "]: ignoring >" + convName + "<");
 					}
 				} else {
-					convResult = m.executeConversionSelect(((Integer) data.getData("position")).intValue(),
-							((Long) data.getData("generation_time")).longValue(),
+					convResult = m.executeConversionSelect(((Integer) se.getData("position")).intValue(),
+							((Long) se.getData("generation_time")).longValue(),
 							convName);
 
 					if (convResult == null) {
@@ -636,10 +638,10 @@ public class DataMappingWrapper extends AbstractWrapper {
 								converter = converterList.get(convResult[1]);
 							}
 							if (convResult[2].isEmpty()) {
-								map.put(convResult[0], converter.convert(data.getData(convName), convResult[3], null));
+								map.put(convResult[0], converter.convert(se.getData(convName), convResult[3], null));
 							} else {
-								map.put(convResult[0], converter.convert(data.getData(convName), convResult[3],
-										data.getData(convResult[2])));
+								map.put(convResult[0], converter.convert(se.getData(convName), convResult[3],
+										se.getData(convResult[2])));
 							}
 						} catch (Exception e) {
 							logger.error(e.getMessage(), e);
@@ -650,7 +652,7 @@ public class DataMappingWrapper extends AbstractWrapper {
 			if (!map.isEmpty()) {
 				Byte[] types = new Byte[map.size()];
 				Arrays.fill(types, DataTypes.VARCHAR);
-				data = new StreamElement(data, map.keySet().toArray(new String[] {}),
+				se = new StreamElement(se, map.keySet().toArray(new String[] {}),
 						types, map.values().toArray(new Serializable[] {}));
 			}
 		} catch (SQLException e) {
@@ -660,7 +662,7 @@ public class DataMappingWrapper extends AbstractWrapper {
 			logger.debug(vsName + "[source=" + inputStreamName + "]: conversion: "
 					+ Long.toString((System.nanoTime() - start) / 1000) + " us");
 		}
-		return data;
+		return se;
 	}
 
 	/**

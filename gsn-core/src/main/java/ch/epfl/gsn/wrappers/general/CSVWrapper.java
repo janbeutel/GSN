@@ -269,11 +269,12 @@ public class CSVWrapper extends AbstractWrapper {
      */
     public void DEBUG_INFO(String s) {
 
+        String string = s;
         String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss,SSS")
                 .format(new java.util.Date(System.currentTimeMillis()));
-        s = "[" + date + "] " + s + "\n";
+        string = "[" + date + "] " + string + "\n";
         try {
-            FileUtils.writeStringToFile(new File("DEBUG_INFO_" + threadCounter + ".txt"), s, true);
+            FileUtils.writeStringToFile(new File("DEBUG_INFO_" + threadCounter + ".txt"), string, true);
         } catch (IOException e) {
             e.printStackTrace();
         }

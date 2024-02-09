@@ -40,17 +40,18 @@ public class ZeroMQDeliveryAsync implements DeliverySystem {
 	 * @param name The name associated with the ZeroMQDeliveryAsync object.
 	 */
 	public ZeroMQDeliveryAsync(String name) {
-		if (name.endsWith(":")) {
-			name = name.substring(0, name.length() - 1);
+		String nameSub = name;
+		if (nameSub.endsWith(":")) {
+			nameSub = nameSub.substring(0, nameSub.length() - 1);
 		}
-		this.name = name;
+		this.name = nameSub;
 		context = Main.getZmqContext();
 		// Socket to talk to clients
 		publisher = context.createSocket(ZMQ.PUB);
 		publisher.setLinger(5000);
 		publisher.setSndHWM(0); // no limit
-		publisher.bind("inproc://stream/" + name);
-		Main.getZmqProxy().connectTo(name);
+		publisher.bind("inproc://stream/" + nameSub);
+		Main.getZmqProxy().connectTo(nameSub);
 		closed = false;
 
 	}
