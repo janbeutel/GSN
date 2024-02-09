@@ -79,7 +79,8 @@ public class MultiFormatWrapper extends AbstractWrapper {
    * and posting the data to GSN.
    */
   public void run() {
-    Double light = 0.0, temperature = 0.0;
+    Double light = 0.0, 
+           temperature = 0.0;
     int packetType = 0;
 
     while (isActive()) {

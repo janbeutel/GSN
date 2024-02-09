@@ -73,6 +73,6 @@ public class LwbHealthMsg extends AbstractMsg {
 
 	@Override
 	public int getType() {
-		return ch.epfl.gsn.wrappers.backlog.plugins.dpp.MessageTypes.DPP_MSG_TYPE_LWB_HEALTH;
+		return MessageTypes.DPP_MSG_TYPE_LWB_HEALTH;
 	}
 }

@@ -27,7 +27,8 @@ package ch.epfl.gsn.delivery.datarequest;
 
 public class LimitCriterion extends AbstractCriterion {
 
-	private Integer offset, size;
+	private Integer offset, 
+					size;
 
 	/**
 	 * <p>

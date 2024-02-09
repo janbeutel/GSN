@@ -32,7 +32,8 @@ public class RotationY implements Converter {
 			return null;
 		}
 
-		Double y, x;
+		Double y, 
+			   x;
 
 		if (signal_name instanceof Integer ||
 				signal_name instanceof Double ||

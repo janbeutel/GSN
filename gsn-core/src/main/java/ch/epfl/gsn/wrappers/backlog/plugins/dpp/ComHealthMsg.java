@@ -8,26 +8,26 @@ import ch.epfl.gsn.beans.DataField;
 public class ComHealthMsg extends AbstractMsg {
 
 	private static DataField[] dataField = {
-			/* all values are from the last health period, unless otherwise stated */
-			new DataField("UPTIME", "BIGINT"), /* Uptime [seconds] */
-			new DataField("MSG_CNT", "INTEGER"), /* Number of received messages */
-			new DataField("CORE_VCC", "INTEGER"), /* Core voltage [10^-3 V] */
-			new DataField("CORE_TEMP", "INTEGER"), /* Core temperature [10^-2 °C] */
-			new DataField("CPU_DC", "INTEGER"), /* CPU duty cycle [10^-2 %] */
-			new DataField("STACK", "SMALLINT"), /* Stack [watermark over the last period in %] */
+		/* all values are from the last health period, unless otherwise stated */
+		new DataField("UPTIME", "BIGINT"), /* Uptime [seconds] */
+		new DataField("MSG_CNT", "INTEGER"), /* Number of received messages */
+		new DataField("CORE_VCC", "INTEGER"), /* Core voltage [10^-3 V] */
+		new DataField("CORE_TEMP", "INTEGER"), /* Core temperature [10^-2 °C] */
+		new DataField("CPU_DC", "INTEGER"), /* CPU duty cycle [10^-2 %] */
+		new DataField("STACK", "SMALLINT"), /* Stack [watermark over the last period in %] */
 
-			new DataField("RADIO_SNR", "SMALLINT"), /* average signal-to-noise ratio [dBm] */
-			new DataField("RADIO_RSSI", "SMALLINT"), /* average RSSI value [-dBm] */
-			new DataField("RADIO_TX_PWR", "SMALLINT"), /* Transmit power [dBm] */
-			new DataField("RADIO_RX_DC", "INTEGER"), /* radio transmit duty cycle [10^-2 %] */
-			new DataField("RADIO_TX_DC", "INTEGER"), /* radio listen duty cycle [10^-2 %] */
-			new DataField("RADIO_PER", "INTEGER"), /* radio packet error rate [10^-2 %] */
+		new DataField("RADIO_SNR", "SMALLINT"), /* average signal-to-noise ratio [dBm] */
+		new DataField("RADIO_RSSI", "SMALLINT"), /* average RSSI value [-dBm] */
+		new DataField("RADIO_TX_PWR", "SMALLINT"), /* Transmit power [dBm] */
+		new DataField("RADIO_RX_DC", "INTEGER"), /* radio transmit duty cycle [10^-2 %] */
+		new DataField("RADIO_TX_DC", "INTEGER"), /* radio listen duty cycle [10^-2 %] */
+		new DataField("RADIO_PER", "INTEGER"), /* radio packet error rate [10^-2 %] */
 
-			new DataField("RX_CNT", "INTEGER"), /* Number of successfully received packets */
-			new DataField("TX_QUEUE", "SMALLINT"), /* Number of packets in the transmit buffer */
-			new DataField("RX_QUEUE", "SMALLINT"), /* Number of packets in the receive buffer */
-			new DataField("TX_DROPPED", "SMALLINT"), /* Dropped packets due to TX queue full */
-			new DataField("RX_DROPPED", "SMALLINT") /* Dropped packets due to RX queue full */
+		new DataField("RX_CNT", "INTEGER"), /* Number of successfully received packets */
+		new DataField("TX_QUEUE", "SMALLINT"), /* Number of packets in the transmit buffer */
+		new DataField("RX_QUEUE", "SMALLINT"), /* Number of packets in the receive buffer */
+		new DataField("TX_DROPPED", "SMALLINT"), /* Dropped packets due to TX queue full */
+		new DataField("RX_DROPPED", "SMALLINT") /* Dropped packets due to RX queue full */
 	};
 
 	/**
@@ -96,6 +96,6 @@ public class ComHealthMsg extends AbstractMsg {
 
 	@Override
 	public int getType() {
-		return ch.epfl.gsn.wrappers.backlog.plugins.dpp.MessageTypes.DPP_MSG_TYPE_COM_HEALTH;
+		return MessageTypes.DPP_MSG_TYPE_COM_HEALTH;
 	}
 }

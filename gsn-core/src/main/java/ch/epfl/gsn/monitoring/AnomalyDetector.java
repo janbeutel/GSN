@@ -98,7 +98,9 @@ public class AnomalyDetector implements Monitorable {
                 continue;
             }
             String parts[] = key.split("\\."); // Tokenizing String with '.'
-            String function = null, fieldName = null, groupBy = null;
+            String function = null, 
+                   fieldName = null, 
+                   groupBy = null;
 
             if (parts.length < 3 || parts.length > 4) {
                 logger.info("ANOMALY-PARSING-ERROR [" + key + "=" + value + "] "

@@ -62,11 +62,14 @@ public class CSVHandler {
     private static Logger logger = LoggerFactory.getLogger(CSVHandler.class);
 
     private static final String TIMESTAMP = "timed";
-    private char stringSeparator, separator;
+    private char stringSeparator, 
+                 separator;
     private String dataFile;
     private DateTimeZone timeZone;
     private int skipFirstXLines;
-    private String[] fields, formats, nulls;
+    private String[] fields, 
+                     formats, 
+                     nulls;
 
     private String checkPointFile;
     private boolean loggedNoChange = false; // to avoid duplicate logging messages when there is no change

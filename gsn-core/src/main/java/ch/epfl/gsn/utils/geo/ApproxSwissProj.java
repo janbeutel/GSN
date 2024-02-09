@@ -164,7 +164,9 @@ public class ApproxSwissProj {
 	 * @return The equivalent angle value in seconds.
 	 */
 	public static double SexAngleToSeconds(double dms) {
-		double deg = 0, min = 0, sec = 0;
+		double deg = 0, 
+			   min = 0, 
+			   sec = 0;
 		deg = Math.floor(dms);
 		min = Math.floor((dms - deg) * 100);
 		sec = (((dms - deg) * 100) - min) * 100;

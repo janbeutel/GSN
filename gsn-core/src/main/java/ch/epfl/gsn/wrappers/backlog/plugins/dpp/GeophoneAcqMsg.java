@@ -97,7 +97,7 @@ public class GeophoneAcqMsg extends AbstractMsg {
 
 	@Override
 	public int getType() {
-		return ch.epfl.gsn.wrappers.backlog.plugins.dpp.MessageTypes.DPP_MSG_TYPE_GEOPHONE_ACQ;
+		return MessageTypes.DPP_MSG_TYPE_GEOPHONE_ACQ;
 	}
 
 }

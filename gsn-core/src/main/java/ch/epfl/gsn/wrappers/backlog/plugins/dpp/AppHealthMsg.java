@@ -70,7 +70,7 @@ public class AppHealthMsg extends AbstractMsg {
 
 	@Override
 	public int getType() {
-		return ch.epfl.gsn.wrappers.backlog.plugins.dpp.MessageTypes.DPP_MSG_TYPE_APP_HEALTH;
+		return MessageTypes.DPP_MSG_TYPE_APP_HEALTH;
 	}
 
 }

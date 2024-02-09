@@ -85,6 +85,6 @@ public class GnssSvMsg extends AbstractMsg {
 
 	@Override
 	public int getType() {
-		return ch.epfl.gsn.wrappers.backlog.plugins.dpp.MessageTypes.DPP_MSG_TYPE_GNSS_SV;
+		return MessageTypes.DPP_MSG_TYPE_GNSS_SV;
 	}
 }

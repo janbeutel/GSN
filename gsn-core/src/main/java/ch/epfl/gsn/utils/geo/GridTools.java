@@ -241,7 +241,8 @@ public class GridTools {
                     ResultSet.CONCUR_READ_ONLY);
             results = statement.executeQuery(query);
             ResultSetMetaData metaData; // Additional information about the results
-            int numCols, numRows = 0; // How many rows and columns in the table
+            int numCols = 0, 
+                numRows = 0; // How many rows and columns in the table
             metaData = results.getMetaData(); // Get metadata on them
             numCols = metaData.getColumnCount(); // How many columns?
             if(results.last()){// Move to last row

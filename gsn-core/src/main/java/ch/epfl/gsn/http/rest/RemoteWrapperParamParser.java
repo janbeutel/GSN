@@ -23,7 +23,9 @@ public class RemoteWrapperParamParser {
 	private long startTime;
 	private boolean isPushBased;
 	private boolean continuous = false;
-	private String query, deliveryContactPoint, remoteContactPoint;
+	private String query, 
+				   deliveryContactPoint, 
+				   remoteContactPoint;
 	private String username, password;
 	private boolean isSSLRequired;
 	// The default timeout is set to 3 times the rate of the periodical Keep alive

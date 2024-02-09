@@ -317,7 +317,8 @@ public class RestStreamHandler extends HttpServlet implements ContinuationListen
 	}
 
 	class URLParser {
-		private String query, tableName;
+		private String query, 
+					   tableName;
 		private long startTime;
 		private Integer limit = null;
 		private Integer timeout = null;

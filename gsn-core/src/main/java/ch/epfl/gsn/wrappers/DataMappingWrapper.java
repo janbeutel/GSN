@@ -690,7 +690,8 @@ public class DataMappingWrapper extends AbstractWrapper {
 				case POSITION_MAPPING:
 					Integer deviceId = null, position = null;
 					Short deviceType = null;
-					Long begin = null, end = null;
+					Long begin = null, 
+						 end = null;
 					String comment = null;
 
 					for (String param : paramNames) {
@@ -749,7 +750,9 @@ public class DataMappingWrapper extends AbstractWrapper {
 					break;
 				case GEO_MAPPING:
 					position = null;
-					Double longitude = null, latitude = null, altitude = null;
+					Double longitude = null, 
+						   latitude = null, 
+						   altitude = null;
 					comment = null;
 
 					for (String param : paramNames) {

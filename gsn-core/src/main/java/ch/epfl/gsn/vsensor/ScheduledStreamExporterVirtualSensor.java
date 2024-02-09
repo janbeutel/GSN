@@ -48,8 +48,12 @@ import org.slf4j.Logger;
  */
 public class ScheduledStreamExporterVirtualSensor extends AbstractScheduledVirtualSensor {
 
-	public static final String PARAM_USER = "user", PARAM_PASSWD = "password", PARAM_URL = "url", TABLE_NAME = "table",
-			PARAM_DRIVER = "driver";
+	public static final String PARAM_USER = "user", 
+							   PARAM_PASSWD = "password", 
+							   PARAM_URL = "url", 
+							   TABLE_NAME = "table",
+							   PARAM_DRIVER = "driver";
+							   
 	public static final String[] OBLIGATORY_PARAMS = new String[] { PARAM_USER, PARAM_URL, PARAM_DRIVER };
 
 	private Connection connection;

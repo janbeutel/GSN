@@ -348,7 +348,9 @@ public class GridRenderer extends AbstractVirtualSensor {
      */
     public void initColorMap() {
         map = new int[256];
-        int r, g, b;
+        int r, 
+            g, 
+            b;
         for (int i = 0; i <= 255; i++) {
             if (i < 128) {
                 r = 255;

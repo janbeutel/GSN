@@ -60,6 +60,6 @@ public class WgpsStatusMsg extends AbstractMsg {
 
 	@Override
 	public int getType() {
-		return ch.epfl.gsn.wrappers.backlog.plugins.dpp.MessageTypes.DPP_MSG_TYPE_WGPS_STATUS;
+		return MessageTypes.DPP_MSG_TYPE_WGPS_STATUS;
 	}
 }

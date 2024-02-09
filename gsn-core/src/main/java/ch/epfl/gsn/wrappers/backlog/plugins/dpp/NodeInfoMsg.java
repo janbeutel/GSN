@@ -100,6 +100,6 @@ public class NodeInfoMsg extends AbstractMsg {
 
 	@Override
 	public int getType() {
-		return ch.epfl.gsn.wrappers.backlog.plugins.dpp.MessageTypes.DPP_MSG_TYPE_NODE_INFO;
+		return MessageTypes.DPP_MSG_TYPE_NODE_INFO;
 	}
 }

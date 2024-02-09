@@ -31,7 +31,8 @@ public class RotationX implements Converter {
 			return null;
 		}
 
-		Double x, y;
+		Double x, 
+			   y;
 
 		if (signal_name instanceof Integer ||
 				signal_name instanceof Double ||
