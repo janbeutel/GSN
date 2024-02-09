@@ -279,7 +279,6 @@ public class OracleStorageManager extends StorageManager {
      */
     @Override
     public void executeDropTable(CharSequence tableName, Connection connection) {
-        PreparedStatement prepareStatement = null;
         try {
             super.executeDropTable(tableName, connection);
             executeCommand("drop sequence " + tableNamePostFixAppender(tableName, "_SEQ"), connection);

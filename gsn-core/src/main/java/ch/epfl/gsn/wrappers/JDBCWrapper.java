@@ -246,7 +246,6 @@ public class JDBCWrapper extends AbstractWrapper {
      * The method also updates the checkpoint file with the latest timestamp.
      */
     public void run() {
-        DataEnumerator data;
 
         try {
             Thread.sleep(2000);
@@ -270,7 +269,6 @@ public class JDBCWrapper extends AbstractWrapper {
                 while (resultSet.next()) {
                     Serializable[] output = new Serializable[this.getOutputFormat().length];
 
-                    long pk = resultSet.getLong(1);
                     long timed = resultSet.getLong(2);
 
                     // logger.warn("pk => "+ pk);

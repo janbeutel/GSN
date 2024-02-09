@@ -68,8 +68,6 @@ public class DemoVSensor extends AbstractVirtualSensor {
 
 	private static final Byte[] OUTPUT_TYPES = new Byte[] { IMAGE_OUTPUT_FIELD_TYPE };
 
-	private static BufferedImage cachedBufferedImage = null;
-
 	private static int counter = 0;
 
 	/**

@@ -8,17 +8,17 @@ import ch.epfl.gsn.beans.DataField;
 public class AppHealthMsg extends AbstractMsg {
 
 	private static DataField[] dataField = {
-			new DataField("UPTIME", "BIGINT"), /* Uptime [seconds] */
-			new DataField("MSG_CNT", "INTEGER"), /* Number of received messages */
-			new DataField("CORE_VCC", "INTEGER"), /* Core voltage [10^-3 V] */
-			new DataField("CORE_TEMP", "INTEGER"), /* Core temperature [10^-2 °C] */
-			new DataField("CPU_DC", "INTEGER"), /* CPU duty cycle [10^-2 %] */
-			new DataField("STACK", "SMALLINT"), /* Stack [watermark over the last period in %] */
-			new DataField("NV_MEM", "SMALLINT"), /* Non-volatile memory usage [%] */
-			new DataField("SUPPLY_VCC", "INTEGER"), /* Supply voltage [10^-3 V] */
-			new DataField("SUPPLY_CURRENT", "INTEGER"), /* Supply [10^-5 A] */
-			new DataField("TEMPERATURE", "INTEGER"), /* Temperature [10^-2 °C] */
-			new DataField("HUMIDITY", "INTEGER") /* Humidity [10^-2 %] */
+		new DataField("UPTIME", "BIGINT"), /* Uptime [seconds] */
+		new DataField("MSG_CNT", "INTEGER"), /* Number of received messages */
+		new DataField("CORE_VCC", "INTEGER"), /* Core voltage [10^-3 V] */
+		new DataField("CORE_TEMP", "INTEGER"), /* Core temperature [10^-2 °C] */
+		new DataField("CPU_DC", "INTEGER"), /* CPU duty cycle [10^-2 %] */
+		new DataField("STACK", "SMALLINT"), /* Stack [watermark over the last period in %] */
+		new DataField("NV_MEM", "SMALLINT"), /* Non-volatile memory usage [%] */
+		new DataField("SUPPLY_VCC", "INTEGER"), /* Supply voltage [10^-3 V] */
+		new DataField("SUPPLY_CURRENT", "INTEGER"), /* Supply [10^-5 A] */
+		new DataField("TEMPERATURE", "INTEGER"), /* Temperature [10^-2 °C] */
+		new DataField("HUMIDITY", "INTEGER") /* Humidity [10^-2 %] */
 	};
 
 	/**

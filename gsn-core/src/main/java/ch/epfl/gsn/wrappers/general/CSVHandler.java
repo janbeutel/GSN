@@ -170,7 +170,7 @@ public class CSVHandler {
                 continue;
             } else if (isTimeStampFormat(formats[i])) {
                 try {
-                    String tmp = DateTimeFormat.forPattern(getTimeStampFormat(formats[i]))
+                    DateTimeFormat.forPattern(getTimeStampFormat(formats[i]))
                             .print(System.currentTimeMillis());
                 } catch (IllegalArgumentException e) {
                     logger.error("Validating the time-format(" + formats[i] + ") used by the CSV-wrapper failed. ");

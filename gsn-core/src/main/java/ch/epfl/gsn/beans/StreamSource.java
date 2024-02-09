@@ -69,15 +69,7 @@ public class StreamSource implements Serializable {
   protected int uid;
 
   protected StringBuilder uidS;
-  /**
-   * Checks the timing to see whether the time is ok for starting.
-   */
-  private static final String[] dateFormats = new String[] { "yyyy/MM/dd 'at' HH:mm:ss z", "h:mm:ss a", "h:mm a" };
-
-  private transient Date startDate;
-
-  private transient Date endDate;
-
+ 
   public static final AddressBean[] EMPTY_ADDRESS_BEAN = new AddressBean[] {};
 
   private AddressBean addressing[] = EMPTY_ADDRESS_BEAN;
@@ -103,13 +95,6 @@ public class StreamSource implements Serializable {
 
   private transient boolean isValidated = false;
   private transient boolean validationResult = false;
-
-  /**
-	 * default Constructor
-	 */
-  public StreamSource() {
-    //default constructor
-  }
 
   public String getRawHistorySize() {
     return rawHistorySize;

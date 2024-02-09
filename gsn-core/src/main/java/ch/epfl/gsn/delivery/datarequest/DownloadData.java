@@ -185,7 +185,6 @@ public class DownloadData extends AbstractDataRequest {
                     respond.println("\t<data vsname=\"" + nextSqlQuery.getKey() + "\">");
                 }
 
-                FieldsCollection fc = qbuilder.getVsnamesAndStreams().get(nextSqlQuery.getKey());
                 boolean wantTimed = true;
                 boolean firstLine = true;
                 LinkedList<StreamElement> streamElements = new LinkedList<StreamElement>();

@@ -99,7 +99,6 @@ public class GridTools {
      */
     public static double deSerializeToCell(byte[] bytes, int xcell, int ycell) {
 
-        StringBuilder sb = new StringBuilder();
         double value = 0;
 
         try {

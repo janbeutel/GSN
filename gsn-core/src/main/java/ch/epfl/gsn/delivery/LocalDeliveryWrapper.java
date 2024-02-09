@@ -123,11 +123,9 @@ public class LocalDeliveryWrapper extends AbstractWrapper implements DeliverySys
 		}
 
 		long lastVisited = -1;
-		boolean continuous = false;
 		Connection conn = null;
 		ResultSet rs = null;
 		if (startTime.equals("continue")) {
-			continuous = true;
 			try {
 				conn = Main.getStorage(params.getVirtualSensorConfig()).getConnection();
 

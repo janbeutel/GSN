@@ -21,9 +21,6 @@ public class MQTTExporterVS extends AbstractVirtualSensor {
 	private String topic;
 	private MqttConnectOptions options = new MqttConnectOptions();
 
-	public MQTTExporterVS() {
-	}
-
 	/**
 	 * Initializes the MQTTExporterVS by setting up the MQTT client connection and
 	 * configuring the necessary parameters.

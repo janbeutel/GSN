@@ -195,7 +195,7 @@ public class StreamRRDExporterVirtualSensor extends AbstractVirtualSensor {
 			if(logger.isDebugEnabled()){
 				logger.debug("The used rrdtool update command is: " + command);
 			}
-			Process process = runtime.exec(command);
+			runtime.exec(command);
 			if(logger.isDebugEnabled()){
 				logger.debug("The processing did not generate an error!");
 			}

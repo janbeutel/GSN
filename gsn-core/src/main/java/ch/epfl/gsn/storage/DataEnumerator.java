@@ -301,7 +301,6 @@ public class DataEnumerator implements DataEnumeratorIF {
 			if (!manualCloseConnection && resultSet.getStatement() != null) {
 				java.sql.Statement s = resultSet.getStatement();
 				java.sql.Connection c = s.getConnection();
-				String tableName = resultSet.getMetaData().getTableName(1);
 				storageManager.close(resultSet);
 				storageManager.closeStatement(s);
 				storageManager.close(c);

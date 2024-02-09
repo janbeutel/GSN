@@ -79,11 +79,6 @@ public class SensorMonitoringWrapper extends AbstractWrapper {
             for (Monitorable m : Main.getInstance().getToMonitor()) {
                 Hashtable<String, Object> h = m.getStatistics();
 
-                long outputedTime = -1;
-                long inputTime = -1;
-                long totalcpuTime = -1;
-                long inputproduced = -1;
-                long outputproduced = -1;
                 // Iterate through the entries of the Hashtable
                 for (Map.Entry<String, Object> entry : h.entrySet()) {
                     String key = entry.getKey();

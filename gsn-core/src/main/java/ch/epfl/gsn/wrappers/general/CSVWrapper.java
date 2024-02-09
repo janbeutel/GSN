@@ -213,7 +213,7 @@ public class CSVWrapper extends AbstractWrapper {
                                 break;
                             }
                         }
-                        boolean insertionSuccess = postStreamElement(streamElement);
+                        postStreamElement(streamElement);
 
                         if (useCounterForCheckPoint) {
                             handler.updateCheckPointFile(processedLineCounter); // write latest processed line number

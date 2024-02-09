@@ -61,7 +61,6 @@ public abstract class StorageManager {
 
     private int Idcounter = 0;
 
-    private String driver = null;
     protected boolean isH2;
     protected boolean isMysql;
     protected boolean isOracle;
