@@ -13,9 +13,6 @@ public class Ssn {
     /** <p>The namespace of the vocabulary as a string</p> */
     public static final String NS = "http://purl.oclc.org/NET/ssnx/ssn#";
     
-    /** <p>The namespace of the vocabulary as a string</p>
-     *  @see #NS */
-    public static String getURI() {return NS;}
     
     /** <p>The namespace of the vocabulary as a resource</p> */
     public static final Resource NAMESPACE = m_model.createResource( NS );
@@ -179,7 +176,9 @@ public class Ssn {
     public static final Resource System = m_model.createResource( "http://purl.oclc.org/NET/ssnx/ssn#System" );
     
     public static final Resource SystemLifetime = m_model.createResource( "http://purl.oclc.org/NET/ssnx/ssn#SystemLifetime" );
-    
+    /** <p>The namespace of the vocabulary as a string</p>
+     *  @see #NS */
+    public static String getURI() {return NS;}
 }
 
 /*

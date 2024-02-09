@@ -12,10 +12,7 @@ public class Wgs84 {
     
     /** <p>The namespace of the vocabulary as a string</p> */
     public static final String NS = "http://www.w3.org/2003/01/geo/wgs84_pos#";
-    
-    /** <p>The namespace of the vocabulary as a string</p>
-     *  @see #NS */
-    public static String getURI() {return NS;}
+   
     
     /** <p>The namespace of the vocabulary as a resource</p> */
     public static final Resource NAMESPACE = m_model.createResource( NS );
@@ -33,6 +30,10 @@ public class Wgs84 {
     public static final Resource Point = m_model.createResource( "http://www.w3.org/2003/01/geo/wgs84_pos#Point" );
     
     public static final Resource SpatialThing = m_model.createResource( "http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing" );
+    
+       /** <p>The namespace of the vocabulary as a string</p>
+     *  @see #NS */
+    public static String getURI() {return NS;}
     
 }
 

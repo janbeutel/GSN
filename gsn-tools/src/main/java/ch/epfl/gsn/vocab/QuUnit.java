@@ -13,10 +13,6 @@ public class QuUnit {
     /** <p>The namespace of the vocabulary as a string</p> */
     public static final String NS = "http://purl.oclc.org/NET/ssnx/qu/unit#";
     
-    /** <p>The namespace of the vocabulary as a string</p>
-     *  @see #NS */
-    public static String getURI() {return NS;}
-    
     /** <p>The namespace of the vocabulary as a resource</p> */
     public static final Resource NAMESPACE = m_model.createResource( NS );
     
@@ -1622,6 +1618,9 @@ public class QuUnit {
     
     public static final Resource year = m_model.createResource( "http://purl.oclc.org/NET/ssnx/qu/unit#year" );
     
+   /** <p>The namespace of the vocabulary as a string</p>
+     *  @see #NS */
+    public static String getURI() {return NS;}
 }
 
 /*
