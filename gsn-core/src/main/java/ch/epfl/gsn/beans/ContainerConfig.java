@@ -228,17 +228,17 @@ public class ContainerConfig {
 		databaseSystem = newValue;
 		storage = new StorageConfig();
 		storage.setJdbcDriver(convertToDriver(newValue));
-		if (newValue == JDBC_SYSTEMS[0]) {
+		if (newValue.equals(JDBC_SYSTEMS[0])) {
 			storage.setJdbcPassword("");
 			storage.setJdbcUsername("sa");
 			storage.setJdbcURL(JDBC_URLS[0]);
-		} else if (newValue == JDBC_SYSTEMS[1]) {
+		} else if (newValue.equals(JDBC_SYSTEMS[1])) {
 			storage.setJdbcPassword("");
 			storage.setJdbcUsername("sa");
 			storage.setJdbcURL(JDBC_URLS[1]);
-		} else if (newValue == JDBC_SYSTEMS[2]) {
+		} else if (newValue.equals(JDBC_SYSTEMS[2])) {
 			storage.setJdbcURL(JDBC_URLS[2]);
-		} else if (newValue == JDBC_SYSTEMS[3]) {
+		} else if (newValue.equals(JDBC_SYSTEMS[3])) {
 			storage.setJdbcURL(JDBC_URLS[3]);
 		}
 	}
@@ -370,3 +370,4 @@ public class ContainerConfig {
 		return accessControl;
 	}
 }
+
