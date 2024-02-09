@@ -27,6 +27,7 @@ addSbtPlugin("com.github.sbt" % "sbt-pgp" % "2.1.2")
 addSbtPlugin("com.typesafe.sbt" % "sbt-play-ebean" % "4.1.4")
 
 //addSbtPlugin("com.typesafe.sbt" % "sbt-play-enhancer" % "1.1.0")
+addSbtPlugin("com.typesafe.sbt" % "sbt-play-enhancer" % "1.2.2")
 
 //addSbtPlugin("io.spray" % "sbt-revolver" % "0.7.2")
 //addSbtPlugin("io.spray" % "sbt-revolver" % "0.9.1")

@@ -2,6 +2,7 @@ lazy val commonSettings = Seq(
   organization := "ch.epfl.gsn",
   version := "2.0.4",
   scalaVersion := "2.12.18",
+  // sbt 1.4.0 and up need scala-xml 2.1.0 and a newer play version
   Compile / compile / javacOptions ++= Seq("-source", "11", "-target", "11"),
   resolvers ++= Seq(
     DefaultMavenRepository,
@@ -19,7 +20,7 @@ lazy val commonSettings = Seq(
   Compile / packageDoc / publishArtifact := false,
   Test / publishArtifact := false,
   pomIncludeRepository := { x => false },
-  pomExtra := (
+  pomExtra :=
   <url>http://gsn.epfl.ch</url>
   <licenses>
     <license>
@@ -38,8 +39,7 @@ lazy val commonSettings = Seq(
       <name>The GSN Team</name>
       <url>http://gsn.epfl.ch</url>
     </developer>
-  </developers>
-),
+  </developers>,
   crossPaths := false,
 //  useGpg := true,
   Test / parallelExecution := false,
