@@ -149,7 +149,7 @@ public class ZeroMQWrapperSync extends AbstractWrapper {
 			receiver.bind("tcp://*:" + lport);
 		}
 		requester = ctx.createSocket(ZMQ.REQ);
-		requester.setReceiveTimeOut(1000);
+		requester.setReceiveTimeOut(60000);
 		requester.setSendTimeOut(1000);
 		requester.setLinger(0);
 		requester.connect(remoteContactPoint_META);
