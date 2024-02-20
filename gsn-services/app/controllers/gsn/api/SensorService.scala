@@ -187,6 +187,8 @@ def sensorData(sensorid:String) = headings((APIPermissionAction(playAuth,false, 
     val filterStr: Option[String] = queryparam("filter")
     val fromStr: Option[String] = queryparam("from")
     val toStr: Option[String] = queryparam("to")
+    val fromTimestamp: Option[String] = queryparam("from_timestamp")
+    val toTimestamp: Option[String] = queryparam("to_timestamp")
     val period: Option[String] = queryparam("period")
     val timeFormat: Option[String] = queryparam("timeFormat")
     val orderBy: Option[String] = queryparam("orderBy")
@@ -203,7 +205,12 @@ def sensorData(sensorid:String) = headings((APIPermissionAction(playAuth,false, 
     val filterArray: Array[String] =
       if (!filterStr.isDefined) Array()
       else filterStr.get.split(",")
-    if (fromStr.isDefined) {
+
+
+    if(fromTimestamp.isDefined){
+      val timestamp = fromTimestamp.get
+      filters += s"timed > $timestamp"
+    } else if (fromStr.isDefined) {
       val fromMillis = if (fromStr.get.contains("+")) {
         isoFormatter.parseDateTime(fromStr.get).getMillis
       } else {
@@ -216,7 +223,10 @@ def sensorData(sensorid:String) = headings((APIPermissionAction(playAuth,false, 
       }
     }
 
-    if (toStr.isDefined) {
+    if(toTimestamp.isDefined){
+      val timestamp = toTimestamp.get
+      filters += s"timed < $timestamp"
+    } else if (toStr.isDefined) {
       val toMillis = if (toStr.get.contains("+")) {
         isoFormatter.parseDateTime(toStr.get).getMillis
       } else {
