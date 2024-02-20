@@ -622,6 +622,8 @@ public final class StreamElement implements Serializable {
 						data[j - 1] = (byte) v.get(j).asInt();
 						break;
 					case DataTypes.SMALLINT:
+						data[j - 1] = (short) v.get(j).asInt();
+						break;
 					case DataTypes.INTEGER:
 						data[j - 1] = v.get(j).asInt();
 						break;

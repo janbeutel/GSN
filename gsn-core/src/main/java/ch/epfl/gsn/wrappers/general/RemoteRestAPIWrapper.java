@@ -43,7 +43,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -247,11 +246,12 @@ public class RemoteRestAPIWrapper extends AbstractWrapper {
 	public void run() {
 		getData = new HttpGet();
 		while (isActive()) {
-			String uri = wsURL + "/api/sensors/" + vsName + "/data?from="
-					+ ISODateTimeFormat.dateTime().print(lastReceivedTimestamp);
+			String uri = wsURL + "/api/sensors/" + vsName + "/data?from_timestamp=" + lastReceivedTimestamp + "&order=asc&size=10000";
+
 			try {
 				getData.setURI(new URI(uri));
 				String content = doRequest(getData);
+
 				for (StreamElement se : StreamElement.fromJSON(content)) {
 					manualDataInsertion(se);
 				}
