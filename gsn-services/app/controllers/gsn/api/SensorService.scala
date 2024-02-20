@@ -38,6 +38,8 @@ import com.typesafe.config.ConfigFactory
 import org.zeromq.ZMQ
 import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryo.io.{Output => kOutput}
+import play.api.mvc.MultipartFormData
+import play.api.libs.Files.TemporaryFile
 
 import play.Logger
 import play.api.mvc._
@@ -390,6 +392,24 @@ def sensorData(sensorid:String) = headings((APIPermissionAction(playAuth,false, 
     //request.body.
     Future(Ok(""))
     
+  }
+
+def uploadCSV: Action[MultipartFormData[TemporaryFile]] = Action.async(parse.multipartFormData) { implicit request =>
+    request.body.file("csvFile").map { filePart =>
+      // Handle the file here
+      val filename = filePart.filename
+      val contentType = filePart.contentType
+      val file = filePart.ref
+      
+      // Do whatever you need with the file
+
+      Logger.debug("Uploaded file: " + filename + ", contentType: " + contentType)
+
+      Future.successful(Ok("File uploaded"))
+    }.getOrElse {
+      // Handle missing file error
+      Future.successful(BadRequest("Missing file"))
+    }
   }
 
 

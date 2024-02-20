@@ -29,6 +29,7 @@
                         <th>@Messages("gsn.access.vs.allowed.write.users")</th>
                         <th>@Messages("gsn.access.vs.allowed.write.groups")</th>
                         <th>@Messages("gsn.access.vs.allowed.all")</th>
+                        <th>Upload specific sensor data</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -117,6 +118,9 @@
                         </td>
                         <td>
                         <input type="checkbox" @if(v.is_public) { checked="checked" } data-id="@v.id" onchange="check(this);"/>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" id="addDataToVS">add data</button>
                         </td>
                     </tr>
                     }
@@ -207,6 +211,26 @@
     </div>
 </div>
 
+<div id="uploadDataToVSModal" class="modal fade" role="dialog">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add VS Data</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="virtualSensorUploadForm" action="@controllers.gsn.api.routes.SensorService.uploadCSV()" method="post" enctype="multipart/form-data" >
+                    <label for="csvFile">Select CSV File</label>
+                    <input type="file" class="form-control-file" id="csvFile" name="csvFile">
+                    <span id="csvError" class="text-danger"></span>
+                    @CSRF.formField   
+                    <button type="submit" class="btn btn-primary upload-btn" disabled>Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
     <script type="text/javascript">
     function check(item){
         var i = $(item);
@@ -221,13 +245,33 @@
 
 
 
+    const csvFile = document.getElementById('csvFile');
+    const csvError = document.getElementById('csvError');
+    const submitBtn = document.querySelector('.upload-btn');
 
+    csvFile.addEventListener('change', function() {
+
+    const fileName = this.value;
+    const fileExtension = fileName.split('.').pop();
+
+    if (fileExtension !== 'csv') {
+        csvError.textContent = 'Please upload a CSV file';
+        submitBtn.disabled = true;
+    } else {
+        submitBtn.disabled = false; 
+        csvError.textContent = ''; 
+    }
+
+    });
 
 
     $('#addVirtualSensor').on('click', function () {
         $('#addVirtualSensorModal').modal('show');
     });
 
+    $('#addDataToVS').on('click', function () {
+        $('#uploadDataToVSModal').modal('show');
+    });
 
     let outputFieldIndex = 0;
 
