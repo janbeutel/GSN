@@ -120,7 +120,7 @@
                         <input type="checkbox" @if(v.is_public) { checked="checked" } data-id="@v.id" onchange="check(this);"/>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-primary" id="addDataToVS">add data</button>
+                            <button type="button" class="btn btn-primary" id="addDataToVS" data-id="@v.id" data-name="@v.value">add data</button>
                         </td>
                     </tr>
                     }
@@ -220,6 +220,7 @@
             </div>
             <div class="modal-body">
                 <form id="virtualSensorUploadForm" action="@controllers.gsn.api.routes.SensorService.uploadCSV()" method="post" enctype="multipart/form-data" >
+                    <input type="hidden" id="virtualSensorName" name="virtualSensorName">
                     <label for="csvFile">Select CSV File</label>
                     <input type="file" class="form-control-file" id="csvFile" name="csvFile">
                     <span id="csvError" class="text-danger"></span>
@@ -270,6 +271,11 @@
     });
 
     $('#addDataToVS').on('click', function () {
+        var vsId = $(this).data('id');
+        var virtualSensorName = $(this).data('name');
+        $('#uploadDataToVSModal').find('.modal-title').text('Add Data to ' + virtualSensorName);
+        $('#virtualSensorName').val(virtualSensorName); // Set the value of the hidden input field
+        console.log("virtualSensorName in JavaScript: " + virtualSensorName); // Add this line to debug
         $('#uploadDataToVSModal').modal('show');
     });
 

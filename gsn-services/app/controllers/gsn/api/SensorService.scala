@@ -394,21 +394,44 @@ def sensorData(sensorid:String) = headings((APIPermissionAction(playAuth,false, 
     
   }
 
-def uploadCSV: Action[MultipartFormData[TemporaryFile]] = Action.async(parse.multipartFormData) { implicit request =>
-    request.body.file("csvFile").map { filePart =>
-      // Handle the file here
-      val filename = filePart.filename
-      val contentType = filePart.contentType
-      val file = filePart.ref
-      
-      // Do whatever you need with the file
+  def uploadCSV(): Action[MultipartFormData[TemporaryFile]] = Action.async(parse.multipartFormData) { implicit request =>
+    Logger.debug("dfa"+request.body)
+    val vsNameOption = request.body.dataParts.get("virtualSensorName").flatMap(_.headOption)
+    vsNameOption match {
+      case Some(virtualSensorName) =>
+        request.body.file("csvFile").map { filePart =>
+          // Handle the file here
+          val filename = filePart.filename
+          val contentType = filePart.contentType
+          val file = filePart.ref
 
-      Logger.debug("Uploaded file: " + filename + ", contentType: " + contentType)
-
-      Future.successful(Ok("File uploaded"))
-    }.getOrElse {
-      // Handle missing file error
-      Future.successful(BadRequest("Missing file"))
+          // Do whatever you need with the file and virtualSensorName
+          Logger.debug("Uploaded file: " + filename + ", contentType: " + contentType + ", virtualSensorName: " + virtualSensorName)
+          implicit val timeout = Timeout(1 seconds)
+          
+          val q=actorSystem.actorSelection("/user/gsnSensorStore/ConfWatcher")
+          val p = q ? GetSensorConf(virtualSensorName)
+            p.map{c => c match{
+              case conf:VsConf => {
+                  val wconfig = conf.streams.flatMap( s => s.sources.flatMap( so => so.wrappers ) ).filter( w => w.wrapper.equals("zeromq-push")).head
+                  Logger.debug("wconfig"+wconfig)
+                  val address = wconfig.params.get("local_address").getOrElse("localhost")
+                  val port = wconfig.params.get("local_port").orNull
+                  val context  = ZMQ.context(1)
+                  val forwarder = context.socket(ZMQ.REQ)
+                  val outputlist= conf.processing.output.map(o=> Logger.debug("name"+o.name + "type" + o.dataType));
+                  Logger.debug("CONFIG"+conf.processing.output);
+                }
+              case _ => InternalServerError("{\"status\": \"error\", \"message\" : \"Virtual Sensor config not found.\"}")
+              }
+            }
+          Future.successful(Ok("File uploaded"))
+        }.getOrElse {
+          // Handle missing file error
+          Future.successful(BadRequest("Missing file"))
+        }
+      case None =>
+        Future.successful(BadRequest("Missing virtualSensorName"))
     }
   }
 
