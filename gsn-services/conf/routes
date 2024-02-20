@@ -60,6 +60,7 @@ POST /api/sensors/download                         controllers.gsn.api.SensorSer
 GET  /api/sensors/:sensorid/grid                   controllers.gsn.api.GridService.gridData(sensorid:String)
 GET  /api/sensors/:sensorid/grid/timeseries        controllers.gsn.api.GridService.gridTimeseries(sensorid:String)
 GET  /api/sensors/:sensorid/stream                 controllers.gsn.api.WebSocketForwarder.socket(sensorid:String)
+POST /api/sensors/uploadCSV                        controllers.gsn.api.SensorService.uploadCSV
 
 
 #Permissions
@@ -81,9 +82,10 @@ POST    /access/users/:page/removerole    controllers.gsn.auth.PermissionsContro
 POST    /access/users/:page/delete        controllers.gsn.auth.PermissionsController.deleteuser(page:Int)
 GET     /access/users/:page               controllers.gsn.auth.PermissionsController.users(page:Int)
 GET     /access/monitoringData            controllers.gsn.auth.PermissionsController.monitoringData
-
+GET     /access/sensors/upload           controllers.gsn.auth.PermissionsController.upload
 
   
+
 
 
 
