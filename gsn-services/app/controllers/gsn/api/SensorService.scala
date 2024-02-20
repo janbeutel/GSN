@@ -40,6 +40,7 @@ import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryo.io.{Output => kOutput}
 import play.api.mvc.MultipartFormData
 import play.api.libs.Files.TemporaryFile
+import ch.epfl.gsn.beans.DataTypes;
 
 import play.Logger
 import play.api.mvc._
@@ -48,6 +49,8 @@ import play.api.Play.current
 import play.api.libs.json.JsValue
 import play.api.libs.json.{Json => PlayJson}
 import play.api.http.ContentTypes
+import java.nio.file.{Files, Paths}
+import scala.util.Try
 
 import scalaoauth2.provider.AuthInfoRequest
 import org.joda.time.format.DateTimeFormat
@@ -394,6 +397,19 @@ def sensorData(sensorid:String) = headings((APIPermissionAction(playAuth,false, 
     
   }
 
+  // Function to map string representation to DataTypes
+  def mapStringToDataType(typeStr: String): Any = typeStr.toLowerCase() match {
+    case "double" => DataTypes.DOUBLE
+    case "float" => DataTypes.FLOAT
+    case "bigint" => DataTypes.BIGINT
+    case "tinyint" => DataTypes.TINYINT
+    case "smallint" => DataTypes.SMALLINT
+    case "integer" => DataTypes.INTEGER
+    case "char" | "varchar" => DataTypes.VARCHAR
+    case "binary" => DataTypes.BINARY
+    case _ => throw new IllegalArgumentException(s"Unknown data type: $typeStr")
+  }
+
   def uploadCSV(): Action[MultipartFormData[TemporaryFile]] = Action.async(parse.multipartFormData) { implicit request =>
     Logger.debug("dfa"+request.body)
     val vsNameOption = request.body.dataParts.get("virtualSensorName").flatMap(_.headOption)
@@ -404,6 +420,29 @@ def sensorData(sensorid:String) = headings((APIPermissionAction(playAuth,false, 
           val filename = filePart.filename
           val contentType = filePart.contentType
           val file = filePart.ref
+
+          // Read the content of the CSV file
+          val csvContent = new String(Files.readAllBytes(file.path))
+          Logger.debug(csvContent)
+
+          // Split CSV content into lines
+          val lines = csvContent.split("\n")
+
+          // Extract column names from the first line and exclude "PK" if present
+          val columnNames = lines.head.split(",").filterNot(_ == "PK").toList
+
+          // Extract data from the remaining lines, excluding the first column if "PK" exists
+          val data: Array[Array[Any]] = lines.tail.map { line =>
+            line.split(",").tail.map(_.trim).asInstanceOf[Array[Any]]
+          }.toArray
+
+          // Now columnNames contains the list of column names (excluding "PK")
+          // and data contains the list of lists representing the data (excluding the first column if "PK" exists)
+
+          // Print the results
+          Logger.debug(s"ColumnNames: $columnNames")
+          Logger.debug("Data:")
+          data.foreach(row => Logger.debug(row.mkString(", ")))
 
           // Do whatever you need with the file and virtualSensorName
           Logger.debug("Uploaded file: " + filename + ", contentType: " + contentType + ", virtualSensorName: " + virtualSensorName)
@@ -419,7 +458,27 @@ def sensorData(sensorid:String) = headings((APIPermissionAction(playAuth,false, 
                   val port = wconfig.params.get("local_port").orNull
                   val context  = ZMQ.context(1)
                   val forwarder = context.socket(ZMQ.REQ)
-                  val outputlist= conf.processing.output.map(o=> Logger.debug("name"+o.name + "type" + o.dataType));
+                  //val outputlist= conf.processing.output.map(o=> Logger.debug("name"+o.name + "type" + o.dataType));
+
+                  var namesList: List[String] = List()
+                  var typesList: List[String] = List()
+
+                  for (o <- conf.processing.output) {
+                      namesList = namesList :+ o.name
+                      typesList = typesList :+ o.dataType
+                  }
+
+                  // Now namesList and typesList contain the respective lists of names and types
+                  Logger.debug(s"Names: $namesList")
+                  Logger.debug(s"Types: $typesList")
+
+                  // Convert typesList using the mapStringToDataType function
+                  val convertedTypesList: List[Any] = typesList.map(mapStringToDataType)
+
+                  // Now convertedTypesList contains the corresponding DataTypes
+                  Logger.debug(s"Converted Types: $convertedTypesList")
+
+
                   Logger.debug("CONFIG"+conf.processing.output);
                 }
               case _ => InternalServerError("{\"status\": \"error\", \"message\" : \"Virtual Sensor config not found.\"}")
