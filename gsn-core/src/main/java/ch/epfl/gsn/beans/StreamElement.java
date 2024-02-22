@@ -32,10 +32,20 @@ package ch.epfl.gsn.beans;
 
 import play.libs.Json;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.StringReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.LoggerFactory;
@@ -223,6 +233,7 @@ public final class StreamElement implements Serializable {
 		if (data == null) {
 			return;
 		}
+
 		switch (fieldType) {
 			case DataTypes.TINYINT:
 				if (!(data instanceof Byte)) {
@@ -643,6 +654,143 @@ public final class StreamElement implements Serializable {
 			k++;
 		}
 		return ret;
+	}
+
+	public static StreamElement[] fromCSV(Path filePath, Map<String, String> namesTypesMap) {
+		List<StreamElement> ret = new ArrayList<>();
+
+		try {
+            // Read all bytes from the file
+            byte[] fileBytes = Files.readAllBytes(filePath);
+
+            // Convert the byte array to a string
+            String csvContent = new String(fileBytes);
+
+			BufferedReader reader = new BufferedReader(new StringReader(csvContent));
+			// Read the first line which contains column headers
+			String firstLine = reader.readLine();
+	
+			// Split the first line using a CSV separator
+			String[] columnNames = firstLine.split(",");
+	
+			// Trim whitespace from each column name
+			for (int i = 0; i < columnNames.length; i++) {
+				columnNames[i] = columnNames[i].trim().replace("\"", "");
+			}
+	
+			// Read the remaining lines containing data
+			String line;
+			while ((line = reader.readLine()) != null) {
+				
+				// Split the first line using a CSV separator
+				String[] values = line.split(",");
+				List<Byte> byteList = new ArrayList<Byte>();
+				List<Serializable> serializableList = new ArrayList<Serializable>();
+				List<String> n = new ArrayList<String>();
+				long timestamp=0L;
+				for (int i = 0; i < values.length; i++) {
+					values[i] = values[i].trim();
+					if("timed".equals(columnNames[i])){
+						timestamp = Long.parseLong(values[i]);
+					}
+					
+					String key = columnNames[i];
+
+					if(namesTypesMap.get(key) != null){
+						String lowerCaseTypeStr = namesTypesMap.get(key);
+						switch (lowerCaseTypeStr.split("\\(")[0]) {
+							case "double":
+								byteList.add(DataTypes.DOUBLE);
+								if(values[i].equals("")){
+									serializableList.add(null);
+								}else{
+									serializableList.add(Double.parseDouble(values[i]));
+								}
+								n.add(key);
+								break;
+							case "float":
+								byteList.add(DataTypes.FLOAT);
+								if(values[i].equals("")){
+									serializableList.add(null);
+								}else{
+									serializableList.add((float) Double.parseDouble(values[i]));
+								}
+								n.add(key);
+								break;
+							case "bigint":
+								byteList.add(DataTypes.BIGINT);
+								if(values[i].equals("")){
+									serializableList.add(null);
+								}else{
+									serializableList.add(Long.parseLong(values[i]));
+								}
+								n.add(key);
+								break;
+							case "tinyint":
+								byteList.add(DataTypes.TINYINT);
+								if(values[i].equals("")){
+									serializableList.add(null);
+								}else{
+									serializableList.add((byte) Integer.parseInt(values[i]));
+								}
+								n.add(key);
+								break;
+							case "smallint":
+								byteList.add(DataTypes.SMALLINT);
+								if(values[i].equals("")){
+									serializableList.add(null);
+								}else{
+									serializableList.add((short) Integer.parseInt(values[i]));
+								}
+								n.add(key);
+								break;
+							case "integer":
+								byteList.add(DataTypes.INTEGER);
+								if(values[i].equals("")){
+									serializableList.add(null);
+								}else{
+									serializableList.add(Integer.parseInt(values[i]));
+								}
+								n.add(key);
+								break;
+							case "char":
+							case "varchar":
+								byteList.add(DataTypes.VARCHAR);
+								if(values[i].equals("")){
+									serializableList.add(null);
+								}else{
+									serializableList.add(values[i].toString());
+								}
+								n.add(key);
+								break;
+							case "binary":
+								byteList.add(DataTypes.BINARY);
+								if(values[i].equals("")){
+									serializableList.add(null);
+								}else{
+									serializableList.add(Base64.decodeBase64(values[i]));
+								}
+								n.add(key);
+								break;
+							default:
+								throw new IllegalArgumentException("Unknown data type: " + lowerCaseTypeStr);
+						}
+					}
+				}
+				
+				String[] stringArray = n.toArray(new String[0]);
+				Byte[] byteArray = byteList.toArray(new Byte[0]);
+				Serializable[] serializableArray = serializableList.toArray(new Serializable[0]);
+				StreamElement se = new StreamElement(stringArray, byteArray, serializableArray,timestamp);
+
+				ret.add(se);
+			} 
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+		return ret.toArray(new StreamElement[0]);
 	}
 
 	/**
