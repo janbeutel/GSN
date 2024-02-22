@@ -505,6 +505,12 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
   }
 
 
+  def commands() = deadbolt.Restrict(roleGroups = allOfGroup(Application.USER_ROLE))() { request =>
+      Context.current.set(JavaHelpers.createJavaContext(request, JavaHelpers.createContextComponents()))
+      Future.successful(Ok(access.commands.render(userProvider)))
+
+  }
+
 
 }
 

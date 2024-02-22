@@ -82,7 +82,7 @@ POST    /access/users/:page/removerole    controllers.gsn.auth.PermissionsContro
 POST    /access/users/:page/delete        controllers.gsn.auth.PermissionsController.deleteuser(page:Int)
 GET     /access/users/:page               controllers.gsn.auth.PermissionsController.users(page:Int)
 GET     /access/monitoringData            controllers.gsn.auth.PermissionsController.monitoringData
-#GET     /access/sensors/upload           controllers.gsn.auth.PermissionsController.upload
+GET     /access/sensors/commands          controllers.gsn.auth.PermissionsController.commands
 
   
 
