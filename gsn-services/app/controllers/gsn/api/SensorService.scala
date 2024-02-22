@@ -411,7 +411,6 @@ def sensorData(sensorid:String) = headings((APIPermissionAction(playAuth,false, 
   }
 
   def uploadCSV(): Action[MultipartFormData[TemporaryFile]] = Action.async(parse.multipartFormData) { implicit request =>
-    Logger.debug("dfa"+request.body)
     val vsNameOption = request.body.dataParts.get("virtualSensorName").flatMap(_.headOption)
     vsNameOption match {
       case Some(virtualSensorName) =>
@@ -421,31 +420,6 @@ def sensorData(sensorid:String) = headings((APIPermissionAction(playAuth,false, 
           val contentType = filePart.contentType
           val file = filePart.ref
 
-          // Read the content of the CSV file
-          val csvContent = new String(Files.readAllBytes(file.path))
-          Logger.debug(csvContent)
-
-          // Split CSV content into lines
-          val lines = csvContent.split("\n")
-
-          // Extract column names from the first line and exclude "PK" if present
-          val columnNames = lines.head.split(",").filterNot(_ == "PK").toList
-
-          // Extract data from the remaining lines, excluding the first column if "PK" exists
-          val data: Array[Array[Any]] = lines.tail.map { line =>
-            line.split(",").tail.map(_.trim).asInstanceOf[Array[Any]]
-          }.toArray
-
-          // Now columnNames contains the list of column names (excluding "PK")
-          // and data contains the list of lists representing the data (excluding the first column if "PK" exists)
-
-          // Print the results
-          Logger.debug(s"ColumnNames: $columnNames")
-          Logger.debug("Data:")
-          data.foreach(row => Logger.debug(row.mkString(", ")))
-
-          // Do whatever you need with the file and virtualSensorName
-          Logger.debug("Uploaded file: " + filename + ", contentType: " + contentType + ", virtualSensorName: " + virtualSensorName)
           implicit val timeout = Timeout(1 seconds)
           
           val q=actorSystem.actorSelection("/user/gsnSensorStore/ConfWatcher")
@@ -453,33 +427,35 @@ def sensorData(sensorid:String) = headings((APIPermissionAction(playAuth,false, 
             p.map{c => c match{
               case conf:VsConf => {
                   val wconfig = conf.streams.flatMap( s => s.sources.flatMap( so => so.wrappers ) ).filter( w => w.wrapper.equals("zeromq-push")).head
-                  Logger.debug("wconfig"+wconfig)
                   val address = wconfig.params.get("local_address").getOrElse("localhost")
                   val port = wconfig.params.get("local_port").orNull
                   val context  = ZMQ.context(1)
                   val forwarder = context.socket(ZMQ.REQ)
-                  //val outputlist= conf.processing.output.map(o=> Logger.debug("name"+o.name + "type" + o.dataType));
-
+                 
                   var namesList: List[String] = List()
                   var typesList: List[String] = List()
-
-                  for (o <- conf.processing.output) {
-                      namesList = namesList :+ o.name
-                      typesList = typesList :+ o.dataType
-                  }
-
-                  // Now namesList and typesList contain the respective lists of names and types
-                  Logger.debug(s"Names: $namesList")
-                  Logger.debug(s"Types: $typesList")
-
-                  // Convert typesList using the mapStringToDataType function
-                  val convertedTypesList: List[Any] = typesList.map(mapStringToDataType)
-
-                  // Now convertedTypesList contains the corresponding DataTypes
-                  Logger.debug(s"Converted Types: $convertedTypesList")
-
-
-                  Logger.debug("CONFIG"+conf.processing.output);
+                  val outputMap: java.util.Map[String, String] = conf.processing.output
+                    .map(o => o.name.trim -> o.dataType.trim.toLowerCase)
+                    .toMap
+                    .asJava
+                  val se = StreamElement.fromCSV(file.path, outputMap)
+                  forwarder.connect("tcp://"+address+":"+port)
+                  forwarder.setReceiveTimeOut(3000)
+                  val result = se.map(s => {
+                    val baos = new ByteArrayOutputStream()
+                    val o = new kOutput(baos)
+                    kryo.writeObjectOrNull(o,s,classOf[StreamElement])
+                    o.close()
+                    forwarder.send(baos.toByteArray)
+                    val rec = forwarder.recv()
+                    (rec != null && rec.head == 0.asInstanceOf[Byte])
+                  })
+                  forwarder.close()
+                  if (result.forall(identity)){
+                    Results.Ok("{\"status\": \"success\"}")       
+                  } else {
+                    Results.InternalServerError("{\"status\": \"error\", \"message\" : \"Packet forwarding to GSN core failed.\"}")
+                  }     
                 }
               case _ => InternalServerError("{\"status\": \"error\", \"message\" : \"Virtual Sensor config not found.\"}")
               }
