@@ -1,6 +1,7 @@
 @import service.gsn.UserProvider
+@import ch.epfl.gsn.config.VsConf
 @import helper._
-@(userProvider: UserProvider)
+@(userProvider: UserProvider,vsConfs: Seq[VsConf])
 
 @main(userProvider,"Upload Page") {
     <html>
@@ -9,10 +10,50 @@
   </head>
   <body>
     <h1>Upload Page for sensor specific commands and binary data</h1>
-    <div id="uploaddescritpiton"></div>
-    <p>Hello World</p>
-    <script>
-    </script>
+    <table class="table table-striped">
+      <thead>
+          <tr>
+              <th>Name</th>
+              <th>Upload</th>
+          </tr>
+      </thead>
+      <tbody>
+          @for(vsConf <- vsConfs) {
+            <tr id="name">
+                <td>@vsConf.name</td>
+                <td>
+                    <button type="button" class="btn btn-primary" id="uploadSensorCommandButton" data-id="@vsConf.name" data-name="@vsConf.name">upload</button>
+                </td>
+            </tr>
+          }
+      </tbody>
+  </table>
+
+  <div id="uploadCommandToVSModal" class="modal fade" role="dialog">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Upload VS Command</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="virtualSensorCommandUploadForm" >
+                    @CSRF.formField   
+                    <button type="submit" class="btn btn-primary upload-btn" disabled>Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <script>
+      $('#uploadSensorCommandButton').on('click', function () {
+        var vsName = $(this).data('id');
+        $('#uploadCommandToVSModal').find('.modal-title').text('Upload ' + vsName);
+        $('#uploadCommandToVSModal').modal('show');
+    });
+  </script>
+
   </body>
   </html>
 }

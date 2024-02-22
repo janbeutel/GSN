@@ -97,6 +97,11 @@ class ConfWatcher extends Actor {
           context .parent ! ModifiedVsConf(vs.get)        
       case GetSensorConf(sensorid) =>
         sender ! vsMap(sensorid.toLowerCase)
+      case GetAllCommandSensors()=>
+        val allConfigs = vsMap.values
+        val relevantSensors= allConfigs.filter(_.processing.webInput.isDefined)
+        println(s"GetAllCommandSensors: ${relevantSensors.size} relevant sensors")
+        sender ! relevantSensors
       //case GetSensorsConf =>
 //        sender ! VsConfs(vsMap.map(_._2).toSeq)
     }
@@ -108,4 +113,5 @@ case class DeletedVsConf(vs:VsConf)
 
 
 case class GetSensorConf(sensorid:String)
+case class GetAllCommandSensors()
 case object GetSensorsConf

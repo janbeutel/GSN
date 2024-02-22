@@ -58,6 +58,14 @@ import ch.epfl.gsn.data.format._
 import play.api.libs.json.Json      
 import javax.inject._
 import play.api.mvc._
+import ch.epfl.gsn.config.GetAllCommandSensors
+import ch.epfl.gsn.config.ConfWatcher
+import ch.epfl.gsn.config.GetSensorConf
+import scala.concurrent.duration.DurationInt
+import akka.pattern.ask
+import akka.util.Timeout
+import scala.concurrent.duration._
+import ch.epfl.gsn.config.VsConf
 
 import io.ebean.Ebean
 
@@ -506,9 +514,26 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
 
 
   def commands() = deadbolt.Restrict(roleGroups = allOfGroup(Application.USER_ROLE))() { request =>
-      Context.current.set(JavaHelpers.createJavaContext(request, JavaHelpers.createContextComponents()))
-      Future.successful(Ok(access.commands.render(userProvider)))
+    Context.current.set(JavaHelpers.createJavaContext(request, JavaHelpers.createContextComponents()))
+    val q = actorSystem.actorSelection("/user/gsnSensorStore/ConfWatcher")
 
+    implicit val timeout: Timeout = Timeout(5.seconds) 
+    val actorRefFuture = q.resolveOne()
+    actorRefFuture.flatMap { actorRef =>
+      (actorRef ? GetAllCommandSensors()).map {
+        case response: Seq[VsConf] =>
+          println(s"Found ${response.size} command sensors")
+          Context.current.set(JavaHelpers.createJavaContext(request, JavaHelpers.createContextComponents()))
+          Ok(access.commands.render(userProvider,response))
+        case _ =>
+          Context.current.set(JavaHelpers.createJavaContext(request, JavaHelpers.createContextComponents()))
+          BadRequest("No Data found")
+      }.recover {
+        case ex: Throwable =>
+          Context.current.set(JavaHelpers.createJavaContext(request, JavaHelpers.createContextComponents()))
+          BadRequest("Error: " + ex.getMessage)
+      }
+    }
   }
 
 
