@@ -397,18 +397,6 @@ def sensorData(sensorid:String) = headings((APIPermissionAction(playAuth,false, 
     
   }
 
-  // Function to map string representation to DataTypes
-  def mapStringToDataType(typeStr: String): Any = typeStr.toLowerCase() match {
-    case "double" => DataTypes.DOUBLE
-    case "float" => DataTypes.FLOAT
-    case "bigint" => DataTypes.BIGINT
-    case "tinyint" => DataTypes.TINYINT
-    case "smallint" => DataTypes.SMALLINT
-    case "integer" => DataTypes.INTEGER
-    case "char" | "varchar" => DataTypes.VARCHAR
-    case "binary" => DataTypes.BINARY
-    case _ => throw new IllegalArgumentException(s"Unknown data type: $typeStr")
-  }
 
   def uploadCSV(): Action[MultipartFormData[TemporaryFile]] = Action.async(parse.multipartFormData) { implicit request =>
     val vsNameOption = request.body.dataParts.get("virtualSensorName").flatMap(_.headOption)
@@ -432,8 +420,6 @@ def sensorData(sensorid:String) = headings((APIPermissionAction(playAuth,false, 
                   val context  = ZMQ.context(1)
                   val forwarder = context.socket(ZMQ.REQ)
                  
-                  var namesList: List[String] = List()
-                  var typesList: List[String] = List()
                   val outputMap: java.util.Map[String, String] = conf.processing.output
                     .map(o => o.name.trim -> o.dataType.trim.toLowerCase)
                     .toMap
