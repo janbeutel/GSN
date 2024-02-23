@@ -27,6 +27,7 @@ package ch.epfl.gsn.config
 
 import xml._
 import com.typesafe.config.ConfigFactory
+import play.api.libs.json._
 
 
 case class GsnConf(monitorPort:Int,timeFormat:String,
@@ -58,6 +59,8 @@ object ZmqConf extends Conf{
 case class StorageConf(driver:String,url:String,
     user:String,pass:String,identifier:Option[String]) 
 object StorageConf extends Conf{
+  implicit val storageConfWrites: Writes[StorageConf] = Json.writes[StorageConf]
+  implicit val storageConfReads: Reads[StorageConf] = Json.reads[StorageConf]
   def create(xml:Node)=StorageConf(
     xml \@ "driver",
     xml \@ "url",

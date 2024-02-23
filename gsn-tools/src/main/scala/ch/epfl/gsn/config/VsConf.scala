@@ -26,6 +26,7 @@
 package ch.epfl.gsn.config
 
 import xml._
+import play.api.libs.json._
 
 case class VsConf(name:String,accessProtected:Boolean,priority:Int,initPriority:Boolean,timeZone:String,
     description:String,poolSize:Option[Int],address:Map[String,String],storage:Option[StorageConf],
@@ -36,6 +37,8 @@ case class VsConf(name:String,accessProtected:Boolean,priority:Int,initPriority:
 //case class VsConfs(confs:Seq[VsConf])
 
 object VsConf extends Conf{
+  implicit val vsConfWrites: Writes[VsConf] = Json.writes[VsConf]
+  implicit val vsConfReads: Reads[VsConf] = Json.reads[VsConf]
   lazy val vs=defaults.getConfig("vs")
   val defaultPoolSize=vs.getInt("poolSize")
   val defaultPriority=vs.getInt("priority")
@@ -64,6 +67,8 @@ object VsConf extends Conf{
 case class ProcessingConf(className:String,uniqueTimestamp:Boolean,initParams:Map[String,String],
     rate:Option[Int],output:Seq[FieldConf],webInput:Option[WebInputConf], partitionField:Option[String])
 object ProcessingConf extends Conf{
+  implicit val processingConfWrites: Writes[ProcessingConf] = Json.writes[ProcessingConf]
+  implicit val processingConfReads: Reads[ProcessingConf] = Json.reads[ProcessingConf]
   def create(xml:Node)=ProcessingConf(
       (xml \ "class-name").text,
       (xml \ "unique-timestamps").headOption.map(a=>a.text.toBoolean).
@@ -78,6 +83,8 @@ object ProcessingConf extends Conf{
 
 case class FieldConf(name:String,dataType:String,description:String,unit:Option[String],index:Option[String])
 object FieldConf {
+  implicit val fieldConfWrites: Writes[FieldConf] = Json.writes[FieldConf]
+  implicit val fieldConfReads: Reads[FieldConf] = Json.reads[FieldConf]
   def create(xml:Node)=FieldConf(
       xml \@ "name",
       xml \@ "type",
@@ -89,6 +96,8 @@ object FieldConf {
    
 case class WebInputConf(password:String,commands:Seq[WebInputCommand])
 object WebInputConf{
+  implicit val webInputConfWrites: Writes[WebInputConf] = Json.writes[WebInputConf]
+  implicit val webInputConfReads: Reads[WebInputConf] = Json.reads[WebInputConf]
   def create(xml:Node)=WebInputConf(
       xml \@ "password",
       (xml \ "command").map(c=>WebInputCommand(c \@ "name",
@@ -96,9 +105,15 @@ object WebInputConf{
    )  
 }
 case class WebInputCommand(name:String,params:Seq[FieldConf])
+object WebInputCommand {
+  implicit val webInputCommandWrites: Writes[WebInputCommand] = Json.writes[WebInputCommand]
+  implicit val webInputCommandReads: Reads[WebInputCommand] = Json.reads[WebInputCommand]
+}
 
 case class StreamConf(name:String,rate:Int,count:Int,query:String,sources:Seq[SourceConf])
 object StreamConf extends Conf{
+  implicit val streamConfWrites: Writes[StreamConf] = Json.writes[StreamConf]
+  implicit val streamConfReads: Reads[StreamConf] = Json.reads[StreamConf]
   def create(xml:Node)=StreamConf(
       xml \@ "name",
       attInt(xml,"rate",0),
@@ -110,6 +125,8 @@ object StreamConf extends Conf{
 case class SourceConf(alias:String,query:String,storageSize:Option[String],slide:Option[String],
     disconnectBufferSize:Option[Int],samplingRate:Option[Double],wrappers:Seq[WrapperConf])
 object SourceConf{
+  implicit val sourceConfWrites: Writes[SourceConf] = Json.writes[SourceConf]
+  implicit val sourceConfReads: Reads[SourceConf] = Json.reads[SourceConf]
   def create(xml:Node)=SourceConf(
       xml \@ "alias",(xml \ "query").text,
       xml.attribute("storage-size").map(_.toString),
@@ -122,6 +139,8 @@ object SourceConf{
     
 case class WrapperConf(wrapper:String,partialKey:Option[String],params:Map[String,String],output:Seq[FieldConf])
 object WrapperConf{
+  implicit val wrapperConfWrites: Writes[WrapperConf] = Json.writes[WrapperConf]
+  implicit val wrapperConfReads: Reads[WrapperConf] = Json.reads[WrapperConf]
   def create(xml:Node)=WrapperConf(
       xml \@ "wrapper", 
       xml.attribute("partial-order-key").map(_.toString),
