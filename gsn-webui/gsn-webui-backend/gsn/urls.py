@@ -22,5 +22,5 @@ urlpatterns = [
     url(r'^auth/$', views.auth, name='auth'),
 
     # url(r'^logged/$', views.oauth_after_log, name='oauth_after_log'),
-    url(r'^accounts/', include('allaccess.urls')),
+    #url(r'^accounts/', include('allaccess.urls')),
 ]
