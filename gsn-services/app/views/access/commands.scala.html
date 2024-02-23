@@ -1,5 +1,9 @@
 @import service.gsn.UserProvider
 @import ch.epfl.gsn.config.VsConf
+@import ch.epfl.gsn.config.WebInputConf 
+@import ch.epfl.gsn.config.WebInputCommand
+@import ch.epfl.gsn.config.FieldConf
+@import play.api.libs.json._
 @import helper._
 @(userProvider: UserProvider,vsConfs: Seq[VsConf])
 
@@ -18,41 +22,45 @@
           </tr>
       </thead>
       <tbody>
-          @for(vsConf <- vsConfs) {
-            <tr id="name">
-                <td>@vsConf.name</td>
-                <td>
-                    <button type="button" class="btn btn-primary" id="uploadSensorCommandButton" data-id="@vsConf.name" data-name="@vsConf.name">upload</button>
-                </td>
-            </tr>
-          }
+        @for(vsConf <- vsConfs) {
+          <tr id="name">
+            <td>@vsConf.name</td>
+            <td>
+              <button type="button" class="btn btn-primary uploadSensorCommandButton" data-vsconf="@Html(Json.stringify(Json.toJson(vsConf)).replace("\"", "&quot;"))">
+                Upload
+              </button>
+              
+            </td>
+          </tr>
+        }
       </tbody>
+      
   </table>
 
   <div id="uploadCommandToVSModal" class="modal fade" role="dialog">
     <div class="modal-dialog custom-modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Upload VS Command</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="virtualSensorCommandUploadForm" >
-                    @CSRF.formField   
-                    <button type="submit" class="btn btn-primary upload-btn" disabled>Upload</button>
-                </form>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Upload VS Command</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
+        <div class="modal-body">
+        </div>
+      </div>
     </div>
   </div>
+  
+  
 
   <script>
-      $('#uploadSensorCommandButton').on('click', function () {
-        var vsName = $(this).data('id');
-        $('#uploadCommandToVSModal').find('.modal-title').text('Upload ' + vsName);
-        $('#uploadCommandToVSModal').modal('show');
+    $('.uploadSensorCommandButton').on('click', function () {
+      // Get VsConf name and associated WebInputCommands
+      var vsconf = $(this).data('vsconf');
+      console.dir(vsconf);
+      $('#uploadCommandToVSModal').modal('show');
     });
   </script>
+  
 
   </body>
   </html>
