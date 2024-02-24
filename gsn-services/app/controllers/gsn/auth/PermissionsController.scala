@@ -537,59 +537,49 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
   }
 
 
-    def uploadToSensor() = deadbolt.Restrict(roleGroups = allOfGroup(Application.USER_ROLE))() { implicit request =>{
+  def uploadToSensor() = deadbolt.Restrict(roleGroups = allOfGroup(Application.USER_ROLE))() { implicit request =>
+    var paramNames: Array[String] = Array.empty
+    var paramValues: Array[String] = Array.empty
     
     val body = request.body.asFormUrlEncoded.getOrElse(Map.empty[String, Seq[String]])
     Logger.debug(s"Body: $body")
-    val commandTypeList= body.filterKeys(_.startsWith("commandSelect")).values.flatten.toSeq
-    val commandType= commandTypeList.head
+    val commandTypeList = body.filterKeys(_.startsWith("commandSelect")).values.flatten.toSeq
+    val commandType = commandTypeList.head
     Logger.debug("COMMAND TYPE" + commandType);
 
-    val vsName = body.filterKeys(_.startsWith("vsName")).values.flatten.toSeq.head
-    Logger.debug("VSNAME" + vsName)
-
     commandType match {
-      case "tosmsg" => {
+      case "tosmsg" =>
         val destination = body.filterKeys(_.startsWith("destination")).values.flatten.toSeq.head
         val cmd = body.filterKeys(_.startsWith("cmd")).values.flatten.toSeq.head
         val arg = body.filterKeys(_.startsWith("arg")).values.flatten.toSeq.head
         val repetitioncnt = body.filterKeys(_.startsWith("repetitioncnt")).values.flatten.toSeq.head
-
-        Logger.debug(s"Destination: $destination Cmd: $cmd Arg: $arg Rep: $repetitioncnt");
-      }
-      case "CC430_CMD" | "GEOPHONE_CMD" | "BOLTBRIDGE_CMD" => {
+        paramNames = Array("destination", "cmd", "arg", "repetitioncnt")
+        paramValues = Array(destination, cmd, arg, repetitioncnt)
+      case "CC430_CMD" | "GEOPHONE_CMD" | "BOLTBRIDGE_CMD" =>
         val target_id = body.filterKeys(_.startsWith("target_id")).values.flatten.toSeq.head
         val typeValue = body.filterKeys(_.startsWith("type")).values.flatten.toSeq.head
         val value = body.filterKeys(_.startsWith("value")).values.flatten.toSeq.head
-
-        Logger.debug(s"TargetId: $target_id type: $typeValue value: $value");
-      }
-      case "GEOPHONE_DEL_DATA_CMD" => {
+        paramNames = Array("target_id", "type", "value")
+        paramValues = Array(target_id, typeValue, value)
+      case "GEOPHONE_DEL_DATA_CMD" =>
         val target_id = body.filterKeys(_.startsWith("target_id")).values.flatten.toSeq.head
         val startTime = body.filterKeys(_.startsWith("start_time")).values.flatten.toSeq.head
         val endTime = body.filterKeys(_.startsWith("end_time")).values.flatten.toSeq.head
-
-        Logger.debug(s"TargetId: $target_id start: $startTime end: $endTime");
-      }
-      case "GEOPHONE_REQ_ADCDATA_CMD" => {
+        paramNames = Array("target_id", "start_time", "end_time")
+        paramValues = Array(target_id, startTime, endTime)
+      case "GEOPHONE_REQ_ADCDATA_CMD" =>
         val target_id = body.filterKeys(_.startsWith("target_id")).values.flatten.toSeq.head
         val id = body.filterKeys(_.startsWith("id")).values.flatten.toSeq.head
         val formatType = body.filterKeys(_.startsWith("format_type")).values.flatten.toSeq.head
         val bits = body.filterKeys(_.startsWith("bits")).values.flatten.toSeq.head
         val subsampling = body.filterKeys(_.startsWith("subsampling")).values.flatten.toSeq.head
-
-        Logger.debug(s"TargetId: $target_id id: $id formatType: $formatType bits: $bits subsampling: $subsampling"); 
-      }
-      case _ => {
+        paramNames = Array("target_id", "id", "format_type", "bits", "subsampling")
+        paramValues = Array(target_id, id, formatType, bits, subsampling)
+      case _ =>
         Logger.debug("Invalid command")
-      }
     }
-
-
-    
 
     Future.successful(Ok("OK"))
-    }
   }
 
 
