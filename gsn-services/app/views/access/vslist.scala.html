@@ -216,7 +216,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Add VS Data</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="virtualSensorUploadForm" action="@controllers.gsn.api.routes.SensorService.uploadCSV()" method="post" enctype="multipart/form-data" >
@@ -225,6 +224,7 @@
                     <input type="file" class="form-control-file" id="csvFile" name="csvFile">
                     <span id="csvError" class="text-danger"></span>
                     @CSRF.formField   
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary upload-btn" disabled>Upload</button>
                 </form>
             </div>
