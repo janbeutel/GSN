@@ -63,6 +63,8 @@ GET  /api/sensors/:sensorid/stream                 controllers.gsn.api.WebSocket
 POST /api/sensors/uploadCSV                        controllers.gsn.api.SensorService.uploadCSV
 
 
+
+
 #Permissions
 GET     /access/groups                    controllers.gsn.auth.PermissionsController.groups(page:Int=1)
 POST    /access/groups/:page/edit         controllers.gsn.auth.PermissionsController.addgroup(page:Int)
@@ -83,6 +85,7 @@ POST    /access/users/:page/delete        controllers.gsn.auth.PermissionsContro
 GET     /access/users/:page               controllers.gsn.auth.PermissionsController.users(page:Int)
 GET     /access/monitoringData            controllers.gsn.auth.PermissionsController.monitoringData
 GET     /access/sensors/commands          controllers.gsn.auth.PermissionsController.commands
+POST    /access/sensors/uploadToSensor    controllers.gsn.auth.PermissionsController.uploadToSensor
 
   
 

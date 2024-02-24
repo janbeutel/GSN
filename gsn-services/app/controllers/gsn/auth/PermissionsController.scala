@@ -54,8 +54,8 @@ import ch.epfl.gsn.config.GsnConf
 import com.typesafe.config.ConfigFactory
 import scala.collection.mutable.ArrayBuffer
 import ch.epfl.gsn.xpr.XprConditions
-import ch.epfl.gsn.data.format._
-import play.api.libs.json.Json      
+import ch.epfl.gsn.data.format._    
+import play.api.libs.json.{Json, JsValue}
 import javax.inject._
 import play.api.mvc._
 import ch.epfl.gsn.config.GetAllCommandSensors
@@ -533,6 +533,62 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
           Context.current.set(JavaHelpers.createJavaContext(request, JavaHelpers.createContextComponents()))
           BadRequest("Error: " + ex.getMessage)
       }
+    }
+  }
+
+
+    def uploadToSensor() = deadbolt.Restrict(roleGroups = allOfGroup(Application.USER_ROLE))() { implicit request =>{
+    
+    val body = request.body.asFormUrlEncoded.getOrElse(Map.empty[String, Seq[String]])
+    Logger.debug(s"Body: $body")
+    val commandTypeList= body.filterKeys(_.startsWith("commandSelect")).values.flatten.toSeq
+    val commandType= commandTypeList.head
+    Logger.debug("COMMAND TYPE" + commandType);
+
+    val vsName = body.filterKeys(_.startsWith("vsName")).values.flatten.toSeq.head
+    Logger.debug("VSNAME" + vsName)
+
+    commandType match {
+      case "tomsg" => {
+        val destination = body.filterKeys(_.startsWith("destination")).values.flatten.toSeq.head
+        val cmd = body.filterKeys(_.startsWith("cmd")).values.flatten.toSeq.head
+        val arg = body.filterKeys(_.startsWith("arg")).values.flatten.toSeq.head
+        val repetitioncnt = body.filterKeys(_.startsWith("repetitioncnt")).values.flatten.toSeq.head
+
+        Logger.debug(s"Destination: $destination Cmd: $cmd Arg: $arg Rep: $repetitioncnt");
+      }
+      case "CC430_CMD" | "GEOPHONE_CMD" | "BOLTBRIDGE_CMD" => {
+        val target_id = body.filterKeys(_.startsWith("target_id")).values.flatten.toSeq.head
+        val typeValue = body.filterKeys(_.startsWith("type")).values.flatten.toSeq.head
+        val value = body.filterKeys(_.startsWith("value")).values.flatten.toSeq.head
+
+        Logger.debug(s"TargetId: $target_id type: $typeValue value: $value");
+      }
+      case "GEOPHONE_DEL_DATA_CMD" => {
+        val target_id = body.filterKeys(_.startsWith("target_id")).values.flatten.toSeq.head
+        val startTime = body.filterKeys(_.startsWith("start_time")).values.flatten.toSeq.head
+        val endTime = body.filterKeys(_.startsWith("end_time")).values.flatten.toSeq.head
+
+        Logger.debug(s"TargetId: $target_id start: $startTime end: $endTime");
+      }
+      case "GEOPHONE_REQ_ADCDATA_CMD" => {
+        val target_id = body.filterKeys(_.startsWith("target_id")).values.flatten.toSeq.head
+        val id = body.filterKeys(_.startsWith("id")).values.flatten.toSeq.head
+        val formatType = body.filterKeys(_.startsWith("format_type")).values.flatten.toSeq.head
+        val bits = body.filterKeys(_.startsWith("bits")).values.flatten.toSeq.head
+        val subsampling = body.filterKeys(_.startsWith("subsampling")).values.flatten.toSeq.head
+
+        Logger.debug(s"TargetId: $target_id id: $id formatType: $formatType bits: $bits subsampling: $subsampling"); 
+      }
+      case _ => {
+        Logger.debug("Invalid command")
+      }
+    }
+
+
+    
+
+    Future.successful(Ok("OK"))
     }
   }
 

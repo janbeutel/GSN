@@ -35,34 +35,41 @@
         }
       </tbody>
       
-  </table>
+    </table>
 
-  <div id="uploadCommandToVSModal" class="modal fade" role="dialog">
-    <div class="modal-dialog custom-modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">Upload VS Command</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        <div class="modal-body" id="modalBody">
-          <!-- Content will be dynamically generated here -->
+    <div id="uploadCommandToVSModal" class="modal fade" role="dialog">
+      <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Upload VS Command</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body" id="modalBody">
+            <!-- Content will be dynamically generated here -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="submitForm">Submit</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   
   
 
   <script>
+    
+    var vsconf;
+
     $('.uploadSensorCommandButton').on('click', function () {
       // Get VsConf name and associated WebInputCommands
-      var vsconf = $(this).data('vsconf');
+      vsconf = $(this).data('vsconf');
       console.log(vsconf)
       // Clear previous content
       $('#modalBody').empty();
       
       // Create select box for commands
-      var commandSelect = '<select id="commandSelect">';
+      var commandSelect = '<select id="commandSelect" name="commandSelect">';
       vsconf.processing.webInput.commands.forEach(function(command) {
         commandSelect += '<option value="' + command.name + '">' + command.name + '</option>';
       });
@@ -99,8 +106,33 @@
           $('#modalBody').append(paramSection);
         });
       });
-
+      $('#commandSelect').trigger('change');
       $('#uploadCommandToVSModal').modal('show');
+    });
+
+
+    $('#submitForm').on('click', function() {
+      var formData = {};
+      $('#modalBody').find('input, select').each(function() {
+        formData[$(this).attr('name')] = $(this).val();
+      });
+
+      formData['vsName'] = vsconf.name;
+
+      console.log(formData);
+      $('#uploadCommandToVSModal').modal('hide');
+
+      $.ajax({
+            type: 'POST',
+            url: '@controllers.gsn.auth.routes.PermissionsController.uploadToSensor()',
+            data: formData,
+            success: function (data) {
+                $('#addVirtualSensorModal').modal('hide');
+            },
+            error: function (error) {
+                console.error(error);
+            }
+      });
     });
   </script>
   
