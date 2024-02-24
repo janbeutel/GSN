@@ -66,6 +66,12 @@ import akka.pattern.ask
 import akka.util.Timeout
 import scala.concurrent.duration._
 import ch.epfl.gsn.config.VsConf
+import org.zeromq.ZMQ
+import com.esotericsoftware.kryo.io.{Output => kOutput}
+import java.io.ByteArrayOutputStream
+import com.esotericsoftware.kryo.Kryo
+import com.esotericsoftware.kryo.io.Input
+import org.objenesis.strategy.StdInstantiatorStrategy
 
 import io.ebean.Ebean
 
@@ -546,38 +552,62 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
     val commandTypeList = body.filterKeys(_.startsWith("commandSelect")).values.flatten.toSeq
     val commandType = commandTypeList.head
     Logger.debug("COMMAND TYPE" + commandType);
-
-    commandType match {
+    val vsname = body.filterKeys(_.startsWith("vsName")).values.flatten.toSeq.head
+    Logger.debug(  "VSNAME: " + vsname );
+  
+    val sensorData = commandType match {
       case "tosmsg" =>
         val destination = body.filterKeys(_.startsWith("destination")).values.flatten.toSeq.head
         val cmd = body.filterKeys(_.startsWith("cmd")).values.flatten.toSeq.head
         val arg = body.filterKeys(_.startsWith("arg")).values.flatten.toSeq.head
         val repetitioncnt = body.filterKeys(_.startsWith("repetitioncnt")).values.flatten.toSeq.head
-        paramNames = Array("destination", "cmd", "arg", "repetitioncnt")
-        paramValues = Array(destination, cmd, arg, repetitioncnt)
+        UploadCommandData(vsname, Array("destination", "cmd", "arg", "repetitioncnt"), Array(destination, cmd, arg, repetitioncnt))
       case "CC430_CMD" | "GEOPHONE_CMD" | "BOLTBRIDGE_CMD" =>
         val target_id = body.filterKeys(_.startsWith("target_id")).values.flatten.toSeq.head
         val typeValue = body.filterKeys(_.startsWith("type")).values.flatten.toSeq.head
         val value = body.filterKeys(_.startsWith("value")).values.flatten.toSeq.head
-        paramNames = Array("target_id", "type", "value")
-        paramValues = Array(target_id, typeValue, value)
+        UploadCommandData(vsname, Array("target_id", "type", "value"), Array(target_id, typeValue, value))
       case "GEOPHONE_DEL_DATA_CMD" =>
         val target_id = body.filterKeys(_.startsWith("target_id")).values.flatten.toSeq.head
         val startTime = body.filterKeys(_.startsWith("start_time")).values.flatten.toSeq.head
         val endTime = body.filterKeys(_.startsWith("end_time")).values.flatten.toSeq.head
-        paramNames = Array("target_id", "start_time", "end_time")
-        paramValues = Array(target_id, startTime, endTime)
+        UploadCommandData(vsname, Array("target_id", "start_time", "end_time"), Array(target_id, startTime, endTime))
       case "GEOPHONE_REQ_ADCDATA_CMD" =>
         val target_id = body.filterKeys(_.startsWith("target_id")).values.flatten.toSeq.head
         val id = body.filterKeys(_.startsWith("id")).values.flatten.toSeq.head
         val formatType = body.filterKeys(_.startsWith("format_type")).values.flatten.toSeq.head
         val bits = body.filterKeys(_.startsWith("bits")).values.flatten.toSeq.head
         val subsampling = body.filterKeys(_.startsWith("subsampling")).values.flatten.toSeq.head
-        paramNames = Array("target_id", "id", "format_type", "bits", "subsampling")
-        paramValues = Array(target_id, id, formatType, bits, subsampling)
+        UploadCommandData(vsname, Array("target_id", "id", "format_type", "bits", "subsampling"), Array(target_id, id, formatType, bits, subsampling))
       case _ =>
         Logger.debug("Invalid command")
+        // Provide some default SensorData if needed
+        UploadCommandData(vsname, Array.empty, Array.empty)
     }
+
+    Logger.debug("SensorData: " + sensorData)
+    //TODO: Try to send data via zeromq to the according wrapper (begin with backlog for now)
+    //therefore backlogwrapper needs to be adjusted like the zeromqpush such that data transmission can be done like 
+    //in uploadCSV()
+    /**
+    val context  = ZMQ.context(1)
+    val forwarder = context.socket(ZMQ.REQ)
+    forwarder.connect("tcp://127.0.0.1:23456")
+    forwarder.setReceiveTimeOut(3000)
+    val kryo = new Kryo()
+    kryo.register(classOf[UploadCommandData])
+    kryo.setInstantiatorStrategy(new StdInstantiatorStrategy())
+    val baos = new ByteArrayOutputStream()
+    val o = new kOutput(baos)
+    Logger.debug("output: " + o)
+    kryo.writeObjectOrNull(o, sensorData, classOf[UploadCommandData])
+    o.close()
+    forwarder.send(baos.toByteArray)
+    val rec = forwarder.recv()
+    (rec != null && rec.head == 0.asInstanceOf[Byte])
+ 
+    forwarder.close()
+    */
 
     Future.successful(Ok("OK"))
   }
@@ -585,7 +615,7 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
 
 }
 
-
+case class UploadCommandData(vsname: String, paramNames: Array[String], paramValues: Array[String])
 
 
 
