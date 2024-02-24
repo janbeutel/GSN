@@ -549,7 +549,7 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
     Logger.debug("VSNAME" + vsName)
 
     commandType match {
-      case "tomsg" => {
+      case "tosmsg" => {
         val destination = body.filterKeys(_.startsWith("destination")).values.flatten.toSeq.head
         val cmd = body.filterKeys(_.startsWith("cmd")).values.flatten.toSeq.head
         val arg = body.filterKeys(_.startsWith("arg")).values.flatten.toSeq.head
