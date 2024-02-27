@@ -8,7 +8,7 @@ export class DownloadService {
   constructor(private http: HttpClient) {}
 
   download(scope: any): void {
-    this.http.post('http://localhost:8000/download/', scope.details, { responseType: 'blob', withCredentials : true })
+    this.http.post('http://walker.uibk.ac.at:8000/download/', scope.details, { responseType: 'blob', withCredentials : true })
       .subscribe((data: any) => {
         const blobURL = URL.createObjectURL(data);
         const anchor = document.createElement('a');
@@ -22,7 +22,7 @@ export class DownloadService {
 
   downloadMultiple(sensorList: string[], from: string, to: string): void {
     sensorList.forEach((sensor: string) => {
-      this.http.get(`http://localhost:8000/download/${sensor}/${from}/${to}/`, { responseType: 'blob', withCredentials: true })
+      this.http.get(`http://walker.uibk.ac.at:8000/download/${sensor}/${from}/${to}/`, { responseType: 'blob', withCredentials: true })
         .subscribe((data: any) => {
           const blobURL = URL.createObjectURL(data);
           const anchor = document.createElement('a');
