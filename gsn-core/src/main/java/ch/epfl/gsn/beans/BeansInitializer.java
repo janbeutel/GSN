@@ -32,7 +32,7 @@ public class BeansInitializer {
 		ContainerConfig con = new ContainerConfig(
 				gsn.monitorPort(), gsn.timeFormat(),
 				gsn.zmqConf().enabled(), gsn.zmqConf().proxyPort(), gsn.zmqConf().metaPort(),
-				storage(gsn.storageConf()), sliding, gsn.maxDBConnections(), gsn.maxSlidingDBConnections(), gsn.commandsConf().enabled(), gsn.commandsConf().commandsPort());
+				storage(gsn.storageConf()), sliding, gsn.maxDBConnections(), gsn.maxSlidingDBConnections(), gsn.backlogCommandsConf().enabled(), gsn.backlogCommandsConf().backlogCommandsPort());
 
 		return con;
 	}

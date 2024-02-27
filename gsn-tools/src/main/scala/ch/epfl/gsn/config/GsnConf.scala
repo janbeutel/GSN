@@ -33,7 +33,7 @@ import play.api.libs.json._
 case class GsnConf(monitorPort:Int,timeFormat:String,
     zmqConf:ZmqConf,
     storageConf:StorageConf,slidingConf:Option[StorageConf],
-    maxDBConnections: Int, maxSlidingDBConnections: Int, commandsConf: CommandsConf)
+    maxDBConnections: Int, maxSlidingDBConnections: Int, backlogCommandsConf: BacklogCommandsConf)
     
 object GsnConf extends Conf {
   def create(xml:Elem)=GsnConf(
@@ -44,7 +44,7 @@ object GsnConf extends Conf {
     (xml \ "sliding").headOption.map(a=>StorageConf.create((a \ "storage").head)),
     takeInt(xml \ "max-db-connections").getOrElse(defaultGsn.maxDBConnections),
     takeInt(xml \ "max-sliding-db-connections").getOrElse(defaultGsn.maxSlidingDBConnections),
-    CommandsConf.create(xml),
+    BacklogCommandsConf.create(xml),
   )
   def load(path:String)=create(XML.load(path))
 }
@@ -57,11 +57,11 @@ object ZmqConf extends Conf{
     takeInt(xml \ "zmqmeta").getOrElse(defaultZmq.metaPort ) )  
 }
 
-case class CommandsConf(enabled:Boolean,commandsPort:Int) 
-object CommandsConf extends Conf{
-  def create(xml:scala.xml.Elem)=CommandsConf(
-    takeBool(xml \ "commands-enable").getOrElse(defaultCommands.enabled),
-    takeInt(xml \ "commands-port").getOrElse(defaultCommands.commandsPort))  
+case class BacklogCommandsConf(enabled:Boolean,backlogCommandsPort:Int) 
+object BacklogCommandsConf extends Conf{
+  def create(xml:scala.xml.Elem)=BacklogCommandsConf(
+    takeBool(xml \ "backlog-commands-enable").getOrElse(defaultBacklogCommands.enabled),
+    takeInt(xml \ "backlog-commands-port").getOrElse(defaultBacklogCommands.backlogCommandsPort))  
 }
 
 case class StorageConf(driver:String,url:String,

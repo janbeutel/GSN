@@ -173,8 +173,8 @@ public final class Main {
 			zmqproxy = new ZeroMQProxy(containerConfig.getZMQProxyPort(), containerConfig.getZMQMetaPort());
 		}
 
-		if(containerConfig.isCommandsEnabled()){
-			backlogzeromq= new BacklogZeroMQ(containerConfig.getCommandsPort());
+		if(containerConfig.isBacklogCommandsEnabled()){
+			backlogzeromq = new BacklogZeroMQ(containerConfig.getBacklogCommandsPort());
 		}
 
 		VSensorLoader vsloader = VSensorLoader.getInstance(virtualSensorDirectory);
