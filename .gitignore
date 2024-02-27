@@ -1,3 +1,4 @@
+.idea
 .cache
 .settings
 *.class
@@ -24,4 +25,5 @@ csv-check-points/
 .vscode/settings.json
 .gitignore
 gsn-webui/node_modules
-gsn-webui/node_modules
+gsn-webui/.bsp
+gsn-webui/gsn-webui-backend/.bsp
