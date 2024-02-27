@@ -77,6 +77,7 @@ import ch.epfl.gsn.monitoring.MonitoringServer;
 import ch.epfl.gsn.networking.zeromq.ZeroMQDeliveryAsync;
 import ch.epfl.gsn.networking.zeromq.ZeroMQDeliverySync;
 import ch.epfl.gsn.networking.zeromq.ZeroMQProxy;
+import ch.epfl.gsn.networking.zeromq.BacklogZeroMQ;
 import ch.epfl.gsn.storage.SQLValidator;
 import ch.epfl.gsn.storage.StorageManager;
 import ch.epfl.gsn.storage.StorageManagerFactory;
@@ -105,6 +106,7 @@ public final class Main {
 	public static String gsnConfFolder = DEFAULT_GSN_CONF_FOLDER;
 	public static String virtualSensorDirectory = DEFAULT_VIRTUAL_SENSOR_FOLDER;
 	private static ZeroMQProxy zmqproxy;
+	private static BacklogZeroMQ backlogzeromq;
 	private static StorageManager mainStorage;
 	private static StorageManager windowStorage;
 	private static StorageManager validationStorage;
@@ -169,6 +171,7 @@ public final class Main {
 		if (containerConfig.isZMQEnabled()) {
 			// start the 0MQ proxy
 			zmqproxy = new ZeroMQProxy(containerConfig.getZMQProxyPort(), containerConfig.getZMQMetaPort());
+			backlogzeromq= new BacklogZeroMQ(55555);
 		}
 
 		VSensorLoader vsloader = VSensorLoader.getInstance(virtualSensorDirectory);
