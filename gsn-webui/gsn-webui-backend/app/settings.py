@@ -24,11 +24,19 @@ SECRET_KEY = '4z_g+i&5omq3lbl@%*t!r1(6ag)9o619n2w@!eu0y@lg=p2gmj'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    'walker.uibk.ac.at',
+]
 
 # Application definition
-
 AUTH_USER_MODEL = "gsn.GSNUser"
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+IGNORABLE_404_URLS = (
+    'favicon.ico',
+)
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -75,7 +83,7 @@ AUTHENTICATION_BACKENDS = (  # Default backend
 WSGI_APPLICATION = 'app.wsgi.application'
 
 CORS_ALLOWED_ORIGINS = [
-   "http://localhost:4200",
+   "http://walker.uibk.ac.at:4200",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -101,7 +109,7 @@ STATIC_ROOT = './static/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static-files"),
-    os.path.join(BASE_DIR, "node_modules"),
+    # os.path.join(BASE_DIR, "node_modules"),
 )
 
 STATICFILES_FINDERS = (
@@ -111,7 +119,6 @@ STATICFILES_FINDERS = (
 
 # Custom setting
 LOGIN_URL = '/auth/'
-
 
 try:
     from app.settingsLocal import *
