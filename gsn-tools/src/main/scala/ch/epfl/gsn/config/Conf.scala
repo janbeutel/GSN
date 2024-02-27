@@ -45,10 +45,14 @@ trait Conf{
   lazy val defaultZmq=ZmqConf(
     zmq.getBoolean("enabled"),zmq.getInt("proxyPort"),zmq.getInt("metaPort"))
 
+  lazy val commands=defaults.getConfig("commands")
+  lazy val defaultCommands=CommandsConf(
+    commands.getBoolean("enabled"),commands.getInt("commandsPort"))
+
   lazy val storage=defaults.getConfig("storage")
   lazy val defaultStorage=StorageConf(storage.getString("driver"),storage.getString("url"),
       storage.getString("user"),storage.getString("password"),None)
 
   lazy val defaultGsn=GsnConf(defaults.getInt("monitorPort"),defaults.getString("timeFormat"),
-      defaultZmq,defaultStorage,None,defaults.getInt("maxDBConnections"), defaults.getInt("maxSlidingDBConnections"))
+      defaultZmq,defaultStorage,None,defaults.getInt("maxDBConnections"), defaults.getInt("maxSlidingDBConnections"), defaultCommands)
 }
