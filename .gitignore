@@ -23,3 +23,5 @@ csv-check-points/
 .DS_Store
 .vscode/settings.json
 .gitignore
+gsn-webui/node_modules
+gsn-webui/node_modules
