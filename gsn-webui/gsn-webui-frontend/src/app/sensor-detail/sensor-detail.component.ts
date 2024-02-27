@@ -105,7 +105,7 @@ export class SensorDetailComponent {
     this.date.from.date = yesterday.slice(0, 19);
     this.date.to.date = today.slice(0, 19);
 
-    this.http.get(`http://localhost:8000/sensors/${this.sensorName}/${this.date.from.date}/${this.date.to.date}/`, { withCredentials: true }).subscribe(
+    this.http.get(`http://walker.uibk.ac.at:8000/sensors/${this.sensorName}/${this.date.from.date}/${this.date.to.date}/`, { withCredentials: true }).subscribe(
       (data: any) => {
         this.loading = false;
         this.sensorDetails = data;
@@ -132,7 +132,7 @@ export class SensorDetailComponent {
       const to = new Date(endDate).toJSON();
       this.date.from.date = from.slice(0, 19);
       this.date.to.date = to.slice(0, 19);
-      this.http.get(`http://localhost:8000/sensors/${this.sensorName}/${this.date.from.date}/${this.date.to.date}/`, { withCredentials: true }).subscribe(
+      this.http.get(`http://walker.uibk.ac.at:8000/sensors/${this.sensorName}/${this.date.from.date}/${this.date.to.date}/`, { withCredentials: true }).subscribe(
         (data: any) => {
           this.loading = false;
           this.details = data.properties ? data : undefined;

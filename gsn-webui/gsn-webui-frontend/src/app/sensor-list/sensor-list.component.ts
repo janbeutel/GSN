@@ -62,14 +62,14 @@ export class SensorListComponent implements OnInit {
         // Set the center of the map to the first sensor's coordinates
         if (this.sensors.length > 0) {
           for (let index = 0; index < this.sensors.length; index++) {
-            
+
             if(this.sensors[index].geometry !=null){
               const firstSensor = this.sensors[index];
               this.firstSensorIndex = index;
               this.lat = firstSensor.geometry.coordinates[0];
               this.lng = firstSensor.geometry.coordinates[1];
               break; // Exit the loop after the assignment
-            }  
+            }
           }
           this.initMap(); // Initialize the map
         }
@@ -121,11 +121,11 @@ export class SensorListComponent implements OnInit {
       const centerCoordinates = fromLonLat([firstSensorCoordinates[0], firstSensorCoordinates[1]]);
       this.map.getView().setCenter(centerCoordinates);
     } else {
-      const centerCoordinates = fromLonLat([11.345725, 47.263461]);
+      const centerCoordinates = fromLonLat([7.6586, 45.9765]);
       this.map.getView().setCenter(centerCoordinates);
-      
+
     }
-    
+
 
     // Loop through the sensors and add markers to the map
     this.sensors.forEach(sensor => {
@@ -134,14 +134,14 @@ export class SensorListComponent implements OnInit {
         const marker = new Feature({
           geometry: new Point(fromLonLat(coordinates))
         });
-  
+
         const markerStyle = new Style({
           image: new Icon({
             src: '../../assets/285659_marker_map_icon.svg', // Provide the path to your marker icon
             anchor: [0.5, 1] // Set the anchor point of the icon (adjust if needed)
           })
         });
-  
+
         marker.setStyle(markerStyle);
         markerSource.addFeature(marker);
       }
