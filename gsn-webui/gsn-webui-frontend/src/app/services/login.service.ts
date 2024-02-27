@@ -21,13 +21,13 @@ export class LoginService {
 
   // gets login url from backend
   getLoginUrl(): Observable<any> {
-    return this.http.get('http://localhost:8000/oauth_code',  { withCredentials: true });
+    return this.http.get('http://walker.uibk.ac.at:8000/oauth_code',  { withCredentials: true });
   }
 
   // creates profile after login in
   // returns user
   createProfile(params: string): Observable<any> {
-    var url = 'http://localhost:8000/profile/' + params;
+    var url = 'http://walker.uibk.ac.at:8000/profile/' + params;
     return this.http.get(url,  { withCredentials: true });
   }
 
