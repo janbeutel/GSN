@@ -16,23 +16,23 @@ export class DashboardService {
   dashboard(): Observable<{ [key: string]: any }> {
     // Create an object to hold the observables for each dashboard request
     const dashboardRequests: { [key: string]: Observable<any> } = {};
-  
+
     // Get all favorites
     return this.favoritesService.list().pipe(
       switchMap((data: any) => {
         const favoritesList = data.favorites_list;
-  
+
         // For each favorite in favoritesList, create an observable for the dashboard request
         favoritesList.forEach((favorite: string) => {
-          dashboardRequests[favorite] = this.http.get(`http://localhost:8000/dashboard/${favorite}/`, { withCredentials: true });
+          dashboardRequests[favorite] = this.http.get(`http://walker.uibk.ac.at:8000/dashboard/${favorite}/`, { withCredentials: true });
         });
-  
+
         // Use forkJoin to combine all the dashboard requests into a single observable
         return forkJoin(dashboardRequests);
       })
     );
   }
-  
+
 }
 
 
