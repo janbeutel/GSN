@@ -58,8 +58,10 @@ public class ContainerConfig {
 	public static final int DEFAULT_MONITOR_PORT = 22001;
 	public static final int DEFAULT_ZMQ_PROXY_PORT = 22022;
 	public static final int DEFAULT_ZMQ_META_PORT = 22023;
+	public static final int DEFAULT_COMMANDS_PORT = 55555;
 	public static final int DEFAULT_SSL_PORT = 8443;
 	public static final boolean DEFAULT_ZMQ_ENABLED = false;
+	public static final boolean DEFAULT_COMMANDS_ENABLED = false;
 
 	public static final String FIELD_NAME_monitorPortNo = "monitorPort";
 	public static final String FIELD_NAME_zmqEnabled = "zmqEnabled";
@@ -71,6 +73,8 @@ public class ContainerConfig {
 	protected boolean zmqEnabled = DEFAULT_ZMQ_ENABLED;
 	protected int zmqProxyPort = DEFAULT_ZMQ_PROXY_PORT;
 	protected int zmqMetaPort = DEFAULT_ZMQ_META_PORT;
+	protected boolean commandsEnabled = DEFAULT_COMMANDS_ENABLED;
+	protected int commandsPort = DEFAULT_COMMANDS_PORT;
 	protected String containerFileName;
 	protected int storagePoolSize = -1;
 
@@ -101,7 +105,7 @@ public class ContainerConfig {
 	}
 
 	public ContainerConfig(int port, String timeFormat, boolean zmqEnabled, int zmqProxyPort, int zmqMetaPort,
-			StorageConfig storage, SlidingConfig slide, int maxDBConnections, int maxSlidingDBConnections) {
+			StorageConfig storage, SlidingConfig slide, int maxDBConnections, int maxSlidingDBConnections, boolean commandsEnabled, int commandsPort) {
 		this.monitorPort = port;
 		this.timeFormat = timeFormat;
 		this.zmqEnabled = zmqEnabled;
@@ -111,6 +115,8 @@ public class ContainerConfig {
 		this.sliding = slide;
 		this.maxDBConnections = maxDBConnections;
 		this.maxSlidingDBConnections = maxSlidingDBConnections;
+		this.commandsEnabled = commandsEnabled;
+		this.commandsPort = commandsPort;
 
 	}
 
@@ -154,6 +160,13 @@ public class ContainerConfig {
 	}
 
 	/**
+	 * @return true if the commands data distribution is enabled.
+	 */
+	public boolean isCommandsEnabled() {
+		return this.commandsEnabled;
+	}
+
+	/**
 	 * @return Returns the ZeroMQ stream proxy port.
 	 */
 	public int getZMQProxyPort() {
@@ -165,6 +178,13 @@ public class ContainerConfig {
 	 */
 	public int getZMQMetaPort() {
 		return this.zmqMetaPort;
+	}
+
+	/**
+	 * @return Returns the commands port.
+	 */
+	public int getCommandsPort() {
+		return this.commandsPort;
 	}
 
 	/**

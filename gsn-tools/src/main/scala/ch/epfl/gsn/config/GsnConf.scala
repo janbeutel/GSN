@@ -33,7 +33,7 @@ import play.api.libs.json._
 case class GsnConf(monitorPort:Int,timeFormat:String,
     zmqConf:ZmqConf,
     storageConf:StorageConf,slidingConf:Option[StorageConf],
-    maxDBConnections: Int, maxSlidingDBConnections: Int)
+    maxDBConnections: Int, maxSlidingDBConnections: Int, commandsConf: CommandsConf)
     
 object GsnConf extends Conf {
   def create(xml:Elem)=GsnConf(
@@ -43,7 +43,8 @@ object GsnConf extends Conf {
     StorageConf.create((xml \ "storage").head),
     (xml \ "sliding").headOption.map(a=>StorageConf.create((a \ "storage").head)),
     takeInt(xml \ "max-db-connections").getOrElse(defaultGsn.maxDBConnections),
-    takeInt(xml \ "max-sliding-db-connections").getOrElse(defaultGsn.maxSlidingDBConnections)
+    takeInt(xml \ "max-sliding-db-connections").getOrElse(defaultGsn.maxSlidingDBConnections),
+    CommandsConf.create(xml),
   )
   def load(path:String)=create(XML.load(path))
 }
@@ -54,6 +55,13 @@ object ZmqConf extends Conf{
     takeBool(xml \ "zmq-enable").getOrElse(defaultZmq.enabled),
     takeInt(xml \ "zmqproxy").getOrElse(defaultZmq .proxyPort),
     takeInt(xml \ "zmqmeta").getOrElse(defaultZmq.metaPort ) )  
+}
+
+case class CommandsConf(enabled:Boolean,commandsPort:Int) 
+object CommandsConf extends Conf{
+  def create(xml:scala.xml.Elem)=CommandsConf(
+    takeBool(xml \ "commands-enable").getOrElse(defaultCommands.enabled),
+    takeInt(xml \ "commands-port").getOrElse(defaultCommands.commandsPort))  
 }
 
 case class StorageConf(driver:String,url:String,

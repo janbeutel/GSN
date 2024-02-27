@@ -589,10 +589,10 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
     //TODO: Try to send data via zeromq to the according wrapper (begin with backlog for now)
     //therefore backlogwrapper needs to be adjusted like the zeromqpush such that data transmission can be done like 
     //in uploadCSV()
-    /**
+    
     val context  = ZMQ.context(1)
     val forwarder = context.socket(ZMQ.REQ)
-    forwarder.connect("tcp://127.0.0.1:23456")
+    forwarder.connect("tcp://127.0.0.1:55555")
     forwarder.setReceiveTimeOut(3000)
     val kryo = new Kryo()
     kryo.register(classOf[UploadCommandData])
@@ -607,7 +607,7 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
     (rec != null && rec.head == 0.asInstanceOf[Byte])
  
     forwarder.close()
-    */
+    
 
     Future.successful(Ok("OK"))
   }
