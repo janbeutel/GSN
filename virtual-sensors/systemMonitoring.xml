@@ -22,8 +22,8 @@
 	<life-cycle pool-size="10" />
 	<addressing>
 		<predicate key="geographical">Geographical data</predicate>
-		<predicate key="LATITUDE">37.5419</predicate>
-		<predicate key="LONGITUDE">-122.1419</predicate>		
+		<predicate key="LATITUDE">47.2577</predicate>
+		<predicate key="LONGITUDE">11.3542</predicate>
 	</addressing>
 	<storage history-size="10000" />
 	<streams>
