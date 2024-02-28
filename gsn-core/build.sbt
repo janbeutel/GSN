@@ -112,5 +112,8 @@ EclipseKeys.projectFlavor := EclipseProjectFlavor.Java
 
 mainClass in Revolver.reStart := Some("ch.epfl.gsn.Main")
 
+unmanagedJars in Compile += file("lib/tinyos-2.x.jar")
+unmanagedJars in Compile += file("lib/tinyos-1.x-gsn-src-bin.jar")
+
 Revolver.reStartArgs := Seq("../conf", "../virtual-sensors")
 

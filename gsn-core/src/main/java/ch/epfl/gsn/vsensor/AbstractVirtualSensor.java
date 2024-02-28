@@ -30,11 +30,13 @@ package ch.epfl.gsn.vsensor;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.Map;
+
+import javax.naming.OperationNotSupportedException;
+
 import java.util.Hashtable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.lang.management.ThreadMXBean;
-import javax.naming.OperationNotSupportedException;
 
 import org.slf4j.LoggerFactory;
 
