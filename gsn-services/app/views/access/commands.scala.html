@@ -125,11 +125,12 @@
             url: '@controllers.gsn.auth.routes.PermissionsController.uploadToSensor()',
             data: formData,
             success: function (data) {
-                $('#addVirtualSensorModal').modal('hide');
+
+              $('#uploadCommandToVSModal').modal('hide');
             },
             error: function (error) {
-              $('#modalBody').html('<p>' + error.responseJSON.error + '</p>');
-              $('#submitForm').hide();
+              var errorMessage = $('<span style="color: red;">' + error.responseJSON.error + '</span>');
+              $('#modalBody').append(errorMessage);  
           }
       });
     });
