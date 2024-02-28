@@ -129,7 +129,7 @@
               $('#uploadCommandToVSModal').modal('hide');
             },
             error: function (error) {
-              var errorMessage = $('<span style="color: red;">' + error.responseJSON.error + '</span>');
+              var errorMessage = $('<span style="color: red;">' + 'Error while sending data to sensor' + '</span>');
               $('#modalBody').append(errorMessage);  
           }
       });
