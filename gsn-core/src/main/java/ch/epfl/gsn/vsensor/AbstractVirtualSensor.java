@@ -41,7 +41,10 @@ import ch.epfl.gsn.ContainerImpl;
 import ch.epfl.gsn.Main;
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.DataTypes;
+import ch.epfl.gsn.beans.InputInfo;
+import ch.epfl.gsn.beans.InputStream;
 import ch.epfl.gsn.beans.StreamElement;
+import ch.epfl.gsn.beans.StreamSource;
 import ch.epfl.gsn.beans.VSensorConfig;
 import ch.epfl.gsn.monitoring.AnomalyDetector;
 import ch.epfl.gsn.monitoring.Monitorable;
@@ -252,7 +255,22 @@ public abstract class AbstractVirtualSensor implements Monitorable {
 	public abstract void dispose();
 
 	public boolean dataFromWeb(String action, String[] paramNames, Serializable[] paramValues) {
-		return false;
+		boolean ret = false;
+		Iterator<InputStream> streams = getVirtualSensorConfiguration().getInputStreams().iterator();
+		while (streams.hasNext()) {
+			InputStream str = streams.next();
+			StreamSource[] sources = str.getSources();
+			for (int j=0; j<sources.length; j++) {
+				try {
+					ret = sources[j].getWrapper().sendToWrapper(action, paramNames, paramValues);
+				} catch (OperationNotSupportedException e) {
+					logger.error(e.getMessage());
+					ret = false;
+				}
+			}
+		}
+		return ret;
+
 	}
 
 	/**
@@ -378,3 +396,4 @@ public abstract class AbstractVirtualSensor implements Monitorable {
 	 */
 	public abstract void dataAvailable(String inputStreamName, StreamElement streamElement);
 }
+
