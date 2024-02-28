@@ -34,6 +34,7 @@ import java.util.Hashtable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.lang.management.ThreadMXBean;
+import javax.naming.OperationNotSupportedException;
 
 import org.slf4j.LoggerFactory;
 
