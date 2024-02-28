@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import ch.epfl.gsn.Main;
+import ch.epfl.gsn.Mappings;
+import ch.epfl.gsn.vsensor.AbstractVirtualSensor;
+import scala.annotation.meta.companionObject;
 
 
 
@@ -41,11 +44,16 @@ public class BacklogZeroMQ extends Thread implements Runnable {
                             UploadCommandData data = kryo.readObjectOrNull(new Input(bais), UploadCommandData.class);
                             String[] paramNames= data.getParamNames();
                             String[] paramValues= data.getParamValues();
-                            //String vsname= data.getVsname;
-                            //AbstractVirtualSensor vs= Mappings.getVSensorInstanceByVSName( vsname ).borrowVS( );
-                            
-                            logger.error(data.toString());
-                            boolean success = true;
+                            String vsname= data.getVsname().toLowerCase();
+                            String cmd = "";
+                            boolean success = false;
+                            AbstractVirtualSensor vs= Mappings.getVSensorInstanceByVSName(vsname).borrowVS();
+                            for(int i=0;i<paramNames.length;i++) {
+                                if(paramNames[i].equals("cmd")) {
+                                    cmd = paramValues[i];
+                                }
+                            }
+                            success = vs.dataFromWeb( cmd , paramNames, paramValues);
 					        receiver.send(success ? new byte[] { (byte) 0 } : new byte[] { (byte) 1 });
                         }
                     } catch (IllegalStateException z) {
@@ -73,6 +81,7 @@ public class BacklogZeroMQ extends Thread implements Runnable {
 
 
 }
+
 
 
 
