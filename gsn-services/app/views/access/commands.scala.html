@@ -119,7 +119,6 @@
       formData['vsName'] = vsconf.name;
 
       console.log(formData);
-      $('#uploadCommandToVSModal').modal('hide');
 
       $.ajax({
             type: 'POST',
@@ -129,8 +128,9 @@
                 $('#addVirtualSensorModal').modal('hide');
             },
             error: function (error) {
-                console.error(error);
-            }
+              $('#modalBody').html('<p>' + error.responseJSON.error + '</p>');
+              $('#submitForm').hide();
+          }
       });
     });
   </script>

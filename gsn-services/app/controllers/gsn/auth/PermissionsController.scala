@@ -605,12 +605,15 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
     o.close()
     forwarder.send(baos.toByteArray)
     val rec = forwarder.recv()
-    (rec != null && rec.head == 0.asInstanceOf[Byte])
- 
-    forwarder.close()
-    
-
-    Future.successful(Ok("OK"))
+    if (rec == null || rec.head == 1.asInstanceOf[Byte]) {
+      System.out.println("Error while sending data to sensor")
+      forwarder.close()
+      Future.successful(BadRequest(Json.obj("error" -> "Error while sending data to the sensor")))
+     
+    } else {
+      forwarder.close()
+      Future.successful(Ok(Json.obj("message" -> "Data successfully sent to the sensor")))
+    }
   }
 
 
