@@ -3,6 +3,7 @@ package init;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import play.inject.ApplicationLifecycle;
+import service.gsn.GSNConfigService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -29,6 +30,7 @@ public class ActorSystemInitializer {
         Config config = ConfigFactory.load();
 		GsnConf gsnConf = GsnConf.load(config.getString("gsn.config"));
 		DataStore dataStore = new DataStore(gsnConf);
+        GSNConfigService gsnConfigService = new GSNConfigService(config);
 
         actorSystem.actorOf(Props.create(SensorStore.class, dataStore), "gsnSensorStore");
 

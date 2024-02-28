@@ -72,12 +72,13 @@ import java.io.ByteArrayOutputStream
 import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryo.io.Input
 import org.objenesis.strategy.StdInstantiatorStrategy
+import service.gsn.GSNConfigService
 
 import io.ebean.Ebean
 
 
 @Singleton
-class PermissionsController @Inject()(actorSystem: ActorSystem, userProvider: UserProvider, deadbolt: DeadboltActions, playAuth: PlayAuthenticate)(implicit ec: ExecutionContext) {
+class PermissionsController @Inject()(actorSystem: ActorSystem, userProvider: UserProvider, deadbolt: DeadboltActions, playAuth: PlayAuthenticate, gsnConfService: GSNConfigService)(implicit ec: ExecutionContext) {
     
     def vs(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Application.USER_ROLE))() { request =>
 
@@ -589,10 +590,10 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
     //TODO: Try to send data via zeromq to the according wrapper (begin with backlog for now)
     //therefore backlogwrapper needs to be adjusted like the zeromqpush such that data transmission can be done like 
     //in uploadCSV()
-    
-    val context  = ZMQ.context(1)
+    val context  = gsnConfService.getContext()
     val forwarder = context.socket(ZMQ.REQ)
-    forwarder.connect("tcp://127.0.0.1:55555")
+    val url = "tcp://127.0.0.1:"
+    forwarder.connect(url + gsnConfService.getBacklogCommandsPort())
     forwarder.setReceiveTimeOut(3000)
     val kryo = new Kryo()
     kryo.register(classOf[UploadCommandData])
