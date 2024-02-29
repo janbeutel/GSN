@@ -7,6 +7,7 @@ import javax.naming.OperationNotSupportedException;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
+import ch.epfl.gsn.wrappers.backlog.BackLogMessage;
 import ch.epfl.gsn.wrappers.backlog.BackLogMessageMultiplexer;
 import ch.epfl.gsn.wrappers.backlog.plugins.AbstractPlugin;
 import ch.epfl.gsn.beans.AddressBean;
@@ -231,8 +232,43 @@ public class BackLogWrapper extends AbstractWrapper {
 	 *         data otherwise false
 	 * @throws OperationNotSupportedException
 	 */
-	public boolean sendToWrapper(String action, String[] paramNames, Serializable[] paramValues)
+
+	public InputInfo sendToWrapper(String action, String[] paramNames, Serializable[] paramValues)
 			throws OperationNotSupportedException {
+		Integer id = 65535;
+		for (int i = 0; i < paramNames.length; i++) {
+			if (paramNames[i].compareToIgnoreCase("core_station") == 0) {
+				try {
+					id = Integer.parseInt((String) paramValues[i]);
+				} catch (NumberFormatException e) {
+					logger.error("The device_id in the core station field has to be an integer.");
+					return new InputInfo(getActiveAddressBean().toString(),
+							"The device_id in the core station field has to be an integer.", false);
+				}
+			}
+		}
+
+		if (id < 0 || id > 65535) {
+			logger.error("device_id has to be a number between 0 and 65535 (inclusive)");
+			return new InputInfo(getActiveAddressBean().toString(),
+					"device_id has to be a number between 0 and 65535 (inclusive)", false);
+		}
+
+		if (blMsgMultiplexer.getDeviceID() == null) {
+			logger.warn("no device id from core station (" + blMsgMultiplexer.getCoreStationName()
+					+ ") determined yet (no connection since last GSN start)");
+			return pluginObject.sendToPlugin(action, paramNames, paramValues);
+		} else if (id.compareTo(blMsgMultiplexer.getDeviceID()) == 0 || id == 65535) {
+			if (logger.isDebugEnabled())
+				logger.debug("Upload command received for device id " + id);
+			return pluginObject.sendToPlugin(action, paramNames, paramValues);
+		}
+		return new InputInfo(getActiveAddressBean().toString(), "", true);
+	}
+
+	public boolean sendToWrapper(String action, String[] paramNames, Object[] paramValues)
+			throws OperationNotSupportedException {
+
 		Integer id = 65535;
 		for (int i = 0; i < paramNames.length; i++) {
 			if (paramNames[i].compareToIgnoreCase("core_station") == 0) {
@@ -253,13 +289,13 @@ public class BackLogWrapper extends AbstractWrapper {
 		if (blMsgMultiplexer.getDeviceID() == null) {
 			logger.warn("no device id from core station (" + blMsgMultiplexer.getCoreStationName()
 					+ ") determined yet (no connection since last GSN start)");
-			InputInfo inputinfo= pluginObject.sendToPlugin(action, paramNames, paramValues);
+			InputInfo inputinfo = pluginObject.sendToPlugin(action, paramNames, paramValues);
 			return inputinfo.hasAtLeastOneSuccess();
 		} else if (id.compareTo(blMsgMultiplexer.getDeviceID()) == 0 || id == 65535) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Upload command received for device id " + id);
 			}
-			InputInfo inputinfo= pluginObject.sendToPlugin(action, paramNames, paramValues);
+			InputInfo inputinfo = pluginObject.sendToPlugin(action, paramNames, paramValues);
 			return inputinfo.hasAtLeastOneSuccess();
 		}
 		return true;
@@ -313,4 +349,3 @@ public class BackLogWrapper extends AbstractWrapper {
 		threadCounter--;
 	}
 }
-
