@@ -5,6 +5,8 @@
    <zmqmeta>22023</zmqmeta>
    <max-db-connections>8</max-db-connections>
    <max-sliding-db-connections>8</max-sliding-db-connections>
+   <backlog-commands-enable>false</backlog-commands-enable>
+   <backlog-commands-port>55555</backlog-commands-port>
 
 
 <!-- Main Storage Database, Mandatory -->
