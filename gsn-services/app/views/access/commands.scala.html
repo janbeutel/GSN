@@ -68,16 +68,16 @@
       $('#modalBody').empty();
       
       // Create select box for commands
-      var commandSelect = '<select id="commandSelect" name="commandSelect">';
+      var cmd = '<select id="cmd" name="cmd">';
       vsconf.processing.webInput.commands.forEach(function(command) {
-        commandSelect += '<option value="' + command.name + '">' + command.name + '</option>';
+        cmd += '<option value="' + command.name + '">' + command.name + '</option>';
       });
-      commandSelect += '</select>';
+      cmd += '</select>';
       
-      $('#modalBody').append(commandSelect);
+      $('#modalBody').append(cmd);
       
       // Listen for change in command select
-      $('#commandSelect').on('change', function() {
+      $('#cmd').on('change', function() {
         var selectedCommandName = $(this).val();
         var selectedCommand = vsconf.processing.webInput.commands.find(function(command) {
           return command.name === selectedCommandName;
@@ -91,21 +91,21 @@
           
           // Check dataType and create appropriate input element
           if (param.dataType === "*text") {
-            inputElement = '<input type="text" name="' + param.name + '" placeholder="' + param.name + '">';
+            var inputElement = '<input type="text" name="' + selectedCommandName + ';' + param.name + '" placeholder="' + param.name + '">';
           } else if (param.dataType.startsWith("*select")) {
             var options = param.dataType.split('|').slice(1).map(function(option) {
               var parts = option.split(',');
               return '<option value="' + parts[1] + '">' + parts[0] + '</option>';
             }).join('');
             
-            inputElement = '<select name="' + param.name + '">' + options + '</select>';
+            inputElement = '<select name="' + selectedCommandName+';'+param.name + '">' + options + '</select>';
           }
           
           var paramSection = $('<div class="paramSection"><label>' + param.name + '</label>' + inputElement + '</div>');
           $('#modalBody').append(paramSection);
         });
       });
-      $('#commandSelect').trigger('change');
+      $('#cmd').trigger('change');
       $('#uploadCommandToVSModal').modal('show');
     });
 

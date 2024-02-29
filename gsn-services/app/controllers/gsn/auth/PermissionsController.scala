@@ -545,51 +545,23 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
 
 
   def uploadToSensor() = deadbolt.Restrict(roleGroups = allOfGroup(Application.USER_ROLE))() { implicit request =>
-    var paramNames: Array[String] = Array.empty
-    var paramValues: Array[String] = Array.empty
-    
+    val paramNames = new ArrayBuffer[String]()
+    val paramValues = new ArrayBuffer[String]() 
     val body = request.body.asFormUrlEncoded.getOrElse(Map.empty[String, Seq[String]])
-    Logger.debug(s"Body: $body")
-    val commandTypeList = body.filterKeys(_.startsWith("commandSelect")).values.flatten.toSeq
-    val commandType = commandTypeList.head
-    Logger.debug("COMMAND TYPE" + commandType);
-    val vsname = body.filterKeys(_.startsWith("vsName")).values.flatten.toSeq.head
-    Logger.debug(  "VSNAME: " + vsname );
-  
-    val sensorData = commandType match {
-      case "tosmsg" =>
-        val destination = body.filterKeys(_.startsWith("destination")).values.flatten.toSeq.head
-        val cmd = body.filterKeys(_.startsWith("cmd")).values.flatten.toSeq.head
-        val arg = body.filterKeys(_.startsWith("arg")).values.flatten.toSeq.head
-        val repetitioncnt = body.filterKeys(_.startsWith("repetitioncnt")).values.flatten.toSeq.head
-        UploadCommandData(vsname, Array("destination", "cmd", "arg", "repetitioncnt"), Array(destination, cmd, arg, repetitioncnt))
-      case "CC430_CMD" | "GEOPHONE_CMD" | "BOLTBRIDGE_CMD" =>
-        val target_id = body.filterKeys(_.startsWith("target_id")).values.flatten.toSeq.head
-        val typeValue = body.filterKeys(_.startsWith("type")).values.flatten.toSeq.head
-        val value = body.filterKeys(_.startsWith("value")).values.flatten.toSeq.head
-        UploadCommandData(vsname, Array("target_id", "type", "value"), Array(target_id, typeValue, value))
-      case "GEOPHONE_DEL_DATA_CMD" =>
-        val target_id = body.filterKeys(_.startsWith("target_id")).values.flatten.toSeq.head
-        val startTime = body.filterKeys(_.startsWith("start_time")).values.flatten.toSeq.head
-        val endTime = body.filterKeys(_.startsWith("end_time")).values.flatten.toSeq.head
-        UploadCommandData(vsname, Array("target_id", "start_time", "end_time"), Array(target_id, startTime, endTime))
-      case "GEOPHONE_REQ_ADCDATA_CMD" =>
-        val target_id = body.filterKeys(_.startsWith("target_id")).values.flatten.toSeq.head
-        val id = body.filterKeys(_.startsWith("id")).values.flatten.toSeq.head
-        val formatType = body.filterKeys(_.startsWith("format_type")).values.flatten.toSeq.head
-        val bits = body.filterKeys(_.startsWith("bits")).values.flatten.toSeq.head
-        val subsampling = body.filterKeys(_.startsWith("subsampling")).values.flatten.toSeq.head
-        UploadCommandData(vsname, Array("target_id", "id", "format_type", "bits", "subsampling"), Array(target_id, id, formatType, bits, subsampling))
-      case _ =>
-        Logger.debug("Invalid command")
-        // Provide some default SensorData if needed
-        UploadCommandData(vsname, Array.empty, Array.empty)
-    }
+    val cmd: String = body.getOrElse("cmd", Seq("")).headOption.getOrElse("")
+    val vsname: String = body.getOrElse("vsname", Seq("")).headOption.getOrElse("")
 
-    Logger.debug("SensorData: " + sensorData)
-    //TODO: Try to send data via zeromq to the according wrapper (begin with backlog for now)
-    //therefore backlogwrapper needs to be adjusted like the zeromqpush such that data transmission can be done like 
-    //in uploadCSV()
+    body.foreach {
+        case (fieldName, fieldValues) =>
+          if (!Seq("cmd", "vsname").contains(fieldName)) {
+            if (fieldName.split(";").headOption.contains(cmd)) {
+              val paramName: String = fieldName.split(";").lastOption.getOrElse("")
+              paramNames += paramName
+              fieldValues.foreach(paramValues += _)
+            }
+          }
+      }
+    val commanddata =UploadCommandData(vsname,paramNames.toArray,paramValues.toArray)
     val context  = gsnConfService.getContext()
     val forwarder = context.socket(ZMQ.REQ)
     val url = "tcp://127.0.0.1:"
@@ -600,13 +572,11 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
     kryo.setInstantiatorStrategy(new StdInstantiatorStrategy())
     val baos = new ByteArrayOutputStream()
     val o = new kOutput(baos)
-    Logger.debug("output: " + o)
-    kryo.writeObjectOrNull(o, sensorData, classOf[UploadCommandData])
+    kryo.writeObjectOrNull(o, commanddata, classOf[UploadCommandData])
     o.close()
     forwarder.send(baos.toByteArray)
     val rec = forwarder.recv()
     if (rec == null || rec.head == 1.asInstanceOf[Byte]) {
-      System.out.println("Error while sending data to sensor")
       forwarder.close()
       Future.successful(BadRequest(Json.obj("error" -> "Error while sending data to the sensor")))
      
@@ -614,6 +584,7 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
       forwarder.close()
       Future.successful(Ok(Json.obj("message" -> "Data successfully sent to the sensor")))
     }
+
   }
 
 
