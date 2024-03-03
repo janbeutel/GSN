@@ -73,13 +73,31 @@ import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryo.io.Input
 import org.objenesis.strategy.StdInstantiatorStrategy
 import service.gsn.GSNConfigService
+import play.api.libs.Files.TemporaryFile
+import play.api.mvc.MultipartFormData
+import play.api.mvc.MultipartFormData.FilePart
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import scala.collection.JavaConverters._
+
+import java.io.File
+import org.apache.commons.fileupload.disk.DiskFileItem
+import org.apache.commons.fileupload.util.Streams
+import java.nio.file.Files
+
+
+
+
 
 import io.ebean.Ebean
 
 
 @Singleton
 class PermissionsController @Inject()(actorSystem: ActorSystem, userProvider: UserProvider, deadbolt: DeadboltActions, playAuth: PlayAuthenticate, gsnConfService: GSNConfigService)(implicit ec: ExecutionContext) {
-    
+
     def vs(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Application.USER_ROLE))() { request =>
 
       val existingDataSources: Seq[DataSource] = DataSource.find.query().findList().asScala
@@ -545,23 +563,66 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
 
 
   def uploadToSensor() = deadbolt.Restrict(roleGroups = allOfGroup(Application.USER_ROLE))() { implicit request =>
-    val paramNames = new ArrayBuffer[String]()
-    val paramValues = new ArrayBuffer[String]() 
-    val body = request.body.asFormUrlEncoded.getOrElse(Map.empty[String, Seq[String]])
-    val cmd: String = body.getOrElse("cmd", Seq("")).headOption.getOrElse("")
-    val vsname: String = body.getOrElse("vsname", Seq("")).headOption.getOrElse("")
+   
+    println("BODY1"+request.body)
 
-    body.foreach {
-        case (fieldName, fieldValues) =>
-          if (!Seq("cmd", "vsname").contains(fieldName)) {
-            if (fieldName.split(";").headOption.contains(cmd)) {
-              val paramName: String = fieldName.split(";").lastOption.getOrElse("")
-              paramNames += paramName
-              fieldValues.foreach(paramValues += _)
-            }
+    val formDataOption: Option[MultipartFormData[TemporaryFile]] = request.body.asMultipartFormData
+
+    val paramNames = new ArrayBuffer[String]()
+    val paramValues = new ArrayBuffer[String]()
+
+    var cmd: String = ""
+    var vsname: String = ""
+
+    formDataOption.foreach { formData =>
+      // Iterate over form data elements
+      formData.dataParts.foreach { case (key, values) =>
+        values.foreach { value =>
+
+          if (key == "commandSelect") {
+            cmd = value
           }
+          if(key == "vsname"){
+            vsname = value
+          }
+          if (key != "commandSelect" && key != "vsname" && key != "csrfToken") {
+            paramNames += key
+            paramValues += value
+          }
+        }
       }
-    val commanddata =UploadCommandData(vsname,paramNames.toArray,paramValues.toArray)
+
+      // Iterate over file parts
+      formData.files.foreach { filePart: FilePart[TemporaryFile] =>
+        println(s"File Part: Key: ${filePart.key}, Filename: ${filePart.filename}, Content Type: ${filePart.contentType}")
+        println("FILE PARTTTT KEY" + filePart.key)
+        println("FILE PARTTTT CONTENTTYPE" + filePart.contentType.getOrElse("application/octet-stream"))
+        println("FILE PARTTTT NAME" + filePart.ref.file.getName)
+        println("FILE PARTTTT SIZEE" + filePart.ref.file.length().toInt)
+        println("FILE PARTTTT KEY FILE" + filePart.ref.file)
+        
+
+        //val diskFileItem = new DiskFileItem(filePart.key, filePart.contentType.getOrElse("application/octet-stream"), false, filePart.filename, filePart.ref.file.length().toInt, filePart.ref.file)
+        //println("FILE ITEM" + diskFileItem)
+
+        //print("FILE ITEM" + fileItem)
+        // Add file key to paramNames
+        paramNames += filePart.key
+
+        val temporaryFile: TemporaryFile = filePart.ref
+        val fileBytes: Array[Byte] = Files.readAllBytes(Paths.get(temporaryFile.path.toAbsolutePath.toString))
+
+        // Add FileItem (filePart.ref) to paramValues
+        paramValues += new String(fileBytes)
+      }
+    }
+
+    println("CMDDD" + cmd)
+    println("VSNAME" + vsname)
+    println("PARAM NAMES" + paramNames)
+    println("PARAM VALUES" + paramValues)
+
+    val commanddata = UploadCommandData(vsname, cmd, paramNames.toArray, paramValues.toArray)
     val context  = gsnConfService.getContext()
     val forwarder = context.socket(ZMQ.REQ)
     val url = "tcp://127.0.0.1:"
@@ -585,12 +646,15 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
       Future.successful(Ok(Json.obj("message" -> "Data successfully sent to the sensor")))
     }
 
+    Future.successful(Ok(Json.obj("message" -> "Data successfully sent to the sensor")))
+
   }
 
 
+  
 }
 
-case class UploadCommandData(vsname: String, paramNames: Array[String], paramValues: Array[String])
+case class UploadCommandData(vsname: String, cmd: String, paramNames: Array[String], paramValues: Array[String])
 
 
 
