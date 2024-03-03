@@ -77,16 +77,16 @@ import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData
 import play.api.mvc.MultipartFormData.FilePart
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.FileItem
+import org.apache.commons.fileupload.FileItemFactory
+import org.apache.commons.fileupload.disk.DiskFileItemFactory
 import scala.collection.JavaConverters._
 
 import java.io.File
 import org.apache.commons.fileupload.disk.DiskFileItem
 import org.apache.commons.fileupload.util.Streams
 import java.nio.file.Files
+import org.apache.commons.io.IOUtils
 
 
 
@@ -547,7 +547,7 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
     actorRefFuture.flatMap { actorRef =>
       (actorRef ? GetAllCommandSensors()).map {
         case response: Seq[VsConf] =>
-          println(s"Found ${response.size} command sensors")
+          //println(s"Found ${response.size} command sensors")
           Context.current.set(JavaHelpers.createJavaContext(request, JavaHelpers.createContextComponents()))
           Ok(access.commands.render(userProvider,response))
         case _ =>
@@ -592,19 +592,35 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
         }
       }
 
+      var factory= new DiskFileItemFactory()
+      factory.setSizeThreshold(1024*1024) //1MB
       // Iterate over file parts
       formData.files.foreach { filePart: FilePart[TemporaryFile] =>
-        println(s"File Part: Key: ${filePart.key}, Filename: ${filePart.filename}, Content Type: ${filePart.contentType}")
-        println("FILE PARTTTT KEY" + filePart.key)
-        println("FILE PARTTTT CONTENTTYPE" + filePart.contentType.getOrElse("application/octet-stream"))
-        println("FILE PARTTTT NAME" + filePart.ref.file.getName)
-        println("FILE PARTTTT SIZEE" + filePart.ref.file.length().toInt)
-        println("FILE PARTTTT KEY FILE" + filePart.ref.file)
-        
+        //println(s"File Part: Key: ${filePart.key}, Filename: ${filePart.filename}, Content Type: ${filePart.contentType}")
+        //println("FILE PARTTTT KEY" + filePart.key)
+        //println("FILE PARTTTT CONTENTTYPE" + filePart.contentType.getOrElse("application/octet-stream"))
+        //println("FILE PARTTTT NAME" + filePart.ref.file.getName)
+        //println("FILE PARTTTT SIZEE" + filePart.ref.file.length().toInt)
+        //println("FILE PARTTTT KEY FILE" + filePart.ref.file)
+        val file= filePart.ref.file
+        val diskFileItem = factory.createItem(filePart.key, filePart.contentType.getOrElse("application/octet-stream"), false, filePart.filename)
+        val outputStream = diskFileItem.getOutputStream()
 
+        val input = Files.newInputStream(Paths.get(filePart.ref.file.getAbsolutePath()))
+        try {
+          IOUtils.copy(input, outputStream)
+        } finally {
+          IOUtils.closeQuietly(input)
+          IOUtils.closeQuietly(outputStream)
+        }
+  
+        println("DISKFILEITEM"+diskFileItem)
+        //val diskFileItem= factory.createItem(filePart.key,filePart.contentType.getOrElse("application/octet-stream"),false,filePart.filename)
+        //println(diskFileItem)
         //val diskFileItem = new DiskFileItem(filePart.key, filePart.contentType.getOrElse("application/octet-stream"), false, filePart.filename, filePart.ref.file.length().toInt, filePart.ref.file)
+        //val diskFileItem = new DiskFileItem(filePart.key, filePart.contentType.getOrElse("application/octet-stream"), false, file.getName, file.length().toInt, file)
         //println("FILE ITEM" + diskFileItem)
-
+        //diskFileItem.getOutputStream().write(Files.readAllBytes(file.toPath()))
         //print("FILE ITEM" + fileItem)
         // Add file key to paramNames
         paramNames += filePart.key
@@ -617,10 +633,10 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
       }
     }
 
-    println("CMDDD" + cmd)
-    println("VSNAME" + vsname)
-    println("PARAM NAMES" + paramNames)
-    println("PARAM VALUES" + paramValues)
+    //println("CMDDD" + cmd)
+    //println("VSNAME" + vsname)
+    //println("PARAM NAMES" + paramNames)
+    //println("PARAM VALUES" + paramValues)
 
     val commanddata = UploadCommandData(vsname, cmd, paramNames.toArray, paramValues.toArray)
     val context  = gsnConfService.getContext()
