@@ -40,21 +40,23 @@
     <div id="uploadCommandToVSModal" class="modal fade" role="dialog">
       <div class="modal-dialog custom-modal-dialog">
         <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">Upload VS Command</h4>
-          </div>
-          <div class="modal-body" id="modalBody">
-            <!-- Content will be dynamically generated here -->
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="submitForm">Submit</button>
-          </div>
+          <form id="virtualSensorCommandForm" onsubmit="handleFormSubmission(); return false;" method="post" enctype="multipart/form-data" >
+            <div class="modal-header">
+              <h4 class="modal-title">Upload VS Command</h4>
+            </div>
+            <div class="modal-body" id="modalBody">
+              <!-- Content will be dynamically generated here -->
+            </div>
+            <div class="modal-footer">
+              @CSRF.formField   
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary upload-btn">Upload</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-  
-  
+
 
   <script>
     
@@ -63,77 +65,97 @@
     $('.uploadSensorCommandButton').on('click', function () {
       // Get VsConf name and associated WebInputCommands
       vsconf = $(this).data('vsconf');
-      console.log(vsconf)
+      vsname = vsconf.name
+      console.log(vsconf);
+
       // Clear previous content
       $('#modalBody').empty();
-      
+
+      // Create form with correct enctype
+      //var form = $('<form enctype="multipart/form-data">');
+      //var form = $('<form id="virtualSensorUploadForm" action="@controllers.gsn.api.routes.SensorService.uploadToSensor()" method="post" enctype="multipart/form-data">');
+
       // Create select box for commands
-      var cmd = '<select id="cmd" name="cmd">';
-      vsconf.processing.webInput.commands.forEach(function(command) {
-        cmd += '<option value="' + command.name + '">' + command.name + '</option>';
+      var commandSelect = $('<select id="commandSelect" name="commandSelect">');
+      vsconf.processing.webInput.commands.forEach(function (command) {
+          commandSelect.append('<option value="' + command.name + '">' + command.name + '</option>');
       });
-      cmd += '</select>';
-      
-      $('#modalBody').append(cmd);
-      
+      //form.append(commandSelect);
+
+      // Append form to modal body
+      $('#modalBody').append(commandSelect);
+
+      $('#modalBody').append('<input type="hidden" id="vsname" name="vsname">');
+      $('#vsname').val(vsname); 
+
       // Listen for change in command select
-      $('#cmd').on('change', function() {
-        var selectedCommandName = $(this).val();
-        var selectedCommand = vsconf.processing.webInput.commands.find(function(command) {
-          return command.name === selectedCommandName;
-        });
-        
-        // Clear previous params and regenerate
-        $('#modalBody .paramSection').remove();
-        
-        selectedCommand.params.forEach(function(param) {
-          var inputElement;
-          
-          // Check dataType and create appropriate input element
-          if (param.dataType === "*text") {
-            var inputElement = '<input type="text" name="' + selectedCommandName + ';' + param.name + '" placeholder="' + param.name + '">';
-          } else if (param.dataType.startsWith("*select")) {
-            var options = param.dataType.split('|').slice(1).map(function(option) {
-              var parts = option.split(',');
-              return '<option value="' + parts[1] + '">' + parts[0] + '</option>';
-            }).join('');
-            
-            inputElement = '<select name="' + selectedCommandName+';'+param.name + '">' + options + '</select>';
-          }
-          
-          var paramSection = $('<div class="paramSection"><label>' + param.name + '</label>' + inputElement + '</div>');
-          $('#modalBody').append(paramSection);
-        });
+      $('#commandSelect').on('change', function () {
+          var selectedCommandName = $(this).val();
+          var selectedCommand = vsconf.processing.webInput.commands.find(function (command) {
+              return command.name === selectedCommandName;
+          });
+
+          // Clear previous params and regenerate
+          $('#modalBody .paramSection').remove();
+
+          selectedCommand.params.forEach(function (param) {
+              var inputElement;
+
+              // Check dataType and create appropriate input element
+              if (param.dataType === "*text") {
+                  inputElement = '<input type="text" name="' + param.name + '" placeholder="' + param.name + '">';
+              } else if (param.dataType.startsWith("*select")) {
+                  var options = param.dataType.split('|').slice(1).map(function (option) {
+                      var parts = option.split(',');
+                      return '<option value="' + parts[1] + '">' + parts[0] + '</option>';
+                  }).join('');
+                  inputElement = '<select name="' + param.name + '">' + options + '</select>';
+              } else if (param.dataType.startsWith("*checkbox")) {
+                  var checkboxParts = param.dataType.split(':');
+                  inputElement = '<input type="checkbox" name="' + param.name + '">' + checkboxParts[1];
+              } else if (param.dataType.startsWith("date")) {
+                  inputElement = '<input type="date" name="' + param.name + '">';
+              } else if (param.dataType === "*binary") {
+                  inputElement = '<input type="file" name="' + param.name + '">';
+              }
+
+              var paramSection = $('<div class="paramSection"><label>' + param.name + '</label>' + inputElement + '</div>');
+              $('#modalBody').append(paramSection);
+          });
       });
-      $('#cmd').trigger('change');
+
+      // Trigger change event to populate params for the first time
+      $('#commandSelect').trigger('change');
+
+      // Show the modal
       $('#uploadCommandToVSModal').modal('show');
-    });
+  });
 
+    function handleFormSubmission() {
 
-    $('#submitForm').on('click', function() {
-      var formData = {};
-      $('#modalBody').find('input, select').each(function() {
-        formData[$(this).attr('name')] = $(this).val();
+      var formData = new FormData(document.getElementById('virtualSensorCommandForm'));
+
+      formData.forEach(function(value, key){
+          console.log(key, value);
       });
 
-      formData['vsName'] = vsconf.name;
-
-      console.log(formData);
-
-      $.ajax({
-            type: 'POST',
-            url: '@controllers.gsn.auth.routes.PermissionsController.uploadToSensor()',
-            data: formData,
-            success: function (data) {
-
-              $('#uploadCommandToVSModal').modal('hide');
-            },
-            error: function (error) {
-              var errorMessage = $('<span style="color: red;">' + 'Error while sending data to sensor' + '</span>');
-              $('#modalBody').append(errorMessage);  
-          }
+      // Perform the AJAX POST request using the fetch API
+      fetch("@controllers.gsn.auth.routes.PermissionsController.uploadToSensor()", {
+          method: 'POST',
+          body: formData
+      })
+      .then(data => {
+          // Handle the response data as needed
+          console.log(data);
+      })
+      .catch(error => {
+          // Handle errors
+          console.error('Error:', error);
       });
-    });
+
+      return false;
+    }
+
   </script>
   
 
