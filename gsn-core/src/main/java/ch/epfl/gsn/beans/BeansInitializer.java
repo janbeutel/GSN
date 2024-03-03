@@ -267,6 +267,9 @@ public class BeansInitializer {
 		if (vs.storageSize().isDefined()) {
 			st.setStorageSize(vs.storageSize().get());
 		}
+		if (vs.storageDirectory().isDefined()) {
+			st.setStorageDirectory(vs.storageDirectory().get());
+		}
 		if (vs.storage().isDefined()) {
 			StorageConf sc = vs.storage().get();
 			if (sc.identifier().isDefined()) {
