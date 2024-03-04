@@ -87,6 +87,8 @@ import org.apache.commons.fileupload.disk.DiskFileItem
 import org.apache.commons.fileupload.util.Streams
 import java.nio.file.Files
 import org.apache.commons.io.IOUtils
+import scala.collection.mutable.ListBuffer
+
 
 
 
@@ -564,12 +566,13 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
 
   def uploadToSensor() = deadbolt.Restrict(roleGroups = allOfGroup(Application.USER_ROLE))() { implicit request =>
    
-    println("BODY1"+request.body)
+    //println("BODY1"+request.body)
 
     val formDataOption: Option[MultipartFormData[TemporaryFile]] = request.body.asMultipartFormData
 
     val paramNames = new ArrayBuffer[String]()
     val paramValues = new ArrayBuffer[String]()
+    val commandFiles = new ArrayBuffer[CommandFile]()
 
     var cmd: String = ""
     var vsname: String = ""
@@ -592,59 +595,22 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
         }
       }
 
-      var factory= new DiskFileItemFactory()
-      factory.setSizeThreshold(1024*1024) //1MB
-      // Iterate over file parts
       formData.files.foreach { filePart: FilePart[TemporaryFile] =>
-        //println(s"File Part: Key: ${filePart.key}, Filename: ${filePart.filename}, Content Type: ${filePart.contentType}")
-        //println("FILE PARTTTT KEY" + filePart.key)
-        //println("FILE PARTTTT CONTENTTYPE" + filePart.contentType.getOrElse("application/octet-stream"))
-        //println("FILE PARTTTT NAME" + filePart.ref.file.getName)
-        //println("FILE PARTTTT SIZEE" + filePart.ref.file.length().toInt)
-        //println("FILE PARTTTT KEY FILE" + filePart.ref.file)
-        val file= filePart.ref.file
-        val diskFileItem = factory.createItem(filePart.key, filePart.contentType.getOrElse("application/octet-stream"), false, filePart.filename)
-        val outputStream = diskFileItem.getOutputStream()
-
-        val input = Files.newInputStream(Paths.get(filePart.ref.file.getAbsolutePath()))
-        try {
-          IOUtils.copy(input, outputStream)
-        } finally {
-          IOUtils.closeQuietly(input)
-          IOUtils.closeQuietly(outputStream)
-        }
-  
-        println("DISKFILEITEM"+diskFileItem)
-        //val diskFileItem= factory.createItem(filePart.key,filePart.contentType.getOrElse("application/octet-stream"),false,filePart.filename)
-        //println(diskFileItem)
-        //val diskFileItem = new DiskFileItem(filePart.key, filePart.contentType.getOrElse("application/octet-stream"), false, filePart.filename, filePart.ref.file.length().toInt, filePart.ref.file)
-        //val diskFileItem = new DiskFileItem(filePart.key, filePart.contentType.getOrElse("application/octet-stream"), false, file.getName, file.length().toInt, file)
-        //println("FILE ITEM" + diskFileItem)
-        //diskFileItem.getOutputStream().write(Files.readAllBytes(file.toPath()))
-        //print("FILE ITEM" + fileItem)
-        // Add file key to paramNames
-        paramNames += filePart.key
-
         val temporaryFile: TemporaryFile = filePart.ref
         val fileBytes: Array[Byte] = Files.readAllBytes(Paths.get(temporaryFile.path.toAbsolutePath.toString))
-
-        // Add FileItem (filePart.ref) to paramValues
-        paramValues += new String(fileBytes)
+        commandFiles += CommandFile(filePart.key, filePart.filename, filePart.contentType.getOrElse("application/octet-stream"), new String(fileBytes))
       }
     }
 
-    //println("CMDDD" + cmd)
-    //println("VSNAME" + vsname)
-    //println("PARAM NAMES" + paramNames)
-    //println("PARAM VALUES" + paramValues)
-
-    val commanddata = UploadCommandData(vsname, cmd, paramNames.toArray, paramValues.toArray)
+    val commanddata = UploadCommandData(vsname, cmd, paramNames.toArray, paramValues.toArray, commandFiles.toArray)
     val context  = gsnConfService.getContext()
     val forwarder = context.socket(ZMQ.REQ)
     val url = "tcp://127.0.0.1:"
     forwarder.connect(url + gsnConfService.getBacklogCommandsPort())
     forwarder.setReceiveTimeOut(3000)
     val kryo = new Kryo()
+    kryo.register(classOf[CommandFile])
+    kryo.register(classOf[Array[CommandFile]])
     kryo.register(classOf[UploadCommandData])
     kryo.setInstantiatorStrategy(new StdInstantiatorStrategy())
     val baos = new ByteArrayOutputStream()
@@ -670,7 +636,9 @@ def removefromgroup(page: Int) = deadbolt.Restrict(roleGroups = allOfGroup(Appli
   
 }
 
-case class UploadCommandData(vsname: String, cmd: String, paramNames: Array[String], paramValues: Array[String])
+case class UploadCommandData(vsname: String, cmd: String, paramNames: Array[String], paramValues: Array[String], commandFiles: Array[CommandFile])
+
+case class CommandFile(fileKey: String, fileName: String, contentType: String, fileContent: String)
 
 
 
