@@ -4,6 +4,8 @@ import org.zeromq.ZMQ;
 import org.zeromq.ZContext;
 
 import java.io.ByteArrayInputStream;
+import java.io.Serializable;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 
@@ -14,6 +16,10 @@ import ch.epfl.gsn.Main;
 import ch.epfl.gsn.Mappings;
 import ch.epfl.gsn.vsensor.AbstractVirtualSensor;
 import scala.annotation.meta.companionObject;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 
@@ -26,6 +32,8 @@ public class BacklogZeroMQ extends Thread implements Runnable {
 
 
     public BacklogZeroMQ(final int port) {
+        kryo.register(CommandFile.class);
+        kryo.register(CommandFile[].class);
         kryo.register(UploadCommandData.class);
         ZContext ctx = Main.getZmqContext();
 		receiver = ctx.createSocket(ZMQ.REP);
@@ -42,18 +50,27 @@ public class BacklogZeroMQ extends Thread implements Runnable {
                         if (rec != null) {
                             ByteArrayInputStream bais = new ByteArrayInputStream(rec);
                             UploadCommandData data = kryo.readObjectOrNull(new Input(bais), UploadCommandData.class);
-                            String[] paramNames= data.getParamNames();
-                            String[] paramValues= data.getParamValues();
-                            String vsname= data.getVsname().toLowerCase();
-                            String cmd = "";
-                            boolean success = false;
-                            AbstractVirtualSensor vs= Mappings.getVSensorInstanceByVSName(vsname).borrowVS();
-                            for(int i=0;i<paramNames.length;i++) {
-                                if(paramNames[i].equals("cmd")) {
-                                    cmd = paramValues[i];
-                                }
+                           
+                            List<String> paramNames = new ArrayList<>(Arrays.asList(data.getParamNames()));
+                            List<Serializable> paramValues = new ArrayList<>();
+
+                            // Add elements from the String array to the Serializable list
+                            for (String value : data.getParamValues()) {
+                                paramValues.add(value);
                             }
-                            success = vs.dataFromWeb( cmd , paramNames, paramValues);
+
+                            String vsname= data.getVsname().toLowerCase();
+                            String cmd = data.getCmd();
+                            boolean success = false;
+
+                            CommandFile[]files = data.getCommandFiles();
+                            for(CommandFile file : files){
+                                paramNames.add(file.getFileKey());
+                                paramValues.add(file.getFileItem());
+                            }
+
+                            AbstractVirtualSensor vs= Mappings.getVSensorInstanceByVSName(vsname).borrowVS();
+                            success = vs.dataFromWeb( cmd , paramNames.toArray(new String[0]), paramValues.toArray(new Serializable[0]));
 					        receiver.send(success ? new byte[] { (byte) 0 } : new byte[] { (byte) 1 });
                         }
                     } catch (IllegalStateException z) {
