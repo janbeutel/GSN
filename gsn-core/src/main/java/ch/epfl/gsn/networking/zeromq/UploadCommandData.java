@@ -6,19 +6,22 @@ public class UploadCommandData {
     private String cmd;
     private String[] paramNames;
     private String[] paramValues;
+    private CommandFile[] commandFiles;
 
     public UploadCommandData() {
         this.vsname = "";
         this.cmd = "";
         this.paramNames = new String[0];
         this.paramValues = new String[0];
+        this.commandFiles = new CommandFile[0];
     }
 
-    public UploadCommandData(String vsname, String cmd, String[] paramNames, String[] paramValues) {
+    public UploadCommandData(String vsname, String cmd, String[] paramNames, String[] paramValues, CommandFile[] commandFiles) {
         this.vsname = vsname;
         this.cmd = cmd;
         this.paramNames = paramNames;
         this.paramValues = paramValues;
+        this.commandFiles = commandFiles;
     }
 
     public String toString(){
@@ -58,5 +61,13 @@ public class UploadCommandData {
 
     public void setParamValues(String[] paramValues) {
         this.paramValues = paramValues;
+    }
+
+    public CommandFile[] getCommandFiles() {
+        return commandFiles;
+    }
+
+    public void setCommandFiles(CommandFile[] commandFiles) {
+        this.commandFiles = commandFiles;
     }
 }
