@@ -226,10 +226,10 @@ public abstract class AbstractWrapper extends Thread implements Monitorable {
 		return isActive;
 	}
 
-	protected void postStreamElement(Serializable... values) {
+	protected boolean postStreamElement(Serializable... values) {
 		StreamElement se = new StreamElement(getOutputFormat(), values, System
 				.currentTimeMillis());
-		postStreamElement(se);
+		return postStreamElement(se);
 	}
 
 	protected boolean postStreamElement(long timestamp, Serializable[] values) {
