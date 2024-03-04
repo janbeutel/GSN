@@ -72,8 +72,6 @@
       $('#modalBody').empty();
 
       // Create form with correct enctype
-      //var form = $('<form enctype="multipart/form-data">');
-      //var form = $('<form id="virtualSensorUploadForm" action="@controllers.gsn.api.routes.SensorService.uploadToSensor()" method="post" enctype="multipart/form-data">');
 
       // Create select box for commands
       var commandSelect = $('<select id="commandSelect" name="commandSelect">');
@@ -147,9 +145,18 @@
       .then(data => {
           // Handle the response data as needed
           console.log(data);
+          if(data.status === 200) {
+            $('#uploadCommandToVSModal').modal('hide');
+          }
+          else if(data.status == 400){
+            var errorMessage = $('<span style="color: red;">' + 'Error while sending data to sensor' + '</span>');
+            $('#modalBody').append(errorMessage);  
+          }
       })
       .catch(error => {
           // Handle errors
+          var errorMessage = $('<span style="color: red;">' + 'Error while sending data to sensor' + '</span>');
+          $('#modalBody').append(errorMessage);  
           console.error('Error:', error);
       });
 
