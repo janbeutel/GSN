@@ -208,7 +208,7 @@ public class PostgresStorageManager extends StorageManager {
     public StringBuilder getStatementCreateTable(String tableName, DataField[] structure) {
         StringBuilder result = new StringBuilder("CREATE TABLE ").append(tableName);
 
-        result.append(" (PK serial PRIMARY KEY NOT NULL , timed BIGINT NOT NULL, "); // TODO: add auto increment
+        result.append(" (PK serial , timed BIGINT NOT NULL, "); // TODO: add auto increment
                                                                                      // AUTO_INCREMENT
 
         for (DataField field : structure) {
@@ -219,8 +219,12 @@ public class PostgresStorageManager extends StorageManager {
             result.append(convertGSNTypeToLocalType(field));
             result.append(" ,");
         }
-        result.delete(result.length() - 2, result.length());
+        result.append("PRIMARY KEY (PK,timed)");
+        ///result.delete(result.length() - 2, result.length());
         result.append(")");
+        result.append("; ");
+        result.append("SELECT create_hypertable(");
+        result.append("'"+tableName+"' ,'timed');");
         return result;
     }
 
