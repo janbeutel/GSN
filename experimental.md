@@ -22,3 +22,5 @@ Useful Links:
 
 -Presentation from Mike Freedman: https://www.youtube.com/watch?v=Fc5NhhjTy_U&list=PLdfRcubzeD1Oq1LrE0G3Mi2pMsOVRfSea&ab_channel=Percona
 
+-Doc HyperTables: https://docs.timescale.com/getting-started/latest/tables-hypertables/
+
