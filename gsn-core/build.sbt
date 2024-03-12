@@ -17,7 +17,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play" % "2.6.0",
   //"mysql" % "mysql-connector-java" % "5.1.29",
   "mysql" % "mysql-connector-java" % "8.0.28",
-  "org.postgresql" % "postgresql" % "9.3-1102-jdbc41",
+  "org.postgresql" % "postgresql" % "42.3.0",
   "org.apache.commons" % "commons-dbcp2" % "2.0",
   "org.hibernate" % "hibernate-core" % "3.6.10.Final",
   "org.apache.httpcomponents" % "httpclient" % "4.3.2",
