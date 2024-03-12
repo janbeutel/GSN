@@ -97,29 +97,29 @@
           $('#modalBody .paramSection').remove();
 
           selectedCommand.params.forEach(function (param) {
-              var inputElement;
+            var inputElement;
 
-              // Check dataType and create appropriate input element
-              if (param.dataType === "*text") {
-                  inputElement = '<input type="text" name="' + param.name + '" placeholder="' + param.name + '">';
-              } else if (param.dataType.startsWith("*select")) {
-                  var options = param.dataType.split('|').slice(1).map(function (option) {
-                      var parts = option.split(',');
-                      return '<option value="' + parts[1] + '">' + parts[0] + '</option>';
-                  }).join('');
-                  inputElement = '<select name="' + param.name + '">' + options + '</select>';
-              } else if (param.dataType.startsWith("*checkbox")) {
-                  var checkboxParts = param.dataType.split(':');
-                  inputElement = '<input type="checkbox" name="' + param.name + '">' + checkboxParts[1];
-              } else if (param.dataType.startsWith("date")) {
-                  inputElement = '<input type="date" name="' + param.name + '">';
-              } else if (param.dataType === "*binary") {
-                  inputElement = '<input type="file" name="' + param.name + '">';
-              }
+            // Check dataType and create appropriate input element
+            if (param.dataType === "*text" || param.dataType === "text") {
+              inputElement = '<input type="text" name="' + param.name + '" placeholder="' + param.name + '">';
+            } else if (param.dataType.startsWith("select") || param.dataType.startsWith("*select")) {
+                var options = param.dataType.split('|').slice(1).map(function (option) {
+                    var parts = option.split(',');
+                    return '<option value="' + parts[1] + '">' + parts[0] + '</option>';
+                }).join('');
+                inputElement = '<select name="' + param.name + '">' + options + '</select>';
+            } else if (param.dataType.startsWith("checkbox") || param.dataType.startsWith("*checkbox")) {
+                var checkboxParts = param.dataType.split(':');
+                inputElement = '<input type="checkbox" name="' + param.name + '">' + checkboxParts[1];
+            } else if (param.dataType.startsWith("date")|| param.dataType.startsWith("*date")) {
+                inputElement = '<input type="date" name="' + param.name + '">';
+            } else if (param.dataType.startsWith("binary") || param.dataType.startsWith("*binary")) {
+                inputElement = '<input type="file" name="' + param.name + '">';
+            }
 
-              var paramSection = $('<div class="paramSection"><label>' + param.name + '</label>' + inputElement + '</div>');
-              $('#modalBody').append(paramSection);
-          });
+            var paramSection = $('<div class="paramSection"><label>' + param.name + '</label>' + inputElement + '</div>');
+            $('#modalBody').append(paramSection);
+        });
       });
 
       // Trigger change event to populate params for the first time
