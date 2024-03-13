@@ -66,10 +66,7 @@ public class FileGetterWrapper extends AbstractWrapper {
 			return false;
 		}
 
-		logger.error("HÄÄÄÄÄÄ" + rootBinaryDir);
 		File f = new File(rootBinaryDir);
-        logger.error("IS NULLL????" + (f == null));
-        logger.error("IS F NOT DIRECTORY" + !f.isDirectory() + "binary dir" + rootBinaryDir);
 		if (!f.isDirectory()) {
 			logger.error(rootBinaryDir + " is not a directory");
 			return false;
