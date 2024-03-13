@@ -304,6 +304,8 @@ public abstract class StorageManager {
                             }
                             if (field.getDataTypeID() == gsnType) {
                                 continue nextField;
+                            } else if(field.getDataTypeID() == DataTypes.TINYINT && gsnType == DataTypes.SMALLINT){
+                                continue nextField;
                             } else {
                                 throw new GSNRuntimeException("The column : "
                                         + colName + " in the >" + tableName
@@ -1381,3 +1383,4 @@ public abstract class StorageManager {
     }
 
 }
+
