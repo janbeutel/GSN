@@ -224,7 +224,8 @@ public class PostgresStorageManager extends StorageManager {
         result.append(")");
         result.append("; ");
         result.append("SELECT create_hypertable(");
-        result.append("'"+tableName+"' ,'timed');");
+        result.append("'"+tableName+"' ,by_range('timed', 7*24*60*60*1000));"); //set 7 days range for hypertable
+        //logger.error("result"+result);
         return result;
     }
 
