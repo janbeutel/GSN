@@ -65,8 +65,8 @@
                                     <li class="@("active".when(nav == "grouplist"))"><a href="@controllers.gsn.auth.routes.PermissionsController.groups(1)">@Messages("gsn.access.groups")</a></li>
                                      <li class="@("active".when(nav == "vslist"))"><a href="@controllers.gsn.auth.routes.PermissionsController.vs(1)">@Messages("gsn.access.vs.title")</a></li>
                                      <li class="@("active".when(nav == "clientlist"))"><a href="@controllers.gsn.routes.OAuth2Controller.listClients()">@Messages("gsn.oauth2.clients")</a></li>
-                                     <li class="@("active".when(nav == "commands"))"><a href="@controllers.gsn.auth.routes.PermissionsController.commands()">Commands</a></li>
-                                     <li class="@("active".when(nav == "monitoring"))"><a href="@controllers.gsn.auth.routes.PermissionsController.monitoringData()">Monitoring</a></li>
+                                     <li class="@("active".when(nav == "commands"))"><a href="@controllers.gsn.auth.routes.PermissionsController.commands()">@Messages("gsn.access.commands")</a></li>
+                                     <li class="@("active".when(nav == "monitoring"))"><a href="@controllers.gsn.auth.routes.PermissionsController.monitoringData()">@Messages("gsn.access.monitoring")</a></li>
                                 
                         </ul>
     

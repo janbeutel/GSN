@@ -170,6 +170,8 @@ gsn.access.users.add_title=Add user
 gsn.access.users.remove=Remove
 gsn.access.roles=Roles
 gsn.access.actions=Actions
+gsn.access.commands= Commands
+gsn.access.monitoring = Monitoring
 
 gsn.oauth2.auth.title=GSN External access
 gsn.oauth2.auth.access=An application would like to connect to your account
