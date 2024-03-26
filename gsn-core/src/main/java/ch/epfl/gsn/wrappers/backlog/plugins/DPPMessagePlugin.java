@@ -167,7 +167,7 @@ public class DPPMessagePlugin extends AbstractPlugin {
 			header = new Serializable[] { timestamp, null, null, getDeviceID(), null, null, null, null };
 		}
 
-		if (getDeviceID() != null) {
+		if (getDeviceID() == null) {
 			processPayload = msgClass.sendPayloadSuccess(false);
 			inputInfo = new InputInfo(getActiveAddressBean().toString(), "device ID is null ", false);
 		} else {
