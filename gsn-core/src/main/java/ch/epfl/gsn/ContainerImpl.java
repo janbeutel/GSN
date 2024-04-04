@@ -30,6 +30,11 @@ package ch.epfl.gsn;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.storage.StorageManager;
 import ch.epfl.gsn.vsensor.AbstractVirtualSensor;
@@ -48,7 +53,7 @@ public class ContainerImpl {
 
 	private static ContainerImpl singleton;
 	private static final Object psLock = new Object();
-	private ArrayList<VirtualSensorDataListener> dataListeners = new ArrayList<VirtualSensorDataListener>();
+	private ConcurrentHashMap<String, CopyOnWriteArrayList<VirtualSensorDataListener>> dataListeners = new ConcurrentHashMap<String, CopyOnWriteArrayList<VirtualSensorDataListener>>();
 
 	private ContainerImpl() {
 	}
@@ -96,12 +101,15 @@ public class ContainerImpl {
 	public void publishData(AbstractVirtualSensor sensor, StreamElement data) throws SQLException {
 		String name = sensor.getVirtualSensorConfiguration().getName().toLowerCase();
 		StorageManager storageMan = Main.getStorage(sensor.getVirtualSensorConfiguration().getName());
-		synchronized (psLock) {
-			storageMan.executeInsert(name, sensor.getVirtualSensorConfiguration().getOutputStructure(), data);
-		}
-
-		for (VirtualSensorDataListener listener : dataListeners) {
-			listener.consume(data, sensor.getVirtualSensorConfiguration());
+		//synchronized (psLock) {
+		storageMan.executeInsert(name, sensor.getVirtualSensorConfiguration().getOutputStructure(), data);
+		//}
+		
+		CopyOnWriteArrayList<VirtualSensorDataListener> listeners = dataListeners.get(name);
+		if (listeners != null) {
+			for (VirtualSensorDataListener listener : listeners) {
+				listener.consume(data, sensor.getVirtualSensorConfiguration());
+			}
 		}
 	}
 
@@ -113,9 +121,16 @@ public class ContainerImpl {
 	 * @param listener The VirtualSensorDataListener to be added to the
 	 *                 dataListeners list.
 	 */
-	public synchronized void addVSensorDataListener(VirtualSensorDataListener listener) {
-		if (!dataListeners.contains(listener)) {
-			dataListeners.add(listener);
+	public void addVSensorDataListener(String key, VirtualSensorDataListener listener) {
+		CopyOnWriteArrayList<VirtualSensorDataListener> listeners = dataListeners.get(key);
+
+		if (listeners == null) {
+			listeners = new CopyOnWriteArrayList<>();
+			dataListeners.put(key, listeners);
+		}
+
+		if (!listeners.contains(listener)) {
+			listeners.add(listener);
 		}
 	}
 
@@ -125,8 +140,15 @@ public class ContainerImpl {
 	 * @param listener The VirtualSensorDataListener to be removed from the
 	 *                 dataListeners list.
 	 */
-	public synchronized void removeVSensorDataListener(VirtualSensorDataListener listener) {
-		dataListeners.remove(listener);
-	}
+	public void removeVSensorDataListener(String key, VirtualSensorDataListener listener) {
+		CopyOnWriteArrayList<VirtualSensorDataListener> listeners = dataListeners.get(key);
 
+		if (listeners != null) {
+			listeners.remove(listener);
+
+			if (listeners.isEmpty()) {
+				dataListeners.remove(key);
+			}
+		}
+	}
 }
