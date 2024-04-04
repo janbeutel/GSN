@@ -64,7 +64,11 @@ public class DataDistributer implements VirtualSensorDataListener, VSensorStateC
 
     private static transient Logger logger = LoggerFactory.getLogger(DataDistributer.class);
 
+    private String name;
+
     private static HashMap<Class<? extends DeliverySystem>, DataDistributer> singletonMap = new HashMap<Class<? extends DeliverySystem>, DataDistributer>();
+
+    private static HashMap<String, DataDistributer> singletonMapZMQ = new HashMap<String, DataDistributer>();
     private Thread thread;
     private HashMap<StorageManager, Connection> connections = new HashMap<StorageManager, Connection>();
 
@@ -133,11 +137,22 @@ public class DataDistributer implements VirtualSensorDataListener, VSensorStateC
      *          instance is to be returned.
      * @return The instance of DataDistributer associated with the given class.
      */
-    public static DataDistributer getInstance(Class<? extends DeliverySystem> c) {
+    public static DataDistributer getInstance(Class<? extends DeliverySystem> c, String name) {
         DataDistributer toReturn = singletonMap.get(c);
         if (toReturn == null) {
             singletonMap.put(c, (toReturn = new DataDistributer()));
         }
+        toReturn.setName(name);
+
+        return toReturn;
+    }
+
+    public static DataDistributer getInstanceZMQ(String c, String name) {
+        DataDistributer toReturn = singletonMapZMQ.get(c);
+        if (toReturn == null) {
+            singletonMapZMQ.put(c, (toReturn = new DataDistributer()));
+        }
+        toReturn.setName(name);
 
         return toReturn;
     }
@@ -306,10 +321,16 @@ public class DataDistributer implements VirtualSensorDataListener, VSensorStateC
         synchronized (listeners) {
             if (listeners.remove(listener)) {
                 try {
+
                     candidatesForNextRound.remove(listener);
                     removeListenerFromCandidates(listener);
                     preparedStatements.get(listener).close();
                     listener.close();
+
+                    if(listeners.isEmpty()){
+                        ContainerImpl.getInstance().removeVSensorDataListener(this.getName(), this);
+                    }
+
                     logger.info(
                             "Removing listener completely from Distributer [Listener: " + listener.toString() + "]");
                 } catch (SQLException e) {
@@ -406,7 +427,7 @@ public class DataDistributer implements VirtualSensorDataListener, VSensorStateC
      */
     public boolean vsLoading(VSensorConfig config) {
         synchronized (listeners) {
-            if (Main.getContainerConfig().isZMQEnabled() && getInstance(ZeroMQDeliverySync.class) == this) {
+            if (Main.getContainerConfig().isZMQEnabled() && getInstance(ZeroMQDeliverySync.class, "sync") == this) {
                 try {
                     DeliverySystem delivery = new ZeroMQDeliveryAsync(config.getName());
                     addListener(DefaultDistributionRequest.create(delivery, config, "select * from " + config.getName(),
@@ -525,6 +546,14 @@ public class DataDistributer implements VirtualSensorDataListener, VSensorStateC
             connections.put(sm, c);
         }
         return c;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public String getName(){
+        return this.name;
     }
 
 }
