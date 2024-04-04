@@ -11,6 +11,7 @@ import org.zeromq.ZContext;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Output;
 
+import ch.epfl.gsn.ContainerImpl;
 import ch.epfl.gsn.DataDistributer;
 import ch.epfl.gsn.Main;
 import ch.epfl.gsn.Mappings;
@@ -86,7 +87,9 @@ public class ZeroMQProxy extends Thread implements Runnable {
 							final DefaultDistributionRequest distributionReq = DefaultDistributionRequest.create(d,
 									Mappings.getVSensorConfig(parts[0]), "select * from " + parts[0], startTime);
 							logger.info("ZMQ request received: " + distributionReq.toString());
-							DataDistributer.getInstance(d.getClass()).addListener(distributionReq);
+							
+							ContainerImpl.getInstance().addVSensorDataListener(parts[0], DataDistributer.getInstanceZMQ(parts[0], parts[0]));
+							DataDistributer.getInstanceZMQ(parts[0], parts[0]).addListener(distributionReq);
 						} catch (Exception e) {
 							logger.warn("ZMQ request parsing error: " + request, e);
 						}
