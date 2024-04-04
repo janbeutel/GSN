@@ -269,7 +269,7 @@ public class LocalDeliveryWrapper extends AbstractWrapper implements DeliverySys
 	 * local distribution.
 	 */
 	public void run() {
-		DataDistributer localDistributer = DataDistributer.getInstance(LocalDeliveryWrapper.class);
+		DataDistributer localDistributer = DataDistributer.getInstance(LocalDeliveryWrapper.class, "local");
 		localDistributer.addListener(this.distributionRequest);
 	}
 

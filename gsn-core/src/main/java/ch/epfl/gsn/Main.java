@@ -188,15 +188,15 @@ public final class Main {
 		Main.vsLoader = vsloader;
 
 		vsloader.addVSensorStateChangeListener(new SQLValidatorIntegration(SQLValidator.getInstance()));
-		vsloader.addVSensorStateChangeListener(DataDistributer.getInstance(LocalDeliveryWrapper.class));
+		vsloader.addVSensorStateChangeListener(DataDistributer.getInstance(LocalDeliveryWrapper.class, "local"));
 		if (containerConfig.isZMQEnabled()) {
-			vsloader.addVSensorStateChangeListener(DataDistributer.getInstance(ZeroMQDeliverySync.class));
-			vsloader.addVSensorStateChangeListener(DataDistributer.getInstance(ZeroMQDeliveryAsync.class));
+			vsloader.addVSensorStateChangeListener(DataDistributer.getInstance(ZeroMQDeliverySync.class, "sync"));
+			vsloader.addVSensorStateChangeListener(DataDistributer.getInstance(ZeroMQDeliveryAsync.class, "async"));
 		}
 
-		ContainerImpl.getInstance().addVSensorDataListener(DataDistributer.getInstance(LocalDeliveryWrapper.class));
-		ContainerImpl.getInstance().addVSensorDataListener(DataDistributer.getInstance(ZeroMQDeliverySync.class));
-		ContainerImpl.getInstance().addVSensorDataListener(DataDistributer.getInstance(ZeroMQDeliveryAsync.class));
+		ContainerImpl.getInstance().addVSensorDataListener("local", DataDistributer.getInstance(LocalDeliveryWrapper.class, "local"));
+		ContainerImpl.getInstance().addVSensorDataListener("sync", DataDistributer.getInstance(ZeroMQDeliverySync.class, "sync"));
+		ContainerImpl.getInstance().addVSensorDataListener("async", DataDistributer.getInstance(ZeroMQDeliveryAsync.class, "async"));
 		vsloader.startLoading();
 
 	}
@@ -553,6 +553,10 @@ public final class Main {
 	 */
 	public static ZeroMQProxy getZmqProxy() {
 		return zmqproxy;
+	}
+
+	public static VSensorLoader getVsLoader() {
+		return vsLoader;
 	}
 
 	/**
