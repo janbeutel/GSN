@@ -123,7 +123,7 @@ object SensorDatabase {
 	  query.append(" where "+conditions.mkString(" and "))
 	query.append(" group by agg_interval")
     if (size.isDefined) 
-	  query.append(" order by timed desc").append(" limit 0," + size.get);	
+	  query.append(" order by timed desc").append(" limit " + size.get);	
 
     try{
 	  vsDB(sensorConf.ds).withSession {implicit session=>
@@ -178,19 +178,19 @@ object SensorDatabase {
           query.append(" desc")
         }
         if (size.isDefined) 
-          query.append(" limit 0," + size.get);	
+          query.append(" limit " + size.get);	
       } else if(size.isDefined){
         if(timeline.isDefined){
           if(order.isDefined){
-            query.append(" order by " +selectedTimeline).append(" "+sortOrder).append(" limit 0," + size.get);
+            query.append(" order by " +selectedTimeline).append(" "+sortOrder).append(" limit " + size.get);
           }else{
-            query.append(" order by " +selectedTimeline+ " desc").append(" limit 0," + size.get);
+            query.append(" order by " +selectedTimeline+ " desc").append(" limit " + size.get);
           }  
         } else{
           if(order.isDefined){
-            query.append(" order by timed ").append(sortOrder).append(" limit 0," + size.get);
+            query.append(" order by timed ").append(sortOrder).append(" limit " + size.get);
           } else {
-            query.append(" order by timed desc").append(" limit 0," + size.get);
+            query.append(" order by timed desc").append(" limit " + size.get);
           }      
         }
       } else if(timeline.isDefined){
@@ -247,7 +247,7 @@ object SensorDatabase {
 	if (conditions != null && conditions.length>0) 
 	  query.append(" where "+conditions.mkString(" and "))
     if (size.isDefined) 
-	  query.append(" order by timed desc").append(" limit 0," + size.get);	
+	  query.append(" order by timed desc").append(" limit " + size.get);	
     try{
 	  vsDB(sensorConf.ds).withSession {implicit session=>
         val stmt=session.conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY)
