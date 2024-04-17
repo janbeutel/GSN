@@ -204,7 +204,7 @@ public class DataDistributer implements VirtualSensorDataListener, VSensorStateC
                     query += " WHERE ";
                 }
 
-                query += " timed > ? and pk > ? order by timed asc LIMIT 1000"; // both have to be parameters to force the optimizer
+                query += " timed > ? and pk > ? order by pk asc LIMIT 1000"; // both have to be parameters to force the optimizer
                                                                    // of Postgres < 9.2 to not scan on timed index
                 PreparedStatement prepareStatement = null;
                 try {
