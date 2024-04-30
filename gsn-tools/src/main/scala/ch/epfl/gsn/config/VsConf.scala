@@ -30,7 +30,7 @@ import play.api.libs.json._
 
 case class VsConf(name:String,accessProtected:Boolean,priority:Int,initPriority:Boolean,timeZone:String,
     description:String,poolSize:Option[Int],address:Map[String,String],storage:Option[StorageConf],
-    storageSize:Option[String], storageDirectory:Option[String], processing:ProcessingConf,streams:Seq[StreamConf]) {
+    storageSize:Option[String], storageDirectory:Option[String],chunkSize:Option[String], processing:ProcessingConf,streams:Seq[StreamConf]) {
   
 }
 
@@ -59,6 +59,7 @@ object VsConf extends Conf{
 		    s.attribute("url").headOption.map(u=>StorageConf.create(s))},		  
 		  (xml \ "storage").headOption.map(s=>s \@ "history-size"),
       (xml \ "storage").headOption.map(s=>s \@ "storage-directory"),
+      (xml \ "storage").headOption.map(s=>s \@ "timescale-chunk-size"),
 		  ProcessingConf.create((xml \ "processing-class").head) ,
 		  (xml \ "streams" \ "stream").map(s=>StreamConf.create(s))		  
   )
