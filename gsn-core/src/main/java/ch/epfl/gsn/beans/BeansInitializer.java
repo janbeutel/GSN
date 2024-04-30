@@ -283,6 +283,10 @@ public class BeansInitializer {
 		if (st.getStorageSize() != null || st.getJdbcURL() != null) {
 			v.setStorage(st);
 		}
+		if(vs.chunkSize().isDefined()){
+			v.setChunkSize(vs.chunkSize().get());
+		}
+		
 		return v;
 	}
 
