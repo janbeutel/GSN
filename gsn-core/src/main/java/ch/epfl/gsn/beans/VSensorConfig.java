@@ -113,6 +113,8 @@ public class VSensorConfig implements Serializable {
 	private transient Double cached_latitude = null;
 	private boolean addressing_processed = false;
 
+	private String chunkSize;
+
 	private boolean isTimestampUnique = false;
 
 	private boolean isGetMainClassInitParamsInitialized = false;
@@ -429,6 +431,14 @@ public class VSensorConfig implements Serializable {
 
 	public long getParsedStorageSize() {
 		return this.parsedStorageSize;
+	}
+
+	public String getChunkSize(){
+		return chunkSize;
+	}
+
+	public void setChunkSize(String chunkSize){
+		this.chunkSize = chunkSize;
 	}
 
 	public String getDirectoryQuery() {

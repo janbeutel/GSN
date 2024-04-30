@@ -27,15 +27,22 @@ package ch.epfl.gsn.storage.db;
 
 import org.slf4j.LoggerFactory;
 
+import ch.epfl.gsn.Main;
+import ch.epfl.gsn.VirtualSensor;
+import ch.epfl.gsn.beans.BeansInitializer;
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.DataTypes;
+import ch.epfl.gsn.beans.StorageConfig;
+import ch.epfl.gsn.beans.VSensorConfig;
 import ch.epfl.gsn.storage.StorageManager;
+import ch.epfl.gsn.config.VsConf;
 
 import org.slf4j.Logger;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.Map;
 
 public class PostgresStorageManager extends StorageManager {
     private static final transient Logger logger = LoggerFactory.getLogger(PostgresStorageManager.class);
@@ -219,12 +226,32 @@ public class PostgresStorageManager extends StorageManager {
             result.append(convertGSNTypeToLocalType(field));
             result.append(" ,");
         }
+        
+        //15724800000 -> 6 months
+        long defaulttimerange= 15724800000L;
+        Map<String, VsConf> configs= Main.getInstance().getVsConf();
+        VsConf vs = null;
+        for (String key : configs.keySet()) {
+            if (key.equalsIgnoreCase(tableName)) {
+                vs = configs.get(key);
+                VSensorConfig vsc= BeansInitializer.vsensor(vs);
+                String timerangeString= vsc.getChunkSize();
+                if(timerangeString == null || timerangeString.isEmpty()){
+                    defaulttimerange= 15724800000L;
+                } else {
+                    defaulttimerange= Long.parseLong(timerangeString);
+                }
+                break;
+            }
+        }
+        
+       
         result.append("PRIMARY KEY (PK,timed)");
         ///result.delete(result.length() - 2, result.length());
         result.append(")");
         result.append("; ");
         result.append("SELECT create_hypertable(");
-        result.append("'"+tableName+"' ,by_range('timed', 7*24*60*60*1000));"); //set 7 days range for hypertable
+        result.append("'"+tableName+"' ,by_range('timed',"+ defaulttimerange+"));"); //set 7 days range for hypertable
         //logger.error("result"+result);
         return result;
     }
