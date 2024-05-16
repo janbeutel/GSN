@@ -455,7 +455,22 @@ def sensorData(sensorid:String) = headings((APIPermissionAction(playAuth,false, 
         Future.successful(BadRequest("Missing virtualSensorName"))
     }
   }
-
+  def timescaleMetadata(sensorid:String) = headings((APIPermissionAction(playAuth,false, sensorid) compose Action).async {implicit request =>
+    Try{
+             
+      val p=Promise[Seq[SensorData]]               
+      val q=actorSystem.actorOf(Props(new QueryActor(p)))      
+      q ! GetTimeScaleMetadata(sensorid)
+      
+      p.future.map{data=>    
+        Ok(JsonSerializer.ser(data.head,Seq(),false))         
+      }.recover{
+        case t=> BadRequest(t.getMessage)        
+      }
+    }.recover{
+      case t=> Future(BadRequest(t.getMessage))
+    }.get
+    })
 
   
   def result(s:Object,out:OutputFormat)={

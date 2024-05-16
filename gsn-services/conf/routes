@@ -61,7 +61,7 @@ GET  /api/sensors/:sensorid/grid                   controllers.gsn.api.GridServi
 GET  /api/sensors/:sensorid/grid/timeseries        controllers.gsn.api.GridService.gridTimeseries(sensorid:String)
 GET  /api/sensors/:sensorid/stream                 controllers.gsn.api.WebSocketForwarder.socket(sensorid:String)
 POST /api/sensors/uploadCSV                        controllers.gsn.api.SensorService.uploadCSV
-
+GET  /api/sensors/timescaleMetadata/:sensorid      controllers.gsn.api.SensorService.timescaleMetadata(sensorid:String)
 
 
 
