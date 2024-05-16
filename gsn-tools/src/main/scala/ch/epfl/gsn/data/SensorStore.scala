@@ -167,6 +167,7 @@ case class AllSensorInfo(sensors:Seq[SensorInfo])
 
 case class GetAllSensors(latestValues:Boolean=false,timeFormat:Option[String]=None)
 case class GetSensor(sensorid:String,latestValues:Boolean=false,timeFormat:Option[String]=None)
+case class GetTimeScaleMetadata(sensorid:String)
 case class GetSensorData(sensorid:String,fields:Seq[String],
 			conditions:Seq[String], size:Option[Int],timeFormat:Option[String],
 			period:Option[String]=None,agg:Option[Aggregation]=None, orderBy:Option[String]=None,order:Option[String]=None ,timeline:Option[String]=None)

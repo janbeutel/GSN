@@ -57,6 +57,18 @@ class QueryActor(p:Promise[Seq[SensorData]]) extends Actor {
           p success Seq(sensorInfoToData(s,false))
         context stop self
       }
+    case GetTimeScaleMetadata(sensorid) => 
+      gsnSensor ! GetSensorInfo(sensorid)
+      sensor.future.map{s=>
+        try{
+          p.success(Seq(getSensorTimescaleMetadata(s)))
+        }                    
+        catch {
+          case e:Exception=>p.failure(e)
+            log.error(e.getMessage)
+        }                   
+        context stop self
+      }
     case g:GetSensorData =>
       log.debug(s"get sensor data from ${g.sensorid}")
       val conds=new ArrayBuffer[String]
@@ -104,6 +116,7 @@ class QueryActor(p:Promise[Seq[SensorData]]) extends Actor {
       else Seq()
     SensorData(latestValues,si.sensor,si.stats.getOrElse(EmptyStats) ) 
   }
+
   
   
 }
