@@ -152,6 +152,49 @@ object SensorDatabase {
 	} 
   }   
 
+  def getSensorTimescaleMetadata(sensorConf: SensorInfo): SensorData = {
+    val sensor = sensorConf.sensor
+    val query = new StringBuilder("SELECT COUNT(*) AS num_chunks, SUM(total_bytes) AS total_size_bytes,MIN(total_bytes) AS min_chunk_size_bytes, MAX(total_bytes) AS max_chunk_size_bytes")
+    query.append(" FROM chunks_detailed_size('").append(sensor.name.toLowerCase).append("');")
+    var data = new ArrayBuffer[Any]
+    var selectedOutput = List[String]("num_chunks","total_size_bytes")
+    val time = new ArrayBuffer[Any]
+    var numChunks = 0
+    var totalSizeBytes = 0L
+    var minChunkSizeBytes = 0L
+    var maxChunkSizeBytes = 0L
+  
+
+    try {
+      vsDB(sensorConf.ds).withSession { implicit session =>
+        val stmt = session.conn.createStatement
+        val rs = stmt.executeQuery(query.toString)
+
+        val resultStringBuilder = new StringBuilder()
+
+        while (rs.next()) {
+          numChunks = rs.getInt("num_chunks")
+          totalSizeBytes = rs.getLong("total_size_bytes")
+          minChunkSizeBytes = rs.getLong("min_chunk_size_bytes")
+          maxChunkSizeBytes = rs.getLong("max_chunk_size_bytes")
+          resultStringBuilder.append(s"num_chunks: $numChunks, total_size_bytes: $totalSizeBytes, min_chunk_size_bytes: $minChunkSizeBytes, max_chunk_size_bytes: $maxChunkSizeBytes\n")
+        }
+        rs.close()
+        stmt.close()
+        //log.error(s"Result: ${resultStringBuilder.toString()}")
+
+        val ts= Seq(Series(Output("num_chunks",sensor.name,DataUnit("count"),IntType),Seq(numChunks)),
+        Series(Output("total_size_bytes",sensor.name,DataUnit("count"),LongType),Seq(totalSizeBytes)),
+        Series(Output("min_chunk_size_bytes",sensor.name,DataUnit("count"),LongType),Seq(minChunkSizeBytes)),
+        Series(Output("max_chunk_size_bytes",sensor.name,DataUnit("count"),LongType),Seq(maxChunkSizeBytes))) 
+        SensorData(ts,sensor)
+      }
+    } catch {
+      case e: Exception =>
+        println(s"Query error ${e.getMessage}")
+        throw e
+    }
+  }
   
   def query(sensorConf:SensorInfo, fields:Seq[String],
 			conditions:Seq[String], size:Option[Int],timeFormat:Option[String],orderBy:Option[String],order:Option[String],timeline:Option[String]):SensorData= {
