@@ -308,15 +308,42 @@
             url: '/ws/api/sensors/' + virtualSensorName,
             success: function(metadata) {
                 $('#showSensorInfoModal').find('.modal-title').text('Information for ' + virtualSensorName);
-                $('#sensorMetadata').text(JSON.stringify(metadata));
+                if (metadata.properties.fields) {
+                    var sensorMetadataTable = '<table class="table"><thead><tr><th>Field Name</th><th>Type</th></tr></thead><tbody>';
+                    metadata.properties.fields.forEach(function(field) {
+                        sensorMetadataTable += '<tr><td>' + field.name + '</td><td>' + field.type + '</td></tr>';
+                    });
+                    sensorMetadataTable += '</tbody></table>';
+                    $('#sensorMetadata').html(sensorMetadataTable);
+                } else {
+                    $('#sensorMetadata').html('<p>No metadata available for this sensor.</p>');
+                }
                 
                 $.ajax({
                     type: 'GET',
                     url: '/ws/api/sensors/timescaleMetadata/' + virtualSensorName,
                     success: function(timescaleData) {
-                        $('#timescaleData').text(JSON.stringify(timescaleData)); 
+                        if(timescaleData.properties){
+                            var numChunks = timescaleData.properties.values[0][0];
+                            var totalSizeBytes = timescaleData.properties.values[0][1];
+                            var minChunkSizeBytes = timescaleData.properties.values[0][2];
+                            var maxChunkSizeBytes = timescaleData.properties.values[0][3];
+
+                            // Create timescale metadata table
+                            var timescaleMetadataTable = '<table class="table"><thead><tr><th>Property</th><th>Value</th></tr></thead><tbody>';
+                            timescaleMetadataTable += '<tr><td>Number of Chunks</td><td>' + numChunks + '</td></tr>';
+                            timescaleMetadataTable += '<tr><td>Total Size Bytes</td><td>' + totalSizeBytes + '</td></tr>';
+                            timescaleMetadataTable += '<tr><td>Min Chunk Size Bytes</td><td>' + minChunkSizeBytes + '</td></tr>';
+                            timescaleMetadataTable += '<tr><td>Max Chunk Size Bytes</td><td>' + maxChunkSizeBytes + '</td></tr>';
+                            timescaleMetadataTable += '</tbody></table>';
+                            $('#timescaleData').html(timescaleMetadataTable);
+                        } else {
+                            $('#timescaleData').html('<p>No timescale metadata available for this sensor.</p>');
+                        }
+
+
                         $('#showSensorInfoModal').modal('show');
-                    },
+                        },
                     error: function(xhr, status, error) {
                         console.error('Error fetching sensor timescale data:', error);
                     }
