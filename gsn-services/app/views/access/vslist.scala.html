@@ -30,6 +30,7 @@
                         <th>@Messages("gsn.access.vs.allowed.write.groups")</th>
                         <th>@Messages("gsn.access.vs.allowed.all")</th>
                         <th>Upload specific sensor data</th>
+                        <th>Show Sensor Information</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -121,6 +122,9 @@
                         </td>
                         <td>
                             <button type="button" class="btn btn-primary" id="addDataToVS" data-id="@v.id" data-name="@v.value">add data</button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" id="showSensorInfo" data-id="@v.id" data-name="@v.value">Info</button>
                         </td>
                     </tr>
                     }
@@ -232,6 +236,23 @@
     </div>
 </div>
 
+<div id="showSensorInfoModal" class="modal fade" role="dialog">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Sensor Information</h4>
+            </div>
+            <div class="modal-body">
+                <h5>Sensor Metadata:</h5>
+                <div id="sensorMetadata"></div> 
+                <h5>Timescale Data:</h5>
+                <div id="timescaleData"></div> 
+            </div>
+        </div>
+    </div>
+</div>
+
+
     <script type="text/javascript">
     function check(item){
         var i = $(item);
@@ -274,9 +295,37 @@
         var vsId = $(this).data('id');
         var virtualSensorName = $(this).data('name');
         $('#uploadDataToVSModal').find('.modal-title').text('Add Data to ' + virtualSensorName);
-        $('#virtualSensorName').val(virtualSensorName); // Set the value of the hidden input field
-        console.log("virtualSensorName in JavaScript: " + virtualSensorName); // Add this line to debug
+        $('#virtualSensorName').val(virtualSensorName); 
         $('#uploadDataToVSModal').modal('show');
+    });
+
+    $('#showSensorInfo').on('click', function () {
+        var vsId = $(this).data('id');
+        var virtualSensorName = $(this).data('name');
+    
+        $.ajax({
+            type: 'GET',
+            url: '/ws/api/sensors/' + virtualSensorName,
+            success: function(metadata) {
+                $('#showSensorInfoModal').find('.modal-title').text('Information for ' + virtualSensorName);
+                $('#sensorMetadata').text(JSON.stringify(metadata));
+                
+                $.ajax({
+                    type: 'GET',
+                    url: '/ws/api/sensors/timescaleMetadata/' + virtualSensorName,
+                    success: function(timescaleData) {
+                        $('#timescaleData').text(JSON.stringify(timescaleData)); 
+                        $('#showSensorInfoModal').modal('show');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching sensor timescale data:', error);
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching sensor metadata:', error);
+            }
+        });
     });
 
     let outputFieldIndex = 0;
