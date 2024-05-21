@@ -291,17 +291,21 @@
         $('#addVirtualSensorModal').modal('show');
     });
 
-    $('#addDataToVS').on('click', function () {
+
+    $('tbody').on('click', '#addDataToVS', function() {
         var vsId = $(this).data('id');
         var virtualSensorName = $(this).data('name');
         $('#uploadDataToVSModal').find('.modal-title').text('Add Data to ' + virtualSensorName);
-        $('#virtualSensorName').val(virtualSensorName); 
+        $('#virtualSensorName').val(virtualSensorName);
         $('#uploadDataToVSModal').modal('show');
     });
 
-    $('#showSensorInfo').on('click', function () {
+    $('tbody').on('click', '#showSensorInfo', function() {
         var vsId = $(this).data('id');
         var virtualSensorName = $(this).data('name');
+
+        console.log("VS ID", vsId)
+        console.log("VIRTUAL SENSOR NAME", virtualSensorName);
     
         $.ajax({
             type: 'GET',
