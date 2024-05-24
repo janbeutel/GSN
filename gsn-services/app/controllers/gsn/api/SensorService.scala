@@ -298,11 +298,8 @@ def sensorData(sensorid:String) = headings((APIPermissionAction(playAuth,false, 
           apiPermissionAction.hasAccess(appUser, false, sensorData.sensor.name)
         })
 
+        Ok(JsonSerializer.ser(accessibleSensorData, Seq(), false))
 
-        accessibleSensorData.headOption match {
-          case Some(head) => Ok(JsonSerializer.ser(head, Seq(), false))
-          case None => NotFound("User does not have access to any sensor")
-        }
       }.recover {
         case t => BadRequest(t.getMessage)
       }
