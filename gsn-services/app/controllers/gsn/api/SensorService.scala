@@ -40,7 +40,9 @@ import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryo.io.{Output => kOutput}
 import play.api.mvc.MultipartFormData
 import play.api.libs.Files.TemporaryFile
+import play.mvc.Http
 import ch.epfl.gsn.beans.DataTypes;
+import play.core.j.JavaHelpers
 
 import play.Logger
 import play.api.mvc._
@@ -274,6 +276,42 @@ def sensorData(sensorid:String) = headings((APIPermissionAction(playAuth,false, 
   }.get
 })
 
+
+  def availableSensors() = headings(Action.async { implicit request =>
+    Try {
+      val p = Promise[Seq[SensorData]]
+      val st = actorSystem.actorSelection("/user/gsnSensorStore")
+      val q = actorSystem.actorOf(Props(new QueryActor(p)))
+
+      implicit val timeout: Timeout = Timeout(5.seconds)
+      q ! GetAllSensors(false, None)
+
+      val defaultMetaPropsScala: Seq[String] = defaultMetaProps.asScala
+
+      p.future.map { data =>
+        val javaContext = JavaHelpers.createJavaContext(request, JavaHelpers.createContextComponents())
+        val user = playAuth.getUser(javaContext)
+        val appUser = User.findByAuthUserIdentity(user)
+        val apiPermissionAction = new APIPermissionAction(playAuth, false, "sensors")(ec)
+
+        val accessibleSensorData = data.filter(sensorData => {
+          apiPermissionAction.hasAccess(appUser, false, sensorData.sensor.name)
+        })
+
+
+        accessibleSensorData.headOption match {
+          case Some(head) => Ok(JsonSerializer.ser(head, Seq(), false))
+          case None => NotFound("User does not have access to any sensor")
+        }
+      }.recover {
+        case t => BadRequest(t.getMessage)
+      }
+    }.recover {
+      case t =>
+        t.printStackTrace
+        Future(BadRequest(t.getMessage))
+    }.get
+  })
    
   def sensorField(sensorid:String,fieldid:String) = 
     Action.async {implicit request=>
