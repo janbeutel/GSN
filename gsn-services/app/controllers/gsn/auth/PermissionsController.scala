@@ -130,12 +130,12 @@ class PermissionsController @Inject()(actorSystem: ActorSystem, userProvider: Us
           dataSourceToDelete.foreach(_.delete())
 
           Ok(views.html.access.vslist(
-            DataSource.find.query().setFirstRow((page - 1) * 10).setMaxRows(10).findList().asScala,
+            DataSource.find.query().setFirstRow((page - 1) * 50).setMaxRows(50).findList().asScala,
             Group.find.query().findList().asScala,
             User.find.query().findList().asScala,
             count,
             page,
-            10,
+            50,
             userProvider
           ))
         }(ec)
