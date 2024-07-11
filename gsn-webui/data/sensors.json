@@ -1,0 +1,1919 @@
+{
+	"network": {
+		"sensornodes": {
+			"sensornode": [
+				{
+					"links": {
+						"link": [
+							{
+								"_node_id": "2116",
+								"_rssi": "97",
+								"_timestamp": "1700773212973"
+							},
+							{
+								"_node_id": "5015",
+								"_rssi": "108",
+								"_timestamp": "1700770549968"
+							}
+						]
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "true",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408896601"
+					},
+					"_node_id": "2084",
+					"_position": "6",
+					"_longitude": "7.669999",
+					"_latitude": "45.980521",
+					"_altitude": "3494.76499508",
+					"_parent_id": "5015",
+					"_timestamp": "1700773213254",
+					"_generation_time": "1700773188254",
+					"_nodetype": "1",
+					"_packet_count": "182887",
+					"_vsys": "3.59",
+					"_vsdi": "0.03",
+					"_current": "0.39",
+					"_temperature": "-7.45",
+					"_humidity": "68.67",
+					"_flash_count": "0",
+					"_uptime": "10550291",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "2084",
+							"_rssi": "60",
+							"_timestamp": "1700773211805"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "true",
+						"_adccomdiff": "true",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408852711"
+					},
+					"_node_id": "2080",
+					"_position": "4",
+					"_longitude": "7.670637",
+					"_latitude": "45.981187",
+					"_altitude": "3494.76480904",
+					"_parent_id": "2084",
+					"_timestamp": "1700773212084",
+					"_generation_time": "1700773171084",
+					"_nodetype": "1",
+					"_packet_count": "272943",
+					"_vsys": "3.60",
+					"_vsdi": "0.01",
+					"_current": "0.56",
+					"_temperature": "-1.69",
+					"_humidity": "70.63",
+					"_flash_count": "0",
+					"_uptime": "5982260",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "5015",
+							"_rssi": "108",
+							"_timestamp": "1700773077430"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "true",
+						"_adccomdiff": "true",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408914527"
+					},
+					"_node_id": "2076",
+					"_position": "1",
+					"_longitude": "7.670342",
+					"_latitude": "45.980766",
+					"_altitude": "3494.7650382",
+					"_parent_id": "5015",
+					"_timestamp": "1700773343176",
+					"_generation_time": "1700773269176",
+					"_nodetype": "1",
+					"_packet_count": "274698",
+					"_vsys": "3.59",
+					"_vsdi": "0.01",
+					"_current": "0.51",
+					"_temperature": "-4.25",
+					"_humidity": "55.15",
+					"_flash_count": "0",
+					"_uptime": "5982396",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "2091",
+							"_rssi": "54",
+							"_timestamp": "1700773046213"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "true",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408862855"
+					},
+					"_node_id": "2070",
+					"_position": "22",
+					"_longitude": "7.670182",
+					"_latitude": "45.981452",
+					"_altitude": "3541.7640822",
+					"_parent_id": "2091",
+					"_timestamp": "1700773333362",
+					"_generation_time": "1700773228362",
+					"_nodetype": "1",
+					"_packet_count": "181929",
+					"_vsys": "3.61",
+					"_vsdi": "0.01",
+					"_current": "0.27",
+					"_temperature": "-4.09",
+					"_humidity": "43.24",
+					"_flash_count": "0",
+					"_uptime": "6003257",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": [
+							{
+								"_node_id": "2059",
+								"_rssi": "108",
+								"_timestamp": "1700772908118"
+							},
+							{
+								"_node_id": "2133",
+								"_rssi": "72",
+								"_timestamp": "1700773027865"
+							},
+							{
+								"_node_id": "2076",
+								"_rssi": "108",
+								"_timestamp": "1700772907862"
+							},
+							{
+								"_node_id": "14",
+								"_rssi": "96",
+								"_timestamp": "1700772418908"
+							},
+							{
+								"_node_id": "2091",
+								"_rssi": "108",
+								"_timestamp": "1700773214387"
+							},
+							{
+								"_node_id": "2084",
+								"_rssi": "108",
+								"_timestamp": "1700771614938"
+							},
+							{
+								"_node_id": "2141",
+								"_rssi": "84",
+								"_timestamp": "1700771361677"
+							},
+							{
+								"_node_id": "2101",
+								"_rssi": "120",
+								"_timestamp": "1700771488899"
+							},
+							{
+								"_node_id": "2023",
+								"_rssi": "84",
+								"_timestamp": "1700771976372"
+							}
+						]
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "false",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408839961"
+					},
+					"_node_id": "5015",
+					"_position": "19",
+					"_longitude": "7.6710989",
+					"_latitude": "45.981168",
+					"_altitude": "3502.76355772",
+					"_parent_id": "14",
+					"_timestamp": "1700773320909",
+					"_generation_time": "1700773320909",
+					"_nodetype": "6",
+					"_packet_count": "168378",
+					"_vsys": "12.08",
+					"_vsdi": "12.08",
+					"_temperature": "-1.84",
+					"_humidity": "56.29",
+					"_flash_count": "0",
+					"_uptime": "308326",
+					"_batterylevel": "100",
+					"_corestation_online": "false",
+					"_iscorestation": "true",
+					"_db_entries": "56"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "2006",
+							"_rssi": "72",
+							"_timestamp": "1700773339923"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "false",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "true",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408893255"
+					},
+					"_node_id": "2067",
+					"_position": "30",
+					"_longitude": "7.669719",
+					"_latitude": "45.980985",
+					"_altitude": "3499.0",
+					"_parent_id": "2006",
+					"_timestamp": "1700773340210",
+					"_generation_time": "1700773225210",
+					"_nodetype": "1",
+					"_packet_count": "136177",
+					"_vsys": "3.59",
+					"_vsdi": "11.48",
+					"_current": "0.23",
+					"_temperature": "-1.49",
+					"_humidity": "64.28",
+					"_flash_count": "0",
+					"_uptime": "8157678",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": [
+							{
+								"_node_id": "5015",
+								"_rssi": "102",
+								"_timestamp": "1700773208383"
+							},
+							{
+								"_node_id": "2141",
+								"_rssi": "84",
+								"_timestamp": "1700769815725"
+							}
+						]
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "false",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408860944"
+					},
+					"_node_id": "3016",
+					"_position": "33",
+					"_longitude": "7.669755",
+					"_latitude": "45.980797",
+					"_altitude": "3507.0",
+					"_parent_id": "5015",
+					"_timestamp": "1700773341438",
+					"_generation_time": "1700773261438",
+					"_nodetype": "2",
+					"_packet_count": "102651",
+					"_vsys": "12.09",
+					"_vsdi": "12.09",
+					"_current": "0.34",
+					"_temperature": "-2.52",
+					"_humidity": "70.32",
+					"_flash_count": "0",
+					"_uptime": "302446",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "3016",
+							"_rssi": "60",
+							"_timestamp": "1700773043615"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "false",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408956660"
+					},
+					"_node_id": "3010",
+					"_position": "35",
+					"_longitude": "7.668998",
+					"_latitude": "45.980067",
+					"_altitude": "3586.0",
+					"_parent_id": "3016",
+					"_timestamp": "1700773331480",
+					"_generation_time": "1700773216480",
+					"_nodetype": "2",
+					"_packet_count": "121499",
+					"_vsys": "13.11",
+					"_vsdi": "13.11",
+					"_current": "0.28",
+					"_temperature": "-4.96",
+					"_humidity": "66.42",
+					"_flash_count": "0",
+					"_uptime": "8159872",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": "",
+					"_node_id": "3009",
+					"_position": "55",
+					"_longitude": "7.744834",
+					"_latitude": "45.941233",
+					"_altitude": "4078.0",
+					"_parent_id": "3009",
+					"_timestamp": "1700649718427",
+					"_generation_time": "1694693076427",
+					"_nodetype": "2",
+					"_packet_count": "14632",
+					"_vsys": "14.73",
+					"_vsdi": "14.73",
+					"_current": "5.92",
+					"_temperature": "6.42",
+					"_humidity": "63.43",
+					"_flash_count": "60865",
+					"_uptime": "11808569",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "5015",
+							"_rssi": "108",
+							"_timestamp": "1700773135246"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "true",
+						"_adccomdiff": "false",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408860677"
+					},
+					"_node_id": "2059",
+					"_position": "27",
+					"_longitude": "7.670104",
+					"_latitude": "45.980307",
+					"_altitude": "3472.0",
+					"_parent_id": "5015",
+					"_timestamp": "1700773334748",
+					"_generation_time": "1700772973748",
+					"_nodetype": "1",
+					"_packet_count": "229165",
+					"_vsys": "3.61",
+					"_vsdi": "0.03",
+					"_current": "0.29",
+					"_temperature": "-5.85",
+					"_humidity": "48.79",
+					"_flash_count": "0",
+					"_uptime": "5977697",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "3016",
+							"_rssi": "54",
+							"_timestamp": "1700773270776"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "true",
+						"_adccomdiff": "true",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408864303"
+					},
+					"_node_id": "2056",
+					"_position": "11",
+					"_longitude": "7.670752",
+					"_latitude": "45.98144",
+					"_altitude": "3494.7642576",
+					"_parent_id": "3016",
+					"_timestamp": "1700773271515",
+					"_generation_time": "1700773190515",
+					"_nodetype": "1",
+					"_packet_count": "274805",
+					"_vsys": "3.61",
+					"_vsdi": "0.03",
+					"_current": "0.32",
+					"_temperature": "-1.57",
+					"_humidity": "41.94",
+					"_flash_count": "0",
+					"_uptime": "5005356",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "2140",
+							"_rssi": "102",
+							"_timestamp": "1700772662434"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "true",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408896302"
+					},
+					"_node_id": "2046",
+					"_position": "8",
+					"_longitude": "7.671225",
+					"_latitude": "45.981323",
+					"_altitude": "3465.76348468",
+					"_parent_id": "2140",
+					"_timestamp": "1700773265877",
+					"_generation_time": "1700773145877",
+					"_nodetype": "1",
+					"_packet_count": "166559",
+					"_vsys": "3.61",
+					"_vsdi": "0.03",
+					"_current": "0.41",
+					"_temperature": "-1.39",
+					"_humidity": "32.66",
+					"_flash_count": "0",
+					"_uptime": "5988249",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": [
+							{
+								"_node_id": "3016",
+								"_rssi": "81",
+								"_timestamp": "1700770397349"
+							},
+							{
+								"_node_id": "5015",
+								"_rssi": "78",
+								"_timestamp": "1700771599207"
+							},
+							{
+								"_node_id": "2076",
+								"_rssi": "72",
+								"_timestamp": "1700772910681"
+							}
+						]
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "true",
+						"_adccomdiff": "true",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408897924"
+					},
+					"_node_id": "2141",
+					"_position": "10",
+					"_longitude": "7.671238",
+					"_latitude": "45.980796",
+					"_altitude": "3450.76387468",
+					"_parent_id": "2076",
+					"_timestamp": "1700773274717",
+					"_generation_time": "1700773221717",
+					"_nodetype": "1",
+					"_packet_count": "275467",
+					"_vsys": "3.60",
+					"_vsdi": "0.01",
+					"_current": "0.49",
+					"_temperature": "-2.21",
+					"_humidity": "56.37",
+					"_flash_count": "0",
+					"_uptime": "1831175",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "2127",
+							"_rssi": "72",
+							"_timestamp": "1700773319989"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "true",
+						"_adccomdiff": "true",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408864935"
+					},
+					"_node_id": "2140",
+					"_position": "7",
+					"_longitude": "7.671116",
+					"_latitude": "45.981272",
+					"_altitude": "3469.76347464",
+					"_parent_id": "2127",
+					"_timestamp": "1700773320733",
+					"_generation_time": "1700773180733",
+					"_nodetype": "1",
+					"_packet_count": "277759",
+					"_vsys": "3.53",
+					"_vsdi": "11.47",
+					"_current": "0.42",
+					"_temperature": "-1.61",
+					"_humidity": "46.33",
+					"_flash_count": "0",
+					"_uptime": "5988013",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "2006",
+							"_rssi": "132",
+							"_timestamp": "1700772975031"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "true",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408890825"
+					},
+					"_node_id": "2134",
+					"_position": "18",
+					"_longitude": "7.670751",
+					"_latitude": "45.981097",
+					"_altitude": "3434.0",
+					"_parent_id": "2006",
+					"_timestamp": "1700773317507",
+					"_generation_time": "1700773203507",
+					"_nodetype": "1",
+					"_packet_count": "182006",
+					"_vsys": "3.61",
+					"_vsdi": "0.03",
+					"_current": "0.39",
+					"_temperature": "-2.33",
+					"_humidity": "50.80",
+					"_flash_count": "0",
+					"_uptime": "5990461",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "5015",
+							"_rssi": "78",
+							"_timestamp": "1700772833426"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "true",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408868242"
+					},
+					"_node_id": "2133",
+					"_position": "9",
+					"_longitude": "7.669048",
+					"_latitude": "45.980137",
+					"_altitude": "3585.76647556",
+					"_parent_id": "5015",
+					"_timestamp": "1700773273013",
+					"_generation_time": "1700773220013",
+					"_nodetype": "1",
+					"_packet_count": "183464",
+					"_vsys": "3.60",
+					"_vsdi": "0.01",
+					"_current": "0.45",
+					"_temperature": "-4.19",
+					"_humidity": "53.35",
+					"_flash_count": "0",
+					"_uptime": "6064400",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "2084",
+							"_rssi": "138",
+							"_timestamp": "1700773316168"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "true",
+						"_adccomdiff": "true",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408860138"
+					},
+					"_node_id": "2132",
+					"_position": "5",
+					"_longitude": "7.67001",
+					"_latitude": "45.980608",
+					"_altitude": "3494.76503032",
+					"_parent_id": "2084",
+					"_timestamp": "1700773316441",
+					"_generation_time": "1700773215441",
+					"_nodetype": "1",
+					"_packet_count": "275324",
+					"_vsys": "3.46",
+					"_vsdi": "11.52",
+					"_current": "0.42",
+					"_temperature": "-8.05",
+					"_humidity": "60.55",
+					"_flash_count": "0",
+					"_uptime": "8293226",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": [
+							{
+								"_node_id": "2134",
+								"_rssi": "96",
+								"_timestamp": "1700773040218"
+							},
+							{
+								"_node_id": "2140",
+								"_rssi": "66",
+								"_timestamp": "1700773318303"
+							}
+						]
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "true",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408854737"
+					},
+					"_node_id": "2127",
+					"_position": "16",
+					"_longitude": "7.670366",
+					"_latitude": "45.980929",
+					"_altitude": "3542.0",
+					"_parent_id": "2134",
+					"_timestamp": "1700773318573",
+					"_generation_time": "1700773199573",
+					"_nodetype": "1",
+					"_packet_count": "183509",
+					"_vsys": "3.62",
+					"_vsdi": "0.01",
+					"_current": "0.23",
+					"_temperature": "-1.97",
+					"_humidity": "46.46",
+					"_flash_count": "0",
+					"_uptime": "4099863",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "2113",
+							"_rssi": "56",
+							"_timestamp": "1700772966964"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "true",
+						"_adccomdiff": "false",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408898168"
+					},
+					"_node_id": "2125",
+					"_position": "47",
+					"_longitude": "7.663309",
+					"_latitude": "45.978705",
+					"_altitude": "3980.0",
+					"_parent_id": "2113",
+					"_timestamp": "1700773314828",
+					"_generation_time": "1700773181828",
+					"_nodetype": "1",
+					"_packet_count": "233006",
+					"_vsys": "3.61",
+					"_vsdi": "0.01",
+					"_current": "0.29",
+					"_temperature": "-6.75",
+					"_humidity": "37.58",
+					"_flash_count": "0",
+					"_uptime": "6011093",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "2076",
+							"_rssi": "90",
+							"_timestamp": "1700773137254"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "true",
+						"_adccomdiff": "true",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408852435"
+					},
+					"_node_id": "2124",
+					"_position": "3",
+					"_longitude": "7.67037",
+					"_latitude": "45.981065",
+					"_altitude": "3494.7651516",
+					"_parent_id": "2076",
+					"_timestamp": "1700773343467",
+					"_generation_time": "1700773263467",
+					"_nodetype": "1",
+					"_packet_count": "274623",
+					"_vsys": "3.60",
+					"_vsdi": "11.57",
+					"_current": "0.52",
+					"_temperature": "-1.71",
+					"_humidity": "57.18",
+					"_flash_count": "0",
+					"_uptime": "5981199",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": "",
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_timestamp": "1695409876271"
+					},
+					"_node_id": "30",
+					"_position": "40",
+					"_longitude": "7.669663",
+					"_latitude": "45.980775",
+					"_altitude": "3508.0",
+					"_parent_id": "30",
+					"_timestamp": "1700749053797",
+					"_generation_time": "1700749053797",
+					"_nodetype": "5",
+					"_packet_count": "175600",
+					"_vsys": "12.28",
+					"_vsdi": "12.28",
+					"_temperature": "0.97",
+					"_humidity": "50.61",
+					"_flash_count": "0",
+					"_uptime": "100666",
+					"_batterylevel": "100",
+					"_corestation_online": "false",
+					"_iscorestation": "true",
+					"_db_entries": "1"
+				},
+				{
+					"links": {
+						"link": [
+							{
+								"_node_id": "2059",
+								"_rssi": "66",
+								"_timestamp": "1700769758132"
+							},
+							{
+								"_node_id": "5015",
+								"_rssi": "84",
+								"_timestamp": "1700772899926"
+							}
+						]
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "false",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408862568"
+					},
+					"_node_id": "2023",
+					"_position": "28",
+					"_longitude": "7.669692",
+					"_latitude": "45.980634",
+					"_altitude": "3502.7634144",
+					"_parent_id": "5015",
+					"_timestamp": "1700773339362",
+					"_generation_time": "1700772974362",
+					"_nodetype": "1",
+					"_packet_count": "134759",
+					"_vsys": "3.61",
+					"_vsdi": "12.12",
+					"_current": "1.47",
+					"_temperature": "-2.59",
+					"_humidity": "29.05",
+					"_flash_count": "0",
+					"_uptime": "6070520",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "2113",
+							"_rssi": "72",
+							"_timestamp": "1700773138103"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "false",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_powerswitch": "true",
+						"_powerswitch_p1": "true",
+						"_powerswitch_p2": "true",
+						"_vaisala_wxt520": "true",
+						"_timestamp": "1700773258365"
+					},
+					"_node_id": "2116",
+					"_position": "25",
+					"_longitude": "7.67096",
+					"_latitude": "45.981257",
+					"_altitude": "3502.76345712",
+					"_parent_id": "2084",
+					"_timestamp": "1700773259085",
+					"_generation_time": "1700773183085",
+					"_nodetype": "1",
+					"_packet_count": "321522",
+					"_vsys": "3.60",
+					"_vsdi": "12.03",
+					"_current": "0.28",
+					"_temperature": "-2.37",
+					"_humidity": "48.38",
+					"_flash_count": "0",
+					"_uptime": "7641585",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": "",
+					"_node_id": "25",
+					"_position": "56",
+					"_longitude": "7.729871",
+					"_latitude": "45.938084",
+					"_altitude": "3883.0",
+					"_parent_id": "25",
+					"_timestamp": "1700773290902",
+					"_generation_time": "1700773290902",
+					"_nodetype": "5",
+					"_packet_count": "163456",
+					"_vsys": "13.23",
+					"_vsdi": "13.23",
+					"_temperature": "-1.59",
+					"_humidity": "43.53",
+					"_flash_count": "0",
+					"_uptime": "99610",
+					"_batterylevel": "100",
+					"_corestation_online": "true",
+					"_iscorestation": "true",
+					"_db_entries": "14"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "2012",
+							"_rssi": "108",
+							"_timestamp": "1700773079037"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "false",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695409036177"
+					},
+					"_node_id": "2020",
+					"_position": "49",
+					"_longitude": "7.663209",
+					"_latitude": "45.978675",
+					"_altitude": "4005.0",
+					"_parent_id": "2012",
+					"_timestamp": "1700773204644",
+					"_generation_time": "1700773103644",
+					"_nodetype": "1",
+					"_packet_count": "124477",
+					"_vsys": "3.60",
+					"_vsdi": "12.47",
+					"_current": "2.26",
+					"_temperature": "-2.47",
+					"_humidity": "56.16",
+					"_flash_count": "0",
+					"_uptime": "6944234",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "3016",
+							"_rssi": "72",
+							"_timestamp": "1700773267325"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "false",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408822479"
+					},
+					"_node_id": "2019",
+					"_position": "32",
+					"_longitude": "7.669732",
+					"_latitude": "45.980766",
+					"_altitude": "3506.0",
+					"_parent_id": "3016",
+					"_timestamp": "1700773268050",
+					"_generation_time": "1700773202050",
+					"_nodetype": "1",
+					"_packet_count": "129472",
+					"_vsys": "3.61",
+					"_vsdi": "12.21",
+					"_current": "1.73",
+					"_temperature": "-2.93",
+					"_humidity": "46.22",
+					"_flash_count": "0",
+					"_uptime": "4033090",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": [
+							{
+								"_node_id": "2116",
+								"_rssi": "72",
+								"_timestamp": "1700772022947"
+							},
+							{
+								"_node_id": "2125",
+								"_rssi": "60",
+								"_timestamp": "1700773078235"
+							},
+							{
+								"_node_id": "2096",
+								"_rssi": "66",
+								"_timestamp": "1700772232951"
+							}
+						]
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "false",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408920175"
+					},
+					"_node_id": "2113",
+					"_position": "17",
+					"_longitude": "7.67705",
+					"_latitude": "45.98206",
+					"_altitude": "3260.0",
+					"_parent_id": "2116",
+					"_timestamp": "1700773337945",
+					"_generation_time": "1700773206945",
+					"_nodetype": "1",
+					"_packet_count": "141103",
+					"_vsys": "3.66",
+					"_vsdi": "0.01",
+					"_current": "0.17",
+					"_temperature": "-2.05",
+					"_humidity": "51.30",
+					"_flash_count": "0",
+					"_uptime": "8499027",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "14",
+							"_rssi": "132",
+							"_timestamp": "1700773215289"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "false",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408834810"
+					},
+					"_node_id": "2015",
+					"_position": "31",
+					"_longitude": "7.670938",
+					"_latitude": "45.981127",
+					"_altitude": "3502.76366344",
+					"_parent_id": "14",
+					"_timestamp": "1700773344293",
+					"_generation_time": "1700773311293",
+					"_nodetype": "1",
+					"_packet_count": "137071",
+					"_vsys": "3.61",
+					"_vsdi": "12.03",
+					"_current": "1.52",
+					"_temperature": "1.29",
+					"_humidity": "32.29",
+					"_flash_count": "0",
+					"_uptime": "5321358",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": [
+							{
+								"_node_id": "2095",
+								"_rssi": "114",
+								"_timestamp": "1700770282986"
+							},
+							{
+								"_node_id": "2020",
+								"_rssi": "114",
+								"_timestamp": "1700771906733"
+							},
+							{
+								"_node_id": "2096",
+								"_rssi": "102",
+								"_timestamp": "1700773022785"
+							}
+						]
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "false",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408977698"
+					},
+					"_node_id": "2012",
+					"_position": "50",
+					"_longitude": "7.663209",
+					"_latitude": "45.978675",
+					"_altitude": "4005.0",
+					"_parent_id": "2096",
+					"_timestamp": "1700773337072",
+					"_generation_time": "1700773153072",
+					"_nodetype": "1",
+					"_packet_count": "124642",
+					"_vsys": "3.60",
+					"_vsdi": "12.53",
+					"_current": "1.80",
+					"_temperature": "-6.09",
+					"_humidity": "33.29",
+					"_flash_count": "0",
+					"_uptime": "6947066",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "2101",
+							"_rssi": "138",
+							"_timestamp": "1700773041358"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "false",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_powerswitch": "true",
+						"_powerswitch_p1": "false",
+						"_powerswitch_p2": "true",
+						"_vaisala_wxt520": "false",
+						"_timestamp": "1700773328343"
+					},
+					"_node_id": "6001",
+					"_position": "26",
+					"_longitude": "7.670911",
+					"_latitude": "45.981193",
+					"_altitude": "3502.7634144",
+					"_parent_id": "2101",
+					"_timestamp": "1700773328178",
+					"_generation_time": "1700773212178",
+					"_nodetype": "3",
+					"_packet_count": "167279",
+					"_vsys": "2.74",
+					"_vsdi": "11.80",
+					"_current": "9.85",
+					"_temperature": "-0.43",
+					"_humidity": "52.35",
+					"_flash_count": "0",
+					"_uptime": "308330",
+					"_batterylevel": "0",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "5015",
+							"_rssi": "102",
+							"_timestamp": "1700773345640"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_timestamp": "1695410943677"
+					},
+					"_node_id": "14",
+					"_position": "0",
+					"_longitude": "7.671042",
+					"_latitude": "45.981137",
+					"_altitude": "3502.7637288",
+					"_parent_id": "14",
+					"_timestamp": "1700773350197",
+					"_generation_time": "1700773350197",
+					"_nodetype": "4",
+					"_packet_count": "205132",
+					"_vsys": "11.92",
+					"_vsdi": "11.92",
+					"_temperature": "10.19",
+					"_humidity": "28.61",
+					"_flash_count": "0",
+					"_uptime": "308467",
+					"_batterylevel": "75",
+					"_corestation_online": "true",
+					"_iscorestation": "true",
+					"_db_entries": "2"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "2006",
+							"_rssi": "81",
+							"_timestamp": "1700773153360"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "false",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408860403"
+					},
+					"_node_id": "2007",
+					"_position": "37",
+					"_longitude": "7.670089",
+					"_latitude": "45.980284",
+					"_altitude": "3494.0",
+					"_parent_id": "2006",
+					"_timestamp": "1700773264327",
+					"_generation_time": "1700773174327",
+					"_nodetype": "1",
+					"_packet_count": "136541",
+					"_vsys": "3.61",
+					"_vsdi": "12.09",
+					"_current": "1.88",
+					"_temperature": "-4.64",
+					"_humidity": "55.15",
+					"_flash_count": "0",
+					"_uptime": "5977455",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": [
+							{
+								"_node_id": "2007",
+								"_rssi": "84",
+								"_timestamp": "1700773152507"
+							},
+							{
+								"_node_id": "2096",
+								"_rssi": "54",
+								"_timestamp": "1700769974707"
+							}
+						]
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "false",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408915069"
+					},
+					"_node_id": "2006",
+					"_position": "14",
+					"_longitude": "7.670936",
+					"_latitude": "45.981125",
+					"_altitude": "3502.76366344",
+					"_parent_id": "2101",
+					"_timestamp": "1700773262843",
+					"_generation_time": "1700773172843",
+					"_nodetype": "1",
+					"_packet_count": "139084",
+					"_vsys": "3.57",
+					"_vsdi": "12.15",
+					"_current": "1.86",
+					"_temperature": "-2.79",
+					"_humidity": "60.99",
+					"_flash_count": "0",
+					"_uptime": "8512275",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": [
+							{
+								"_node_id": "2006",
+								"_rssi": "138",
+								"_timestamp": "1700773042774"
+							},
+							{
+								"_node_id": "5015",
+								"_rssi": "114",
+								"_timestamp": "1700772677486"
+							}
+						]
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "true",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408892978"
+					},
+					"_node_id": "2101",
+					"_position": "15",
+					"_longitude": "7.6709857233029",
+					"_latitude": "45.98112593438",
+					"_altitude": "3505.7637038",
+					"_parent_id": "5015",
+					"_timestamp": "1700773330659",
+					"_generation_time": "1700773245659",
+					"_nodetype": "1",
+					"_packet_count": "181733",
+					"_vsys": "3.62",
+					"_vsdi": "0.01",
+					"_current": "0.25",
+					"_temperature": "-2.71",
+					"_humidity": "33.09",
+					"_flash_count": "0",
+					"_uptime": "5146710",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": [
+							{
+								"_node_id": "5015",
+								"_rssi": "60",
+								"_timestamp": "1700770212128"
+							},
+							{
+								"_node_id": "2095",
+								"_rssi": "130",
+								"_timestamp": "1700770301540"
+							},
+							{
+								"_node_id": "2012",
+								"_rssi": "96",
+								"_timestamp": "1700770606882"
+							},
+							{
+								"_node_id": "2006",
+								"_rssi": "54",
+								"_timestamp": "1700770295185"
+							},
+							{
+								"_node_id": "2113",
+								"_rssi": "66",
+								"_timestamp": "1700773339095"
+							}
+						]
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "true",
+						"_adccomdiff": "false",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408945307"
+					},
+					"_node_id": "2096",
+					"_position": "46",
+					"_longitude": "7.663149",
+					"_latitude": "45.978669",
+					"_altitude": "4006.0",
+					"_parent_id": "2113",
+					"_timestamp": "1700773339095",
+					"_generation_time": "1700773193095",
+					"_nodetype": "1",
+					"_packet_count": "242247",
+					"_vsys": "3.61",
+					"_vsdi": "0.01",
+					"_current": "0.19",
+					"_temperature": "-6.43",
+					"_humidity": "60.72",
+					"_flash_count": "0",
+					"_uptime": "8284685",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": [
+							{
+								"_node_id": "2020",
+								"_rssi": "84",
+								"_timestamp": "1700770296015"
+							},
+							{
+								"_node_id": "2096",
+								"_rssi": "132",
+								"_timestamp": "1700773275637"
+							}
+						]
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "false",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_powerswitch": "true",
+						"_powerswitch_p1": "true",
+						"_powerswitch_p2": "true",
+						"_vaisala_wxt520": "true",
+						"_timestamp": "1700773276317"
+					},
+					"_node_id": "2095",
+					"_position": "51",
+					"_longitude": "7.663209",
+					"_latitude": "45.978675",
+					"_altitude": "4005.0",
+					"_parent_id": "2096",
+					"_timestamp": "1700773277101",
+					"_generation_time": "1700773125101",
+					"_nodetype": "1",
+					"_packet_count": "313556",
+					"_vsys": "3.58",
+					"_vsdi": "12.44",
+					"_current": "0.24",
+					"_temperature": "-6.92",
+					"_humidity": "53.03",
+					"_flash_count": "0",
+					"_uptime": "10742230",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": [
+							{
+								"_node_id": "5015",
+								"_rssi": "114",
+								"_timestamp": "1700773089427"
+							},
+							{
+								"_node_id": "2070",
+								"_rssi": "60",
+								"_timestamp": "1700772028016"
+							}
+						]
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "true",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408914799"
+					},
+					"_node_id": "2091",
+					"_position": "20",
+					"_longitude": "7.670438",
+					"_latitude": "45.980418",
+					"_altitude": "3494.7650376",
+					"_parent_id": "5015",
+					"_timestamp": "1700773342899",
+					"_generation_time": "1700773260899",
+					"_nodetype": "1",
+					"_packet_count": "182800",
+					"_vsys": "3.60",
+					"_vsdi": "0.03",
+					"_current": "0.27",
+					"_temperature": "-6.21",
+					"_humidity": "74.67",
+					"_flash_count": "0",
+					"_uptime": "3962218",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": {
+						"link": {
+							"_node_id": "2059",
+							"_rssi": "78",
+							"_timestamp": "1700773075802"
+						}
+					},
+					"configuration": {
+						"_info": "true",
+						"_health": "true",
+						"_adcmux": "false",
+						"_adccomdiff": "true",
+						"_dcx": "false",
+						"_drift": "false",
+						"_events": "true",
+						"_rssi": "true",
+						"_statecounter": "true",
+						"_decagonmux": "false",
+						"_powerswitch": "false",
+						"_vaisala_wxt520": "false",
+						"_th3": "false",
+						"_enviroscan": "false",
+						"_modbus": "false",
+						"_timestamp": "1695408891080"
+					},
+					"_node_id": "2090",
+					"_position": "2",
+					"_longitude": "7.670103",
+					"_latitude": "45.980461",
+					"_altitude": "3494.7651386",
+					"_parent_id": "2059",
+					"_timestamp": "1700773334476",
+					"_generation_time": "1700773249476",
+					"_nodetype": "1",
+					"_packet_count": "182282",
+					"_vsys": "3.56",
+					"_vsdi": "11.63",
+					"_current": "0.35",
+					"_temperature": "-5.77",
+					"_humidity": "61.93",
+					"_flash_count": "0",
+					"_uptime": "5977455",
+					"_batterylevel": "100",
+					"_iscorestation": "false"
+				},
+				{
+					"links": "",
+					"_node_id": "2083",
+					"_position": "12",
+					"_nodetype": "1",
+					"_packet_count": "0",
+					"_iscorestation": "false"
+				},
+				{
+					"links": "",
+					"_node_id": "2140",
+					"_position": "13",
+					"_nodetype": "1",
+					"_packet_count": "0",
+					"_iscorestation": "false"
+				},
+				{
+					"links": "",
+					"_node_id": "2089",
+					"_position": "21",
+					"_nodetype": "1",
+					"_packet_count": "0",
+					"_iscorestation": "false"
+				},
+				{
+					"links": "",
+					"_node_id": "6005",
+					"_position": "23",
+					"_nodetype": "3",
+					"_packet_count": "0",
+					"_iscorestation": "false"
+				},
+				{
+					"links": "",
+					"_node_id": "2048",
+					"_position": "24",
+					"_nodetype": "1",
+					"_packet_count": "0",
+					"_iscorestation": "false"
+				},
+				{
+					"links": "",
+					"_node_id": "2098",
+					"_position": "29",
+					"_nodetype": "9",
+					"_packet_count": "0",
+					"_iscorestation": "false"
+				},
+				{
+					"links": "",
+					"_node_id": "3015",
+					"_position": "34",
+					"_nodetype": "2",
+					"_packet_count": "0",
+					"_iscorestation": "false"
+				},
+				{
+					"links": "",
+					"_node_id": "2020",
+					"_position": "39",
+					"_nodetype": "1",
+					"_packet_count": "0",
+					"_iscorestation": "false"
+				},
+				{
+					"links": "",
+					"_node_id": "2063",
+					"_position": "53",
+					"_nodetype": "1",
+					"_packet_count": "0",
+					"_iscorestation": "false"
+				},
+				{
+					"links": "",
+					"_node_id": "2083",
+					"_position": "57",
+					"_nodetype": "1",
+					"_packet_count": "0",
+					"_iscorestation": "false"
+				}
+			]
+		},
+		"_mapped": "true"
+	}
+}
