@@ -10,63 +10,35 @@ export default function SensorDetails({
   return (
     <>
       <div className="flex gap-10 pt-4">
-        <div className="flex items-center">
-          <Icons.position className="h-6 w-6 text-slate-500 mr-2" />
-          <div>
-            <div className="text-sm text-gray-500">Sensor Position</div>
-            <div className="text-lg">{selectedSensor.position}</div>
-          </div>
-        </div>
-
-        <div className="flex items-center">
+        <div className="flex items-center flex-1">
           <Icons.sensorId className="h-6 w-6 text-slate-500 mr-2" />
           <div>
             <div className="text-sm text-gray-500">Current Sensor Id</div>
-            <div className="text-lg">{selectedSensor.id}</div>
+            <div className="text-sm">{selectedSensor.name}</div>
           </div>
         </div>
-      </div>
-      <div className="flex gap-8 pt-6 justify-between">
-        <div className="flex items-center">
-          <Icons.temperature className="h-6 w-6 text-red-500 mr-2" />
+        <div className="flex items-center flex-1">
+          <Icons.position className="h-6 w-6 text-slate-500 mr-2" />
           <div>
-            <div className="text-sm text-gray-500">Temperature</div>
-            <div className="text-lg">{selectedSensor.temperature} °C</div>
+            <div className="text-sm text-gray-500">Sensor Latitude</div>
+            <div className="text-sm">{selectedSensor.latitude}</div>
           </div>
         </div>
-
-        <div className="flex items-center">
-          <Icons.humidity className="h-6 w-6 text-sky-500 mr-2" />
+        <div className="flex items-center flex-1">
+          <Icons.position className="h-6 w-6 text-slate-500 mr-2" />
           <div>
-            <div className="text-sm text-gray-500">Humidity</div>
-            <div className="text-lg">{selectedSensor.humidity} %</div>
+            <div className="text-sm text-gray-500">Sensor Longitude</div>
+            <div className="text-sm">{selectedSensor.longitude}</div>
           </div>
         </div>
-
-        <div className="flex items-center">
-          <Icons.battery className="h-6 w-6 text-lime-500 mr-2" />
-          <div>
-            <div className="text-sm text-gray-500">Battery Voltage</div>
-            <div className="text-lg">{selectedSensor.voltage} V</div>
-          </div>
-        </div>
-
-        <div className="flex items-center">
+        <div className="flex items-center flex-1">
           <Icons.lastUpdate className="h-6 w-6 text-slate-500 mr-2" />
           <div>
             <div className="text-sm text-gray-500">Last Update</div>
-            <div className="text-lg">
+            <div className="text-sm">
               {selectedSensor.lastUpdate?.toLocaleDateString().substring(0, 5)}{" "}
               {selectedSensor.lastUpdate?.toLocaleTimeString()}
             </div>
-          </div>
-        </div>
-
-        <div className="flex items-center">
-          <Icons.uptime className="h-6 w-6 text-slate-500 mr-2" />
-          <div>
-            <div className="text-sm text-gray-500">Uptime</div>
-            <div className="text-lg">{selectedSensor.uptime} s</div>
           </div>
         </div>
       </div>
