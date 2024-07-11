@@ -17,31 +17,25 @@ import {
 
 const dashboards: { title: string; href: string; description: string }[] = [
   {
-    title: "Displacement",
-    href: "/displacement",
-    description:
-      "Displays the current crack displacment.",
-  },
-  {
-    title: "Temperatures",
-    href: "/temperature-rock",
+    title: "Temperature",
+    href: "/sensors",
     description:
       "Displays the current temperature of the sensors in a graph and a table.",
   },
   {
-    title: "Uptime",
-    href: "/uptime",
-    description: "Sensor status information",
+    title: "Crack Data",
+    href: "/gauge",
+    description: "Displays the current crack data of the sensors.",
   },
   {
     title: "Images",
-    href: "images",
+    href: "",
     description: "Displays the current images of several Webcams.",
   },
   {
     title: "Weather",
-    href: "/weather-gauge",
-    description: "Displays the current weather data on-site.",
+    href: "",
+    description: "Displays the current weather data of the location.",
   },
 ];
 
@@ -73,7 +67,7 @@ export function NavBar() {
               <ListItem href="" title="Introduction">
                 Learn more about the project and the objectives.
               </ListItem>
-              <ListItem href="/sensor-dashboard" title="Sensors">
+              <ListItem href="/dashboard" title="Sensors">
                 View the current sensor data and locations.
               </ListItem>
               <ListItem href="" title="More Information">
@@ -98,45 +92,12 @@ export function NavBar() {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-        {/* <NavigationMenuItem>
-          <Link href="https://essd.copernicus.org/articles/11/1203/2019/" legacyBehavior passHref>
+        <NavigationMenuItem>
+          <Link href="" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
               Documentation
             </NavigationMenuLink>
           </Link>
-        </NavigationMenuItem> */}
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Documentation</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-              <li className="row-span-3">
-                <NavigationMenuLink asChild>
-                  <a
-                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-sky-100/50 to-sky-200 p-6 no-underline outline-none focus:shadow-md"
-                    href="https://essd.copernicus.org/articles/11/1203/2019/"
-                  >
-                    <Icons.article className="h-6 w-6" />
-                    <div className="mb-2 mt-4 text-lg font-medium">
-                      PermaSense
-                    </div>
-                    <p className="text-sm leading-tight text-muted-foreground">
-                      A decade of detailed observations (2008–2018) in steep
-                      bedrock permafrost at the Matterhorn
-                    </p>
-                  </a>
-                </NavigationMenuLink>
-              </li>
-              <ListItem href="" title="Introduction">
-                Learn more about the project and the objectives.
-              </ListItem>
-              <ListItem href="" title="Wiki">
-                In depth technical documentation.
-              </ListItem>
-              <ListItem href="https://git.uibk.ac.at/informatik/neslab/public/permasense/permasense_datamgr" title="PermaSense Data Manager">
-                Tools for quering and post-processing PermaSense Data.
-              </ListItem>
-            </ul>
-          </NavigationMenuContent>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
