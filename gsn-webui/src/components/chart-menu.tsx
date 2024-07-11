@@ -78,7 +78,7 @@ export default function ChartMenu({
           className="justify-between"
           onSelect={(e) => {
             if (isDynamic) e.preventDefault();
-            isDynamic ? setResolution("1d") : setResolution("dynamic");
+            isDynamic ? setResolution("") : setResolution("dynamic");
           }}
         >
           Dynamic Resolution

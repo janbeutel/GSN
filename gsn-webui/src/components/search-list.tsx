@@ -34,7 +34,7 @@ export function SearchList({
       <CommandInput className="py-2" placeholder="Search..." />
       <CommandList className="max-h-[calc(100vh-105px)]">
         <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup heading="Positions">
+        <CommandGroup>
           {sensors.map((sensor, i) => (
             <CommandItem
               key={i}
