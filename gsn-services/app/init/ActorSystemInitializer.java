@@ -1,3 +1,9 @@
+/** 
+* @author Davide De Sclavis
+* @author Manuel Buchauer
+* @author Jan Beutel
+*/
+
 package init;
 
 import akka.actor.ActorSystem;
