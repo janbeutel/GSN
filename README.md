@@ -1,32 +1,43 @@
-# GSN Global Sensor Networks [![Build Status](https://travis-ci.org/LSIR/gsn.svg)](https://travis-ci.org/LSIR/gsn)
+# README
 
-GSN is a software middleware designed to facilitate the deployment and programming of sensor networks.
+## Old Documentation
 
-## Online Documentation
+You can find the old GSN documentation of the project at [wiki](https://github.com/LSIR/gsn/wiki).
 
-You can find the latest GSN documentation, including a deployment, installation, and programming
-guide, on the project [wiki](https://github.com/LSIR/gsn/wiki).
-This README file only contains basic setup instructions depending on your goal:
+### Quick demo with Vagrant
 
-### Running and deploying GSN
+On any computer that can run [VirtualBox](https://www.virtualbox.org/) (or any other supported virtual machine provider), install [Vagrant](https://www.vagrantup.com/). To use the `Vagrantfile` provided, go into the folder with the `Vagrantfile` and type `vagrant up` in your terminal. To connect to the virtual box instance, use `vagrant ssh`. When connected the GIT Repository can be cloned onto the VM. If you want to use Visual Studio Code to connect to the running VM use `vagrant ssh-config` and copy the information to ssh config by pressing `F1` or `STRG + Shift + P` in VSCode and choose `Remote-SSH: Open SSH- Configuration file` (Remote-SSH Plugin must be installed in VSCode). 
 
-#### Quick demo with Vagrant
+### Compiling and Running
 
-On any computer that can run [VirtualBox](https://www.virtualbox.org/) (or any other supported virtual machine provider), install [Vagrant](https://www.vagrantup.com/), get the GSN git repository or just the file `Vagrantfile` and type `vagrant up` in your terminal (being in the same folder).
-Once the provisioning is done, open your browser at http://localhost:8000/ to see the GSN UI. You can login with the username root@localhost and password changeme.
+Prerequisites to compile GSN:
 
-#### Debian package
+* gsn-core and gsn-extra
+  * sbt 0.13.18+
+  * Java JDK 11
+* gsn-tools and gsn-services
+  * sbt 0.13.18+
+  * Java JDK 11
+  * Scala 2.12
+* gsn-webui
+  * Node.js
 
-To make it even easier to test on Linux or deploy at large scale, we provide debian packages (see releases). It includes a systemd script to start the GSN server modules automatically at boot and manage it like any other service. Configuration files are in `/etc/gsn-core/`, `/etc/gsn-services/` and `/etc/gsn-webui/`, the virtual sensors in `/etc/gsn-core/virtual-sensors/` and the logs can be found at `/var/log/gsn-core/`, `/var/log/gsn-services/` and `/var/log/gsn-webui/`. Starting and stopping GSN is performed with `service gsn-core start/stop`, `service gsn-services start/stop` and `service gsn-webui start/stop`. By default, the GSN web interface is then accessible at <http://localhost> and the API at <http://localhost:9000>, but you can change the ports in the configuration files.
+If all prequisites are installed either on your local machine or on the VM using vagrant, change to the repository folder and type `sbt`. This should install all required dependencies. In order to compile gsn-core and gsn-services, switch to the corresponding workspace using the command `project core` or `project services` while using sbt. Then `compile` can be used. Compilation for gsn-core and gsn-services can also done by just using `sbt` in the main directory of the repository and the command `compile`. However to run the individual projects the workspace has to be switched using `project core` or `project services`. To run gsn-core use `restart` in gsn-core workspace. To run gsn-services use `run` in gsn-services workspace. Since some functionality of gsn-services depend on a running gsn-core, gsn-core should be started first and then gsn-services can be started in a separate terminal. Gsn-services should then be available at `http://localhost:9000/ws` and the following credentials can be used:
+ * username: root@localhost
+ * password: changeme
 
-#### Universal package
+Important commands:
+* clean: remove generated files
+* compile: compiles the modules
+* package: build jar packages
+* project \[core|tools|services]: select a specific projet
 
-We provide a universal package for each release of the code. This package is the best way to easily try GSN features on non-Linux platforms.
+### Deployment
 
-The installer binaries for the latest release can be found at:
-<https://github.com/LSIR/gsn/releases>
-
-Once GSN is installed, you can start it, executing the batch file `gsn-start.bat` (Windows) or shell script `gsn-start.sh` (Linux).
+For an easy deployment, debian packages can be created for gsn-core and gsn-services. Therefore the code needs to be compiled following the steps of "Compiling and Running". When compiled, `debian:packageBin` can be used in the corresponding workspace gsn-core or gsn-services. This created an installable .deb file in the target folder, which can be moved to a server and installed by `sudo dpkg -i filename.deb`. To start or stop an installed instance following commands can be used:
+ * `sudo systemctl start gsn-core.service/gsn-services.service`
+ * `sudo systemctl stop gsn-core.service/gsn-services.service`
+ * `sudo systemctl restart gsn-core.service/gsn-services.service`
 
 #### Loading your first virtual sensor
 
@@ -36,53 +47,45 @@ This directory contains a set of samples that can be used.
 You can start by loading the MultiFormatTemperatureHandler virtual sensor (`virtual-sensors/samples/multiFormatSample.xml`).
 This virtual sensor generates random values without the need of an actual physical sensor.
 
-### Developing new wrappers or Virtual Sensors
 
-If you only need to write your own wrapper for a specific sensor communication protocol or processing class, you don't need to have the full building chain as in the next section. Just start an empty Java or Scala project and include a dependency to gsn-core (for example with maven):
+#### Starting the GSN Frontend Application
 
-```xml
-<dependency>
-    <groupId>ch.epfl.gsn</groupId>
-    <artifactId>gsn-core</artifactId>
-    <version>2.0.0</version>
-</dependency>
+1. Install the necessary Node.js dependencies:
+
+```sh
+npm install
+npm install -g pnpm
+npm install pg
 ```
 
-Then you can package your code as a jar and put it in the lib folder of the installer (after you followed the steps of the previous section) and you are ready to load you own wrapper or virtual sensor. In the case of a new wrapper you will also need to register it on the `wrapper.properties` file on your GSN installation.
-
-### Building from sources
-
-First download the code from the git repository (using `--depth 1` makes it a lot smaller if you don't need the 10 years history):
-
+2. Enter database credentials in `/src/app/api/postgres/route.ts` and `/src/app/api/timeseries/route.ts`
+```js
+const pool = new Pool({
+   user: 'enter username here',
+   host: 'lochmatter.uibk.ac.at',
+   database: 'enter database name here',
+   password: 'enter password here',
+   port: 5432,
+});
 ```
-git clone --depth 1 git@github.com:LSIR/gsn.git
+
+4. Enter gsn-services credentials in `/src/app/api/postgres/route.ts`
+
+```js
+const CLIENT_ID = 'enter client id here';
+const CLIENT_SECRET = 'enter client secret here';
+const TOKEN_URL = 'http://ifi-walker.uibk.ac.at:9000/ws/oauth2/token';
+const SENSORS_URL = 'http://ifi-walker.uibk.ac.at:9000/ws/api/sensors';
 ```
 
-The GSN modules have the following requirements for building from the sources:
+3. Start the Next.js application:
 
-* gsn-core and gsn-extra
-  * sbt 0.13+
-  * Java JDK 1.7
-* gsn-tools and gsn-services
-  * sbt 0.13+
-  * Java JDK 1.7
-  * Scala 2.11
-* gsn-webui
-  * python 3
-  * [bower](http://bower.io/)
-  * [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
+```sh
+npm run dev
+```
 
-Then you can run the following tasks in sbt:
+This will start the GSN Frontend application in development mode.
 
-* clean: remove generated files
-* compile: compiles the modules
-* package: build jar packages
-* project \[core|extra|tools|services|webui]: select a specific projet
+3. Open a web browser and navigate to `http://localhost:3000` to view the application (adjust the port if your configuration is different).
 
-In the project core you can use `re-start` to launch gsn-core for development and `debian:packageBin` to build the debian package.
 
-In the project services you can use `run` to start the web api in development mode  and `debian:packageBin` to build the debian package.
-
-In the project webui you can use `startDjango` to start the web interface in development mode  and `packageDjango` to build the debian package.
-
-Never use the development mode commands to run a production server !!
