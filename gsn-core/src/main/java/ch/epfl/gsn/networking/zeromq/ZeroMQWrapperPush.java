@@ -18,8 +18,6 @@
 * You should have received a copy of the GNU General Public License
 * along with GSN.  If not, see <http://www.gnu.org/licenses/>.
 * 
-* File: src/ch/epfl/gsn/networking/zeromq/ZeroMQWrapperPush.java
-*
 * @author Julien Eberle
 * @author Davide De Sclavis
 * @author Manuel Buchauer

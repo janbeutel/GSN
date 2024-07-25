@@ -1,3 +1,11 @@
+/**
+* 
+* @author Davide De Sclavis
+* @author Manuel Buchauer
+* @author Jan Beutel
+*
+*/
+
 package ch.epfl.gsn.networking.zeromq;
 
 import org.zeromq.ZMQ;

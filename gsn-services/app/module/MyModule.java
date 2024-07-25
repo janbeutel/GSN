@@ -1,3 +1,8 @@
+/** 
+* @author Davide De Sclavis
+* @author Manuel Buchauer
+* @author Jan Beutel
+*/
 package module;
 
 import com.feth.play.module.mail.IMailer;
