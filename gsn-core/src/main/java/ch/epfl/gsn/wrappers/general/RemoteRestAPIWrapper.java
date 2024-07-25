@@ -20,6 +20,9 @@
  * File: src/ch/epfl/gsn/wrappers/general/RemoteRestAPIWrapper.java
  *
  * @author Julien Eberle
+ * @author Davide De Sclavis
+ * @author Manuel Buchauer
+ * @author Jan Beutel
  *
  */
 

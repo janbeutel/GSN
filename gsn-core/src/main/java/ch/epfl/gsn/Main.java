@@ -29,7 +29,7 @@
 * @author Julien Eberle
 * @author Tonio Gsell
 * @author Mustafa Yuecel
-* @author Davide Desclavis
+* @author Davide De Sclavis
 * @author Manuel Buchauer
 * @author Jan Beutel
 *

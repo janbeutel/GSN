@@ -1,6 +1,7 @@
 /**
 * Global Sensor Networks (GSN) Source Code
 * Copyright (c) 2006-2016, Ecole Polytechnique Federale de Lausanne (EPFL)
+* Copyright (c) 2020-2023, University of Innsbruck
 * 
 * This file is part of GSN.
 * 
@@ -22,6 +23,9 @@
 * @author Timotee Maret
 * @author Ali Salehi
 * @author Mehdi Riahi
+* @author Davide De Sclavis
+* @author Manuel Buchauer
+* @author Jan Beutel
 *
 */
 

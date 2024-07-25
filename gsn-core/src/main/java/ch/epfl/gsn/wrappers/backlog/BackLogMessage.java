@@ -58,6 +58,9 @@ import java.text.StringCharacterIterator;
  * </ul>
  * 
  * @author Tonio Gsell
+ * @author Davide De Sclavis
+ * @author Manuel Buchauer
+ * @author Jan Beutel
  * 
  * @see gsn.wrappers.BackLogWrapper BackLogWrapper
  */

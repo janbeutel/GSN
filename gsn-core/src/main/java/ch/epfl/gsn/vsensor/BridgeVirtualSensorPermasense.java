@@ -28,6 +28,9 @@ import org.slf4j.Logger;
  *
  * @author Tonio Gsell
  * @author Mustafa Yuecel
+ * @author Davide De Sclavis
+ * @author Manuel Buchauer
+ * @author Jan Beutel
  */
 
 /**

@@ -39,6 +39,9 @@ import ch.epfl.gsn.beans.InputInfo;
  * as it passively benefits from the backlog functionality.
  *
  * @author Tonio Gsell
+ * @author Davide De Sclavis
+ * @author Manuel Buchauer
+ * @author Jan Beutel
  * 
  * @see BackLogMessage
  * @see AbstractPlugin
