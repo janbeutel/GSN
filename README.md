@@ -1,4 +1,4 @@
-# README
+# GSN Global Sensor Networks [![Build Status](https://travis-ci.org/LSIR/gsn.svg)](https://travis-ci.org/LSIR/gsn)
 
 ## Old Documentation
 
