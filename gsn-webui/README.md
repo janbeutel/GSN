@@ -1,3 +1,5 @@
+Based on this [student project](https://github.com/Fl0h0/gns).
+
 ### Prerequisites
 
 - Node.js (recommended version: [specify version])
