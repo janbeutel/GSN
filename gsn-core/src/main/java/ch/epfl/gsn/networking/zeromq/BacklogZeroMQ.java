@@ -47,7 +47,6 @@ public class BacklogZeroMQ extends Thread implements Runnable {
 		receiver = ctx.createSocket(ZMQ.REP);
 		receiver.bind("tcp://*:" + port);
 		receiver.setReceiveTimeOut(10000);
-        logger.error("createdbacklogzeromq");
         Thread backlogproxy = new Thread(new Runnable() {
 
 			@Override
