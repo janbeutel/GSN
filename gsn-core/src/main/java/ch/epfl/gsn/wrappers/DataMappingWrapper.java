@@ -150,7 +150,7 @@ public class DataMappingWrapper extends AbstractWrapper {
 					}
 					if (logger.isDebugEnabled()) {
 						try {
-							String[] args = { "-webPort", "8082", "-webAllowOthers", "false" };
+							String[] args = { "-webPort", "8082"};
 							web = Server.createWebServer(args);
 							web.start();
 						} catch (SQLException e) {
