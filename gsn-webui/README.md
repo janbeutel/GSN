@@ -26,7 +26,7 @@ const pool = new Pool({
 });
 ```
 
-4. Enter gsn-services credentials in `/src/app/api/postgres/route.ts`
+4. Enter gsn-services credentials in `/src/app/api/rest/route.ts`
 
 ```js
 const CLIENT_ID = 'enter client id here';
