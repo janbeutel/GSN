@@ -50,7 +50,7 @@ This virtual sensor generates random values without the need of an actual physic
 
 #### Starting the GSN Frontend Application
 
-1. Install the necessary Node.js dependencies:
+1. Install the necessary Node.js dependencies or maybe not:
 
 ```sh
 npm install
