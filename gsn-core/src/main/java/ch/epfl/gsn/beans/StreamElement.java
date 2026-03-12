@@ -34,7 +34,6 @@
 
 package ch.epfl.gsn.beans;
 
-import play.libs.Json;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -55,6 +54,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.epfl.gsn.beans.json.*;
 import ch.epfl.gsn.delivery.StreamElement4Rest;
@@ -67,6 +67,8 @@ public final class StreamElement implements Serializable {
 	private static final long serialVersionUID = 2000261462783698617L;
 
 	private static final transient Logger logger = LoggerFactory.getLogger(StreamElement.class);
+
+	private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
 	private transient TreeMap<String, Integer> indexedFieldNames = null;
 
@@ -608,7 +610,13 @@ public final class StreamElement implements Serializable {
 	 */
 
 	public static StreamElement[] fromJSON(String s) {
-		JsonNode jn = Json.parse(s).get("properties");
+		JsonNode jn;
+		try {
+			jn = JSON_MAPPER.readTree(s).get("properties");
+		} catch (Throwable var2) {
+			throw new RuntimeException(var2);
+		}
+
 		DataField[] df = new DataField[jn.get("fields").size() - 1];
 		int i = 0;
 		for (JsonNode f : jn.get("fields")) {
@@ -1012,7 +1020,11 @@ public final class StreamElement implements Serializable {
 		feature.setType("Feature");
 		feature.setProperties(prop);
 
-		return Json.toJson(feature).toString();
+		try {
+			return JSON_MAPPER.valueToTree(feature).toString();
+		 } catch (Exception var2) {
+			throw new RuntimeException(var2);
+		 }
 	}
 
 	/**

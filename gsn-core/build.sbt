@@ -12,9 +12,9 @@ Revolver.settings
 
 libraryDependencies ++= Seq(
   //"com.typesafe" % "config" % "1.2.1",
-  "org.scala-lang.modules" %% "scala-xml" % "1.0.5",
+//   "org.scala-lang.modules" %% "scala-xml" % "1.0.5",
   "com.h2database" % "h2" % "1.4.195",
-  "com.typesafe.play" %% "play" % "2.6.0",
+  "com.fasterxml.jackson.core" % "jackson-databind" % "2.17.0",
   //"mysql" % "mysql-connector-java" % "5.1.29",
   "mysql" % "mysql-connector-java" % "8.0.28",
   "org.postgresql" % "postgresql" % "42.3.0",

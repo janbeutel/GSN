@@ -28,8 +28,6 @@
 
 package ch.epfl.gsn.wrappers.general;
 
-import play.libs.Json;
-
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -49,6 +47,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.epfl.gsn.beans.AddressBean;
 import ch.epfl.gsn.beans.DataField;
@@ -60,6 +59,8 @@ import org.slf4j.Logger;
 public class RemoteRestAPIWrapper extends AbstractWrapper {
 
 	private final transient Logger logger = LoggerFactory.getLogger(RemoteRestAPIWrapper.class);
+
+	private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
 	private DataField[] structure = null;
 	private String wsURL;
@@ -151,7 +152,11 @@ public class RemoteRestAPIWrapper extends AbstractWrapper {
 			}
 			if (code == 200) {
 				String content = EntityUtils.toString(response.getEntity());
-				return Json.parse(content).get("access_token").asText();
+				try {
+					return JSON_MAPPER.readTree(content).get("access_token").asText();
+				} catch (Throwable var2) {
+					throw new RuntimeException(var2);
+				}
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -209,7 +214,12 @@ public class RemoteRestAPIWrapper extends AbstractWrapper {
 		HttpGet get = new HttpGet(wsURL + "/api/sensors/" + vsName);
 		try {
 			String content = doRequest(get);
-			JsonNode jn = Json.parse(content).get("properties");
+			JsonNode jn;
+			try {
+				jn = JSON_MAPPER.readTree(content).get("properties");
+			} catch (Throwable var2) {
+				throw new RuntimeException(var2);
+			}
 			DataField[] df = new DataField[jn.get("fields").size() - 1];
 			int i = 0;
 			for (JsonNode f : jn.get("fields")) {
