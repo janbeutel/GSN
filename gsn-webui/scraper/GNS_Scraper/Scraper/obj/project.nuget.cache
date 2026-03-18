@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "uO+4YtkvIR+J5JP8yV80pK7+pj4nfqxI62wfedPqeOdLdHsIyNX8d52pocVZfFc/VkE3CPzJEeGpaTk3UePp/Q==",
+  "success": true,
+  "projectFilePath": "/home/manuel/Documents/Uni/Master-Thesis/gsn2/gsn-webui/scraper/GNS_Scraper/Scraper/Scraper.csproj",
+  "expectedPackageFiles": [
+    "/home/manuel/.nuget/packages/bouncycastle.netcore/1.9.0/bouncycastle.netcore.1.9.0.nupkg.sha512",
+    "/home/manuel/.nuget/packages/net-questdb-client/1.1.2/net-questdb-client.1.1.2.nupkg.sha512",
+    "/home/manuel/.nuget/packages/microsoft.netcore.app.ref/7.0.20/microsoft.netcore.app.ref.7.0.20.nupkg.sha512",
+    "/home/manuel/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.20/microsoft.aspnetcore.app.ref.7.0.20.nupkg.sha512",
+    "/home/manuel/.nuget/packages/microsoft.netcore.app.host.linux-x64/7.0.20/microsoft.netcore.app.host.linux-x64.7.0.20.nupkg.sha512"
+  ],
+  "logs": []
+}

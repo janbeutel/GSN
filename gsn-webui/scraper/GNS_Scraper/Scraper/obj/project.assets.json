@@ -1,0 +1,143 @@
+{
+  "version": 3,
+  "targets": {
+    "net7.0": {
+      "BouncyCastle.NetCore/1.9.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/BouncyCastle.Crypto.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/BouncyCastle.Crypto.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "net-questdb-client/1.1.2": {
+        "type": "package",
+        "dependencies": {
+          "BouncyCastle.NetCore": "1.9.0"
+        },
+        "compile": {
+          "lib/netstandard2.1/net-questdb-client.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/net-questdb-client.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "BouncyCastle.NetCore/1.9.0": {
+      "sha512": "FpWfsqjMp+RNavLqMlviDPlbdf7q4j/pr9SHfc1LKcZz5PRjciuYo59nFnw+eJi+H8cm0eH5uVZStwAv1LRdCw==",
+      "type": "package",
+      "path": "bouncycastle.netcore/1.9.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "bouncycastle.netcore.1.9.0.nupkg.sha512",
+        "bouncycastle.netcore.nuspec",
+        "lib/net20/BouncyCastle.Crypto.dll",
+        "lib/net20/BouncyCastle.Crypto.xml",
+        "lib/netstandard2.0/BouncyCastle.Crypto.dll",
+        "lib/netstandard2.0/BouncyCastle.Crypto.xml"
+      ]
+    },
+    "net-questdb-client/1.1.2": {
+      "sha512": "dVh62KWrE4cWpDx6ljyDvwDe8UC+LJ658ruSuUFYDkT8+ECGcsQTP1lIjLDVaKWLrVI9+iEgUAE2UFKddt8fDA==",
+      "type": "package",
+      "path": "net-questdb-client/1.1.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.1/net-questdb-client.dll",
+        "net-questdb-client.1.1.2.nupkg.sha512",
+        "net-questdb-client.nuspec"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net7.0": [
+      "net-questdb-client >= 1.1.2"
+    ]
+  },
+  "packageFolders": {
+    "/home/manuel/.nuget/packages/": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "/home/manuel/Documents/Uni/Master-Thesis/gsn2/gsn-webui/scraper/GNS_Scraper/Scraper/Scraper.csproj",
+      "projectName": "Scraper",
+      "projectPath": "/home/manuel/Documents/Uni/Master-Thesis/gsn2/gsn-webui/scraper/GNS_Scraper/Scraper/Scraper.csproj",
+      "packagesPath": "/home/manuel/.nuget/packages/",
+      "outputPath": "/home/manuel/Documents/Uni/Master-Thesis/gsn2/gsn-webui/scraper/GNS_Scraper/Scraper/obj/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/home/manuel/Documents/Uni/Master-Thesis/gsn2/gsn-webui/scraper/GNS_Scraper/nuget.config",
+        "/home/manuel/.nuget/NuGet/NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net7.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net7.0": {
+        "targetAlias": "net7.0",
+        "dependencies": {
+          "net-questdb-client": {
+            "target": "Package",
+            "version": "[1.1.2, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[7.0.20, 7.0.20]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.linux-x64",
+            "version": "[7.0.20, 7.0.20]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[7.0.20, 7.0.20]"
+          }
+        ],
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.125/RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

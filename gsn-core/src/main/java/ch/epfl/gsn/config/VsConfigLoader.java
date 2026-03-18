@@ -1,0 +1,18 @@
+package ch.epfl.gsn.config;
+
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import java.io.File;
+
+public class VsConfigLoader {
+    private static final XmlMapper mapper = new XmlMapper();
+
+    static {
+        // Crucial: This tells Jackson how to handle Optional
+        mapper.registerModule(new Jdk8Module());
+    }
+
+    public static VsConf load(String path) throws Exception {
+        return mapper.readValue(new File(path), VsConf.class);
+    }
+}

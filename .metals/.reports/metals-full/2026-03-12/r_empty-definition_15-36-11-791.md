@@ -1,0 +1,188 @@
+error id: file://<WORKSPACE>/gsn-services/app/views/access/commands.scala.html:
+file://<WORKSPACE>/gsn-services/app/views/access/commands.scala.html
+empty definition using pc, found symbol in pc: 
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 184
+uri: file://<WORKSPACE>/gsn-services/app/views/access/commands.scala.html
+text:
+```scala
+@import service.gsn.UserProvider
+@import ch.epfl.gsn.config.VsConf
+@import ch.epfl.gsn.config.WebInputConf 
+@import ch.epfl.gsn.config.WebInputCommand
+@import ch.epfl.gsn.config.FieldC@@onf
+@import play.api.libs.json._
+@import helper._
+@(userProvider: UserProvider,vsConfs: Seq[VsConf])
+
+@main(userProvider,"Upload Page","commands") {
+    <html>
+  <head>
+    <title>Upload Page</title>
+  </head>
+  <body>
+    <h1>Upload Page for sensor specific commands and binary data</h1>
+    <table class="table table-striped">
+      <thead>
+          <tr>
+              <th>Name</th>
+              <th>Upload</th>
+          </tr>
+      </thead>
+      <tbody>
+        @for(vsConf <- vsConfs) {
+          <tr id="name">
+            <td>@vsConf.name</td>
+            <td>
+              <button type="button" class="btn btn-primary uploadSensorCommandButton" data-vsconf="@Html(Json.stringify(Json.toJson(vsConf)).replace("\"", "&quot;"))">
+                Upload
+              </button>
+              
+            </td>
+          </tr>
+        }
+      </tbody>
+      
+    </table>
+
+    <div id="uploadCommandToVSModal" class="modal fade" role="dialog">
+      <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+          <form id="virtualSensorCommandForm" onsubmit="handleFormSubmission(); return false;" method="post" enctype="multipart/form-data" >
+            <div class="modal-header">
+              <h4 class="modal-title">Upload VS Command</h4>
+            </div>
+            <div class="modal-body" id="modalBody">
+              <!-- Content will be dynamically generated here -->
+            </div>
+            <div class="modal-footer">
+              @CSRF.formField   
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary upload-btn">Upload</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+  <script>
+    
+    var vsconf;
+
+    $('.uploadSensorCommandButton').on('click', function () {
+      // Get VsConf name and associated WebInputCommands
+      vsconf = $(this).data('vsconf');
+      vsname = vsconf.name
+      console.log(vsconf);
+
+      // Clear previous content
+      $('#modalBody').empty();
+
+      // Create form with correct enctype
+
+      // Create select box for commands
+      var commandSelect = $('<select id="commandSelect" name="commandSelect">');
+      vsconf.processing.webInput.commands.forEach(function (command) {
+          commandSelect.append('<option value="' + command.name + '">' + command.name + '</option>');
+      });
+      //form.append(commandSelect);
+
+      // Append form to modal body
+      $('#modalBody').append(commandSelect);
+
+      $('#modalBody').append('<input type="hidden" id="vsname" name="vsname">');
+      $('#vsname').val(vsname); 
+
+      // Listen for change in command select
+      $('#commandSelect').on('change', function () {
+          var selectedCommandName = $(this).val();
+          var selectedCommand = vsconf.processing.webInput.commands.find(function (command) {
+              return command.name === selectedCommandName;
+          });
+
+          // Clear previous params and regenerate
+          $('#modalBody .paramSection').remove();
+
+          selectedCommand.params.forEach(function (param) {
+              var inputElement;
+
+              // Check dataType and create appropriate input element
+              if (param.dataType === "*text") {
+                  inputElement = '<input type="text" name="' + param.name + '" placeholder="' + param.name + '">';
+              } else if (param.dataType.startsWith("*select")) {
+                  var options = param.dataType.split('|').slice(1).map(function (option) {
+                      var parts = option.split(',');
+                      return '<option value="' + parts[1] + '">' + parts[0] + '</option>';
+                  }).join('');
+                  inputElement = '<select name="' + param.name + '">' + options + '</select>';
+              } else if (param.dataType.startsWith("*checkbox")) {
+                  var checkboxParts = param.dataType.split(':');
+                  inputElement = '<input type="checkbox" name="' + param.name + '">' + checkboxParts[1];
+              } else if (param.dataType.startsWith("date")) {
+                  inputElement = '<input type="date" name="' + param.name + '">';
+              } else if (param.dataType === "*binary") {
+                  inputElement = '<input type="file" name="' + param.name + '">';
+              }
+
+              var paramSection = $('<div class="paramSection"><label>' + param.name + '</label>' + inputElement + '</div>');
+              $('#modalBody').append(paramSection);
+          });
+      });
+
+      // Trigger change event to populate params for the first time
+      $('#commandSelect').trigger('change');
+
+      // Show the modal
+      $('#uploadCommandToVSModal').modal('show');
+  });
+
+    function handleFormSubmission() {
+
+      var formData = new FormData(document.getElementById('virtualSensorCommandForm'));
+
+      formData.forEach(function(value, key){
+          console.log(key, value);
+      });
+
+      // Perform the AJAX POST request using the fetch API
+      fetch("@controllers.gsn.auth.routes.PermissionsController.uploadToSensor()", {
+          method: 'POST',
+          body: formData
+      })
+      .then(data => {
+          // Handle the response data as needed
+          console.log(data);
+          if(data.status === 200) {
+            $('#uploadCommandToVSModal').modal('hide');
+          }
+          else if(data.status == 400){
+            var errorMessage = $('<span style="color: red;">' + 'Error while sending data to sensor' + '</span>');
+            $('#modalBody').append(errorMessage);  
+          }
+      })
+      .catch(error => {
+          // Handle errors
+          var errorMessage = $('<span style="color: red;">' + 'Error while sending data to sensor' + '</span>');
+          $('#modalBody').append(errorMessage);  
+          console.error('Error:', error);
+      });
+
+      return false;
+    }
+
+  </script>
+  
+
+  </body>
+  </html>
+}
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: 

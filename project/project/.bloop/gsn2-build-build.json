@@ -1,0 +1,374 @@
+{
+    "version": "1.4.0",
+    "project": {
+        "name": "gsn2-build-build",
+        "directory": "/home/manuel/Documents/Uni/Master-Thesis/gsn2/project/project",
+        "workspaceDir": "/home/manuel/Documents/Uni/Master-Thesis/gsn2/project/project",
+        "sources": [
+            "/home/manuel/Documents/Uni/Master-Thesis/gsn2/project/project/src/main/scala",
+            "/home/manuel/Documents/Uni/Master-Thesis/gsn2/project/project/src/main/scala-2.12",
+            "/home/manuel/Documents/Uni/Master-Thesis/gsn2/project/project/src/main/scala-2",
+            "/home/manuel/Documents/Uni/Master-Thesis/gsn2/project/project/src/main/java",
+            "/home/manuel/Documents/Uni/Master-Thesis/gsn2/project/project/src/main/scala-sbt-1.0",
+            "/home/manuel/Documents/Uni/Master-Thesis/gsn2/project/project/target/scala-2.12/sbt-1.0/src_managed/main"
+        ],
+        "dependencies": [
+            
+        ],
+        "classpath": [
+            "/home/manuel/.sbt/boot/scala-2.12.18/lib/scala-library.jar",
+            "/home/manuel/.cache/coursier/v1/https/repo1.maven.org/maven2/ch/epfl/scala/sbt-bloop_2.12_1.0/1.4.6/sbt-bloop-1.4.6.jar",
+            "/home/manuel/.cache/coursier/v1/https/repo1.maven.org/maven2/net/java/dev/jna/jna/4.5.0/jna-4.5.0.jar",
+            "/home/manuel/.cache/coursier/v1/https/repo1.maven.org/maven2/net/java/dev/jna/jna-platform/4.5.0/jna-platform-4.5.0.jar",
+            "/home/manuel/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/code/gson/gson/2.7/gson-2.7.jar",
+            "/home/manuel/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/lib/scala-compiler.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/lib/scala-xml_2.12-2.1.0.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/lib/scala-reflect.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/scala-parser-combinators_2.12-1.1.2.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/zinc-lm-integration_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/librarymanagement-core_2.12-1.9.3.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/collections_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/util-interface-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/protocol_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/compiler-interface-1.9.6.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/config-1.4.2.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/test-agent-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/jna-5.13.0.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/testing_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/jsch-0.1.54.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/shaded-scalajson_2.12-1.0.0-M4.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/logic_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/run_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/sbt-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/log4j-slf4j-impl-2.17.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/log4j-api-2.17.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/sjson-new-murmurhash_2.12-0.9.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/command_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/core-macros_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/reactive-streams-1.0.3.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/util-control_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/compiler-bridge_2.12-1.9.6.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/main-settings_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/gigahorse-core_2.12-0.7.0.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/scala-compiler-2.12.18.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/tasks_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/checker-qual-3.4.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/scala-reflect-2.12.18.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/shaded-apache-httpasyncclient-0.7.0.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/jline-terminal-jansi-3.24.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/zinc-compile_2.12-1.9.6.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/util-cache_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/caffeine-2.8.5.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/ssl-config-core_2.12-0.6.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/log4j-core-2.17.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/jna-platform-5.13.0.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/zinc-core_2.12-1.9.6.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/zero-allocation-hashing-0.10.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/scala-collection-compat_2.12-2.10.0.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/disruptor-3.4.2.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/zinc-persist_2.12-1.9.6.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/scala-library-2.12.18.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/sjson-new-core_2.12-0.9.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/file-tree-views-2.1.12.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/scripted-plugin_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/util-position_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/jline-reader-3.24.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/completion_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/jline-terminal-jna-3.24.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/main_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/jansi-2.4.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/util-relation_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/actions_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/test-interface-1.0.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/scala-xml_2.12-2.2.0.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/io_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/jline-builtins-3.24.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/zinc-classfile_2.12-1.9.6.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/template-resolver-0.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/zinc-compile-core_2.12-1.9.6.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/shaded-jawn-parser_2.12-0.9.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/zinc-apiinfo_2.12-1.9.6.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/librarymanagement-ivy_2.12-1.9.3.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/launcher-interface-1.4.2.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/sjson-new-scalajson_2.12-0.9.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/zinc_2.12-1.9.6.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/error_prone_annotations-2.4.0.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/ivy-2.3.0-sbt-396a783bba347016e7fe30dacc60d355be607fe2.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/jline-2.14.7-sbt-9c3b6aca11c57e339441442bbf58e550cdfecb79.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/util-logging_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/lm-coursier-shaded_2.12-2.1.2.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/jline-style-3.24.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/gigahorse-apache-http_2.12-0.7.0.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/jline-terminal-3.24.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/zinc-persist-core-assembly-1.9.6.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/task-system_2.12-1.9.9.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/zinc-classpath_2.12-1.9.6.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/ipcsocket-1.6.2.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/sbinary_2.12-0.5.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/jline-native-3.24.1.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/slf4j-api-1.7.36.jar",
+            "/home/manuel/.sbt/boot/scala-2.12.18/org.scala-sbt/sbt/1.9.9/util-tracking_2.12-1.9.9.jar"
+        ],
+        "out": "/home/manuel/Documents/Uni/Master-Thesis/gsn2/project/project/.bloop/gsn2-build-build",
+        "classesDir": "/home/manuel/Documents/Uni/Master-Thesis/gsn2/project/project/.bloop/gsn2-build-build/scala-2.12/sbt-1.0/classes",
+        "resources": [
+            "/home/manuel/Documents/Uni/Master-Thesis/gsn2/project/project/src/main/resources",
+            "/home/manuel/Documents/Uni/Master-Thesis/gsn2/project/project/target/scala-2.12/sbt-1.0/resource_managed/main"
+        ],
+        "scala": {
+            "organization": "org.scala-lang",
+            "name": "scala-compiler",
+            "version": "2.12.18",
+            "options": [
+                "-deprecation",
+                "-Wconf:cat=unused-nowarn:s",
+                "-Wconf:cat=unused-nowarn:s",
+                "-Wconf:cat=unused-nowarn:s",
+                "-Xsource:3"
+            ],
+            "jars": [
+                "/home/manuel/.sbt/boot/scala-2.12.18/lib/scala-library.jar",
+                "/home/manuel/.sbt/boot/scala-2.12.18/lib/scala-compiler.jar",
+                "/home/manuel/.sbt/boot/scala-2.12.18/lib/scala-xml_2.12-2.1.0.jar",
+                "/home/manuel/.sbt/boot/scala-2.12.18/lib/scala-reflect.jar"
+            ],
+            "analysis": "/home/manuel/Documents/Uni/Master-Thesis/gsn2/project/project/target/streams/compile/bloopAnalysisOut/_global/streams/inc_compile_2.12.zip",
+            "setup": {
+                "order": "mixed",
+                "addLibraryToBootClasspath": true,
+                "addCompilerToClasspath": false,
+                "addExtraJarsToClasspath": false,
+                "manageBootClasspath": true,
+                "filterLibraryFromClasspath": true
+            }
+        },
+        "java": {
+            "options": [
+                
+            ]
+        },
+        "sbt": {
+            "sbtVersion": "1.9.9",
+            "autoImports": [
+                "import _root_.scala.xml.{TopScope=>$scope}",
+                "import _root_.sbt._",
+                "import _root_.sbt.Keys._",
+                "import _root_.sbt.nio.Keys._",
+                "import _root_.sbt.ScriptedPlugin.autoImport._, _root_.sbt.plugins.JUnitXmlReportPlugin.autoImport._, _root_.sbt.plugins.MiniDependencyTreePlugin.autoImport._, _root_.bloop.integrations.sbt.BloopPlugin.autoImport._",
+                "import _root_.sbt.plugins.IvyPlugin, _root_.sbt.plugins.JvmPlugin, _root_.sbt.plugins.CorePlugin, _root_.sbt.ScriptedPlugin, _root_.sbt.plugins.SbtPlugin, _root_.sbt.plugins.SemanticdbPlugin, _root_.sbt.plugins.JUnitXmlReportPlugin, _root_.sbt.plugins.Giter8TemplatePlugin, _root_.sbt.plugins.MiniDependencyTreePlugin, _root_.bloop.integrations.sbt.BloopPlugin"
+            ]
+        },
+        "test": {
+            "frameworks": [
+                {
+                    "names": [
+                        "org.scalacheck.ScalaCheckFramework"
+                    ]
+                },
+                {
+                    "names": [
+                        "org.specs2.runner.Specs2Framework",
+                        "org.specs2.runner.SpecsFramework"
+                    ]
+                },
+                {
+                    "names": [
+                        "org.specs.runner.SpecsFramework"
+                    ]
+                },
+                {
+                    "names": [
+                        "org.scalatest.tools.Framework",
+                        "org.scalatest.tools.ScalaTestFramework"
+                    ]
+                },
+                {
+                    "names": [
+                        "com.novocode.junit.JUnitFramework"
+                    ]
+                },
+                {
+                    "names": [
+                        "munit.Framework"
+                    ]
+                },
+                {
+                    "names": [
+                        "zio.test.sbt.ZTestFramework"
+                    ]
+                },
+                {
+                    "names": [
+                        "weaver.framework.CatsEffect"
+                    ]
+                },
+                {
+                    "names": [
+                        "hedgehog.sbt.Framework"
+                    ]
+                }
+            ],
+            "options": {
+                "excludes": [
+                    
+                ],
+                "arguments": [
+                    
+                ]
+            }
+        },
+        "platform": {
+            "name": "jvm",
+            "config": {
+                "home": "/usr/lib/jvm/java-11-openjdk-amd64",
+                "options": [
+                    "-Duser.dir=/home/manuel/Documents/Uni/Master-Thesis/gsn2/project/project"
+                ]
+            },
+            "mainClass": [
+                
+            ]
+        },
+        "resolution": {
+            "modules": [
+                {
+                    "organization": "ch.epfl.scala",
+                    "name": "sbt-bloop",
+                    "version": "1.4.6",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "sbt-bloop",
+                            "path": "/home/manuel/.cache/coursier/v1/https/repo1.maven.org/maven2/ch/epfl/scala/sbt-bloop_2.12_1.0/1.4.6/sbt-bloop-1.4.6.jar"
+                        },
+                        {
+                            "name": "sbt-bloop",
+                            "path": "/home/manuel/.ivy2/cache/scala_2.12/sbt_1.0/ch.epfl.scala/sbt-bloop/jars/sbt-bloop-1.4.6.jar"
+                        },
+                        {
+                            "name": "sbt-bloop",
+                            "path": "/home/manuel/.ivy2/cache/scala_2.10/sbt_0.13/ch.epfl.scala/sbt-bloop/jars/sbt-bloop-1.4.6.jar"
+                        },
+                        {
+                            "name": "sbt-bloop",
+                            "classifier": "sources",
+                            "path": "/home/manuel/.ivy2/cache/scala_2.10/sbt_0.13/ch.epfl.scala/sbt-bloop/srcs/sbt-bloop-1.4.6-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "net.java.dev.jna",
+                    "name": "jna",
+                    "version": "4.5.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "jna",
+                            "path": "/home/manuel/.cache/coursier/v1/https/repo1.maven.org/maven2/net/java/dev/jna/jna/4.5.0/jna-4.5.0.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "net.java.dev.jna",
+                    "name": "jna-platform",
+                    "version": "4.5.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "jna-platform",
+                            "path": "/home/manuel/.cache/coursier/v1/https/repo1.maven.org/maven2/net/java/dev/jna/jna-platform/4.5.0/jna-platform-4.5.0.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.google.code.gson",
+                    "name": "gson",
+                    "version": "2.7",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "gson",
+                            "path": "/home/manuel/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/code/gson/gson/2.7/gson-2.7.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.google.code.findbugs",
+                    "name": "jsr305",
+                    "version": "3.0.2",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "jsr305",
+                            "path": "/home/manuel/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scala-lang",
+                    "name": "scala-library",
+                    "version": "2.12.18",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scala-library",
+                            "path": "/home/manuel/.sbt/boot/scala-2.12.18/lib/scala-library.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scala-lang",
+                    "name": "scala-compiler",
+                    "version": "2.12.18",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scala-compiler",
+                            "path": "/home/manuel/.sbt/boot/scala-2.12.18/lib/scala-compiler.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scala-lang",
+                    "name": "scala-compiler",
+                    "version": "2.12.18",
+                    "configurations": "optional",
+                    "artifacts": [
+                        {
+                            "name": "scala-compiler",
+                            "path": "/home/manuel/.sbt/boot/scala-2.12.18/lib/scala-compiler.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scala-lang",
+                    "name": "scala-library",
+                    "version": "2.12.18",
+                    "configurations": "optional",
+                    "artifacts": [
+                        {
+                            "name": "scala-library",
+                            "path": "/home/manuel/.sbt/boot/scala-2.12.18/lib/scala-library.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scala-lang",
+                    "name": "scala-reflect",
+                    "version": "2.12.18",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scala-reflect",
+                            "path": "/home/manuel/.sbt/boot/scala-2.12.18/lib/scala-reflect.jar"
+                        }
+                    ]
+                }
+            ]
+        },
+        "tags": [
+            "library"
+        ]
+    }
+}

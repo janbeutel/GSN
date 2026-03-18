@@ -66,7 +66,7 @@ lazy val root = (project in file(".")).
 
 
 lazy val core = (project in file("gsn-core")).
-  dependsOn(tools).
+  dependsOn().
   settings(commonSettings: _*).
   enablePlugins(JavaServerAppPackaging, DebianPlugin)
 

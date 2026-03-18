@@ -11,10 +11,17 @@ name := "gsn-core"
 Revolver.settings
 
 libraryDependencies ++= Seq(
-  //"com.typesafe" % "config" % "1.2.1",
+  "org.projectlombok" % "lombok" % "1.18.44" % Provided,
+//   "com.typesafe" % "config" % "1.2.1",
 //   "org.scala-lang.modules" %% "scala-xml" % "1.0.5",
   "com.h2database" % "h2" % "1.4.195",
+  "javax.media" % "jai_core" % "1.1.3",
+  "com.mchange" % "c3p0" % "0.9.5-pre10",
+  // The module that provides Jdk8Module (for Optional support)
+  "com.fasterxml.jackson.datatype" % "jackson-datatype-jdk8" % "2.17.0",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.17.0",
+  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-xml" % "2.17.0",
+  "com.vividsolutions" % "jts-core" % "1.14.0",
   //"mysql" % "mysql-connector-java" % "5.1.29",
   "mysql" % "mysql-connector-java" % "8.0.28",
   "org.postgresql" % "postgresql" % "42.3.0",
