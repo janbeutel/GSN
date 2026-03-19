@@ -118,7 +118,7 @@ tasks.named('buildDeb', com.netflix.gradle.plugins.deb.Deb) {
 
     packageName = 'gsn-core'
     release = '1'
-    arch = NOARCH
+    arch = ALL
     os = LINUX
     summary = 'GSN Server'
     packageDescription = 'Global Sensor Networks Core'

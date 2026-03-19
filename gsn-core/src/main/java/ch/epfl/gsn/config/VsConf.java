@@ -2,44 +2,46 @@ package ch.epfl.gsn.config;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.List;
 import java.util.Map;
 
 public record VsConf(
-        @JacksonXmlProperty(isAttribute = true)
+        @JacksonXmlProperty(isAttribute = true, localName = "name")
         String name,
 
         @JacksonXmlProperty(isAttribute = true, localName = "protected")
         boolean isProtected,
 
-        @JacksonXmlProperty(isAttribute = true)
+        @JacksonXmlProperty(isAttribute = true, localName = "priority")
         int priority,
 
-        @JacksonXmlProperty(isAttribute = true)
+        @JacksonXmlProperty(isAttribute = true, localName = "initPriority")
         boolean initPriority,
 
         @JacksonXmlProperty(isAttribute = true, localName = "time-zone")
         String timeZone,
 
+        @JacksonXmlProperty(localName = "description")
         String description,
 
         // Maps to (xml \ "life-cycle") and its attribute "pool-size"
+        @JacksonXmlProperty(localName = "life-cycle")
         LifeCycle lifeCycle,
 
         // If your XML is <predicate key="k">value</predicate>, use the helper class.
-        @JsonProperty("addressing")
+        @JacksonXmlProperty(localName = "addressing")
         Addressing addressing,
 
-        @JsonProperty("storage")
+        @JacksonXmlProperty(localName = "storage")
         Optional<StorageConf> storage,
 
-        @JsonProperty("processing-class")
+        @JacksonXmlProperty(localName = "processing-class")
         ProcessingConf processingClass,
 
-        @JsonProperty("streams")
+        @JacksonXmlProperty(localName = "streams")
         StreamsContainer streamsContainer
 ) {
     public static VsConf load(String path) throws Exception {
@@ -107,19 +109,22 @@ public record VsConf(
     ) {}
 
     public record Addressing(
+            @JacksonXmlElementWrapper(useWrapping = false)
             @JacksonXmlProperty(localName = "predicate")
             List<Predicate> predicates
     ) {}
 
     public record Predicate(
-            @JacksonXmlProperty(isAttribute = true)
+            @JacksonXmlProperty(isAttribute = true, localName = "key")
             String key,
 
+            @JacksonXmlProperty(localName = "")
             @JacksonXmlText
             String value
     ) {}
 
     public record StreamsContainer(
+            @JacksonXmlElementWrapper(useWrapping = false)
             @JacksonXmlProperty(localName = "stream")
             List<StreamConf> streamList
     ) {}

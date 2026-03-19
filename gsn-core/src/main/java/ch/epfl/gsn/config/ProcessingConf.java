@@ -1,32 +1,32 @@
 package ch.epfl.gsn.config;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 public record ProcessingConf(
-        @JsonProperty("class-name")
+        @JacksonXmlProperty(localName = "class-name")
         String className,
 
-        @JsonProperty("unique-timestamps")
+        @JacksonXmlProperty(localName = "unique-timestamps")
         boolean uniqueTimestamp,
 
         // Maps (xml \ "init-params" \ "param")
-        @JsonProperty("init-params")
+        @JacksonXmlProperty(localName = "init-params")
         InitParamsContainer initParamsContainer,
 
         // Maps (xml \ "output-specification") and its "rate" attribute
-        @JsonProperty("output-specification")
+        @JacksonXmlProperty(localName = "output-specification")
         OutputSpec outputSpec,
 
         // Maps (xml \ "output-structure" \ "field")
-        @JsonProperty("output-structure")
+        @JacksonXmlProperty(localName = "output-structure")
         OutputStructureContainer outputStructure,
 
-        @JsonProperty("web-input")
+        @JacksonXmlProperty(localName = "web-input")
         Optional<WebInputConf> webInput
 ) {
     public Optional<Integer> rate() {
@@ -51,20 +51,22 @@ public record ProcessingConf(
     // --- Helper records to handle XML nesting ---
 
     public record InitParamsContainer(
+            @JacksonXmlElementWrapper(useWrapping = false)
             @JacksonXmlProperty(localName = "param")
             List<Param> params
     ) {}
 
     public record Param(
-            @JacksonXmlProperty(isAttribute = true)
+            @JacksonXmlProperty(isAttribute = true, localName = "name")
             String name,
 
+            @JacksonXmlProperty(localName = "")
             @JacksonXmlText
             String value
     ) {}
 
     public record OutputSpec(
-            @JacksonXmlProperty(isAttribute = true)
+            @JacksonXmlProperty(isAttribute = true, localName = "rate")
             Integer rate
     ) {}
 
@@ -72,6 +74,7 @@ public record ProcessingConf(
             @JacksonXmlProperty(isAttribute = true, localName = "partition-field")
             String partitionField,
 
+            @JacksonXmlElementWrapper(useWrapping = false)
             @JacksonXmlProperty(localName = "field")
             List<FieldConf> fields
     ) {}

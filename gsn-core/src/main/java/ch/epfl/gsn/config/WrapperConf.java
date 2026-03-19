@@ -1,26 +1,27 @@
 package ch.epfl.gsn.config;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.List;
 
 public record WrapperConf(
-        @JacksonXmlProperty(isAttribute = true)
+        @JacksonXmlProperty(isAttribute = true, localName = "wrapper")
         String wrapper,
 
         @JacksonXmlProperty(isAttribute = true, localName = "partial-order-key")
         Optional<String> partialKey,
 
         // Maps (xml \ "predicate") to a list of Key/Value pairs
-        @JsonProperty("predicate")
+        @JacksonXmlProperty(localName = "predicate")
+        @JacksonXmlElementWrapper(useWrapping = false)
         List<Predicate> predicates,
 
         // Maps (xml \ "output-structure" \ "field")
-        @JsonProperty("output-structure")
+        @JacksonXmlProperty(localName = "output-structure")
         OutputStructureContainer outputStructure
 ) {
     public Map<String, String> params() {
@@ -41,9 +42,10 @@ public record WrapperConf(
     // --- Helper records ---
 
     public record Predicate(
-            @JacksonXmlProperty(isAttribute = true)
+            @JacksonXmlProperty(isAttribute = true, localName = "key")
             String key,
 
+            @JacksonXmlProperty(localName = "")
             @JacksonXmlText
             String value
     ) {}

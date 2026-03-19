@@ -12,12 +12,13 @@ public record FieldConf(
         String dataType,
 
         // Captures the text between <field>...</field>
+        @JacksonXmlProperty(localName = "")
         @JacksonXmlText
         String description,
 
-        @JacksonXmlProperty(isAttribute = true)
+        @JacksonXmlProperty(isAttribute = true, localName = "unit")
         Optional<String> unit,
 
-        @JacksonXmlProperty(isAttribute = true)
+        @JacksonXmlProperty(isAttribute = true, localName = "index")
         Optional<String> index
 ) {}
