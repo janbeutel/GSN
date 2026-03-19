@@ -1,39 +1,31 @@
 package ch.epfl.gsn.config;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Optional;
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class SourceConf {
+public record SourceConf(
+        @JacksonXmlProperty(isAttribute = true)
+        String alias,
 
-    @JacksonXmlProperty(isAttribute = true)
-    private String alias;
+        // Maps to <query>Text Content</query>
+        @JacksonXmlProperty
+        String query,
 
-    // Maps to <query>Text Content</query>
-    private String query;
+        @JacksonXmlProperty(isAttribute = true, localName = "storage-size")
+        Optional<String> storageSize,
 
-    @JacksonXmlProperty(isAttribute = true, localName = "storage-size")
-    private Optional<String> storageSize;
+        @JacksonXmlProperty(isAttribute = true)
+        Optional<String> slide,
 
-    @JacksonXmlProperty(isAttribute = true)
-    private Optional<String> slide;
+        @JacksonXmlProperty(isAttribute = true, localName = "disconnected-buffer-size")
+        Optional<Integer> disconnectBufferSize,
 
-    @JacksonXmlProperty(isAttribute = true, localName = "disconnected-buffer-size")
-    private Optional<Integer> disconnectBufferSize;
+        @JacksonXmlProperty(isAttribute = true, localName = "sampling-rate")
+        Optional<Double> samplingRate,
 
-    @JacksonXmlProperty(isAttribute = true, localName = "sampling-rate")
-    private Optional<Double> samplingRate;
-
-    // Maps (xml \ "address").map(...)
-    // We use @JsonProperty to tell Jackson the tag name is "address" 
-    // even though the Java field is called "wrappers"
-    @JsonProperty("address")
-    private List<WrapperConf> wrappers;
-}
+        // Maps (xml \ "address").map(...)
+        @JsonProperty("address")
+        List<WrapperConf> wrappers
+) {}

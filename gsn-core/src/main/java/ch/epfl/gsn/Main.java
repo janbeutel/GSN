@@ -49,6 +49,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.RenderingHints;
 import java.awt.SplashScreen;
 import java.io.File;
+import java.io.IOException;
 // import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -95,7 +96,7 @@ public final class Main {
 	public static final int DEFAULT_MAX_DB_CONNECTIONS = 128;
 	public static final String DEFAULT_GSN_CONF_FOLDER = "../conf";
 	public static final String DEFAULT_VIRTUAL_SENSOR_FOLDER = "../conf/virtual-sensors";
-	public static transient Logger logger = LoggerFactory.getLogger(Main.class);
+	public static Logger logger = LoggerFactory.getLogger(Main.class);
 
 	/**
 	 * Mapping between the wrapper name (used in addressing of stream source)
@@ -125,7 +126,7 @@ public final class Main {
 	 * It would be used for monitoring CPU time of each virtual sensor
 	 */
 
-	private static ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
+	private static final ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
 
 	/**
 	 * The Main class represents the entry point of the GSN (Global Sensor Networks)
@@ -226,7 +227,7 @@ public final class Main {
 	 * 
 	 * @param message the array of messages to be displayed on the splash screen
 	 */
-	private static void updateSplashIfNeeded(String message[]) {
+	private static void updateSplashIfNeeded(String[] message) {
 		boolean headless_check = isHeadless();
 
 		if (!headless_check) {
@@ -365,6 +366,9 @@ public final class Main {
 			logger.error("The file wrapper.properties refers to one or more classes which don't exist in the classpath"
 					+ e.getMessage());
 			System.exit(1);
+		} catch (IOException e) {
+			logger.error("Error reading the gsn.xml file: " + e.getMessage());
+			System.exit(1);
 		}
 		return toReturn;
 
@@ -376,8 +380,9 @@ public final class Main {
 	 * @param gsnXMLpath The path to the gsn.xml file.
 	 * @return The loaded ContainerConfig object.
 	 * @throws ClassNotFoundException If the specified gsn.xml file is not found.
+	 * @throws IOException If the specified gsn.xml file cannot be read.
 	 */
-	public static ContainerConfig loadContainerConfig(String gsnXMLpath) throws ClassNotFoundException {
+	public static ContainerConfig loadContainerConfig(String gsnXMLpath) throws ClassNotFoundException, IOException {
 		if (!new File(gsnXMLpath).isFile()) {
 			logger.error("Couldn't find the gsn.xml file @: " + (new File(gsnXMLpath).getAbsolutePath()));
 			System.exit(1);
@@ -479,12 +484,13 @@ public final class Main {
 	 * @return The StorageManager instance.
 	 */
 	public static StorageManager getStorage(VSensorConfig config) {
-		StorageManager sm = storagesConfigs.get(config == null ? null : config);
+		StorageManager sm = storagesConfigs.get(config);
 		if (sm != null) {
 			return sm;
 		}
 
 		DBConnectionInfo dci = null;
+		// StorageConfig is not defined as Optional - isDefined is correct here
 		if (config == null || config.getStorage() == null || !config.getStorage().isDefined()) {
 			sm = mainStorage;
 		} else {

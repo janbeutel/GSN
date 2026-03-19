@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e
+
+SERVICE_NAME="gsn-core.service"
+
+if command -v systemctl >/dev/null 2>&1; then
+  systemctl stop "${SERVICE_NAME}" || true
+  systemctl disable "${SERVICE_NAME}" || true
+  systemctl daemon-reload || true
+fi
+
+exit 0

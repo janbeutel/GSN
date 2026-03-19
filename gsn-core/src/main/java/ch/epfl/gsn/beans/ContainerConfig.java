@@ -223,11 +223,11 @@ public class ContainerConfig {
 	 *                                       configuration.
 	 * @return A ContainerConfig object representing the configuration loaded from
 	 *         the file.
-	 * @throws FileNotFoundException If the specified file for GSN configuration is
+	 * @throws IOException If the specified file for GSN configuration is
 	 *                               not found.
 	 */
 	public static ContainerConfig getConfigurationFromFile(String containerConfigurationFileName)
-			throws FileNotFoundException {
+			throws IOException {
 		GsnConf gsn = GsnConf.load(containerConfigurationFileName);
 		ContainerConfig toReturn = BeansInitializer.container(gsn);
 		toReturn.setSourceFiles(containerConfigurationFileName);

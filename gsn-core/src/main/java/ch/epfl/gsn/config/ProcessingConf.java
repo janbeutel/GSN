@@ -1,64 +1,78 @@
 package ch.epfl.gsn.config;
 
-import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-@Data
-public class ProcessingConf {
+public record ProcessingConf(
+        @JsonProperty("class-name")
+        String className,
 
-    @JsonProperty("class-name")
-    private String className;
+        @JsonProperty("unique-timestamps")
+        boolean uniqueTimestamp,
 
-    @JsonProperty("unique-timestamps")
-    private boolean uniqueTimestamp;
+        // Maps (xml \ "init-params" \ "param")
+        @JsonProperty("init-params")
+        InitParamsContainer initParamsContainer,
 
-    // Maps (xml \ "init-params" \ "param")
-    @JsonProperty("init-params")
-    private InitParamsContainer initParamsContainer;
+        // Maps (xml \ "output-specification") and its "rate" attribute
+        @JsonProperty("output-specification")
+        OutputSpec outputSpec,
 
-    // Maps (xml \ "output-specification") and its "rate" attribute
-    @JsonProperty("output-specification")
-    private OutputSpec outputSpec;
+        // Maps (xml \ "output-structure" \ "field")
+        @JsonProperty("output-structure")
+        OutputStructureContainer outputStructure,
 
-    // Maps (xml \ "output-structure" \ "field")
-    @JsonProperty("output-structure")
-    private OutputStructureContainer outputStructure;
-
-    @JsonProperty("web-input")
-    private Optional<WebInputConf> webInput;
-
-    // --- Helper classes to handle XML nesting ---
-
-    @Data
-    public static class InitParamsContainer {
-        @JacksonXmlProperty(localName = "param")
-        private List<Param> params;
+        @JsonProperty("web-input")
+        Optional<WebInputConf> webInput
+) {
+    public Optional<Integer> rate() {
+        return outputSpec == null || outputSpec.rate() == null ? Optional.empty() : Optional.of(outputSpec.rate());
     }
 
-    @Data
-    public static class Param {
-        @JacksonXmlProperty(isAttribute = true)
-        private String name;
-        @JacksonXmlText
-        private String value;
+    public List<FieldConf> output() {
+        return outputStructure == null || outputStructure.fields() == null ? List.of() : outputStructure.fields();
     }
 
-    @Data
-    public static class OutputSpec {
-        @JacksonXmlProperty(isAttribute = true)
-        private Integer rate;
+    public java.util.Map<String, String> initParams() {
+        if (initParamsContainer == null || initParamsContainer.params() == null) {
+            return java.util.Map.of();
+        }
+        HashMap<String, String> out = new HashMap<>();
+        for (Param p : initParamsContainer.params()) {
+            out.put(p.name(), p.value());
+        }
+        return out;
     }
 
-    @Data
-    public static class OutputStructureContainer {
-        @JacksonXmlProperty(isAttribute = true, localName = "partition-field")
-        private String partitionField;
+    // --- Helper records to handle XML nesting ---
 
-        @JacksonXmlProperty(localName = "field")
-        private List<FieldConf> fields;
-    }
+    public record InitParamsContainer(
+            @JacksonXmlProperty(localName = "param")
+            List<Param> params
+    ) {}
+
+    public record Param(
+            @JacksonXmlProperty(isAttribute = true)
+            String name,
+
+            @JacksonXmlText
+            String value
+    ) {}
+
+    public record OutputSpec(
+            @JacksonXmlProperty(isAttribute = true)
+            Integer rate
+    ) {}
+
+    public record OutputStructureContainer(
+            @JacksonXmlProperty(isAttribute = true, localName = "partition-field")
+            String partitionField,
+
+            @JacksonXmlProperty(localName = "field")
+            List<FieldConf> fields
+    ) {}
 }

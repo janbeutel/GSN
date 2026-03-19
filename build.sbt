@@ -3,7 +3,7 @@ lazy val commonSettings = Seq(
   organization := "ch.epfl.gsn",
   version := "2.0.4",
   scalaVersion := "2.12.4",
-  javacOptions in (Compile, compile) ++= Seq("-source", "11", "-target", "11"),
+  javacOptions in (Compile, compile) ++= Seq("-source", "17", "-target", "17"),
   resolvers ++= Seq(
     DefaultMavenRepository,
     "Typesafe Repository" at "https://repo.maven.apache.org/maven2/",

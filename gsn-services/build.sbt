@@ -55,7 +55,7 @@ NativePackagerKeys.packageDescription := "Global Sensor Networks Services"
 
 NativePackagerKeys.maintainer in com.typesafe.sbt.SbtNativePackager.Linux := "LSIR EPFL <gsn@epfl.ch>"
 
-debianPackageDependencies in Debian += "java11-runtime"
+debianPackageDependencies in Debian += "java17-runtime"
 
 debianPackageRecommends in Debian ++= Seq("postgresql", "gsn-core", "nginx")
 

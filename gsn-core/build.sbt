@@ -1,28 +1,37 @@
-import NativePackagerHelper._
+import com.typesafe.sbt.packager.linux._ 
 
-import com.typesafe.sbt.packager.archetypes.systemloader.ServerLoader
+enablePlugins(JavaServerAppPackaging, SystemdPlugin)
 
-import com.typesafe.sbt.packager.archetypes.TemplateWriter
-
-import com.typesafe.sbt.packager.linux._
-
+// --- MIGRATED GLOBAL SETTINGS ---
+organization := "ch.epfl.gsn"
 name := "gsn-core"
+version := "2.0.4"
+scalaVersion := "2.12.18" // Crucial for Java 17 compatibility
 
-Revolver.settings
+Compile / javacOptions ++= Seq("-source", "17", "-target", "17")
+scalacOptions += "-deprecation"
+EclipseKeys.projectFlavor := EclipseProjectFlavor.Java
 
+resolvers ++= Seq(
+  DefaultMavenRepository,
+  "Typesafe Repository" at "https://repo.maven.apache.org/maven2/",
+  "osgeo" at "https://repo.osgeo.org/repository/release/",
+  "play-authenticate (release)" at "https://oss.sonatype.org/content/repositories/releases/",
+  "play-authenticate (snapshot)" at "https://oss.sonatype.org/content/repositories/snapshots/",
+  "Local ivy Repository" at ""+Path.userHome.asFile.toURI.toURL+"/.ivy2/local",
+  "Local cache" at ""+file(".").toURI.toURL+"lib/cache"
+)
+// --------------------------------
+
+// --- DEPENDENCIES ---
 libraryDependencies ++= Seq(
   "org.projectlombok" % "lombok" % "1.18.44" % Provided,
-//   "com.typesafe" % "config" % "1.2.1",
-//   "org.scala-lang.modules" %% "scala-xml" % "1.0.5",
   "com.h2database" % "h2" % "1.4.195",
-  "javax.media" % "jai_core" % "1.1.3",
   "com.mchange" % "c3p0" % "0.9.5-pre10",
-  // The module that provides Jdk8Module (for Optional support)
   "com.fasterxml.jackson.datatype" % "jackson-datatype-jdk8" % "2.17.0",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.17.0",
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-xml" % "2.17.0",
   "com.vividsolutions" % "jts-core" % "1.14.0",
-  //"mysql" % "mysql-connector-java" % "5.1.29",
   "mysql" % "mysql-connector-java" % "8.0.28",
   "org.postgresql" % "postgresql" % "42.3.0",
   "org.apache.commons" % "commons-dbcp2" % "2.0",
@@ -50,78 +59,64 @@ libraryDependencies ++= Seq(
   "org.zeromq" % "jeromq" % "0.3.5",
   "org.eclipse.paho" % "org.eclipse.paho.client.mqttv3" % "1.1.0",
   "org.eclipse.californium" % "californium-core" % "1.0.4",
-  "junit" % "junit" % "4.11" %  "test",
-  //"ch.epfl.gsn" % "gsn-tools" % "2.0.3",
-  "org.easymock" % "easymockclassextension" % "3.2" % "test",
+  "junit" % "junit" % "4.11" %  Test,
+  "org.easymock" % "easymockclassextension" % "3.2" % Test,
   "commons-fileupload" % "commons-fileupload" % "1.3.3",
-  "javax.servlet" % "javax.servlet-api" % "3.0.1" % "provided",
+  "javax.servlet" % "javax.servlet-api" % "3.0.1" % Provided,
   "com.jfinal" % "cos" % "2022.2",
   "org.eclipse.jetty" % "jetty-continuation" % "9.4.43.v20210629",
   "org.eclipse.jetty" % "jetty-io" % "9.4.43.v20210629",
   "org.jibx" % "jibx-run" % "1.3.1",
-  "javax.media" % "jai_codec" % "1.1.3",
-  "org.httpunit" % "httpunit" % "1.7.2" % "test" exclude("xerces","xercesImpl") exclude("xerces","xmlParserAPIs") exclude("javax.servlet","servlet-api")
+  "org.httpunit" % "httpunit" % "1.7.2" % Test exclude("xerces","xercesImpl") exclude("xerces","xmlParserAPIs") exclude("javax.servlet","servlet-api")
 )
+
+Compile / unmanagedJars += file("lib/tinyos-2.x.jar")
+Compile / unmanagedJars += file("lib/tinyos-1.x-gsn-src-bin.jar")
+Compile / unmanagedJars += file("lib/jai_codec-1.1.3.jar")
+Compile / unmanagedJars += file("lib/jai_core-1.1.3.jar")
 
 
 mainClass := Some("ch.epfl.gsn.Main")
 
-NativePackagerKeys.packageSummary in com.typesafe.sbt.SbtNativePackager.Linux := "GSN Server"
+// --- NATIVE PACKAGER ---
+Linux / packageSummary := "GSN Server"
+Windows / packageSummary := "GSN Server"
+packageDescription := "Global Sensor Networks Core"
+Windows / maintainer := "LSIR EPFL <gsn@epfl.ch>"
+Linux / maintainer := "LSIR EPFL <gsn@epfl.ch>"
 
-NativePackagerKeys.packageSummary in com.typesafe.sbt.SbtNativePackager.Windows := "GSN Server"
+Debian / debianPackageDependencies += "java17-runtime"
+Debian / debianPackageRecommends ++= Seq("postgresql", "munin-node", "gsn-services")
+Linux / daemonUser := "gsn"
 
-NativePackagerKeys.packageDescription := "Global Sensor Networks Core"
+// --- MAPPINGS ---
+Universal / mappings += (Compile / sourceDirectory).value / "templates" / "gsn-core" -> "bin/gsn-core"
+Universal / mappings += (Compile / sourceDirectory).value / "main" / "resources" / "log4j2.xml" -> "conf/log4j2.xml"
+Universal / mappings += baseDirectory.value / ".." / "conf" / "gsn.xml" -> "conf/gsn.xml"
+Universal / mappings += (Compile / sourceDirectory).value / "main" / "resources" / "wrappers.properties" -> "conf/wrappers.properties"
 
-NativePackagerKeys.maintainer in com.typesafe.sbt.SbtNativePackager.Windows := "LSIR EPFL <gsn@epfl.ch>"
-
-NativePackagerKeys.maintainer in com.typesafe.sbt.SbtNativePackager.Linux := "LSIR EPFL <gsn@epfl.ch>"
-
-debianPackageDependencies in Debian += "java11-runtime"
-
-debianPackageRecommends in Debian ++= Seq("postgresql", "munin-node", "gsn-services")
-
-serverLoading in Debian := Some(ServerLoader.Systemd)
-
-daemonUser in Linux := "gsn"
-
-mappings in Universal += (sourceDirectory.value / "templates" / "gsn-core") -> "bin/gsn-core"
-
-mappings in Universal += (sourceDirectory.value / "main" / "resources" / "log4j2.xml") -> "conf/log4j2.xml"
-
-mappings in Universal += (baseDirectory.value / ".." / "conf" / "gsn.xml") -> "conf/gsn.xml"
-
-mappings in Universal += (sourceDirectory.value / "main" / "resources" / "wrappers.properties") -> "conf/wrappers.properties"
-
-linuxPackageMappings in Debian += packageMapping(
+Debian / linuxPackageMappings += packageMapping(
   (baseDirectory.value / ".." / "virtual-sensors" / "packaged") -> "/usr/share/gsn-core/conf/virtual-sensors"
 ) withUser "gsn" withGroup "root" withPerms "0775" withContents()
 
-mappings in Universal ++= ((baseDirectory.value / ".." / "virtual-sensors" / "samples").***).pair(file => Some("virtual-sensors-samples/" + file.name))
+Universal / mappings ++= {
+  val samplesDir = baseDirectory.value / ".." / "virtual-sensors" / "samples"
+  // Get all files, filter out directories, and map them to the new folder
+  samplesDir.allPaths.get.filter(_.isFile).map { file =>
+    file -> s"virtual-sensors-samples/${file.getName}"
+  }
+}
 
-
-linuxPackageMappings := {
-    val mappings = linuxPackageMappings.value
+Linux / linuxPackageMappings := {
+    val mappings = (Linux / linuxPackageMappings).value
     mappings map { 
         case linuxPackage if linuxPackage.fileData.config equals "true" =>
-            val newFileData = linuxPackage.fileData.copy(
-                user = "gsn"
-            )
-            linuxPackage.copy(
-                fileData = newFileData
-            )
+            val newFileData = linuxPackage.fileData.copy(user = "gsn")
+            linuxPackage.copy(fileData = newFileData)
         case linuxPackage => linuxPackage
     }
 }
-enablePlugins(SystemdPlugin)
 
-scalacOptions += "-deprecation"
-
-EclipseKeys.projectFlavor := EclipseProjectFlavor.Java
-
-mainClass in Revolver.reStart := Some("ch.epfl.gsn.Main")
-
-unmanagedJars in Compile += file("lib/tinyos-2.x.jar")
-unmanagedJars in Compile += file("lib/tinyos-1.x-gsn-src-bin.jar")
-
-Revolver.reStartArgs := Seq("../conf", "../virtual-sensors")
-
+// --- REVOLVER ---
+reStart / mainClass := Some("ch.epfl.gsn.Main")
+reStart / reStartArgs := Seq("../conf", "../virtual-sensors")

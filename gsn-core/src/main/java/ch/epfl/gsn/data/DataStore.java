@@ -20,7 +20,7 @@ public class DataStore {
 
     public DataStore(GsnConf gsn) {
         this.gsn = gsn;
-        this.dataSource = createDataSource("gsn", gsn.getStorageConf());
+        this.dataSource = createDataSource("gsn", gsn.storageConf());
     }
 
     /**
@@ -33,7 +33,7 @@ public class DataStore {
 
     private DataSource createDataSource(String name, StorageConf store) {
         // Check if a datasource with this URL already exists in C3P0 registry
-        DataSource ds = C3P0Registry.pooledDataSourceByName(store.getUrl());
+        DataSource ds = C3P0Registry.pooledDataSourceByName(store.url());
         if (ds != null) {
             return ds;
         }
@@ -41,15 +41,15 @@ public class DataStore {
         log.debug("Creating a new datasource: {}", store);
         ComboPooledDataSource cpds = new ComboPooledDataSource(name);
         try {
-            cpds.setDriverClass(store.getDriver());
+            cpds.setDriverClass(store.driver());
         } catch (PropertyVetoException e) {
-            log.error("Invalid JDBC driver: " + store.getDriver(), e);
+            log.error("Invalid JDBC driver: " + store.driver(), e);
             throw new RuntimeException(e);
         }
 
-        cpds.setJdbcUrl(store.getUrl());
-        cpds.setUser(store.getUser());
-        cpds.setPassword(store.getPass());
+        cpds.setJdbcUrl(store.url());
+        cpds.setUser(store.user());
+        cpds.setPassword(store.pass());
         
         // Pool Settings
         cpds.setMinPoolSize(1);
@@ -60,10 +60,10 @@ public class DataStore {
     }
 
     public void close() {
-        DataSource ds = C3P0Registry.pooledDataSourceByName(gsn.getStorageConf().getUrl());
+        DataSource ds = C3P0Registry.pooledDataSourceByName(gsn.storageConf().url());
         if (ds instanceof ComboPooledDataSource) {
             ((ComboPooledDataSource) ds).close();
-            log.info("Closed C3P0 data source: {}", gsn.getStorageConf());
+            log.info("Closed C3P0 data source: {}", gsn.storageConf());
         }
     }
     
