@@ -695,7 +695,7 @@ public class BinaryPlugin extends AbstractPlugin {
 
             byte[] buf = new byte[4096];
 	        while(cis.read(buf) >= 0 && !dispose) {
-	        	yield();
+	        	Thread.yield();
 	        }
 	        if (dispose)
 	        	return new Serializable[]{};
