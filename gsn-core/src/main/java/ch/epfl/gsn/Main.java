@@ -126,7 +126,7 @@ public final class Main {
 	 * It would be used for monitoring CPU time of each virtual sensor
 	 */
 
-	private static final ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
+	private static ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
 
 	/**
 	 * The Main class represents the entry point of the GSN (Global Sensor Networks)
