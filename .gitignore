@@ -29,3 +29,4 @@ gsn-webui/.bsp
 gsn-webui/gsn-webui-backend/.bsp
 /gsn-webui/gsn-webui-frontend/.angular
 gsn-core/project/.bloop
+.metals

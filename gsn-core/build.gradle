@@ -57,7 +57,7 @@ dependencies {
     implementation 'rome:rome:1.0'
     implementation 'org.jfree:jfreechart:1.0.19'
     implementation 'org.jfree:jcommon:1.0.23'
-    implementation 'org.codehaus.groovy:groovy-all:2.2.2'
+    implementation 'org.codehaus.groovy:groovy:3.0.23'
     implementation 'net.rforge:REngine:0.6-8.1'
     implementation 'net.rforge:Rserve:0.6-8.1'
     implementation 'org.rxtx:rxtx:2.1.7'
@@ -75,6 +75,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.11'
     testImplementation 'org.easymock:easymockclassextension:3.2'
+    testImplementation 'org.mockito:mockito-core:5.18.0'
     testImplementation('org.httpunit:httpunit:1.7.2') {
         exclude group: 'xerces', module: 'xercesImpl'
         exclude group: 'xerces', module: 'xmlParserAPIs'
@@ -118,13 +119,14 @@ tasks.named('buildDeb', com.netflix.gradle.plugins.deb.Deb) {
 
     packageName = 'gsn-core'
     release = '1'
-    arch = ALL
+    arch = 'ALL'
     os = LINUX
     summary = 'GSN Server'
     packageDescription = 'Global Sensor Networks Core'
     maintainer = 'LSIR EPFL <gsn@epfl.ch>'
 
-    requires('java17-runtime')
+    // Use a concrete runtime package available on both Debian and Ubuntu.
+    requires('openjdk-17-jre-headless')
     suggests('postgresql')
     suggests('munin-node')
     suggests('gsn-services')
@@ -150,7 +152,15 @@ tasks.named('buildDeb', com.netflix.gradle.plugins.deb.Deb) {
         fileType CONFIG
         user 'gsn'
     }
-    from('../virtual-sensors/packaged') {
+    // Ship one default VS so a fresh install has a runnable sensor.
+    from('../conf/virtual-sensors/packaged/memoryDataVS.xml') {
+        into '/usr/share/gsn-core/conf/virtual-sensors'
+        user 'gsn'
+        permissionGroup 'root'
+        fileMode 0775
+    }
+    // Always create conf/virtual-sensors, even when packaged sensors are empty.
+    from('packaging/debian/virtual-sensors') {
         into '/usr/share/gsn-core/conf/virtual-sensors'
         user 'gsn'
         permissionGroup 'root'

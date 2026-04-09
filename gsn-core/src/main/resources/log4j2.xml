@@ -27,7 +27,8 @@
         <!-- The set of built-in levels includes ALL, TRACE, DEBUG, INFO, WARN, ERROR, FATAL, and OFF. -->
         <Root level="info">
         <!-- <Root level="error"> -->
-          <AppenderRef ref="Console" level="FATAL"/>
+          <!-- <AppenderRef ref="Console" level="FATAL"/> -->
+          <AppenderRef ref="Console" level="INFO"/>
           <AppenderRef ref="LogFile" level="INFO"/>
           <AppenderRef ref="ErrorFile" level="ERROR"/>
         </Root>
