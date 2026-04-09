@@ -51,6 +51,7 @@ public record WrapperConf(
     ) {}
 
     public record OutputStructureContainer(
+            @JacksonXmlElementWrapper(useWrapping = false)
             @JacksonXmlProperty(localName = "field")
             List<FieldConf> fields
     ) {}

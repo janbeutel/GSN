@@ -57,8 +57,11 @@ public class TestHibernateStorage {
 
     @BeforeClass
     public static void initClass() {
-        //dbInfo = new HibernateUtil.DBConnectionInfo("org.h2.Driver", "jdbc:h2:mem:test", "sa", "");
-        dbInfo = new DBConnectionInfo("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/ch.epfl.gsn", "root", "");
+        // These tests should be self-contained. By default they used MySQL on localhost,
+        // which is not available in the typical CI/test environment.
+        // We switch to an in-memory H2 database that runs in MySQL mode.
+        dbInfo = new DBConnectionInfo("org.h2.Driver",
+                "jdbc:h2:mem:hibernate-test;MODE=MySQL;DB_CLOSE_DELAY=-1", "sa", "");
     }
 
     @Before

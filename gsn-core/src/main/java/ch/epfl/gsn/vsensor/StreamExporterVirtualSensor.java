@@ -39,7 +39,7 @@ import ch.epfl.gsn.Main;
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.beans.VSensorConfig;
 import ch.epfl.gsn.utils.GSNRuntimeException;
-
+import ch.epfl.gsn.storage.StorageManager;
 import org.slf4j.Logger;
 
 import java.sql.Connection;
@@ -105,10 +105,19 @@ public class StreamExporterVirtualSensor extends AbstractVirtualSensor {
 			if(logger.isDebugEnabled()){
 				logger.debug("jdbc connection established.");
 			}
-			if (!Main.getStorage(table_name.toString()).tableExists(table_name,
-					getVirtualSensorConfiguration().getOutputStructure(), connection)) {
-				Main.getStorage(table_name.toString()).executeCreateTable(table_name,
-						getVirtualSensorConfiguration().getOutputStructure(), false, connection);
+			// `Main.getStorage(vsName)` returns null if the provided name isn't
+			// registered in Mappings. StreamExporter is frequently used with a
+			// table name that is not a known virtual-sensor name, so fall back to
+			// the default storage manager.
+			if (table_name == null) {
+				throw new GSNRuntimeException("Initialization of the Stream Exporter VS failed: missing 'table' parameter.");
+			}
+			StorageManager storage = Main.getStorage(table_name.toString());
+			if (storage == null) {
+				storage = Main.getDefaultStorage();
+			}
+			if (!storage.tableExists(table_name, getVirtualSensorConfiguration().getOutputStructure(), connection)) {
+				storage.executeCreateTable(table_name, getVirtualSensorConfiguration().getOutputStructure(), false, connection);
 			}
 		} catch (ClassNotFoundException e) {
 			logger.error(e.getMessage(), e);
@@ -136,14 +145,16 @@ public class StreamExporterVirtualSensor extends AbstractVirtualSensor {
 	 * @param streamElement the stream element to be inserted
 	 */
 	public void dataAvailable(String inputStreamName, StreamElement streamElement) {
-		StringBuilder query = Main.getStorage(table_name.toString()).getStatementInsert(table_name,
-				getVirtualSensorConfiguration().getOutputStructure());
+		ch.epfl.gsn.storage.StorageManager storage = Main.getStorage(table_name.toString());
+		if (storage == null) {
+			storage = Main.getDefaultStorage();
+		}
+		StringBuilder query = storage.getStatementInsert(table_name, getVirtualSensorConfiguration().getOutputStructure());
 
 		try {
 			counter++; //
 			startTime = System.nanoTime();
-			Main.getStorage(table_name.toString()).executeInsert(table_name,
-					getVirtualSensorConfiguration().getOutputStructure(), streamElement, getConnection());
+			storage.executeInsert(table_name, getVirtualSensorConfiguration().getOutputStructure(), streamElement, getConnection());
 			estimatedTime += (System.nanoTime() - startTime);
 			if (counter >= limit) {
 				double seconds = (double) estimatedTime / 1000000000.0;

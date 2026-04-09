@@ -106,7 +106,8 @@ public class TestScriptletProcessor {
     @Test
     public void testCorrectScriptExecution() {
 
-        ScriptletProcessor processor = getProcessor(dataFields1, "msg = 'Hello ' + ch.epfl.gsn; def msg1 = 'This is a script internal variable.'");
+        ScriptletProcessor processor = getProcessor(dataFields1,
+                "msg = 'Hello ' + binding.getVariable('ch.epfl.gsn'); def msg1 = 'This is a script internal variable.'");
         StreamElement se = new StreamElement(dataFields1, data1);
         Binding context = processor.updateContext(se);
         context.setVariable("ch.epfl.gsn", new String("Groovy GSN"));
@@ -124,7 +125,10 @@ public class TestScriptletProcessor {
 
     @Test
     public void testStatefullScriptlet() {
-       ScriptletProcessor processor = getProcessor(dataFields1, "msg = (binding.getVariables().get('msg')==null) ? '' : msg; msg = 'Hello World ' + msg + ' ' + ch.epfl.gsn + '!'; println msg; return ch.epfl.gsn;");
+       ScriptletProcessor processor = getProcessor(dataFields1,
+               "msg = (binding.getVariables().get('msg')==null) ? '' : msg; "
+                       + "def g = binding.getVariable('ch.epfl.gsn'); "
+                       + "msg = 'Hello World ' + msg + ' ' + g + '!'; println msg; return g;");
         StreamElement se = new StreamElement(dataFields1, data1);
         Binding context = processor.updateContext(se);
         context.setVariable("ch.epfl.gsn", new String("Groovy GSN"));

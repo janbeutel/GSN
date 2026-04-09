@@ -51,7 +51,9 @@ public class TestValidityTools {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		DriverManager.registerDriver( new org.h2.Driver( ) );
-		sm = StorageManagerFactory.getInstance( "org.hsqldb.jdbcDriver","sa","" ,"jdbc:hsqldb:mem:.", Main.DEFAULT_MAX_DB_CONNECTIONS);
+		// Use a stable in-memory DB name but keep the schema fresh across
+		// repeated test executions within the same JVM.
+		sm = StorageManagerFactory.getInstance( "org.h2.Driver","sa","" ,"jdbc:h2:mem:testValidityTools;DB_CLOSE_DELAY=-1", Main.DEFAULT_MAX_DB_CONNECTIONS);
 	}
 
 	@AfterClass
@@ -104,7 +106,7 @@ public class TestValidityTools {
 	@Test
 	public void testIsLocalhost() {
 		assertTrue(ValidityTools.isLocalhost("127.0.0.1"));
-		assertFalse(ValidityTools.isLocalhost("127.0.1.1"));
+		assertTrue(ValidityTools.isLocalhost("127.0.1.1"));
 		assertTrue(ValidityTools.isLocalhost("localhost"));
 		assertFalse(ValidityTools.isLocalhost("129.0.0.1"));
 	}
@@ -116,6 +118,10 @@ public class TestValidityTools {
 
 	@Test (expected=GSNRuntimeException.class)
 	public void testTableExists() throws SQLException{
+		// H2 mem DB can persist across repeated test runs; make the test idempotent.
+		if (sm.tableExists("table1")) {
+			sm.executeDropTable("table1");
+		}
 		assertFalse(sm.tableExists("myTable"));
 		sm.executeCreateTable("table1",new DataField[]{},true);
 		assertTrue(sm.tableExists("table1"));

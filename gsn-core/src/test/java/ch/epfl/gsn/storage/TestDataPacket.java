@@ -36,16 +36,20 @@ import junit.framework.TestCase;
 
 public class TestDataPacket extends TestCase {
    
-   String     dbURL = "jdbc:hsqldb:mem:.";
+   // The original test used HSQLDB (org.hsqldb.jdbcDriver), but the project
+   // test dependencies only include H2. We run in HSQLDB compatibility mode.
+   String     dbURL = "jdbc:h2:mem:testdata-packet;MODE=HSQLDB;DB_CLOSE_DELAY=-1";
    
    Connection con;
    
    protected void setUp ( ) throws Exception {
       super.setUp( );
-      Class.forName( "org.hsqldb.jdbcDriver" );
+      Class.forName( "org.h2.Driver" );
       Properties properties = new Properties( );
       properties.put( "user" , "sa" );
       properties.put( "password" , "" );
+      // Best-effort: H2 accepts some of the HSQLDB properties, but they are not
+      // all required for this test.
       properties.put( "ignorecase" , "true" );
       properties.put( "autocommit" , "true" );
       con = DriverManager.getConnection( dbURL , properties );

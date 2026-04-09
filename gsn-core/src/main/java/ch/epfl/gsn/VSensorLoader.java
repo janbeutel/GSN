@@ -683,7 +683,15 @@ public class VSensorLoader extends Thread {
 					+ WrappersUtil.DEFAULT_WRAPPER_PROPERTIES_FILE + "< file.");
 			return null;
 		}
-		AbstractWrapper wrapper = (AbstractWrapper) Main.getWrapperClass(addressBean.getWrapper()).newInstance();
+		AbstractWrapper wrapper = null;
+		try {
+			logger.info("Creating wrapper: " + addressBean.getWrapper());
+
+			wrapper = (AbstractWrapper) Main.getWrapperClass(addressBean.getWrapper()).getDeclaredConstructor().newInstance();
+		} catch (Exception e) {
+			logger.error("Error creating wrapper: " + e.getMessage(), e);
+			return null;
+		}
 		wrapper.setActiveAddressBean(addressBean);
 		boolean initializationResult = wrapper.initialize_wrapper();
 		if (!initializationResult) {

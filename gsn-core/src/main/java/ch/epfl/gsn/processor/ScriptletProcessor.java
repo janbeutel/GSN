@@ -198,6 +198,19 @@ public class ScriptletProcessor extends AbstractVirtualSensor {
     private TimerTask periodicalTask = null;
 
     /**
+     * Legacy support for Groovy 2.x "permissive" dotted-variable resolution.
+     * <p>
+     * Historically, scriptlets could reference binding variables using dotted
+     * identifiers (e.g. {@code ch.epfl.gsn}). With Groovy 3 this is no longer
+     * reliably resolved as a single binding key, so we rewrite those occurrences
+     * to {@code binding.getVariable('ch.epfl.gsn')}.
+     * <p>
+     * This compatibility layer is deprecated and will be removed in the next
+     * major version.
+     */
+    private static final String[] LEGACY_DOTTED_BINDING_KEYS = new String[] { "ch.epfl.gsn" };
+
+    /**
      * Initializes the ScriptletProcessor.
      * 
      * @return true if the initialization is successful, false otherwise.
@@ -329,8 +342,9 @@ public class ScriptletProcessor extends AbstractVirtualSensor {
         // Add the syntactic sugars
         scriptlet.append("def isdef(var){(binding.getVariables().containsKey(var))}\n");
         scriptlet.append("// end auto generated part --\n");
-        // Append the scriplet from the parameter
-        scriptlet.append(ps);
+        // Append the scriptlet from the parameter (legacy rewrites for backward compatibility).
+        String rewritten = rewriteLegacyDottedBindingVariables(ps);
+        scriptlet.append(rewritten);
         //
         GroovyShell shell = new GroovyShell();
         Script script = null;
@@ -344,6 +358,103 @@ public class ScriptletProcessor extends AbstractVirtualSensor {
             return null;
         }
         return script;
+    }
+
+    /**
+     * Rewrites legacy dotted binding references (e.g. {@code ch.epfl.gsn}) to
+     * explicit binding lookups so the script works on Groovy 3+.
+     */
+    private String rewriteLegacyDottedBindingVariables(String scriptSource) {
+        if (scriptSource == null || scriptSource.isEmpty()) {
+            return scriptSource;
+        }
+
+        String rewritten = scriptSource;
+        boolean didRewrite = false;
+
+        for (String key : LEGACY_DOTTED_BINDING_KEYS) {
+            String replacement = "binding.getVariable('" + key + "')";
+            String next = replaceOutsideQuotes(rewritten, key, replacement);
+            didRewrite = didRewrite || !next.equals(rewritten);
+            rewritten = next;
+        }
+
+        if (didRewrite) {
+            logger.warn(
+                    "Deprecated scriptlet syntax detected: dotted binding variable reference(s) like '" +
+                            LEGACY_DOTTED_BINDING_KEYS[0] +
+                            "'. " +
+                            "ScriptletProcessor rewrites them for Groovy 3+. " +
+                            "This behavior is deprecated and will be removed in the next major version.");
+        }
+
+        return rewritten;
+    }
+
+    /**
+     * Replaces occurrences of {@code token} with {@code replacement}, but only when
+     * the occurrence is outside single-quoted / double-quoted string literals.
+     */
+    private String replaceOutsideQuotes(String source, String token, String replacement) {
+        if (source == null || source.isEmpty() || token == null || token.isEmpty()) {
+            return source;
+        }
+
+        StringBuilder out = new StringBuilder(source.length());
+        boolean inSingleQuote = false;
+        boolean inDoubleQuote = false;
+
+        for (int i = 0; i < source.length();) {
+            char c = source.charAt(i);
+
+            // Handle string literal toggles (very small heuristic: enough for our scriptlets).
+            if (!inDoubleQuote && c == '\'') {
+                // Skip escaped quote: \' inside single-quoted string.
+                if (i > 0 && source.charAt(i - 1) == '\\') {
+                    out.append(c);
+                    i++;
+                    continue;
+                }
+                inSingleQuote = !inSingleQuote;
+                out.append(c);
+                i++;
+                continue;
+            }
+            if (!inSingleQuote && c == '"') {
+                if (i > 0 && source.charAt(i - 1) == '\\') {
+                    out.append(c);
+                    i++;
+                    continue;
+                }
+                inDoubleQuote = !inDoubleQuote;
+                out.append(c);
+                i++;
+                continue;
+            }
+
+            if (!inSingleQuote && !inDoubleQuote && i + token.length() <= source.length()
+                    && source.startsWith(token, i) && isStandaloneToken(source, i, token.length())) {
+                out.append(replacement);
+                i += token.length();
+                continue;
+            }
+
+            out.append(c);
+            i++;
+        }
+
+        return out.toString();
+    }
+
+    private boolean isStandaloneToken(String source, int start, int tokenLen) {
+        char before = start > 0 ? source.charAt(start - 1) : '\0';
+        int afterIdx = start + tokenLen;
+        char after = afterIdx < source.length() ? source.charAt(afterIdx) : '\0';
+        return !isIdentifierChar(before) && !isIdentifierChar(after);
+    }
+
+    private boolean isIdentifierChar(char c) {
+        return Character.isLetterOrDigit(c) || c == '_' || c == '$';
     }
 
     /**

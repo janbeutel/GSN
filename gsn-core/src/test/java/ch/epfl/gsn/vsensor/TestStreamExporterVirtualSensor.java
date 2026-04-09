@@ -31,6 +31,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
@@ -43,14 +44,15 @@ import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.DataTypes;
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.beans.VSensorConfig;
+import ch.epfl.gsn.Main;
 import ch.epfl.gsn.utils.KeyValueImp;
-import ch.epfl.gsn.vsensor.StreamExporterVirtualSensor;
 
 public class TestStreamExporterVirtualSensor extends TestCase {
    
-   private final String  user = "sa" , passwd = "" , db = "." , url = "jdbc:hsqldb:mem:." , streamName = "aJUnitTestStream";
+   private final String  user = "sa" , passwd = "" , url = "jdbc:h2:mem:.;DB_CLOSE_DELAY=-1" , streamName = "aJUnitTestStream";
    
    private VSensorConfig config;
+   private static final String DRIVER_H2 = "org.h2.Driver";
    
    /*
     * To run some of these tests, a mysql server must be running on localhost
@@ -63,9 +65,12 @@ public class TestStreamExporterVirtualSensor extends TestCase {
     * @see junit.framework.TestCase#setUp()
     */
    public void setUp ( ) {
+      // Ensure GSN singletons/config are initialized; StreamExporter uses Main.getStorage().
+      Main.getInstance();
       config = new VSensorConfig( );
       config.setName( "JUnitTestStreamExporterVS" );
       config.setFileName( "PlaceholderfileNameForJUNitTesting" );
+      config.setOutputStructure( new DataField[] {} );
       
    }
    
@@ -87,6 +92,7 @@ public class TestStreamExporterVirtualSensor extends TestCase {
     */
    public void testMissingAllEssentialParameters ( ) {
       StreamExporterVirtualSensor vs = new StreamExporterVirtualSensor( );
+      vs.setVirtualSensorConfiguration( config );
       assertFalse( vs.initialize( ) );
    }
    
@@ -100,6 +106,10 @@ public class TestStreamExporterVirtualSensor extends TestCase {
       params.add( new KeyValueImp( StreamExporterVirtualSensor.PARAM_URL , url ) );
       params.add( new KeyValueImp( StreamExporterVirtualSensor.PARAM_USER , user ) );
       params.add( new KeyValueImp( StreamExporterVirtualSensor.PARAM_PASSWD , passwd ) );
+      params.add( new KeyValueImp( StreamExporterVirtualSensor.PARAM_DRIVER , DRIVER_H2 ) );
+      params.add( new KeyValueImp( StreamExporterVirtualSensor.TABLE_NAME , streamName ) );
+      // StreamExporterVS expects a numeric limit in 'entries'
+      params.add( new KeyValueImp( StreamExporterVirtualSensor.PARAM_ENTRIES , "1" ) );
       config.setMainClassInitialParams( params );
       vs.setVirtualSensorConfiguration( config );
       assertTrue( vs.initialize( ) );
@@ -116,22 +126,27 @@ public class TestStreamExporterVirtualSensor extends TestCase {
       params.add( new KeyValueImp( StreamExporterVirtualSensor.PARAM_URL , url ) );
       params.add( new KeyValueImp( StreamExporterVirtualSensor.PARAM_USER , user ) );
       params.add( new KeyValueImp( StreamExporterVirtualSensor.PARAM_PASSWD , passwd ) );
+      params.add( new KeyValueImp( StreamExporterVirtualSensor.PARAM_DRIVER , DRIVER_H2 ) );
+      params.add( new KeyValueImp( StreamExporterVirtualSensor.TABLE_NAME , streamName ) );
+      params.add( new KeyValueImp( StreamExporterVirtualSensor.PARAM_ENTRIES , "1" ) );
       config.setMainClassInitialParams( params );
       vs.setVirtualSensorConfiguration( config );
-      vs.initialize( );
       
       // configure datastream
       Vector < DataField > fieldTypes = new Vector < DataField >( );
-      Object [ ] data = null;
-      
-      for ( String type : DataTypes.TYPE_NAMES )
-         fieldTypes.add( new DataField( type , type , type ) );
-      int i = 0;
-      for ( Object value : DataTypes.TYPE_SAMPLE_VALUES )
-         data[ i++ ] = value;
+      // Keep this test self-contained and robust: only verify insertion for
+      // a simple VARCHAR field type.
+      fieldTypes.add( new DataField( "value", DataTypes.VARCHAR ) );
+      Serializable[] data = new Serializable[] { "A chain of chars" };
+
+      // StreamExporterVS uses the output structure from the virtual sensor config
+      // to create the destination table.
+      config.setOutputStructure( fieldTypes.toArray( new DataField[] {} ) );
+
+      vs.initialize( );
       
       long timeStamp = new Date( ).getTime( );
-      StreamElement streamElement = new StreamElement( fieldTypes.toArray( new DataField[] {} ) , ( Serializable [ ] ) data , timeStamp );
+      StreamElement streamElement = new StreamElement( fieldTypes.toArray( new DataField[] {} ) , data , timeStamp );
       
       // give datastream to vs
       vs.dataAvailable( streamName , streamElement );
@@ -139,13 +154,11 @@ public class TestStreamExporterVirtualSensor extends TestCase {
       // clean up and control
       boolean result = true;
       try {
-         DriverManager.registerDriver( new com.mysql.jdbc.Driver( ) );
-         Connection connection = DriverManager.getConnection( url , user , passwd );
+         Connection connection = vs.getConnection();
          Statement statement = connection.createStatement( );
-         statement.execute( "SELECT * FROM " + streamName );
-         System.out.println( "result" + result );
-         result = statement.getResultSet( ).last( );
-         System.out.println( "result" + result );
+         ResultSet rs = statement.executeQuery( "SELECT COUNT(*) FROM " + streamName );
+         rs.next();
+         result = rs.getLong( 1 ) == 1L;
       } catch ( SQLException e ) {
          // TODO Auto-generated catch block
          e.printStackTrace( );

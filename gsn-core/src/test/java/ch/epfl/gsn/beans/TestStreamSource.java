@@ -67,9 +67,9 @@ public class TestStreamSource {
    
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-	  DriverManager.registerDriver( new org.h2.Driver( ) );
-	  sm = StorageManagerFactory.getInstance("org.h2.Driver","sa","" ,"jdbc:h2:mem:.", Main.DEFAULT_MAX_DB_CONNECTIONS);
-		
+		DriverManager.registerDriver(new org.h2.Driver());
+		Main.getInstance();
+		sm = Main.getWindowStorage();
 	}
 
 	@Before
@@ -201,7 +201,11 @@ public class TestStreamSource {
 		assertTrue(ss.validate());
 		StringBuilder query = ss.toSql();
 		assertTrue(query.toString().toLowerCase().indexOf("mod")<0);
-		assertTrue(query.toString().toLowerCase().indexOf("false")>0);
+		String q = query.toString().toLowerCase();
+		// Equivalent ways to express "no rows":
+		// - `where false` (boolean literal)
+		// - `where 1=0` (portable SQL predicate)
+		assertTrue(q.contains("false") || q.contains("1=0"));
 		sm.executeInsert(ss.getWrapper().getDBAliasInStr(), ss.getWrapper().getOutputFormat(),new StreamElement(new DataField[] {},new Serializable[] {},System.currentTimeMillis()/2) );
 		DataEnumerator dm = sm.executeQuery(query, true);
 		assertFalse(dm.hasMoreElements());
@@ -229,7 +233,8 @@ public class TestStreamSource {
 
 		ss.setWrapper(wrapper);
 		assertTrue(ss.validate());
-		assertTrue(ss.toSql().toString().toLowerCase().indexOf("false")>0);
+		String q = ss.toSql().toString().toLowerCase();
+		assertTrue(q.contains("false") || q.contains("1=0"));
 		wrapper.removeListener(ss);
 	}
 

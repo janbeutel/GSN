@@ -54,7 +54,7 @@ public class CSVHandler {
     }
 
     public boolean initialize(String dataFile, String inFields, String inFormats, char separator, char stringSeparator, int skipFirstXLines, String nullValues) {
-        return initialize(dataFile, inFields, inFormats, separator, stringSeparator, skipFirstXLines, nullValues, LOCAL_TIMEZONE_ID, "check-poin/" + (new File(dataFile).getName() + ".chk-point"));
+        return initialize(dataFile, inFields, inFormats, separator, stringSeparator, skipFirstXLines, nullValues, LOCAL_TIMEZONE_ID, "csv-check-points/" + (new File(dataFile).getName() + ".chk-point"));
     }
 
     public boolean initialize(String dataFile, String inFields, String inFormats, char separator, char stringSeparator, int skipFirstXLines, String nullValues, String timeZone, String checkpointFile) {
@@ -111,7 +111,8 @@ public class CSVHandler {
                 continue;
             else if (isTimeStampFormat(formats[i])) {
                 try {
-                    String tmp = DateTimeFormat.forPattern(getTimeStampFormat(formats[i])).print(System.currentTimeMillis());
+                    // Validate timestamp patterns by attempting to format the current time.
+                    DateTimeFormat.forPattern(getTimeStampFormat(formats[i])).print(System.currentTimeMillis());
                 } catch (IllegalArgumentException e) {
                     logger.error("Validating the time-format(" + formats[i] + ") used by the CSV-wrapper is failed. ");
                     return false;
@@ -135,9 +136,13 @@ public class CSVHandler {
      * @throws IOException
      */
     public static String[] generateFieldIdx(String rawFields, boolean toLowerCase) throws IOException {
-        String[] toReturn = new CSVReader(new StringReader(rawFields)).readNext();
-        if (toReturn == null)
+        String[] toReturn;
+        try (CSVReader reader = new CSVReader(new StringReader(rawFields))) {
+            toReturn = reader.readNext();
+        }
+        if (toReturn == null) {
             return new String[0];
+        }
         for (int i = 0; i < toReturn.length; i++) {
             toReturn[i] = toReturn[i].trim();
             if (toLowerCase)
@@ -156,6 +161,15 @@ public class CSVHandler {
 	            lastItem = Long.parseLong(val.trim());
         }
         items = parseValues(dataFile, lastItem);
+
+        // Persist checkpoint so subsequent calls can skip already-processed rows.
+        // For timestamp-based CSV wrappers, this is the last emitted TIMED value.
+        if (checkPointFile != null && items != null && !items.isEmpty() && items.get(items.size() - 1).containsKey(TIMESTAMP)) {
+            Object ts = items.get(items.size() - 1).get(TIMESTAMP);
+            if (ts instanceof Long) {
+                updateCheckPointFile((Long) ts);
+            }
+        }
 
         return items;
     }

@@ -30,3 +30,5 @@ gsn-webui/gsn-webui-backend/.bsp
 /gsn-webui/gsn-webui-frontend/.angular
 gsn-core/project/.bloop
 .metals
+.vscode/tasks.json
+.vscode/launch.json

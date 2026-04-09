@@ -59,8 +59,9 @@ public class TestVSensorLoader {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		DriverManager.registerDriver( new org.h2.Driver( ) );
-		sm = StorageManagerFactory.getInstance( "org.hsqldb.jdbcDriver","sa","" ,"jdbc:hsqldb:mem:.", Main.DEFAULT_MAX_DB_CONNECTIONS);
+		DriverManager.registerDriver(new org.h2.Driver());
+		Main.getInstance();
+		sm = Main.getWindowStorage();
 	}
 
 	@AfterClass
@@ -126,15 +127,16 @@ public class TestVSensorLoader {
 		StreamSource 	ss1 = new StreamSource().setAlias("my-stream1").setAddressing(new AddressBean[] {new AddressBean("mock-test")}).setSqlQuery("select * from wrapper").setRawHistorySize("2").setInputStream(is);		
 		ss1.setSamplingRate(1);
 		assertTrue(ss1.validate());
-//		assertTrue(loader.prepareStreamSource(is,ss1));
+		MockWrapper wrapper = (MockWrapper) loader.createWrapper(addressing[0]);
+		assertTrue(loader.prepareStreamSource(ss1, wrapper.getOutputFormat(), wrapper));
 		StreamSource 	ss2 = new StreamSource().setAlias("my-stream2").setAddressing(new AddressBean[] {new AddressBean("mock-test")}).setSqlQuery("select * from wrapper").setRawHistorySize("20").setInputStream(is);		
 		ss2.setSamplingRate(1);
 		assertTrue(ss2.validate());
-//		assertTrue(loader.prepareStreamSource(is,ss2));
+		assertTrue(loader.prepareStreamSource(ss2, wrapper.getOutputFormat(), wrapper));
 		ss1.getWrapper().releaseResources();
 		assertFalse(sm.tableExists(ss1.getWrapper().getDBAliasInStr()));
 	}
-	
+
 	@Test
 	public void testReloadingVirtualSensor() throws InstantiationException, IllegalAccessException, SQLException {
 		VSensorLoader loader = new VSensorLoader();
@@ -142,7 +144,8 @@ public class TestVSensorLoader {
 		StreamSource 	ss = new StreamSource().setAlias("my-stream1").setAddressing(addressing).setSqlQuery("select * from wrapper").setRawHistorySize("2").setInputStream(is);		
 		ss.setSamplingRate(1);
 		assertTrue(ss.validate());
-//		assertTrue(loader.prepareStreamSource(is,ss));
+		MockWrapper wrapper = (MockWrapper) loader.createWrapper(addressing[0]);
+		assertTrue(loader.prepareStreamSource(ss, wrapper.getOutputFormat(), wrapper));
 		assertTrue(sm.tableExists(ss.getWrapper().getDBAliasInStr()));
 		assertTrue(sm.tableExists(ss.getUIDStr()));
 		assertFalse(is.getRenamingMapping().isEmpty());
@@ -154,7 +157,6 @@ public class TestVSensorLoader {
 		assertTrue(is.getRenamingMapping().isEmpty());
 		ss = new StreamSource().setAlias("my-stream1").setAddressing(addressing).setSqlQuery("select * from wrapper").setRawHistorySize("2").setInputStream(is);		
 		ss.setSamplingRate(1);
-//		assertTrue(loader.prepareStreamSource(is,ss));
-		
+		assertTrue(loader.prepareStreamSource(ss, wrapper.getOutputFormat(), wrapper));
 	}
 }

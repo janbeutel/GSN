@@ -39,7 +39,6 @@ import java.sql.SQLException;
 import javax.naming.OperationNotSupportedException;
 
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -50,21 +49,16 @@ import ch.epfl.gsn.beans.InputStream;
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.beans.StreamSource;
 import ch.epfl.gsn.storage.StorageManager;
-import ch.epfl.gsn.storage.StorageManagerFactory;
 import ch.epfl.gsn.utils.GSNRuntimeException;
 import ch.epfl.gsn.utils.KeyValueImp;
-import ch.epfl.gsn.wrappers.AbstractWrapper;
-import ch.epfl.gsn.wrappers.MockWrapper;
-import ch.epfl.gsn.wrappers.SystemTime;
 
 public class TestAbstractWrapper {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		DriverManager.registerDriver( new org.h2.Driver( ) );
-
-		sm = StorageManagerFactory.getInstance( "org.h2.Driver","sa","" ,"jdbc:h2:mem:gsn_mem_db", Main.DEFAULT_MAX_DB_CONNECTIONS);
-//		StorageManager.getInstance ( ).initialize ( "com.mysql.jdbc.Driver","root","" , "jdbc:mysql://localhost/ch.epfl.gsn");
+		Main.getInstance();
+		sm = Main.getWindowStorage();
 	}
 
 	@AfterClass
@@ -73,13 +67,6 @@ public class TestAbstractWrapper {
 
 	private static StorageManager sm;
 	
-
-	//@Before
-	//public void setUp() throws Exception {
-	//	sm = StorageManager.getInstance();
-	//	}
-
-
 	@Test (expected=OperationNotSupportedException.class)
 	public void testSendToWrapper1() throws OperationNotSupportedException {
 		SystemTime systemTimeWrapper = new SystemTime();
