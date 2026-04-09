@@ -1,13 +1,16 @@
 <sensor-server>
    <monitor-port>22001</monitor-port>
-   <zmq-enable>true</zmq-enable>
-   <zmqproxy>22022</zmqproxy>
-   <zmqmeta>22023</zmqmeta>
+   <zmq-conf>
+	   <zmq-enable>true</zmq-enable>
+	   <zmqproxy>22022</zmqproxy>
+	   <zmqmeta>22023</zmqmeta>
+   </zmq-conf>
    <max-db-connections>8</max-db-connections>
    <max-sliding-db-connections>8</max-sliding-db-connections>
-   <backlog-commands-enable>false</backlog-commands-enable>
-   <backlog-commands-port>55555</backlog-commands-port>
-
+   <backlog-commands>
+     <backlog-commands-enable>false</backlog-commands-enable>
+     <backlog-commands-port>55555</backlog-commands-port>
+   </backlog-commands>
 
 <!-- Main Storage Database, Mandatory -->
 <!--<storage user="sa" password="" driver="org.h2.Driver" url="jdbc:h2:mem:gsn_mem_db" />-->  
