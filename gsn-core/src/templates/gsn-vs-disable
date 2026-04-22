@@ -1,0 +1,27 @@
+#!/bin/sh
+set -eu
+
+CONFIG_DIR="${GSN_CONFIG_DIR:-/etc/gsn-core}"
+ENABLED_DIR="${CONFIG_DIR}/virtual-sensors-enabled"
+
+if [ "${1:-}" = "" ]; then
+  echo "Usage: gsn-vs-disable <virtual-sensor-name|file.xml>"
+  exit 1
+fi
+
+name="${1}"
+case "${name}" in
+  *.xml) file="${name}" ;;
+  *) file="${name}.xml" ;;
+esac
+
+dst="${ENABLED_DIR}/${file}"
+
+if [ -L "${dst}" ] || [ -f "${dst}" ]; then
+  rm -f "${dst}"
+  echo "Disabled virtual sensor: ${file}"
+  exit 0
+fi
+
+echo "Virtual sensor is not enabled: ${file}"
+exit 1

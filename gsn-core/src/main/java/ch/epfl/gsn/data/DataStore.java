@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.beans.PropertyVetoException;
 
+// TODO verify if this is still in use for the gsn-core -> the defines a variable but is not using it
 public class DataStore {
 
     private static final Logger log = LoggerFactory.getLogger(DataStore.class);

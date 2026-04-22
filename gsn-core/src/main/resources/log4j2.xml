@@ -5,7 +5,7 @@
           <PatternLayout pattern="%highlight{%-6p[%d] [%t] (%F\:%L) - %m%n}"/>
         </Console>
 
-        <RollingFile name="ErrorFile" fileName="logs/error.log" filePattern="logs/gsn-%i.log">
+        <RollingFile name="ErrorFile" fileName="/var/log/gsn-core/error.log" filePattern="/var/log/gsn-core/gsn-error-%i.log">
           <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
           <PatternLayout pattern="%-6p[%d] [%t] (%F\:%L) - %m%n"/>
             <Policies>
@@ -14,7 +14,7 @@
           <DefaultRolloverStrategy max="20" fileIndex="min"/>
         </RollingFile >
 
-        <RollingFile name="LogFile" fileName="logs/gsn.log" filePattern="logs/gsn-%i.log">
+        <RollingFile name="LogFile" fileName="/var/log/gsn-core/gsn.log" filePattern="/var/log/gsn-core/gsn-%i.log">
           <PatternLayout pattern="%-6p[%d] [%t] (%F\:%L) - %m%n"/>
             <Policies>
         		  <SizeBasedTriggeringPolicy size="250 MB"/>

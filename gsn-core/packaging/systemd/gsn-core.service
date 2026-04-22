@@ -7,7 +7,7 @@ Type=simple
 User=gsn
 Group=gsn
 WorkingDirectory=/usr/share/gsn-core
-ExecStart=/usr/share/gsn-core/bin/gsn-core conf conf/virtual-sensors
+ExecStart=/usr/share/gsn-core/bin/gsn-core /etc/gsn-core /etc/gsn-core/virtual-sensors-enabled
 Restart=on-failure
 RestartSec=5
 

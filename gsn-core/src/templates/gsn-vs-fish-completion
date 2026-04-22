@@ -1,0 +1,43 @@
+function __gsn_vs_config_dir
+    if set -q GSN_CONFIG_DIR
+        echo $GSN_CONFIG_DIR
+    else
+        echo /etc/gsn-core
+    end
+end
+
+function __gsn_vs_available
+    set -l config_dir (__gsn_vs_config_dir)
+    set -l dir "$config_dir/virtual-sensors-available"
+    if test -d "$dir"
+        for f in $dir/*.xml
+            if test -f "$f"
+                basename "$f"
+            end
+        end
+    end
+end
+
+function __gsn_vs_enabled
+    set -l config_dir (__gsn_vs_config_dir)
+    set -l dir "$config_dir/virtual-sensors-enabled"
+    if test -d "$dir"
+        for f in $dir/*.xml
+            if test -f "$f" -o -L "$f"
+                basename "$f"
+            end
+        end
+    end
+end
+
+function __gsn_vs_enable_candidates
+    set -l enabled (__gsn_vs_enabled)
+    for candidate in (__gsn_vs_available)
+        if not contains -- "$candidate" $enabled
+            echo "$candidate"
+        end
+    end
+end
+
+complete -c gsn-vs-enable -f -a "(__gsn_vs_enable_candidates)"
+complete -c gsn-vs-disable -f -a "(__gsn_vs_enabled)"

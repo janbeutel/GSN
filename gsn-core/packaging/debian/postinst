@@ -4,7 +4,11 @@ set -e
 SERVICE_NAME="gsn-core.service"
 SERVICE_USER="gsn"
 INSTALL_DIR="/usr/share/gsn-core"
-VIRTUAL_SENSORS_DIR="${INSTALL_DIR}/conf/virtual-sensors"
+CONFIG_DIR="/etc/gsn-core"
+LOG_DIR="/var/log/gsn-core"
+LEGACY_VIRTUAL_SENSORS_DIR="${CONFIG_DIR}/virtual-sensors"
+VIRTUAL_SENSORS_AVAILABLE_DIR="${CONFIG_DIR}/virtual-sensors-available"
+VIRTUAL_SENSORS_ENABLED_DIR="${CONFIG_DIR}/virtual-sensors-enabled"
 
 # Ensure the service account exists before systemd tries to start the unit.
 if ! getent group "${SERVICE_USER}" >/dev/null 2>&1; then
@@ -15,10 +19,38 @@ if ! getent passwd "${SERVICE_USER}" >/dev/null 2>&1; then
   useradd --system --gid "${SERVICE_USER}" --home "${INSTALL_DIR}" --shell /usr/sbin/nologin "${SERVICE_USER}"
 fi
 
-mkdir -p "${VIRTUAL_SENSORS_DIR}"
+mkdir -p "${VIRTUAL_SENSORS_AVAILABLE_DIR}"
+mkdir -p "${VIRTUAL_SENSORS_ENABLED_DIR}"
+mkdir -p "${LOG_DIR}"
 
 if [ -d "${INSTALL_DIR}" ]; then
   chown -R "${SERVICE_USER}:${SERVICE_USER}" "${INSTALL_DIR}"
+fi
+
+if [ -d "${CONFIG_DIR}" ]; then
+  chown -R root:root "${CONFIG_DIR}"
+fi
+
+if [ -d "${LOG_DIR}" ]; then
+  chown -R "${SERVICE_USER}:${SERVICE_USER}" "${LOG_DIR}"
+fi
+
+# Fresh install convenience: auto-enable packaged defaults.
+for available_vs in "${VIRTUAL_SENSORS_AVAILABLE_DIR}"/*.xml; do
+  [ -e "${available_vs}" ] || continue
+  available_name="$(basename "${available_vs}")"
+  enabled_link="${VIRTUAL_SENSORS_ENABLED_DIR}/${available_name}"
+  if [ ! -e "${enabled_link}" ] && [ ! -L "${enabled_link}" ]; then
+    ln -s "../virtual-sensors-available/${available_name}" "${enabled_link}" || true
+  fi
+done
+
+# On upgrades, remind operators to review config compatibility.
+if [ "${1:-}" = "configure" ] && [ -n "${2:-}" ]; then
+  echo "NOTICE: gsn-core was upgraded from version ${2}."
+  echo "NOTICE: Please review /etc/gsn-core/gsn.xml for compatibility with this release."
+  echo "NOTICE: If dpkg prompted about config changes, merge and keep your intended settings."
+  echo "NOTICE: Virtual sensors now support /etc/gsn-core/virtual-sensors-available and /etc/gsn-core/virtual-sensors-enabled."
 fi
 
 if command -v systemctl >/dev/null 2>&1; then

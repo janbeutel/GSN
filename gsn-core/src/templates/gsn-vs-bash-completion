@@ -1,0 +1,40 @@
+_gsn_vs_list_xml_files() {
+  local dir="$1"
+  if [ -d "$dir" ]; then
+    command ls -1 "$dir" 2>/dev/null | command sed -n 's/^\(.*\.xml\)$/\1/p'
+  fi
+}
+
+_gsn_vs_enable_completions() {
+  local cur
+  cur="${COMP_WORDS[COMP_CWORD]}"
+
+  local config_dir available_dir enabled_dir
+  config_dir="${GSN_CONFIG_DIR:-/etc/gsn-core}"
+  available_dir="${config_dir}/virtual-sensors-available"
+  enabled_dir="${config_dir}/virtual-sensors-enabled"
+
+  local available enabled candidates
+  available="$(_gsn_vs_list_xml_files "$available_dir")"
+  enabled="$(_gsn_vs_list_xml_files "$enabled_dir")"
+
+  # Suggest only sensors that are available but not currently enabled.
+  candidates="$(comm -23 <(printf '%s\n' $available | sort -u) <(printf '%s\n' $enabled | sort -u))"
+  COMPREPLY=( $(compgen -W "$candidates" -- "$cur") )
+}
+
+_gsn_vs_disable_completions() {
+  local cur
+  cur="${COMP_WORDS[COMP_CWORD]}"
+
+  local config_dir enabled_dir
+  config_dir="${GSN_CONFIG_DIR:-/etc/gsn-core}"
+  enabled_dir="${config_dir}/virtual-sensors-enabled"
+
+  local enabled
+  enabled="$(_gsn_vs_list_xml_files "$enabled_dir")"
+  COMPREPLY=( $(compgen -W "$enabled" -- "$cur") )
+}
+
+complete -F _gsn_vs_enable_completions gsn-vs-enable
+complete -F _gsn_vs_disable_completions gsn-vs-disable

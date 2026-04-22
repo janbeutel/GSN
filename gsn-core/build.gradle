@@ -51,7 +51,7 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.3'
     implementation 'org.apache.logging.log4j:log4j-web:2.3'
     implementation 'net.sf.opencsv:opencsv:2.3'
-    implementation 'com.thoughtworks.xstream:xstream:1.4.5'
+    implementation 'com.thoughtworks.xstream:xstream:1.4.21'
     implementation 'org.antlr:stringtemplate:3.0'
     implementation 'commons-lang:commons-lang:2.6'
     implementation 'rome:rome:1.0'
@@ -135,36 +135,85 @@ tasks.named('buildDeb', com.netflix.gradle.plugins.deb.Deb) {
 
     from(tasks.installDist) {
         into '/usr/share/gsn-core'
+        // Keep host-specific configuration only in /etc/gsn-core for Debian/FHS.
+        exclude 'conf/**'
     }
 
     from('src/main/resources/log4j2.xml') {
-        into '/usr/share/gsn-core/conf'
+        into '/etc/gsn-core'
         fileType CONFIG
-        user 'gsn'
+        user 'root'
+        permissionGroup 'root'
+        fileMode 0644
     }
     from('src/main/resources/wrappers.properties') {
-        into '/usr/share/gsn-core/conf'
+        into '/etc/gsn-core'
         fileType CONFIG
-        user 'gsn'
+        user 'root'
+        permissionGroup 'root'
+        fileMode 0644
     }
     from('../conf/gsn.xml') {
-        into '/usr/share/gsn-core/conf'
+        into '/etc/gsn-core'
         fileType CONFIG
-        user 'gsn'
+        user 'root'
+        permissionGroup 'root'
+        fileMode 0644
     }
     // Ship one default VS so a fresh install has a runnable sensor.
     from('../conf/virtual-sensors/packaged/memoryDataVS.xml') {
-        into '/usr/share/gsn-core/conf/virtual-sensors'
+        into '/etc/gsn-core/virtual-sensors-available'
         user 'gsn'
         permissionGroup 'root'
         fileMode 0775
     }
-    // Always create conf/virtual-sensors, even when packaged sensors are empty.
+    // Always create /etc/gsn-core/virtual-sensors-available, even when packaged sensors are empty.
     from('packaging/debian/virtual-sensors') {
-        into '/usr/share/gsn-core/conf/virtual-sensors'
+        into '/etc/gsn-core/virtual-sensors-available'
         user 'gsn'
         permissionGroup 'root'
         fileMode 0775
+    }
+
+    from('src/templates/gsn-vs-enable') {
+        into '/usr/bin'
+        permissionGroup 'root'
+        user 'root'
+        fileMode 0755
+    }
+    from('src/templates/gsn-vs-disable') {
+        into '/usr/bin'
+        permissionGroup 'root'
+        user 'root'
+        fileMode 0755
+    }
+    from('src/templates/gsn-vs-bash-completion') {
+        into '/usr/share/bash-completion/completions'
+        permissionGroup 'root'
+        user 'root'
+        fileMode 0644
+        rename { 'gsn-vs-enable' }
+    }
+    from('src/templates/gsn-vs-bash-completion') {
+        into '/usr/share/bash-completion/completions'
+        permissionGroup 'root'
+        user 'root'
+        fileMode 0644
+        rename { 'gsn-vs-disable' }
+    }
+    from('src/templates/gsn-vs-fish-completion') {
+        into '/usr/share/fish/vendor_completions.d'
+        permissionGroup 'root'
+        user 'root'
+        fileMode 0644
+        rename { 'gsn-vs-enable.fish' }
+    }
+    from('src/templates/gsn-vs-fish-completion') {
+        into '/usr/share/fish/vendor_completions.d'
+        permissionGroup 'root'
+        user 'root'
+        fileMode 0644
+        rename { 'gsn-vs-disable.fish' }
     }
 
     // Install a systemd unit and execute lifecycle hooks on install/remove.
@@ -177,4 +226,9 @@ tasks.named('buildDeb', com.netflix.gradle.plugins.deb.Deb) {
 
     postInstall file('packaging/debian/postinst')
     preUninstall file('packaging/debian/prerm')
+
+    // Ensure dpkg treats these as conffiles and prompts on local modifications.
+    configurationFile('/etc/gsn-core/gsn.xml')
+    configurationFile('/etc/gsn-core/wrappers.properties')
+    configurationFile('/etc/gsn-core/log4j2.xml')
 }
