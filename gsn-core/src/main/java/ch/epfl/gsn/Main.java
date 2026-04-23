@@ -39,7 +39,6 @@ package ch.epfl.gsn;
 
 import ch.epfl.gsn.config.GsnConf;
 import ch.epfl.gsn.config.VsConf;
-import ch.epfl.gsn.data.DataStore;
 
 import java.io.File;
 import java.io.IOException;
@@ -139,8 +138,6 @@ public final class Main {
 
 		int maxDBConnections = containerConfig.getMaxDBConnections();
 		int maxSlidingDBConnections = containerConfig.getMaxSlidingDBConnections();
-
-		DataStore ds = new DataStore(gsnConf);
 
 		mainStorage = StorageManagerFactory.getInstance(containerConfig.getStorage().getJdbcDriver(),
 				containerConfig.getStorage().getJdbcUsername(), containerConfig.getStorage().getJdbcPassword(),
