@@ -41,13 +41,6 @@ import ch.epfl.gsn.config.GsnConf;
 import ch.epfl.gsn.config.VsConf;
 import ch.epfl.gsn.data.DataStore;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
-import java.awt.RenderingHints;
-import java.awt.SplashScreen;
 import java.io.File;
 import java.io.IOException;
 // import java.io.FileNotFoundException;
@@ -142,8 +135,6 @@ public final class Main {
 				gsnConfFolder + "/gsn.xml");
 		ValidityTools.checkAccessibilityOfDirs(virtualSensorDirectory);
 		containerConfig = loadContainerConfiguration();
-		updateSplashIfNeeded(
-				new String[] { "GSN is starting...", "All GSN logs are available at: logs/ch.epfl.gsn.log" });
 		System.out.println("Global Sensor Networks (GSN) is starting...");
 
 		int maxDBConnections = containerConfig.getMaxDBConnections();
@@ -203,64 +194,6 @@ public final class Main {
 	}
 
 	/**
-	 * Closes the splash screen if it is visible.
-	 * If the application is running in headless mode or no splash screen is
-	 * specified, this method does nothing.
-	 */
-	private static void closeSplashIfneeded() {
-		if (isHeadless()) {
-			return;
-		}
-		SplashScreen splash = SplashScreen.getSplashScreen();
-		// Check if we have specified any splash screen
-		if (splash == null) {
-			return;
-		}
-		if (splash.isVisible()) {
-			splash.close();
-		}
-
-	}
-
-	/**
-	 * Updates the splash screen if needed with the given message.
-	 * 
-	 * @param message the array of messages to be displayed on the splash screen
-	 */
-	private static void updateSplashIfNeeded(String[] message) {
-		boolean headless_check = isHeadless();
-
-		if (!headless_check) {
-			SplashScreen splash = SplashScreen.getSplashScreen();
-			if (splash == null) {
-				return;
-			}
-
-			if (splash.isVisible()) {
-				// Get a graphics overlay for the splash screen
-				Graphics2D g = splash.createGraphics();
-				// Do some drawing on the graphics object
-				// Now update to the splash screen
-
-				g.setComposite(AlphaComposite.Clear);
-				g.fillRect(0, 0, 400, 70);
-				g.setPaintMode();
-				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				g.setColor(Color.BLACK);
-				g.setFont(new Font("Arial", Font.BOLD, 11));
-				for (int i = 0; i < message.length; i++) {
-					g.drawString(message[i], 13, 16 * i + 10);
-				}
-				splash.update();
-			}
-		}
-	}
-
-	private static boolean isHeadless() {
-		return GraphicsEnvironment.isHeadless();
-	}
-
-	/**
 	 * Returns the singleton instance of the Main class.
 	 * If the singleton instance does not exist, it is created.
 	 * 
@@ -290,7 +223,6 @@ public final class Main {
 		if (args.length > 1) {
 			Main.virtualSensorDirectory = args[1];
 		}
-		updateSplashIfNeeded(new String[] { "GSN is trying to start.", "All GSN logs are available at: logs/gsn.log" });
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {
@@ -329,13 +261,11 @@ public final class Main {
 			Main.getInstance();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			updateSplashIfNeeded(new String[] { "Starting GSN failed! Look at logs/gsn.log for more information." });
 			try {
 				Thread.sleep(4000);
 			} catch (InterruptedException e1) {
 			}
 		}
-		closeSplashIfneeded();
 	}
 
 	/**
