@@ -109,7 +109,7 @@ public class BacklogZeroMQService  {
             CommandFile[]files = data.getCommandFiles();
             for(CommandFile file : files){
                 paramNames.add(file.getFileKey());
-                paramValues.add(file.getFileItem());
+                paramValues.add((Serializable) file.getFileItem());
             }
 
             AbstractVirtualSensor vs= Mappings.getVSensorInstanceByVSName(vsname).borrowVS();

@@ -162,9 +162,9 @@ public class DPPFirmwarePlugin extends AbstractPlugin {
 		else if(action.compareToIgnoreCase("firmware_update") == 0) {
 			for (int i = 0 ; i < paramNames.length ; i++) {
 				if( paramNames[i].compareToIgnoreCase("target_id") == 0 )
-					target_id = new Integer((String)paramValues[i]);
+					target_id = Integer.valueOf((String)paramValues[i]);
 				else if( paramNames[i].compareToIgnoreCase("component_id") == 0 )
-					component_id = new Integer((String)paramValues[i]);
+					component_id = Integer.valueOf((String)paramValues[i]);
 			}
 			if (target_id == null) {
 				logger.warn("target_id is missing: could not upload DPP firmware update command");

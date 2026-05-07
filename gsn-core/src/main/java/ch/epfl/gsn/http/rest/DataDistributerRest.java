@@ -152,7 +152,7 @@ public class DataDistributerRest implements VirtualSensorDataListener, VSensorSt
 										}
 										prepareStatement.setLong(1, listener.request.getStartTime());
 										// prepareStatement.setLong(1, listener.getLastVisitedPk());
-										listener.delivery_count = new Integer(prepareStatement.getMaxRows());
+										listener.delivery_count = Integer.valueOf(prepareStatement.getMaxRows());
 									} catch (SQLException e) {
 										Main.getStorage(listener.request.getVSensorConfig()).close(prepareStatement);
 										logger.error(e.getMessage(), e);

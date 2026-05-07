@@ -494,7 +494,7 @@ public class MigMessagePlugin extends AbstractPlugin
     	Object [] initArgs = new Object [ 1 ] ;
     	Class<?> [] cArgs = new Class [ 1 ] ;
     	cArgs [ 0 ] = Integer.TYPE ;
-    	initArgs [ 0 ] = new Integer ( data_length ) ;
+    	initArgs [ 0 ] = Integer.valueOf ( data_length ) ;
     	
     	return instantiateTOSMsg ( cArgs , initArgs ) ;
     }

@@ -142,9 +142,9 @@ public class DataTypes {
          SMALLINT_NAME,
          FLOAT_NAME };
 
-   public final static Object[] TYPE_SAMPLE_VALUES = { "A chain of chars", 'c', new Integer(32), new Integer(66000),
-         new Byte((byte) 12), new Double(3.141592),
-         new Date().getTime(), new Integer(1), new Integer(9), new Float(2.02) };
+   public final static Object[] TYPE_SAMPLE_VALUES = { "A chain of chars", 'c', Integer.valueOf(32), Integer.valueOf(66000),
+         Byte.valueOf((byte) 12), Double.valueOf(3.141592),
+         new Date().getTime(), Integer.valueOf(1), Integer.valueOf(9), Float.valueOf(2.02f) };
 
    /**
     * Converts a given type name to the corresponding GSN type ID.

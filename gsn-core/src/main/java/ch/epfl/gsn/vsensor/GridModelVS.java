@@ -285,12 +285,12 @@ public class GridModelVS extends AbstractVirtualSensor {
             oos.close();
             bos.close();
 
-            stream[0] = new Integer(gridSize);
-            stream[1] = new Integer(gridSize);
-            stream[2] = new Double(x_BL);
-            stream[3] = new Double(y_BL);
-            stream[4] = new Double(cellSize);
-            stream[5] = new Double(0);
+            stream[0] = Integer.valueOf(gridSize);
+            stream[1] = Integer.valueOf(gridSize);
+            stream[2] = Double.valueOf(x_BL);
+            stream[3] = Double.valueOf(y_BL);
+            stream[4] = Double.valueOf(cellSize);
+            stream[5] = Double.valueOf(0);
             stream[6] = bos.toByteArray();
 
             StreamElement se = new StreamElement(getOutputFormat(), stream, data.getTimeStamp());

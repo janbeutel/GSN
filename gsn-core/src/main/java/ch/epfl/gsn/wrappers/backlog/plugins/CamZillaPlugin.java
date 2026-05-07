@@ -206,9 +206,9 @@ public class CamZillaPlugin extends AbstractPlugin {
 			double x = 0, y = 0;
 			for (int i = 0 ; i < paramNames.length ; i++) {
 				if( paramNames[i].compareToIgnoreCase("x") == 0 )
-					x = new Double((String)paramValues[i]);
+					x = Double.valueOf((String)paramValues[i]);
 				else if( paramNames[i].compareToIgnoreCase("y") == 0 )
-					y = new Double((String)paramValues[i]);
+					y = Double.valueOf((String)paramValues[i]);
 			}
 			
 			logger.info("uploading positioning task (x=" + x + ",y=" + y + ")");

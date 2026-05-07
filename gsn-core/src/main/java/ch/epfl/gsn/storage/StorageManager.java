@@ -342,7 +342,11 @@ public abstract class StorageManager {
             }
 
         } catch (SQLException e) {
-            if (e.getErrorCode() == getTableNotExistsErrNo() || e.getMessage().contains("does not exist")) {
+            String msg = e.getMessage() == null ? "" : e.getMessage().toLowerCase();
+            if (e.getErrorCode() == getTableNotExistsErrNo()
+                    || e.getErrorCode() == 42104 // H2 2.x table/view not found
+                    || msg.contains("does not exist")
+                    || msg.contains("not found")) {
                 return false;
             } else {
                 logger.error(e.getMessage());

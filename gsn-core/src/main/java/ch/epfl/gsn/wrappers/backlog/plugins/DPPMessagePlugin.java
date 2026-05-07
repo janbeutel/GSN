@@ -194,7 +194,7 @@ public class DPPMessagePlugin extends AbstractPlugin {
 				if (!msgClass.isMinimal()) {
 					for (int i = 0; i < paramNames.length; i++) {
 						if (paramNames[i].trim().compareToIgnoreCase(DPP_HEADER_TARGET_ID) == 0) {
-							target_id = new Integer((String) paramValues[i]); // target_id
+							target_id = Integer.valueOf((String) paramValues[i]); // target_id
 						}
 					}
 					if (target_id == null) {

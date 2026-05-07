@@ -889,7 +889,7 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 						}
 					}
 					if (toReturn != null) {
-						toReturn = (Double) toReturn / new Double(divider);
+						toReturn = (Double) toReturn / Double.valueOf(divider);
 					}
 					break;
 				case DataTypes.BIGINT:
@@ -906,7 +906,7 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 						}
 					}
 					if (toReturn != null) {
-						toReturn = (Long) ((Long) toReturn / new Long(divider));
+						toReturn = (Long) ((Long) toReturn / Long.valueOf(divider));
 					}
 					break;
 				case DataTypes.INTEGER:
@@ -915,14 +915,14 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 						if (srl != null) {
 							divider++;
 							if (toReturn == null) {
-								toReturn = new Long((Integer) srl);
+								toReturn = Long.valueOf((Integer) srl);
 							} else {
-								toReturn = (Long) toReturn + new Long((Integer) srl);
+								toReturn = (Long) toReturn + Long.valueOf((Integer) srl);
 							}
 						}
 					}
 					if (toReturn != null) {
-						toReturn = (Integer) ((Long) ((Long) toReturn / new Long(divider))).intValue();
+						toReturn = (Integer) ((Long) ((Long) toReturn / Long.valueOf(divider))).intValue();
 					}
 					break;
 				case DataTypes.SMALLINT:
@@ -931,15 +931,15 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 						if (srl != null) {
 							divider++;
 							if (toReturn == null) {
-								toReturn = new Long((Short) srl);
+								toReturn = Long.valueOf((Short) srl);
 							} else {
-								toReturn = (Long) toReturn + new Long((Short) srl);
+								toReturn = (Long) toReturn + Long.valueOf((Short) srl);
 							}
 
 						}
 					}
 					if (toReturn != null) {
-						toReturn = (Short) ((Long) ((Long) toReturn / new Long(divider))).shortValue();
+						toReturn = (Short) ((Long) ((Long) toReturn / Long.valueOf(divider))).shortValue();
 					}
 					break;
 				case DataTypes.TINYINT:
@@ -948,15 +948,15 @@ public class StreamMergingVirtualSensor extends BridgeVirtualSensorPermasense {
 						if (srl != null) {
 							divider++;
 							if (toReturn == null) {
-								toReturn = new Long((Byte) srl);
+								toReturn = Long.valueOf((Byte) srl);
 							} else {
-								toReturn = (Long) toReturn + new Long((Byte) srl);
+								toReturn = (Long) toReturn + Long.valueOf((Byte) srl);
 							}
 
 						}
 					}
 					if (toReturn != null) {
-						toReturn = (Byte) ((Long) ((Long) toReturn / new Long(divider))).byteValue();
+						toReturn = (Byte) ((Long) ((Long) toReturn / Long.valueOf(divider))).byteValue();
 					}
 
 					break;

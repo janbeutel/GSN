@@ -456,11 +456,11 @@ public abstract class AbstractPlugin extends Thread implements BackLogMessageLis
 		if (value == null) {
 			return null;
 		} else if (value instanceof Byte) {
-			return new Long((Byte) value);
+			return Long.valueOf((Byte) value);
 		} else if (value instanceof Short) {
-			return new Long((Short) value);
+			return Long.valueOf((Short) value);
 		} else if (value instanceof Integer) {
-			return new Long((Integer) value);
+			return Long.valueOf((Integer) value);
 		} else if (value instanceof Long) {
 			return (Long) value;
 		} else {
@@ -480,13 +480,13 @@ public abstract class AbstractPlugin extends Thread implements BackLogMessageLis
 		if (value == null) {
 			return null;
 		} else if (value instanceof Byte) {
-			return new Double((Byte) value);
+			return Double.valueOf((Byte) value);
 		} else if (value instanceof Short) {
-			return new Double((Short) value);
+			return Double.valueOf((Short) value);
 		} else if (value instanceof Integer) {
-			return new Double((Integer) value);
+			return Double.valueOf((Integer) value);
 		} else if (value instanceof Long) {
-			return new Double((Long) value);
+			return Double.valueOf((Long) value);
 		} else if (value instanceof Double) {
 			return (Double) value;
 		} else {
@@ -506,9 +506,9 @@ public abstract class AbstractPlugin extends Thread implements BackLogMessageLis
 		if (value == null) {
 			return null;
 		} else if (value instanceof Byte) {
-			return new Integer((Byte) value);
+			return Integer.valueOf((Byte) value);
 		} else if (value instanceof Short) {
-			return new Integer((Short) value);
+			return Integer.valueOf((Short) value);
 		} else if (value instanceof Integer) {
 			return (Integer) value;
 		} else {
@@ -529,7 +529,7 @@ public abstract class AbstractPlugin extends Thread implements BackLogMessageLis
 		if (value == null) {
 			return null;
 		} else if (value instanceof Byte) {
-			return new Short((Byte) value);
+			return Short.valueOf((short) ((Byte) value));
 		} else if (value instanceof Short) {
 			return (Short) value;
 		} else {

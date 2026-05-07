@@ -66,7 +66,8 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 	private int hostPort;
 	private String deploymentName;
 	boolean stuff = false;
-	Boolean connected = false;
+	private final Object connectedLock = new Object();
+	private volatile boolean connected = false;
 
 	public BackLogMessageMultiplexer() throws Exception {
 		throw new Exception("use 'getInstance(String CoreStation)' function for instantiation");
@@ -103,7 +104,7 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 		Matcher m = Pattern.compile("(.*):(.*)").matcher(coreStationAddress);
 		if (m.find()) {
 			inetAddress = InetAddress.getByName(m.group(1));
-			hostPort = new Integer(m.group(2));
+			hostPort = Integer.valueOf(m.group(2));
 			coreStationAddress_noIp = inetAddress.getHostName() + ":" + hostPort;
 			if (blMultiplexerMap.containsKey(coreStationAddress_noIp)) {
 				return blMultiplexerMap.get(coreStationAddress_noIp);
@@ -399,7 +400,7 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 	 *                 destination for received messages
 	 */
 	public synchronized void registerListener(int msgType, BackLogMessageListener listener, boolean isPlugin) {
-		Integer msgTypeInt = new Integer(msgType);
+		Integer msgTypeInt = Integer.valueOf(msgType);
 		Vector<BackLogMessageListener> vec = msgTypeListener.get(msgTypeInt);
 		if (vec == null) {
 			vec = new Vector<BackLogMessageListener>();
@@ -427,7 +428,7 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 	 */
 	public synchronized void deregisterListener(int msgType, BackLogMessageListener listener, boolean isPlugin)
 			throws IllegalArgumentException {
-		Integer msgTypeInt = new Integer(msgType);
+		Integer msgTypeInt = Integer.valueOf(msgType);
 		Vector<BackLogMessageListener> vec = msgTypeListener.get(msgTypeInt);
 
 		if (vec == null) {
@@ -463,7 +464,7 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 	 */
 	protected void multiplexMessage(BackLogMessage message) {
 		int ReceiverCount = 0;
-		Integer msgTypeInt = new Integer(message.getType());
+		Integer msgTypeInt = Integer.valueOf(message.getType());
 		Vector<BackLogMessageListener> vec = msgTypeListener.get(msgTypeInt);
 		if (vec == null) {
 			logger.warn(
@@ -552,7 +553,7 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 			}
 		}
 
-		synchronized (connected) {
+		synchronized (connectedLock) {
 			coreStationStatistics.setDeviceId(coreStationDeviceId);
 			connected = true;
 			coreStationStatistics.setConnected(true);
@@ -620,7 +621,7 @@ public class BackLogMessageMultiplexer extends Thread implements CoreStationList
 			pingWatchDogTimer.cancel();
 		}
 
-		synchronized (connected) {
+		synchronized (connectedLock) {
 			if (connected) {
 				connected = false;
 				coreStationStatistics.setConnected(false);

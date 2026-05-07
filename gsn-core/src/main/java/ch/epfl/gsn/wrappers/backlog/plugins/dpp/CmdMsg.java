@@ -61,7 +61,7 @@ public class CmdMsg extends AbstractMsg {
 			params.put(paramNames[i].toLowerCase().trim(), paramValues[i]);
 		
 		if (action.compareToIgnoreCase("SX1262_BASEBOARD_POWER_CMD") == 0) {
-			if (new Integer((String)params.get("status")) == 1) {
+			if (Integer.valueOf((String)params.get("status")) == 1) {
 				bb = ByteBuffer.wrap(new byte[9]);
 				type = CMD_SX1262_BASEBOARD_ENABLE;
 			}
@@ -76,7 +76,7 @@ public class CmdMsg extends AbstractMsg {
 		}
 		else if (action.compareToIgnoreCase("BASEBOARD_PWR_CMD") == 0) {
 			bb = ByteBuffer.wrap(new byte[3]);
-			type = new Short((String)params.get("port"));
+			type = Short.valueOf((String)params.get("port"));
 		}
 		else if (action.compareToIgnoreCase("BASEBOARD_POWEROFF_CMD") == 0) {
 			bb = ByteBuffer.wrap(new byte[3]);
@@ -105,7 +105,7 @@ public class CmdMsg extends AbstractMsg {
 		else {
 			bb = ByteBuffer.wrap(new byte[4]);
 			try {
-	        	type = new Short((String)params.get(DPP_CMD_TYPE));
+	        	type = Short.valueOf((String)params.get(DPP_CMD_TYPE));
 			} catch (NumberFormatException e) {
 				throw new Exception("type field has to be a short");
 			}
@@ -136,42 +136,42 @@ public class CmdMsg extends AbstractMsg {
 
 		if (action.compareToIgnoreCase("SX1262_BASEBOARD_POWER_CMD") == 0) {
 			try {
-				Long val = new Long((String)params.get("time"));
+				Long val = Long.valueOf((String)params.get("time"));
 				if (val < 0 || val >= 4294967296L)
 					throw new Exception("time field has to be an usigned int (0 to 2^32-1)");
 				bb.putInt((int) (val & 0xffffffffL));
 			} catch (NumberFormatException e) {
 				throw new Exception("time field has to be an integer");
 			}
-			bb.put(new Byte((String)params.get("flag")));
-			if (new Integer((String)params.get("status")) == 1)
+			bb.put(Byte.valueOf((String)params.get("flag")));
+			if (Integer.valueOf((String)params.get("status")) == 1)
 				bb.putShort((short) WAKEUP_TYPE_POWER_ON);
 		}
 		else if (action.compareToIgnoreCase("SX1262_BASEBOARD_POWER_EXT3") == 0 || action.compareToIgnoreCase("BASEBOARD_PWR_CMD") == 0 || action.compareToIgnoreCase("BASEBOARD_POWEROFF_CMD") == 0 || action.compareToIgnoreCase("BASEBOARD_DUTYCYCLE_CMD") == 0 ) {
-			bb.put(new Byte((String)params.get("status")));
+			bb.put(Byte.valueOf((String)params.get("status")));
 		}
 		else if (action.compareToIgnoreCase("CMD_BASEBOARD_MSG_ROUTING") == 0) {
-			bb.put(new Byte((String)params.get("route")));
+			bb.put(Byte.valueOf((String)params.get("route")));
 		}
 		else if (action.compareToIgnoreCase("GEOPHONE_REQ_ADCDATA_CMD") == 0) {
 			try {
-				Long val = new Long((String)params.get("id"));
+				Long val = Long.valueOf((String)params.get("id"));
 				if (val < 0 || val >= 4294967296L)
 					throw new Exception("id field has to be an usigned int (0 to 2^32-1)");
 				bb.putInt((int) (val & 0xffffffffL));
 			} catch (NumberFormatException e) {
 				throw new Exception("id field has to be an integer");
 			}
-			byte fmt_type = new Byte((String)params.get("format_type"));
-			byte res = new Byte((String)params.get("bits"));
-			byte sub = new Byte((String)params.get("subsampling"));
+			byte fmt_type = Byte.valueOf((String)params.get("format_type"));
+			byte res = Byte.valueOf((String)params.get("bits"));
+			byte sub = Byte.valueOf((String)params.get("subsampling"));
 			byte fmt = (byte) ((fmt_type << 4) | (sub << 2) | res);
 			bb.put(fmt);
 		}
 		else if (action.compareToIgnoreCase("GEOPHONE_DEL_DATA_CMD") == 0) {
 			Long val;
 			try {
-				val = new Long((String)params.get("start_time"));
+				val = Long.valueOf((String)params.get("start_time"));
 				if (val < 0 || val >= 4294967296L)
 					throw new Exception("start_time field has to be an usigned int (0 to 2^32-1)");
 				bb.putInt((int) (val & 0xffffffffL));
@@ -179,7 +179,7 @@ public class CmdMsg extends AbstractMsg {
 				throw new Exception("start_time field has to be an integer");
 			}
 			try {
-				val = new Long((String)params.get("end_time"));
+				val = Long.valueOf((String)params.get("end_time"));
 				if (val < 0 || val >= 4294967296L)
 					throw new Exception("end_time field has to be an usigned int (0 to 2^32-1)");
 				bb.putInt((int) (val & 0xffffffffL));
@@ -190,7 +190,7 @@ public class CmdMsg extends AbstractMsg {
 		else if (action.compareToIgnoreCase("GEOPHONE_SCHED_ADD_CMD") == 0) {
 			Long val;
 			try {
-				val = new Long((String)params.get("start_time"));
+				val = Long.valueOf((String)params.get("start_time"));
 				if (val < 0 || val >= 4294967296L)
 					throw new Exception("start_time field has to be an usigned int (0 to 2^32-1)");
 				bb.putInt((int) (val & 0xffffffffL));
@@ -198,7 +198,7 @@ public class CmdMsg extends AbstractMsg {
 				throw new Exception("start_time field has to be an integer");
 			}
 			try {
-				val = new Long((String)params.get("period_duration_task"));
+				val = Long.valueOf((String)params.get("period_duration_task"));
 				if (val < 0 || val >= 4294967296L)
 					throw new Exception("period_duration_task field has to be an usigned int (0 to 2^32-1)");
 				bb.putInt((int) (val & 0xffffffffL));
@@ -208,7 +208,7 @@ public class CmdMsg extends AbstractMsg {
 		}
 		else {
 			try {
-				Integer val = new Integer((String)params.get(DPP_CMD_VALUE));
+				Integer val = Integer.valueOf((String)params.get(DPP_CMD_VALUE));
 				if (val >= 0 && val < 65536)
 					bb.putShort((short) (val & 0xffff));
 				else if (val < 0 && val > -32768)

@@ -67,7 +67,7 @@ public class CoreStationStatistics {
 	public void msgReceived(int type, long size) {
 		Long val = msgRecvCounterMap.get(type);
 		if (val == null) {
-			msgRecvCounterMap.put(type, new Long(1));
+			msgRecvCounterMap.put(type, Long.valueOf(1));
 		} else {
 			msgRecvCounterMap.put(type, val + 1);
 		}
@@ -145,7 +145,7 @@ public class CoreStationStatistics {
 	public void msgSent(int type, long size) {
 		Long val = msgSendCounterMap.get(type);
 		if (val == null) {
-			msgSendCounterMap.put(type, new Long(1));
+			msgSendCounterMap.put(type, Long.valueOf(1));
 		} else {
 			msgSendCounterMap.put(type, val + 1);
 		}

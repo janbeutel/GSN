@@ -62,7 +62,7 @@ public class DPPMessageMultiplexer implements BackLogMessageListener {
 	 *                 destination for received messages
 	 */
 	public synchronized void registerListener(int msgType, DPPMessagePlugin listener) {
-		Integer msgTypeInt = new Integer(msgType);
+		Integer msgTypeInt = Integer.valueOf(msgType);
 		Vector<DPPMessagePlugin> vec = msgTypeListener.get(msgTypeInt);
 		if (vec == null) {
 			vec = new Vector<DPPMessagePlugin>();
@@ -85,7 +85,7 @@ public class DPPMessageMultiplexer implements BackLogMessageListener {
 	 * @return false if no more listeners are available
 	 */
 	public synchronized boolean deregisterListener(int msgType, DPPMessagePlugin listener) {
-		Integer msgTypeInt = new Integer(msgType);
+		Integer msgTypeInt = Integer.valueOf(msgType);
 		Vector<DPPMessagePlugin> vec = msgTypeListener.get(msgTypeInt);
 		if (vec == null) {
 			throw new IllegalArgumentException("No listeners registered for DPP message type " + msgType);

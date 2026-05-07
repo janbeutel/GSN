@@ -632,10 +632,10 @@ public class AsyncCoreStationClient extends Thread {
 						byte[] arr = new byte[data.length + 4];
 						out.get(arr);
 						byte[] tmp = pktStuffing(arr);
-						size = new Long(tmp.length);
+						size = Long.valueOf(tmp.length);
 						pData.queue.offer(new PriorityDataElement(priority, tmp));
 					} else {
-						size = new Long(data.length);
+						size = Long.valueOf(data.length);
 						pData.queue.offer(new PriorityDataElement(priority, data));
 					}
 				}

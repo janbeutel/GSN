@@ -59,7 +59,7 @@ public class JpegGetterVirtualSensor extends BridgeVirtualSensorPermasense {
 		
 		dcraw_flip = params.get("dcraw_flip");
 		if (params.get("rotation")!=null)
-			rotation = new Double(params.get("rotation"));
+			rotation = Double.valueOf(params.get("rotation"));
 		return ret;
 	}
 	

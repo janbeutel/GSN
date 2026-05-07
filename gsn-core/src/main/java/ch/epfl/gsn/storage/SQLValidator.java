@@ -48,15 +48,15 @@ import org.slf4j.Logger;
 import org.h2.command.CommandInterface;
 import org.h2.command.Parser;
 import org.h2.command.Prepared;
-import org.h2.command.dml.Select;
+import org.h2.command.query.Select;
 import org.h2.engine.ConnectionInfo;
-import org.h2.engine.Session;
+import org.h2.engine.SessionLocal;
 
 public class SQLValidator implements VSensorStateChangeListener {
 
 	private static final transient Logger logger = LoggerFactory.getLogger(SQLValidator.class);
 
-	private Session session = null;
+	private SessionLocal session = null;
 	private Connection connection;
 	private static SQLValidator validator;
 
@@ -73,10 +73,10 @@ public class SQLValidator implements VSensorStateChangeListener {
 		properties.put("user", "sa");
 		properties.put("password", "");
 		String URL = "jdbc:h2:mem:test";
-		ConnectionInfo connInfo = new ConnectionInfo(URL, properties);
+		ConnectionInfo connInfo = new ConnectionInfo(URL, properties, null, null);
 
 		// org.h2.engine.SessionRemote f= new org.h2.engine.SessionRemote(connInfo);
-		session = org.h2.engine.Engine.getInstance().createSession(connInfo);
+		session = org.h2.engine.Engine.createSession(connInfo);
 		// SessionFactoryEmbedded factory = new SessionFactoryEmbedded();
 		// session = (Session) factory.createSession(connInfo);
 		this.connection = DriverManager.getConnection(URL, properties);
@@ -88,8 +88,8 @@ public class SQLValidator implements VSensorStateChangeListener {
 	}
 
 	public void executeDDL(String ddl) throws SQLException {
-		CommandInterface command = session.prepareCommand(ddl, 0);
-		command.executeUpdate();
+		CommandInterface command = session.prepareCommand(ddl);
+		command.executeUpdate(null);
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class SQLValidator implements VSensorStateChangeListener {
 			return null;
 		}
 
-		if ((select.getTables().size() != 1) || (select.getTopFilters().size() != 1)
+		if ((select.getTables().size() != 1) || (select.getTopTableFilter() == null)
 				|| select.isQuickAggregateQuery()) {
 			return null;
 		}
@@ -265,18 +265,16 @@ public class SQLValidator implements VSensorStateChangeListener {
 		}
 
 		Parser parser = new Parser(session);
-		Prepared somePrepared;
-		// try {
-		somePrepared = parser.prepare(query);
-		if (somePrepared instanceof Select && somePrepared.isQuery()) {
-			select = (Select) somePrepared;
+		try {
+			Prepared somePrepared = parser.prepare(query);
+			if (somePrepared instanceof Select && somePrepared.isQuery()) {
+				select = (Select) somePrepared;
+			}
+		} catch (Exception e) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("SQL validation parse failed for query: " + query, e);
+			}
 		}
-
-		/*
-		 * } catch (SQLException e) {
-		 * logger.debug(e.getMessage(),e);
-		 * }
-		 */
 		return select;
 	}
 

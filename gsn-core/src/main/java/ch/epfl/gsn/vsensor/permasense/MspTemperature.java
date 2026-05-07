@@ -30,7 +30,7 @@ public class MspTemperature implements Converter {
 		if (v == 65535) {
 			return null;
 		} else {
-			return decimal3.format((new Double(v) * (1.5 / 4095) - 0.986) / 0.00355);
+			return decimal3.format((Double.valueOf(v) * (1.5 / 4095) - 0.986) / 0.00355);
 		}
 	}
 }

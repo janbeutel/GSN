@@ -29,6 +29,10 @@
 
 package ch.epfl.gsn.storage.hibernate;
 
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.EnumSet;
+
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.LoggerFactory;
 
@@ -39,10 +43,14 @@ import ch.epfl.gsn.utils.jndi.GSNContextFactory;
 import org.slf4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.cfg.*;
-import org.hibernate.engine.SessionFactoryImplementor;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.hbm2ddl.SchemaValidator;
+import org.hibernate.tool.schema.TargetType;
 
 public class HibernateUtil {
 
@@ -70,11 +78,14 @@ public class HibernateUtil {
         cfg.setProperty("hibernate.jndi.class", GSNContextFactory.class.getCanonicalName());
         cfg.setProperty("hibernate.show_sql", "false");
         cfg.setProperty("hibernate.format_sql", "true");
-        cfg.addXML(entityMapping);
         //
+        StandardServiceRegistry serviceRegistry = cfg.getStandardServiceRegistryBuilder().build();
+        Metadata metadata = new MetadataSources(serviceRegistry)
+                .addInputStream(new ByteArrayInputStream(entityMapping.getBytes(StandardCharsets.UTF_8)))
+                .buildMetadata();
         SessionFactory session = null;
         try {
-            session = cfg.buildSessionFactory();
+            session = metadata.buildSessionFactory();
         } catch (Exception e) {
             logger.error("error: " + e.getMessage());
         }
@@ -83,13 +94,13 @@ public class HibernateUtil {
         // Create the table if it does not exist already.
         try {
             // script, export, justDrop, justCreate
-            new SchemaExport(cfg).execute(false, true, false, true);
+            new SchemaExport().execute(EnumSet.of(TargetType.DATABASE), SchemaExport.Action.CREATE, metadata);
         } catch (HibernateException e) {
             logger.error(e.getMessage(), e);
         }
         // Check if the table exists and has the proper outputformat
         try {
-            new SchemaValidator(cfg).validate();
+            new SchemaValidator().validate(metadata);
         } catch (HibernateException e) {
             session = null;
             logger.error("Failed create the table: " + e.getMessage());

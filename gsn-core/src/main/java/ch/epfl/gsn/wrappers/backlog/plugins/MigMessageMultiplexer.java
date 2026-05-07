@@ -116,7 +116,7 @@ public class MigMessageMultiplexer implements BackLogMessageListener {
 	 *          destination for received messages
 	 */
 	public synchronized void registerListener(int msgType, MigMessagePlugin listener) {
-		Integer msgTypeInt = new Integer(msgType);
+		Integer msgTypeInt = Integer.valueOf(msgType);
 	    Vector<MigMessagePlugin> vec = msgTypeListener.get(msgTypeInt);
 	    if (vec == null) {
 	      vec = new Vector<MigMessagePlugin>();
@@ -139,7 +139,7 @@ public class MigMessageMultiplexer implements BackLogMessageListener {
 	 * @return false if no more listeners are available
 	 */
 	public synchronized boolean deregisterListener(int msgType, MigMessagePlugin listener) {
-		Integer msgTypeInt = new Integer(msgType);
+		Integer msgTypeInt = Integer.valueOf(msgType);
 		Vector<MigMessagePlugin> vec = msgTypeListener.get(msgTypeInt);
 		if (vec == null) {
 			throw new IllegalArgumentException( "No listeners registered for mig message type " + msgType);
@@ -189,7 +189,7 @@ public class MigMessageMultiplexer implements BackLogMessageListener {
 			// create a TOS message (TinyOS1.x)
 			final TOSMsg msg = createTOSMsg ( data ) ;
 
-			Integer type = new Integer ( msg.get_type () );
+			Integer type = Integer.valueOf ( msg.get_type () );
 
 			net.tinyos1x.message.Message received ;
 			int length = msg.get_length () ;

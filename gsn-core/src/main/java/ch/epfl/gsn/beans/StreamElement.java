@@ -582,7 +582,7 @@ public final class StreamElement implements Serializable {
 				case DataTypes.TINYINT:
 				case DataTypes.SMALLINT:
 				case DataTypes.INTEGER:
-					toReturn[i] = new Integer((Integer) fieldValues[i]);
+					toReturn[i] = Integer.valueOf((Integer) fieldValues[i]);
 					break;
 				case DataTypes.CHAR:
 				case DataTypes.VARCHAR:
