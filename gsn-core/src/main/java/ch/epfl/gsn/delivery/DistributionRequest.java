@@ -33,7 +33,6 @@ package ch.epfl.gsn.delivery;
 
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.beans.VSensorConfig;
-import ch.epfl.gsn.utils.models.AbstractModel;
 /**
  * The DistributionRequest interface represents a request for distributing stream elements.
  */
@@ -56,7 +55,4 @@ public interface DistributionRequest {
     public abstract boolean isClosed();
 
     public abstract DeliverySystem getDeliverySystem();
-
-    public abstract AbstractModel getModel();
-
 }

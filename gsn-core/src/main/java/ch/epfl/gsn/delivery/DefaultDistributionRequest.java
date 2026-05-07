@@ -41,7 +41,6 @@ import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.beans.StreamElement;
 import ch.epfl.gsn.beans.VSensorConfig;
 import ch.epfl.gsn.storage.SQLValidator;
-import ch.epfl.gsn.utils.models.AbstractModel;
 
 import org.slf4j.Logger;
 
@@ -229,10 +228,5 @@ public class DefaultDistributionRequest implements DistributionRequest {
 		result = 31 * result + (deliverySystem == null ? 0:deliverySystem.hashCode());
 		result = 31 * result + (vSensorConfig == null ?  0:vSensorConfig.hashCode());
 		return result;
-	}
-
-	@Override
-	public AbstractModel getModel() {
-		return null;
 	}
 }
