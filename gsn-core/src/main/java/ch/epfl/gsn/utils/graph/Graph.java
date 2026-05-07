@@ -34,6 +34,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Graph<T> implements Serializable {
 
 	private static final long serialVersionUID = 9015284213829329797L;
@@ -41,6 +44,8 @@ public class Graph<T> implements Serializable {
 	private ArrayList<Node<T>> nodes;
 
 	private ArrayList<Node<T>> rootNodes;
+
+	private static transient Logger logger = LoggerFactory.getLogger(Graph.class);
 
 	/**
 	 * Constructs an empty graph.
@@ -197,32 +202,21 @@ public class Graph<T> implements Serializable {
 	 * Adds an edge between two nodes in the graph.
 	 * If either the start or end node does not exist, a NodeNotExistsException is
 	 * thrown.
-	 * If the edge already exists, an EdgeExistsException is thrown.
 	 *
 	 * @param startObject the data of the start node for the edge
 	 * @param endObject   the data of the end node for the edge
 	 * @throws NodeNotExistsException if either the start or end node does not exist
 	 *                                in the graph
-	 * @throws EdgeExistsException    if the edge already exists between the
-	 *                                specified nodes
 	 */
-	public void addEdge(T startObject, T endObject)
-			throws NodeNotExistsExeption {
+	public void addEdge(T startObject, T endObject) {
 		Node<T> startNode = findNode(startObject);
-		if (startNode == null) {
-			throw new NodeNotExistsExeption(startObject == null ? "null" : startObject.toString());
-		}
 		Node<T> endNode = findNode(endObject);
-		if (endNode == null) {
-			throw new NodeNotExistsExeption(endObject == null ? "null" : endObject.toString());
-		}
-		try {
+
+		if (!startNode.edgeExists(endNode)) {
 			startNode.addEdge(endNode);
 			if (!endNode.equals(findRootNode(startNode))) {
 				rootNodes.remove(endNode);
 			}
-		} catch (EdgeExistsException e) {
-			// TODO Auto-generated catch block
 		}
 	}
 
@@ -250,12 +244,12 @@ public class Graph<T> implements Serializable {
 	 * 
 	 * @param Object
 	 * @return a boolean indicating whether the node is removed
-	 * @throws NodeNotExistsExeption
 	 */
-	public boolean removeNode(T object) throws NodeNotExistsExeption {
+	public boolean removeNode(T object) {
 		Node<T> node = findNode(object);
 		if (node == null) {
-			throw new NodeNotExistsExeption(object == null ? "null" : object.toString());
+			logger.error("Node not found: " + (object == null ? "null" : object.toString()));
+			return false;
 		}
 
 		List<Node<T>> ascendingNodes = getAscendingNodes(node);

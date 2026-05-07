@@ -21,4 +21,9 @@ public record FieldConf(
 
         @JacksonXmlProperty(isAttribute = true, localName = "index")
         Optional<String> index
-) {}
+) {
+    public FieldConf {
+        unit = unit == null ? Optional.empty() : unit;
+        index = index == null ? Optional.empty() : index;
+    }
+}

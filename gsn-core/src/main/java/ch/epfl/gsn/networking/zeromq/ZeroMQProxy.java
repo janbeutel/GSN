@@ -29,6 +29,7 @@ package ch.epfl.gsn.networking.zeromq;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.zeromq.ZMQ;
 import org.slf4j.Logger;
@@ -45,7 +46,7 @@ import ch.epfl.gsn.Mappings;
 import ch.epfl.gsn.beans.DataField;
 import ch.epfl.gsn.delivery.DefaultDistributionRequest;
 
-public class ZeroMQProxy extends Thread implements Runnable {
+public class ZeroMQProxy {
 
 	private static transient Logger logger = LoggerFactory.getLogger(ZeroMQProxy.class);
 
@@ -55,6 +56,11 @@ public class ZeroMQProxy extends Thread implements Runnable {
 	private ZMQ.Socket clients;
 	private Kryo kryo = new Kryo();
 	private HashMap<String, DataField[]> structures = new HashMap<String, DataField[]>(); // maybe put into mappings...
+	private final int portOUT;
+	private final int portMETA;
+	private Thread dataProxyThread;
+	private Thread metaResponderThread;
+	private final AtomicBoolean running = new AtomicBoolean(false);
 
 	/**
 	 * Constructs a ZeroMQProxy object with the specified output port and metadata
@@ -75,8 +81,16 @@ public class ZeroMQProxy extends Thread implements Runnable {
 	 */
 	public ZeroMQProxy(final int portOUT, final int portMETA) {
 		kryo.register(DataField[].class);
-		ctx = Main.getZmqContext();
+		this.portOUT = portOUT;
+		this.portMETA = portMETA;
+	}
 
+	public synchronized void start() {
+		if (running.get()) {
+			return;
+		}
+
+		ctx = Main.getZmqContext();
 		subscriberX = ctx.createSocket(ZMQ.XSUB);
 		publisherX = ctx.createSocket(ZMQ.XPUB);
 		publisherX.setXpubVerbose(true);
@@ -86,22 +100,27 @@ public class ZeroMQProxy extends Thread implements Runnable {
 
 		clients = ctx.createSocket(ZMQ.REP);
 		clients.bind("tcp://*:" + portMETA);
+		clients.setReceiveTimeOut(1000);
 
-		Thread dataProxy = new Thread(new Runnable() {
+		running.set(true);
 
+		dataProxyThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				ZMQ.proxy(subscriberX, publisherX, null);
 			}
 		});
-		dataProxy.setName("ZMQ-PROXY-Thread");
-		dataProxy.start();
+		dataProxyThread.setName("ZMQ-PROXY-Thread");
+		dataProxyThread.start();
 
-		Thread metaResponder = new Thread(new Runnable() {
+		metaResponderThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				while (true) {
+				while (running.get()) {
 					String request = clients.recvStr(0);
+					if (request == null) {
+						continue;
+					}
 					logger.info("ZMQ request: " + request);
 					String[] parts = request.split("\\?");
 					if (parts.length > 1) {
@@ -131,8 +150,24 @@ public class ZeroMQProxy extends Thread implements Runnable {
 				}
 			}
 		});
-		metaResponder.setName("ZMQ-META-Thread");
-		metaResponder.start();
+		metaResponderThread.setName("ZMQ-META-Thread");
+		metaResponderThread.start();
+	}
+
+	public synchronized void close() {
+		if (!running.get()) {
+			return;
+		}
+		running.set(false);
+		if (clients != null) {
+			clients.close();
+		}
+		if (subscriberX != null) {
+			subscriberX.close();
+		}
+		if (publisherX != null) {
+			publisherX.close();
+		}
 	}
 
 	/**

@@ -56,7 +56,6 @@ public class ContainerImpl {
 	 */
 
 	private static ContainerImpl singleton;
-	private static final Object psLock = new Object();
 	private ConcurrentHashMap<String, CopyOnWriteArrayList<VirtualSensorDataListener>> dataListeners = new ConcurrentHashMap<String, CopyOnWriteArrayList<VirtualSensorDataListener>>();
 
 	private ContainerImpl() {
@@ -64,13 +63,6 @@ public class ContainerImpl {
 
 	/**
 	 * Returns the singleton instance of the ContainerImpl class.
-	 *
-	 * <p>
-	 * This method implements the Singleton Design Pattern, which ensures that only
-	 * one instance of the ContainerImpl class is created.
-	 * If the singleton instance is null, a new instance is created and returned.
-	 * If the singleton instance already exists, the existing instance is returned.
-	 * </p>
 	 *
 	 * @return The singleton instance of the ContainerImpl class.
 	 */
@@ -105,9 +97,7 @@ public class ContainerImpl {
 	public void publishData(AbstractVirtualSensor sensor, StreamElement data) throws SQLException {
 		String name = sensor.getVirtualSensorConfiguration().getName().toLowerCase();
 		StorageManager storageMan = Main.getStorage(sensor.getVirtualSensorConfiguration().getName());
-		//synchronized (psLock) {
 		storageMan.executeInsert(name, sensor.getVirtualSensorConfiguration().getOutputStructure(), data);
-		//}
 		
 		CopyOnWriteArrayList<VirtualSensorDataListener> listeners = dataListeners.get(name);
 		if (listeners != null) {

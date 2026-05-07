@@ -29,4 +29,11 @@ public record SourceConf(
         @JacksonXmlProperty(localName = "address")
         @JacksonXmlElementWrapper(useWrapping = false)
         List<WrapperConf> wrappers
-) {}
+) {
+    public SourceConf {
+        storageSize = storageSize == null ? Optional.empty() : storageSize;
+        slide = slide == null ? Optional.empty() : slide;
+        disconnectBufferSize = disconnectBufferSize == null ? Optional.empty() : disconnectBufferSize;
+        samplingRate = samplingRate == null ? Optional.empty() : samplingRate;
+    }
+}

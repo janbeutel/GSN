@@ -61,8 +61,13 @@ public class WrappersUtil {
          // container.
       config.load(new FileReader(location));
     } catch (IOException e) {
-      logger.error(new StringBuilder().append("Check the :").append(location)
-          .append(" file and make sure it's syntactically correct: ").append(e.getMessage()).toString());
+      logger.error(new StringBuilder()
+        .append("Check the :")
+        .append(location)
+        .append(" file and make sure it's syntactically correct: ")
+        .append(e.getMessage())
+        .toString()
+      );
       logger.info("Sample wrappers extention properties file is provided in GSN distribution.");
       System.exit(1);
     }

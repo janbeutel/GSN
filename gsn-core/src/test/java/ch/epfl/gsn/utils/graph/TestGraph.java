@@ -35,13 +35,12 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import ch.epfl.gsn.utils.graph.Graph;
-import ch.epfl.gsn.utils.graph.NodeNotExistsExeption;
 
 
 public class TestGraph {
 	
 	@Test
-	public void testRemoveCycles() throws NodeNotExistsExeption{
+	public void testRemoveCycles() {
 		Graph<String> graph = new Graph<String>();
 		graph.addNode("n1");
 		graph.addNode("n2");
@@ -73,7 +72,7 @@ public class TestGraph {
 	}
 	
 	@Test
-	public void testRemoveNode() throws NodeNotExistsExeption{
+	public void testRemoveNode() {
 		Graph<String> graph = new Graph<String>();
 		graph.addNode("n1");
 		graph.addNode("n2");
@@ -93,7 +92,7 @@ public class TestGraph {
 	}
 	
 	@Test
-	public void testFindRootNode() throws NodeNotExistsExeption{
+	public void testFindRootNode() {
 		Graph<String> graph = new Graph<String>();
 		graph.addNode("n1");
 		graph.addNode("n2");

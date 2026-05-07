@@ -48,7 +48,6 @@ import ch.epfl.gsn.delivery.LocalDeliveryWrapper;
 import ch.epfl.gsn.storage.SQLUtils;
 import ch.epfl.gsn.utils.graph.Graph;
 import ch.epfl.gsn.utils.graph.Node;
-import ch.epfl.gsn.utils.graph.NodeNotExistsExeption;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -107,22 +106,10 @@ public final class Modifications {
 		if (fileNames == null || list == null) {
 			throw new RuntimeException("Null pointer Exception (" + (fileNames == null) + "),(" + (list == null) + ")");
 		}
-		/*
-		 * IBindingFactory bfact;
-		 * IUnmarshallingContext uctx;
-		 * try {
-		 * bfact = BindingDirectory.getFactory( VSensorConfig.class );
-		 * uctx = bfact.createUnmarshallingContext( );
-		 * } catch ( JiBXException e1 ) {
-		 * logger.fatal( e1.getMessage( ) , e1 );
-		 * return;
-		 * }
-		 */
+
 		VSensorConfig configuration;
 		for (String file : fileNames) {
 			try {
-				// configuration = ( VSensorConfig ) uctx.unmarshalDocument( new
-				// FileInputStream( file ) , null );
 				VsConf vsConf = VsConf.load(file);
 				configuration = BeansInitializer.vsensor(vsConf);
 				configuration.setFileName(file);
@@ -134,14 +121,6 @@ public final class Modifications {
 				}
 
 				list.add(configuration);
-				/*
-				 * } catch ( JiBXException e ) {
-				 * logger.error( e.getMessage( ) , e );
-				 * logger.error( new StringBuilder( ).append(
-				 * "Adding the virtual sensor specified in " ).append( file ).append(
-				 * " failed because there is syntax error in the configuration file. Please check the configuration file and try again."
-				 * ).toString( ) );
-				 */
 			} catch (Exception e) {
 				logger.error("Adding the virtual sensor specified in " + file + " failed." + e.getMessage());
 			}
@@ -180,12 +159,7 @@ public final class Modifications {
 
 					}
 				}
-				try {
-					graph.removeNode(vSensorConfig);
-				} catch (NodeNotExistsExeption e) {
-					// This shouldn't happen
-					logger.error(e.getMessage(), e);
-				}
+				graph.removeNode(vSensorConfig);
 			}
 		}
 	}
@@ -270,12 +244,7 @@ public final class Modifications {
 							logger.warn("The specified wrapper >" + addressing[addressingIndex].getWrapper()
 									+ "< does not exist");
 							if (addressingIndex == addressing.length && !hasValidAddressing) {
-								try {
-									graph.removeNode(config);
-								} catch (NodeNotExistsExeption e) {
-									logger.error(e.getMessage(), e);
-									// This shouldn't happen, as we first add all virtual sensors to the graph
-								}
+								graph.removeNode(config);
 								continue outFor;
 							}
 							continue;
@@ -296,42 +265,28 @@ public final class Modifications {
 								
 								// If this addressing element is the last one, remove VS from the graph
 								if (addressingIndex == addressing.length - 1 && !hasValidAddressing) {
-									try {
-										graph.removeNode(config);
-									} catch (NodeNotExistsExeption e) {
-										logger.error(e.getMessage(), e);
-										// This shouldn't happen, as we first add all virtual sensors to the graph
-									}
+									graph.removeNode(config);
+
 									continue outFor;
 								}
 								continue;
 							}
-							try {
-								if (graph.findNode(sensorConfig) != null) {
-									graph.addEdge(config, sensorConfig);
-									if (graph.hasCycle()) {
-										logger.warn("A dependency cycle was found when adding >" + config.getName()
-												+ "< virtual sensor. The cycle will be removed");
-										graph.removeNode(sensorConfig);
-										continue outFor;
-									}
-									hasValidAddressing = true;
-								} else
-								// If this addressing element is the last one, remove VS from the graph
-								if (addressingIndex == addressing.length - 1 && !hasValidAddressing) {
-									try {
-										graph.removeNode(config);
-									} catch (NodeNotExistsExeption e) {
-										logger.error(e.getMessage(), e);
-										// This shouldn't happen, as we first add all virtual sensors to the graph
-									}
+							if (graph.findNode(sensorConfig) != null) {
+								graph.addEdge(config, sensorConfig);
+								if (graph.hasCycle()) {
+									logger.warn("A dependency cycle was found when adding >" + config.getName()
+											+ "< virtual sensor. The cycle will be removed");
+									graph.removeNode(sensorConfig);
 									continue outFor;
 								}
-							} catch (NodeNotExistsExeption e) {
-								logger.error(e.getMessage(), e);
-								// This shouldn't happen, as we first add all virtual sensors to the graph
-							}
+								hasValidAddressing = true;
+							} else
+							// If this addressing element is the last one, remove VS from the graph
+							if (addressingIndex == addressing.length - 1 && !hasValidAddressing) {
+								graph.removeNode(config);
 
+								continue outFor;
+							}
 						}
 					}
 				}
@@ -339,42 +294,6 @@ public final class Modifications {
 		}
 	}
 
-	/*
-	 * let's keep it if we want to play with zmq dependency one day
-	 * private static boolean isInTheSameGSNInstance(AddressBean addressBean) {
-	 * String urlStr = addressBean.getPredicateValue ( "remote-contact-point" );
-	 * String host;
-	 * int port;
-	 * 
-	 * if(urlStr != null){
-	 * try {
-	 * URL url = new URL(urlStr);
-	 * host = url.getHost();
-	 * port = url.getPort() != -1 ? url.getPort() :
-	 * ContainerConfig.DEFAULT_GSN_PORT;
-	 * } catch (MalformedURLException e) {
-	 * logger.warn("Malformed URL : " + e.getMessage(), e);
-	 * return false;
-	 * }
-	 * }else{
-	 * host = addressBean.getPredicateValue ( "host" );
-	 * if ( host == null || host.trim ( ).length ( ) == 0 ) {
-	 * logger.warn (
-	 * "The >host< parameter is missing from the RemoteWrapper wrapper." );
-	 * return false;
-	 * }
-	 * port = addressBean.getPredicateValueAsInt("port"
-	 * ,ContainerConfig.DEFAULT_GSN_PORT);
-	 * if ( port > 65000 || port <= 0 ) {
-	 * logger.warn("Remote wrapper initialization failed, bad port number:"+port);
-	 * return false;
-	 * }
-	 * }
-	 * boolean toReturn = (ValidityTools.isLocalhost(host) &&
-	 * Main.getContainerConfig().getContainerPort() == port);
-	 * return toReturn;
-	 * }
-	 */
 	public static Graph<VSensorConfig> buildDependencyGraphFromIterator(Iterator<VSensorConfig> vsensorIterator) {
 		Graph<VSensorConfig> graph = new Graph<VSensorConfig>();
 		fillGraph(graph, vsensorIterator);

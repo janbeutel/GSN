@@ -29,6 +29,10 @@ public record ProcessingConf(
         @JacksonXmlProperty(localName = "web-input")
         Optional<WebInputConf> webInput
 ) {
+    public ProcessingConf {
+        webInput = webInput == null ? Optional.empty() : webInput;
+    }
+
     public Optional<Integer> rate() {
         return outputSpec == null || outputSpec.rate() == null ? Optional.empty() : Optional.of(outputSpec.rate());
     }

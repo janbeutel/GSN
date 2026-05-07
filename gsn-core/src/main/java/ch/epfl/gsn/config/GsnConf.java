@@ -29,6 +29,10 @@ public record GsnConf(
         @JacksonXmlProperty(localName = "backlog-commands")
         BacklogCommandsConf backlogCommandsConf
 ) {
+    public GsnConf {
+        slidingConf = slidingConf == null ? Optional.empty() : slidingConf;
+    }
+
     public static GsnConf load(String path) throws IOException {
         return GsnConfigLoader.load(path);
     }

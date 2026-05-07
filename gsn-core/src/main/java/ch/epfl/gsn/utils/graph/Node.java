@@ -72,12 +72,8 @@ public class Node<T> implements Serializable {
 	 *
 	 * @param node The target node to which the edge connects.
 	 * @return The created edge.
-	 * @throws EdgeExistsException If an edge to the specified node already exists.
 	 */
-	public Edge<T> addEdge(Node<T> node) throws EdgeExistsException {
-		if (edgeExists(node)) {
-			throw new EdgeExistsException();
-		}
+	public Edge<T> addEdge(Node<T> node) {
 		Edge<T> edge = new Edge<T>(this, node);
 		outputEdges.add(edge);
 		node.getInputEdges().add(edge);
@@ -108,7 +104,7 @@ public class Node<T> implements Serializable {
 	 * @param node the node to check for an edge connection
 	 * @return true if an edge exists, false otherwise
 	 */
-	private boolean edgeExists(Node<T> node) {
+	public boolean edgeExists(Node<T> node) {
 		for (Edge<T> edge : outputEdges) {
 			if (edge.getEndNode().equals(node)) {
 				return true;

@@ -30,4 +30,11 @@ public record StorageConf(
 
         @JacksonXmlProperty(isAttribute = true, localName = "timescale-chunk-size")
         Optional<String> chunkSize
-) {}
+) {
+    public StorageConf {
+        identifier = identifier == null ? Optional.empty() : identifier;
+        historySize = historySize == null ? Optional.empty() : historySize;
+        storageDirectory = storageDirectory == null ? Optional.empty() : storageDirectory;
+        chunkSize = chunkSize == null ? Optional.empty() : chunkSize;
+    }
+}

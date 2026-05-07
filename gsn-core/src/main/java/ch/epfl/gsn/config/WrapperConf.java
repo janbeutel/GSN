@@ -24,6 +24,10 @@ public record WrapperConf(
         @JacksonXmlProperty(localName = "output-structure")
         OutputStructureContainer outputStructure
 ) {
+    public WrapperConf {
+        partialKey = partialKey == null ? Optional.empty() : partialKey;
+    }
+
     public Map<String, String> params() {
         if (predicates == null) {
             return Map.of();

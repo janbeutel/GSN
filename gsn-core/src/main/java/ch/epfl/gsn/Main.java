@@ -70,7 +70,7 @@ import ch.epfl.gsn.monitoring.MonitoringServer;
 import ch.epfl.gsn.networking.zeromq.ZeroMQDeliveryAsync;
 import ch.epfl.gsn.networking.zeromq.ZeroMQDeliverySync;
 import ch.epfl.gsn.networking.zeromq.ZeroMQProxy;
-import ch.epfl.gsn.networking.zeromq.BacklogZeroMQ;
+import ch.epfl.gsn.networking.zeromq.BacklogZeroMQService;
 import ch.epfl.gsn.storage.SQLValidator;
 import ch.epfl.gsn.storage.StorageManager;
 import ch.epfl.gsn.storage.StorageManagerFactory;
@@ -86,8 +86,9 @@ import ch.epfl.gsn.wrappers.WrappersUtil;
 public final class Main {
 
 	public static final int DEFAULT_MAX_DB_CONNECTIONS = 128;
-	public static final String DEFAULT_GSN_CONF_FOLDER = "../conf";
-	public static final String DEFAULT_VIRTUAL_SENSOR_FOLDER = "../conf/virtual-sensors";
+	public static final String DEFAULT_GSN_CONF_FOLDER = "/etc/gsn-core";
+	public static final String DEFAULT_VIRTUAL_SENSOR_FOLDER = "/etc/gsn-core/virtual-sensors";
+	public static final String DEFAULT_GSN_CONFIG_FILE = "gsn.xml";
 	public static Logger logger = LoggerFactory.getLogger(Main.class);
 
 	/**
@@ -98,8 +99,9 @@ public final class Main {
 	private static Main singleton;
 	public static String gsnConfFolder = DEFAULT_GSN_CONF_FOLDER;
 	public static String virtualSensorDirectory = DEFAULT_VIRTUAL_SENSOR_FOLDER;
+	private static String gsnConfigFilePath = gsnConfFolder + "/" + DEFAULT_GSN_CONFIG_FILE;
 	private static ZeroMQProxy zmqproxy;
-	private static BacklogZeroMQ backlogzeromq;
+	private static BacklogZeroMQService backlogzeromqService;
 	private static StorageManager mainStorage;
 	private static StorageManager windowStorage;
 	private static StorageManager validationStorage;
@@ -129,26 +131,49 @@ public final class Main {
 	 * @throws Exception if an error occurs during the initialization process
 	 */
 	private Main() throws Exception {
-
-		ValidityTools.checkAccessibilityOfFiles(WrappersUtil.DEFAULT_WRAPPER_PROPERTIES_FILE,
-				gsnConfFolder + "/gsn.xml");
+		ValidityTools.checkAccessibilityOfFiles(WrappersUtil.DEFAULT_WRAPPER_PROPERTIES_FILE, gsnConfigFilePath);
 		ValidityTools.checkAccessibilityOfDirs(virtualSensorDirectory);
-		containerConfig = loadContainerConfiguration();
+		
+		loadGsnConfiguration();
+		loadContainerConfiguration();
+		
 		System.out.println("Global Sensor Networks (GSN) is starting...");
 
 		int maxDBConnections = containerConfig.getMaxDBConnections();
 		int maxSlidingDBConnections = containerConfig.getMaxSlidingDBConnections();
 
-		mainStorage = StorageManagerFactory.getInstance(containerConfig.getStorage().getJdbcDriver(),
-				containerConfig.getStorage().getJdbcUsername(), containerConfig.getStorage().getJdbcPassword(),
-				containerConfig.getStorage().getJdbcURL(), maxDBConnections);
+		StorageConfig mainStorageConfig = containerConfig.getStorage();
+		mainStorage = StorageManagerFactory.getInstance(
+			mainStorageConfig.getJdbcDriver(),
+			mainStorageConfig.getJdbcUsername(),
+			mainStorageConfig.getJdbcPassword(),
+			mainStorageConfig.getJdbcURL(),
+			maxDBConnections
+		);
 
-		StorageConfig sc = containerConfig.getSliding() == null ? containerConfig.getStorage(): containerConfig.getSliding().getStorage();
-		windowStorage = StorageManagerFactory.getInstance(sc.getJdbcDriver(), sc.getJdbcUsername(),
-				sc.getJdbcPassword(), sc.getJdbcURL(), maxSlidingDBConnections);
+		StorageConfig slidingStorageConfig;
+		if (containerConfig.getSliding() == null) {
+			logger.warn("Sliding configuration is not defined, using main storage configuration.");
+			slidingStorageConfig = containerConfig.getStorage();
+		} else {
+			slidingStorageConfig = containerConfig.getSliding().getStorage();
+		}
 
-		validationStorage = StorageManagerFactory.getInstance("org.h2.Driver", "sa", "", "jdbc:h2:mem:validator",
-				Main.DEFAULT_MAX_DB_CONNECTIONS);
+		windowStorage = StorageManagerFactory.getInstance(
+			slidingStorageConfig.getJdbcDriver(),
+			slidingStorageConfig.getJdbcUsername(),
+			slidingStorageConfig.getJdbcPassword(),
+			slidingStorageConfig.getJdbcURL(),
+			maxSlidingDBConnections
+		);
+
+		validationStorage = StorageManagerFactory.getInstance(
+			"org.h2.Driver",
+			"sa",
+			"",
+			"jdbc:h2:mem:validator",
+			DEFAULT_MAX_DB_CONNECTIONS
+		);
 
 		logger.trace("The Container Configuration file loaded successfully.");
 
@@ -158,12 +183,13 @@ public final class Main {
 		monitoringServer.start();
 
 		if (containerConfig.isZMQEnabled()) {
-			// start the 0MQ proxy
 			zmqproxy = new ZeroMQProxy(containerConfig.getZMQProxyPort(), containerConfig.getZMQMetaPort());
+			zmqproxy.start();
 		}
 
 		if(containerConfig.isBacklogCommandsEnabled()){
-			backlogzeromq = new BacklogZeroMQ(containerConfig.getBacklogCommandsPort());
+			backlogzeromqService = new BacklogZeroMQService(containerConfig.getBacklogCommandsPort());
+			backlogzeromqService.start();
 		}
 
 		VSensorLoader vsloader = VSensorLoader.getInstance(virtualSensorDirectory);
@@ -274,18 +300,13 @@ public final class Main {
 	 * wrappers from the
 	 * 'wrappers.properties' file.
 	 *
-	 * @return The loaded container configuration.
-	 * @throws RuntimeException If the 'wrappers.properties' file refers to one or
-	 *                          more classes
-	 *                          which don't exist in the classpath.
 	 */
-	public static ContainerConfig loadContainerConfiguration() {
-		ValidityTools.checkAccessibilityOfFiles(WrappersUtil.DEFAULT_WRAPPER_PROPERTIES_FILE,
-				gsnConfFolder + "/gsn.xml");
-		ValidityTools.checkAccessibilityOfDirs(virtualSensorDirectory);
-		ContainerConfig toReturn = null;
+	private void loadContainerConfiguration() {
 		try {
-			toReturn = loadContainerConfig(gsnConfFolder + "/gsn.xml");
+			containerConfig = BeansInitializer.container(gsnConf);
+			Class.forName(containerConfig.getStorage().getJdbcDriver());
+			containerConfig.setContainerConfigurationFileName(gsnConfigFilePath);
+
 			logger.info("Loading wrappers.properties at : " + WrappersUtil.DEFAULT_WRAPPER_PROPERTIES_FILE);
 			wrappers = WrappersUtil.loadWrappers(new HashMap<String, Class<?>>());
 			logger.info("Wrappers initialization ...");
@@ -293,51 +314,16 @@ public final class Main {
 			logger.error("The file wrapper.properties refers to one or more classes which don't exist in the classpath"
 					+ e.getMessage());
 			System.exit(1);
-		} catch (IOException e) {
-			logger.error("Error reading the gsn.xml file: " + e.getMessage());
-			System.exit(1);
 		}
-		return toReturn;
-
 	}
 
-	/**
-	 * Loads the container configuration from the specified gsn.xml file.
-	 *
-	 * @param gsnXMLpath The path to the gsn.xml file.
-	 * @return The loaded ContainerConfig object.
-	 * @throws ClassNotFoundException If the specified gsn.xml file is not found.
-	 * @throws IOException If the specified gsn.xml file cannot be read.
-	 */
-	public static ContainerConfig loadContainerConfig(String gsnXMLpath) throws ClassNotFoundException, IOException {
-		if (!new File(gsnXMLpath).isFile()) {
-			logger.error("Couldn't find the gsn.xml file @: " + (new File(gsnXMLpath).getAbsolutePath()));
+	private void loadGsnConfiguration() {
+		try {
+			gsnConf = GsnConf.load(gsnConfigFilePath);
+		} catch (IOException e) {
+			logger.error("Error loading the gsn configuration: " + e.getMessage());
 			System.exit(1);
 		}
-		GsnConf gsn = GsnConf.load(gsnXMLpath);
-		gsnConf = gsn;
-		ContainerConfig conf = BeansInitializer.container(gsn);
-		Class.forName(conf.getStorage().getJdbcDriver());
-		conf.setContainerConfigurationFileName(gsnXMLpath);
-		// return conf;
-		// Create a JDBC connection using the URL approach
-		// String jdbcUrl = conf.getStorage().getJdbcURL(); // Get the JDBC URL from
-		// your configuration
-		// String username = conf.getStorage().getJdbcUsername(); // Get the username
-		// String password = conf.getStorage().getJdbcPassword(); // Get the password
-
-		// try{
-		// Connection connection = DriverManager.getConnection(jdbcUrl, username,
-		// password);
-		// Perform any necessary operations with the connection
-		// ...
-		// } catch (SQLException e) {
-		// logger.error("Error creating database connection: " + e.getMessage());
-		// Handle the exception as needed
-		// }
-
-		// conf.setContainerConfigurationFileName(gsnXMLpath);
-		return conf;
 	}
 
 	/**
@@ -375,18 +361,17 @@ public final class Main {
 	}
 
 	/**
-	 * Get's the GSN configuration without starting GSN.
+	 * Get's the GSN configuration.
+	 * 
+	 * Behaviour changed, now it only works if GSN is not started.
 	 * 
 	 * @return
 	 * @throws Exception
 	 */
 	public static ContainerConfig getContainerConfig() {
 		if (singleton == null) {
-			try {
-				return loadContainerConfig(Main.gsnConfFolder + "/gsn.xml");
-			} catch (Exception e) {
-				return null;
-			}
+			logger.error("GSN is not started, so it is not possible to get the container configuration.");
+			return null;
 		} else {
 			return singleton.containerConfig;
 		}
@@ -527,5 +512,4 @@ public final class Main {
 	public static ThreadMXBean getThreadMXBean() {
 		return threadBean;
 	}
-
 }

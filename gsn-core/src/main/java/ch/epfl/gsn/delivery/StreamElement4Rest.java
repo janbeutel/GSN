@@ -112,6 +112,8 @@ public class StreamElement4Rest {
 	 */
 	public static XStream getXstream() {
 		XStream xstream = new XStream();
+		XStream.setupDefaultSecurity(xstream);
+		xstream.allowTypesByWildcard(new String[] { "ch.epfl.gsn.**", "java.util.Date" });
 		xstream.alias("stream-element", StreamElement4Rest.class);
 		xstream.alias("field", Field4Rest.class);
 		xstream.useAttributeFor(StreamElement4Rest.class, "timestamp");
@@ -124,6 +126,8 @@ public class StreamElement4Rest {
 
 	public static XStream getXstream4Structure() {
 		XStream xstream = new XStream();
+		XStream.setupDefaultSecurity(xstream);
+		xstream.allowTypesByWildcard(new String[] { "ch.epfl.gsn.**", "java.util.Date" });
 		// xstream.alias("stream-element", StreamElement4Rest.class);
 		// xstream.alias("field", Field4Rest.class);
 		// xstream.useAttributeFor(StreamElement4Rest.class,"timestamp");

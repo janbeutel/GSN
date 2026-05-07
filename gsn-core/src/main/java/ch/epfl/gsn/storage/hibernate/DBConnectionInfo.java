@@ -29,8 +29,6 @@
 
 package ch.epfl.gsn.storage.hibernate;
 
-import org.apache.commons.dbcp2.BasicDataSource;
-
 public class DBConnectionInfo {
     private String driverClass, url, userName, password;
 
@@ -40,50 +38,6 @@ public class DBConnectionInfo {
         this.userName = userName;
         this.password = password;
     }
-
-    // public BasicDataSource createDataSource() {
-    // return createDataSource(25, 5, -1); //TODO: tune parameters
-    // }
-
-    // public BasicDataSource createDataSource(int maxActive, int maxIde, int
-    // maxWait) {
-    // return createDataSource(maxActive, maxIde, maxWait, 1000 * 60 * 30, -1);
-    // }
-
-    /**
-     * //@param maxActive The maximum number of active connections that can be
-     * allocated from this pool at the same time, or negative for no limit. (def: 8)
-     * //@param maxIde The maximum number of connections that can remain idle in the
-     * pool, without extra ones being released, or negative for no limit. (def: 8)
-     * //@param maxWait The maximum number of milliseconds that the pool will wait
-     * (when there are no available connections) for a connection to be returned
-     * before throwing an exception, or -1 to wait indefinitely. (def:indefinitely)
-     * //@param minEvictableIdleTimeMillis The minimum amount of time an object may
-     * sit idle in the pool before it is eligable for eviction by the idle object
-     * evictor (if any). (def: 1000 * 60 * 30)
-     * //@param timeBetweenEvictionRunsMillis The number of milliseconds to sleep
-     * between runs of the idle object evictor thread. When non-positive, no idle
-     * object evictor thread will be run. (def: -1)
-     * //@return the configured BasicDataSource
-     */
-    /*
-     * public BasicDataSource createDataSource(int maxActive, int maxIde, int
-     * maxWait, long minEvictableIdleTimeMillis, long timeBetweenEvictionRunsMillis)
-     * {
-     * BasicDataSource ds = new BasicDataSource();
-     * ds.setDriverClassName(driverClass);
-     * ds.setUsername(userName);
-     * ds.setPassword(password);
-     * ds.setUrl(url);
-     * 
-     * ds.setMaxActive(maxActive);
-     * ds.setMaxIdle(maxIde);
-     * ds.setMaxWait(maxWait);
-     * ds.setMinEvictableIdleTimeMillis(minEvictableIdleTimeMillis);
-     * ds.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMillis);
-     * return ds;
-     * }
-     */
 
     public boolean equals(Object o) {
         if (null == o) {

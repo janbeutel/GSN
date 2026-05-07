@@ -44,6 +44,10 @@ public record VsConf(
         @JacksonXmlProperty(localName = "streams")
         StreamsContainer streamsContainer
 ) {
+    public VsConf {
+        storage = storage == null ? Optional.empty() : storage;
+    }
+
     public static VsConf load(String path) throws Exception {
         return VsConfigLoader.load(path);
     }

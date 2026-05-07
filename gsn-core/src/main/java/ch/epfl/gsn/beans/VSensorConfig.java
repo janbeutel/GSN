@@ -365,7 +365,12 @@ public class VSensorConfig implements Serializable {
 		if (!this.isGetMainClassInitParamsInitialized) {
 			this.isGetMainClassInitParamsInitialized = true;
 			for (final KeyValue param : this.mainClassInitialParams) {
-				this.mainClassInitParams.put(param.getKey().toString().toLowerCase(), param.getValue().toString());
+				if (param == null || param.getKey() == null) {
+					continue;
+				}
+				String key = param.getKey().toString().toLowerCase();
+				Object value = param.getValue();
+				this.mainClassInitParams.put(key, value == null ? "" : value.toString());
 			}
 		}
 		return this.mainClassInitParams;

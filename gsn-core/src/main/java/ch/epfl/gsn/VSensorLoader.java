@@ -174,10 +174,7 @@ public class VSensorLoader extends Thread {
 	 * The loop continues until the {@code isActive} flag is set to false.
 	 */
 	public void run() {
-		if (Main.getStorage((VSensorConfig) null) == null || Main.getWindowStorage() == null) { // Checks only if the
-																								// default storage and
-																								// the window storage
-																								// are defined.
+		if (Main.getStorage((VSensorConfig) null) == null || Main.getWindowStorage() == null) {
 			logger.error("The Storage Manager shouldn't be null, possible a BUG.");
 			return;
 		}
